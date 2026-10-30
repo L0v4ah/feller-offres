@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Offres Feller</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1F3F0; --paper:#FFFFFF; --ink:#1B211E; --ink-2:#4A544F; --ink-3:#7C867F;
+  --line:#D9DED9; --accent:#0F5D4E; --accent-ink:#FFFFFF; --accent-soft:#E3EFEA;
+  --ok:#2A7D4F; --warn:#9A5B14; --warn-soft:#FBF0E1; --danger:#9B2F2F;
+  --r:6px; --r-lg:10px;
+  font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15191A; --paper:#1E2425; --ink:#ECEFEC; --ink-2:#B5BDB8; --ink-3:#7F8A84;
+    --line:#2F3738; --accent:#5FB89E; --accent-ink:#0F1A17; --accent-soft:#1E302B;
+    --ok:#6CC08F; --warn:#E0A75A; --warn-soft:#2E261A;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--accent)}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- shell ---------- */
+.app{display:grid;grid-template-columns:minmax(0,1fr) 380px;min-height:100vh}
+@media (max-width:980px){.app{grid-template-columns:1fr}}
+header.top{grid-column:1/-1;display:flex;align-items:baseline;gap:18px;padding:16px 24px 0}
+header.top h1{font-size:17px;font-weight:600;margin:0;letter-spacing:-.01em}
+header.top .meta{color:var(--ink-3);font-size:13px}
+header.top .spacer{flex:1}
+header.top button.ghost{background:none;border:1px solid var(--line);border-radius:var(--r);padding:5px 10px;font-size:13px;color:var(--ink-2)}
+
+main{padding:16px 24px 48px;min-width:0}
+aside{border-left:1px solid var(--line);background:var(--paper);padding:16px 20px 48px;position:sticky;top:0;height:100vh;overflow:auto}
+@media (max-width:980px){aside{position:static;height:auto;border-left:0;border-top:1px solid var(--line)}}
+
+/* ---------- search ---------- */
+.search{display:flex;gap:8px;align-items:stretch}
+.search .field{flex:1;display:flex;align-items:center;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--r-lg);padding:0 6px 0 14px;transition:border-color .15s}
+.search .field:focus-within{border-color:var(--accent)}
+.search input{flex:1;border:0;background:none;outline:none;padding:14px 0;font-size:17px;min-width:0}
+.search input::placeholder{color:var(--ink-3)}
+.mic{width:42px;height:42px;border-radius:50%;border:0;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:none}
+.mic svg{width:20px;height:20px}
+.mic.listening{background:var(--accent);color:var(--accent-ink);animation:pulse 1.2s ease-in-out infinite}
+.mic[disabled]{opacity:.35;cursor:not-allowed}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(15,93,78,.35)}50%{box-shadow:0 0 0 10px rgba(15,93,78,0)}}
+@media (prefers-reduced-motion:reduce){.mic.listening{animation:none}}
+.hint{color:var(--ink-3);font-size:13px;margin:8px 2px 0;min-height:18px}
+.hint b{color:var(--ink-2);font-weight:500}
+
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 6px}
+.chip{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:4px 11px;font-size:13px;color:var(--ink-2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* ---------- configurator suggestion ---------- */
+.conf{display:flex;gap:12px;align-items:center;background:var(--warn-soft);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent);border-radius:var(--r-lg);padding:10px 14px;margin:14px 0 4px}
+.conf .t{flex:1;font-size:14px}
+.conf .t b{font-weight:600;color:var(--warn)}
+.conf a.btn{white-space:nowrap}
+
+/* ---------- results ---------- */
+.results{margin-top:10px}
+.count{color:var(--ink-3);font-size:13px;margin:6px 2px 8px}
+.row{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:10px 12px;margin-bottom:6px}
+.row img{width:64px;height:64px;object-fit:contain;background:#fff;border-radius:var(--r)}
+.row .desc{font-weight:500;line-height:1.3}
+.row .ids{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:4px;font-size:13px;color:var(--ink-2)}
+.row .ids .e{font-size:16px;font-weight:600;color:var(--ink);letter-spacing:.02em}
+.row .ids .e small{font-size:11px;font-weight:500;color:var(--ink-3);margin-right:5px;letter-spacing:0}
+.row .tags{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
+.tag{font-size:12px;color:var(--ink-2);background:var(--bg);border-radius:4px;padding:1px 7px}
+.tag.ok{color:var(--ok)}
+.tag.fu{color:var(--warn)}
+.row .act{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+@media (max-width:560px){.row{grid-template-columns:48px minmax(0,1fr)}.row img{width:48px;height:48px}.row .act{grid-column:1/-1;flex-direction:row}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--paper);border-radius:var(--r);padding:7px 12px;font-size:13.5px;font-weight:500;text-decoration:none;color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.small{padding:4px 9px;font-size:12.5px}
+.btn.icon{width:30px;height:30px;padding:0}
+
+.empty{padding:40px 10px;color:var(--ink-2);max-width:52ch}
+.empty h2{font-size:16px;font-weight:600;margin:0 0 8px;color:var(--ink)}
+.empty ul{padding-left:18px;margin:8px 0}
+.empty li{margin:3px 0}
+.empty code{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-family:inherit}
+
+/* ---------- offer list ---------- */
+aside h2{font-size:15px;font-weight:600;margin:0 0 12px}
+aside h2 .n{color:var(--ink-3);font-weight:400}
+.client{display:grid;gap:8px;margin-bottom:14px}
+.client input,.client textarea{width:100%;border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;background:var(--bg)}
+.client textarea{resize:vertical;min-height:38px}
+.items{display:grid;gap:6px}
+.item{display:grid;grid-template-columns:minmax(0,1fr) 68px 28px;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:8px 0}
+.item .d{font-size:13.5px;line-height:1.3}
+.item .e{font-size:12.5px;color:var(--ink-2);margin-top:2px}
+.item input.q{width:68px;text-align:center;border:1px solid var(--line);border-radius:var(--r);padding:5px 4px;background:var(--bg)}
+.item button.x{border:0;background:none;color:var(--ink-3);font-size:18px;line-height:1;padding:2px}
+.item button.x:hover{color:var(--danger)}
+.aside-empty{color:var(--ink-3);font-size:13.5px;padding:18px 0}
+.actions{display:grid;gap:8px;margin-top:16px}
+.actions .btn{padding:10px}
+
+/* ---------- print ---------- */
+#print{display:none}
+@media print{
+  body{background:#fff;color:#000}
+  .app{display:none}
+  #print{display:block;padding:0;font-size:12px}
+  #print h1{font-size:20px;margin:0 0 2px}
+  #print .sub{color:#555;margin-bottom:18px}
+  #print table{width:100%;border-collapse:collapse}
+  #print th,#print td{text-align:left;padding:7px 6px;border-bottom:1px solid #ccc;vertical-align:top}
+  #print th{font-weight:600;border-bottom:2px solid #000}
+  #print td.q{text-align:center;width:40px}
+  #print td.e{white-space:nowrap;font-weight:600}
+  #print .notes{margin-top:16px;white-space:pre-wrap}
+  #print .foot{margin-top:28px;color:#555;font-size:11px}
+  #print a{color:#000;text-decoration:none}
+  #print .doc{font-size:11px;color:#444}
+  @page{margin:18mm 16mm}
+}
+.sr{position:absolute;left:-9999px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <h1>Offres Feller</h1>
+    <span class="meta" id="dbinfo">Catalogue en cours de chargement…</span>
+    <span class="spacer"></span>
+    <button class="ghost" id="theme" type="button">Thème</button>
+  </header>
+
+  <main>
+    <div class="search">
+      <div class="field">
+        <input id="q" type="search" autocomplete="off" placeholder="Ex. : interrupteur 3/1L EDIZIOdue blanc, prise 3×T13, 226311000" aria-label="Recherche de matériel">
+        <button class="mic" id="mic" type="button" aria-label="Recherche vocale" title="Recherche vocale">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="hint" id="hint"></div>
+
+    <div class="filters" id="filters" role="group" aria-label="Filtrer par ligne de design"></div>
+
+    <div id="conf"></div>
+
+    <div class="results">
+      <div class="count" id="count"></div>
+      <div id="list"></div>
+    </div>
+  </main>
+
+  <aside>
+    <h2>Liste de matériel <span class="n" id="n"></span></h2>
+    <div class="client">
+      <input id="c_name" placeholder="Client / chantier">
+      <textarea id="c_notes" placeholder="Remarque pour le client (facultatif)"></textarea>
+    </div>
+    <div class="items" id="items"></div>
+    <div class="aside-empty" id="aside-empty">Ajoute des articles depuis la recherche. La liste reste enregistrée dans ce navigateur.</div>
+    <div class="actions">
+      <button class="btn primary" id="pdf" type="button">Exporter en PDF</button>
+      <button class="btn" id="copy" type="button">Copier la liste (texte)</button>
+      <button class="btn" id="clear" type="button">Vider la liste</button>
+    </div>
+  </aside>
+</div>
+
+<section id="print" aria-hidden="true"></section>
+
+<script src="data.js"></script>
+<script>
+/* ---------------- configurateurs & outils ---------------- */
+const TOOLS = [
+  {name:'Module de combinaison Feller', url:'https://online-katalog.feller.ch/fr/combinations', why:'Composer une combinaison (interrupteurs + prises) et obtenir la référence exacte', rx:/combin|combi\b|schéma|schema|\d\s*[x×]\s*t13|t13\s*\+|\+\s*t13|\b\d\/\d[lp]?\s*\+/i},
+  {name:'Planification Wiser by Feller', url:'https://www.feller.ch/fr/connected-buildings/wiser-by-feller/planification', why:'Dimensionner une installation Wiser (actionneurs, scènes, gateway)', rx:/wiser|smart ?home|domotique|zeptrion/i},
+  {name:'Planification SNAPFIX', url:'https://www.feller.ch/fr/gamme/snapfix/planification', why:'Choisir les kits SNAPFIX (EDIZIO.liv) adaptés au montage', rx:/snapfix|edizio\.?liv/i},
+  {name:'DispoSuite (planification Feller)', url:'https://www.feller.ch/fr/services/logiciel-de-planification-disposuite', why:'Planifier un projet complet et sortir la liste de matériel', rx:/disposuite|planif|projet|villa|immeuble|appartement/i},
+  {name:'Kombi Tool Sonepar', url:'https://www.sonepar.ch/fr/kombitool', why:'Configurer les combinaisons chez le grossiste avec prix et stock', rx:/kombi|grossiste|sonepar|prix|stock/i},
+  {name:'Configurateurs Schneider Electric (CH)', url:'https://www.se.com/ch/fr/work/products/tools/product-configurators/', why:'Tableaux, TGBT, onduleurs et produits Schneider hors catalogue Feller', rx:/tgbt|prisma|resi9|onduleur|ups|tableau|coffret|distribution|evlink|wallbox|borne/i},
+  {name:'Centre de téléchargement Feller', url:'https://online-katalog.feller.ch/fr/download-center', why:'Brochures, fiches techniques et plans cotés par ligne de design', rx:/brochure|fiche|catalogue|documentation|plan cot/i},
+];
+
+/* ---------------- données ---------------- */
+const DB = (window.FELLER_DATA && window.FELLER_DATA.items) || [];
+const EXPORTED = window.FELLER_DATA && window.FELLER_DATA.exportedAt;
+const DESIGNS = ['EDIZIOdue','EDIZIO.liv','STANDARDdue','NEVO','ELEMENT','SNAPFIX','FLF'];
+
+const norm = s => (s||'').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[×x]/g,'x').replace(/\s+/g,' ').trim();
+// synonymes oraux -> vocabulaire catalogue
+const SYN = [
+  [/\bencastre(e|s)?\b/g,'enc'],[/\bapparent(e|s)?\b/g,'ap'],[/\bblanche?\b/g,'blanc'],[/\bnoire?\b/g,'noir'],
+  [/\btriple\b/g,'3x'],[/\bdouble\b/g,'2x'],[/\bsimple\b/g,'1x'],[/\bprise(s)? (t|type) ?13\b/g,'prise t13'],[/\bt ?13\b/g,'t13'],[/\bt ?23\b/g,'t23'],
+  [/\b(trois|3) (sur|slash|\/) (un|1)\b/g,'3/1'],[/\bsix (sur|\/) (un|1)\b/g,'6/1'],[/\bva[- ]et[- ]vient\b/g,'3/1'],[/\binter\b/g,'interrupteur'],
+  [/\bedizio due\b/g,'ediziodue'],[/\bedizio liv\b/g,'edizio.liv'],[/\bstandard due\b/g,'standarddue'],[/\bbouton[- ]poussoir\b/g,'poussoir'],
+];
+function prep(q){ let s=norm(q); for(const [a,b] of SYN) s=s.replace(a,b); return s; }
+DB.forEach(it=>{ it._s = norm([it.d,it.t,it.f,it.e,it.ean].join(' ')); it._dsg = DESIGNS.find(x=>norm(it.d).includes(norm(x))) || ''; });
+
+function search(q, design){
+  const s = prep(q); if(!s && !design) return [];
+  const toks = s.split(' ').filter(Boolean);
+  const out=[];
+  for(const it of DB){
+    if(design && it._dsg!==design) continue;
+    let score=0, ok=true;
+    for(const t of toks){
+      if(it._s.includes(t)){ score += (it.e===t||norm(it.f)===t) ? 50 : (it._s.indexOf(t)<40?3:1); }
+      else { ok=false; break; }
+    }
+    if(!ok) continue;
+    if(it.buy) score+=1; if(it.fu) score-=2;
+    if(/\.61\b|blanc/.test(it._s)) score+=.5; // le blanc d'abord, c'est le cas courant
+    out.push([score,it]);
+  }
+  out.sort((a,b)=>b[0]-a[0] || a[1].d.length-b[1].d.length);
+  return out.slice(0,60).map(x=>x[1]);
+}
+
+/* ---------------- état ---------------- */
+const $ = id=>document.getElementById(id);
+const store = { get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)) }catch(e){} } };
+let list = store.get('offre.items', []);
+let client = store.get('offre.client', {name:'',notes:''});
+let design = '';
+let lastQ = '';
+
+$('dbinfo').textContent = DB.length ? `${DB.length.toLocaleString('fr-CH')} articles Feller · catalogue du ${EXPORTED ? new Date(EXPORTED).toLocaleDateString('fr-CH') : '—'}` : 'Catalogue introuvable : le fichier data.js doit être à côté de index.html.';
+
+/* ---------------- rendu ---------------- */
+function productUrl(it){ return 'https://online-katalog.feller.ch/fr/product?fnr='+encodeURIComponent(it.f); }
+function docsUrl(it){ return productUrl(it)+'#documents'; }
+function esc(s){ return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function renderFilters(){
+  $('filters').innerHTML = ['',...DESIGNS].map(d=>`<button class="chip" type="button" data-d="${d}" aria-pressed="${design===d}">${d||'Toutes les lignes'}</button>`).join('');
+}
+$('filters').addEventListener('click',e=>{ const b=e.target.closest('.chip'); if(!b) return; design=b.dataset.d; renderFilters(); run(); });
+
+function renderConf(q){
+  const hits = TOOLS.filter(t=>t.rx.test(q));
+  $('conf').innerHTML = hits.slice(0,2).map(t=>`<div class="conf"><div class="t"><b>Configurateur conseillé :</b> ${esc(t.name)}<br><span style="color:var(--ink-2);font-size:13px">${esc(t.why)}</span></div><a class="btn" href="${t.url}" target="_blank" rel="noopener">Ouvrir</a></div>`).join('');
+}
+
+function renderResults(items, q){
+  if(!q && !design){
+    $('count').textContent='';
+    $('list').innerHTML = `<div class="empty"><h2>Dis ou tape ce dont tu as besoin</h2>
+      L'outil cherche dans tout le catalogue Feller (description, N° Feller, N° ELDAS, EAN) et te dit si l'article existe.
+      <ul><li><code>interrupteur 3/1L EDIZIOdue blanc</code></li><li><code>prise 3×T13 NEVO</code></li><li><code>combinaison 3/1P + T13</code> → propose aussi le configurateur</li><li><code>226311000</code> ou <code>7563.FMI.61</code></li></ul>
+      Chaque résultat donne le N° ELDAS, la fiche produit et ses brochures, et s'ajoute à la liste de matériel à droite.</div>`;
+    return;
+  }
+  if(!items.length){
+    $('count').textContent='';
+    $('list').innerHTML = `<div class="empty"><h2>Aucun article Feller ne correspond</h2>
+      Ce matériel n'existe pas sous cette description dans le catalogue Feller, ou il s'agit d'un produit Schneider (tableaux, bornes EVlink, onduleurs) non couvert ici.
+      <ul><li>Essaie moins de mots, ou le N° ELDAS directement.</li><li>Retire le filtre de ligne de design.</li><li>Pour Schneider : <a href="https://www.se.com/ch/fr/work/products/tools/product-configurators/" target="_blank" rel="noopener">configurateurs Schneider</a> ou recherche chez le grossiste.</li></ul></div>`;
+    return;
+  }
+  $('count').textContent = `${items.length} article${items.length>1?'s':''}${items.length===60?' (affichage limité : précise la recherche)':''}`;
+  $('list').innerHTML = items.map(it=>{
+    const inList = list.find(x=>x.f===it.f);
+    return `<article class="row" data-f="${esc(it.f)}">
+      <img src="${esc(it.img)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div>
+        <div class="desc">${esc(it.d)}</div>
+        <div class="ids"><span class="e num"><small>ELDAS</small>${it.e ? esc(it.e) : '<span style="color:var(--ink-3);font-weight:400">pas de N° ELDAS</span>'}</span><span class="num">N° Feller ${esc(it.f)}</span>${it.ean?`<span class="num">EAN ${esc(it.ean)}</span>`:''}</div>
+        <div class="tags">${it._dsg?`<span class="tag">${esc(it._dsg)}</span>`:''}${it.buy?'<span class="tag ok">Disponible</span>':'<span class="tag">Non commandable</span>'}${it.fu?`<span class="tag fu">Remplacé par ${esc(it.fu)}</span>`:''}</div>
+      </div>
+      <div class="act">
+        <button class="btn primary small add" type="button">${inList?'Ajouter encore':'Ajouter'}</button>
+        <a class="btn small" href="${docsUrl(it)}" target="_blank" rel="noopener">Fiche et brochures</a>
+      </div>
+    </article>`;
+  }).join('');
+}
+$('list').addEventListener('click',e=>{
+  const b=e.target.closest('.add'); if(!b) return;
+  const f=b.closest('.row').dataset.f; const it=DB.find(x=>x.f===f); if(!it) return;
+  const ex=list.find(x=>x.f===f); if(ex) ex.q+=1; else list.push({f:it.f,e:it.e,d:it.d,q:1});
+  saveList(); b.textContent='Ajouté'; setTimeout(()=>b.textContent='Ajouter encore',900);
+});
+
+function renderList(){
+  $('n').textContent = list.length ? `· ${list.reduce((a,x)=>a+x.q,0)} pièce${list.reduce((a,x)=>a+x.q,0)>1?'s':''}` : '';
+  $('aside-empty').style.display = list.length?'none':'block';
+  $('items').innerHTML = list.map((x,i)=>`<div class="item">
+    <div><div class="d">${esc(x.d)}</div><div class="e num">ELDAS ${esc(x.e||'—')} · ${esc(x.f)}</div></div>
+    <input class="q num" type="number" min="1" step="1" value="${x.q}" data-i="${i}" aria-label="Quantité">
+    <button class="x" type="button" data-i="${i}" aria-label="Retirer">×</button></div>`).join('');
+  $('c_name').value=client.name; $('c_notes').value=client.notes;
+}
+$('items').addEventListener('input',e=>{ const i=e.target.dataset.i; if(e.target.classList.contains('q')){ list[i].q=Math.max(1,parseInt(e.target.value)||1); store.set('offre.items',list); $('n').textContent=`· ${list.reduce((a,x)=>a+x.q,0)} pièces`; }});
+$('items').addEventListener('click',e=>{ const b=e.target.closest('.x'); if(!b) return; list.splice(+b.dataset.i,1); saveList(); run(); });
+function saveList(){ store.set('offre.items',list); renderList(); }
+['c_name','c_notes'].forEach(id=>$(id).addEventListener('input',()=>{ client={name:$('c_name').value,notes:$('c_notes').value}; store.set('offre.client',client); }));
+$('clear').onclick=()=>{ if(!list.length||confirm('Vider la liste de matériel ?')){ list=[]; saveList(); run(); } };
+
+$('copy').onclick=async()=>{
+  const txt=[`Liste de matériel${client.name?' – '+client.name:''}`,'',...list.map(x=>`${x.q} × ${x.d}  (ELDAS ${x.e||'—'}, N° Feller ${x.f})`),'',client.notes].join('\n');
+  try{ await navigator.clipboard.writeText(txt); $('copy').textContent='Copié'; setTimeout(()=>$('copy').textContent='Copier la liste (texte)',1200);}catch(e){ prompt('Copie manuelle :',txt); }
+};
+
+$('pdf').onclick=()=>{
+  if(!list.length){ alert('La liste est vide.'); return; }
+  const d=new Date().toLocaleDateString('fr-CH',{day:'2-digit',month:'long',year:'numeric'});
+  $('print').innerHTML=`<h1>Liste de matériel${client.name?' – '+esc(client.name):''}</h1>
+    <div class="sub">${d} · ${list.reduce((a,x)=>a+x.q,0)} pièces · références Feller</div>
+    <table><thead><tr><th>Qté</th><th>Désignation</th><th>N° ELDAS</th><th>N° Feller</th><th>Documentation</th></tr></thead><tbody>
+    ${list.map(x=>{const it=DB.find(y=>y.f===x.f)||x; return `<tr><td class="q num">${x.q}</td><td>${esc(x.d)}</td><td class="e num">${esc(x.e||'—')}</td><td class="num">${esc(x.f)}</td><td class="doc"><a href="${docsUrl(it)}">Fiche &amp; brochures</a></td></tr>`}).join('')}
+    </tbody></table>
+    ${client.notes?`<div class="notes">${esc(client.notes)}</div>`:''}
+    <div class="foot">Les numéros ELDAS permettent la commande chez tout grossiste électro suisse. Fiches techniques et brochures : online-katalog.feller.ch</div>`;
+  window.print();
+};
+
+/* ---------------- recherche ---------------- */
+let timer;
+$('q').addEventListener('input',()=>{ clearTimeout(timer); timer=setTimeout(run,120); });
+function run(){
+  const q=$('q').value.trim(); lastQ=q;
+  renderConf(q);
+  renderResults(search(q,design), q);
+}
+
+/* ---------------- voix ---------------- */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const mic=$('mic'), hint=$('hint');
+if(!SR){ mic.disabled=true; mic.title='Recherche vocale non disponible dans ce navigateur (utilise Chrome, Edge ou Safari)'; hint.textContent='Recherche vocale indisponible dans ce navigateur : tape ta demande.'; }
+else{
+  let rec=null, listening=false;
+  mic.onclick=()=>{
+    if(listening){ rec.stop(); return; }
+    rec=new SR(); rec.lang='fr-CH'; rec.interimResults=true; rec.continuous=false;
+    rec.onstart=()=>{ listening=true; mic.classList.add('listening'); hint.innerHTML='<b>Je t\'écoute…</b> dis par exemple « interrupteur va-et-vient EDIZIOdue blanc »'; };
+    rec.onresult=e=>{ const t=[...e.results].map(r=>r[0].transcript).join(' '); $('q').value=t; hint.innerHTML=`Entendu : <b>${esc(t)}</b>`; run(); };
+    rec.onerror=e=>{ hint.textContent = e.error==='not-allowed' ? 'Micro refusé : autorise le microphone pour ce site.' : 'Reconnaissance interrompue, réessaie.'; };
+    rec.onend=()=>{ listening=false; mic.classList.remove('listening'); if(!$('q').value) hint.textContent=''; };
+    rec.start();
+  };
+}
+
+/* ---------------- thème ---------------- */
+$('theme').onclick=()=>{ const r=document.documentElement; const cur=r.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); r.dataset.theme = cur==='dark'?'light':'dark'; store.set('offre.theme',r.dataset.theme); };
+const th=store.get('offre.theme',null); if(th) document.documentElement.dataset.theme=th;
+
+renderFilters(); renderList(); run();
+$('q').focus();
+</script>
+</body>
+</html>
