@@ -169,6 +169,30 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 .empty{padding:30px 6px;color:var(--muted);max-width:54ch}
 .empty h2{font-size:18px;font-weight:600;margin:0 0 8px;color:var(--text)}
 
+/* ---------- fiche produit ---------- */
+#pm{position:fixed;inset:0;background:rgba(23,25,26,.45);backdrop-filter:blur(6px);z-index:82;display:grid;place-items:center;padding:16px;overflow:auto}
+#pm .sheet{position:relative;background:var(--solid);border:1px solid var(--rim);border-radius:var(--r-card);box-shadow:var(--shadow-pop);width:min(960px,100%);max-height:calc(100vh - 32px);overflow:auto;display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr)}
+@media (max-width:760px){#pm .sheet{grid-template-columns:1fr;max-height:100vh;border-radius:0}#pm{padding:0}}
+#pm .pic{background:#fff;display:grid;place-items:center;padding:24px;min-height:300px;cursor:zoom-in}
+#pm .pic img{max-width:100%;max-height:380px;object-fit:contain}
+#pm .info{padding:22px 24px 24px;display:flex;flex-direction:column;gap:12px}
+#pm .close{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:0;background:var(--ink);color:var(--on-ink);font-size:18px}
+#pm h2{font-size:20px;font-weight:600;margin:0;letter-spacing:-.02em;line-height:1.25;padding-right:36px}
+#pm .ids{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--muted)}
+#pm .ids .e{font-size:24px;font-weight:600;color:var(--text);letter-spacing:-.01em;width:100%}
+#pm .ids .e small{font-size:11px;font-weight:600;color:var(--faint);margin-right:6px;letter-spacing:.04em}
+#pm .kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+#pm .kv div{background:var(--glass-3);border:1px solid var(--rim);border-radius:14px;padding:8px 10px}
+#pm .kv span{display:block;font-size:11.5px;color:var(--faint)}
+#pm .kv b{font-weight:600;font-size:14px}
+#pm h4{font-size:12.5px;font-weight:600;color:var(--faint);margin:6px 0 0}
+#pm .spec div{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px dotted var(--line-2);font-size:13.5px}
+#pm .spec span:first-child{color:var(--muted)}
+#pm .accs div{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:5px 0;font-size:13.5px}
+#pm .accs .d{flex:1}
+#pm .buy{display:flex;gap:10px;align-items:center;margin-top:auto;padding-top:8px;flex-wrap:wrap}
+#pm .buy .cqty{display:inline-grid}
+#pm .links{display:flex;flex-wrap:wrap;gap:12px;font-size:13.5px}
 /* ---------- lightbox ---------- */
 #lb{position:fixed;inset:0;background:rgba(23,25,26,.7);backdrop-filter:blur(6px);display:grid;place-items:center;z-index:80;padding:20px;cursor:zoom-out}
 #lb img{max-width:min(92vw,720px);max-height:82vh;background:#fff;border-radius:var(--r-card);padding:20px}
@@ -201,6 +225,16 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 .qs .send{margin-top:14px;display:flex;gap:8px;align-items:center}
 .qs .send small{color:var(--faint)}
 .msg.think{color:var(--faint);font-size:13.5px}
+.prop{align-self:stretch;background:var(--float);border:1px solid var(--rim);border-radius:var(--r-tile);padding:12px 14px;box-shadow:var(--shadow)}
+.prop .ph b{display:block;font-weight:600;font-size:15px}.prop .ph small{color:var(--faint);font-size:12.5px}
+.prop p{font-size:13.5px;color:var(--muted);margin:8px 0 4px;white-space:pre-wrap}
+.prow{display:grid;grid-template-columns:18px 40px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);cursor:pointer}
+.prow img{width:40px;height:40px;object-fit:contain;border-radius:10px;border:1px solid var(--line);background:#fff}
+.prow .t b{display:block;font-weight:500;font-size:13.5px;line-height:1.25}.prow .t small{color:var(--muted);font-size:12px}
+.prow .q{font-weight:600}
+.prop .pu{margin-top:10px;font-size:12.5px;font-weight:600;color:var(--pine)}
+.prow.up{background:var(--accent-soft);border-radius:12px;padding:8px;border-top:0;margin-top:4px}
+.prop .pa{margin-top:10px}
 .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--tomato);animation:blink 1s infinite;margin-left:4px}
 @keyframes blink{50%{opacity:.2}}
 .starters{display:grid;gap:8px;padding:4px 0}
@@ -235,12 +269,13 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 .tools h3{font-size:13px;font-weight:600;color:var(--faint);margin:0 0 6px}
 .tools a{display:block;font-size:13.5px;padding:5px 0;text-decoration:none;color:var(--text)}
 .tools a span{color:var(--faint);font-size:12.5px;display:block}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--on-ink);padding:10px 18px;border-radius:999px;font-size:14px;z-index:85;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-pop)}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:var(--on-ink);padding:10px 18px;border-radius:999px;font-size:14px;z-index:85;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-pop)}
 .toast button{background:none;border:0;color:var(--butter);padding:0;font-weight:600}
 
 .listbar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:40;display:flex;align-items:center;gap:10px;background:var(--glass-3);backdrop-filter:blur(14px);border:1px solid var(--rim);box-shadow:var(--shadow-pop);border-radius:999px;padding:8px 10px 8px 18px;font-size:14px;font-weight:500;white-space:nowrap;max-width:calc(100vw - 24px)}
 .stage.chat-open .listbar{left:calc((100% - 440px)/2)}
 @media (max-width:1000px){.stage.chat-open .listbar{display:none}}
+.csec{font-size:15px;font-weight:600;margin:18px 0 8px;display:flex;align-items:baseline;gap:8px}.csec small{color:var(--faint);font-weight:400;font-size:12.5px}
 .gauge{background:var(--glass-2);border:1px solid var(--rim);border-radius:var(--r-tile);padding:14px 16px;margin:0 0 14px;box-shadow:var(--shadow)}
 .gauge .bar{height:10px;border-radius:999px;background:var(--well);overflow:hidden}
 .gauge .bar i{display:block;height:100%;background:var(--pine);border-radius:999px;transition:width .25s var(--ease)}
@@ -333,10 +368,11 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
   </div>
   <div class="foot">
     <button class="btn primary" id="pdf" type="button">Exporter en PDF</button>
-    <div style="display:flex;gap:8px"><button class="btn" id="copy" type="button" style="flex:1">Copier en texte</button><button class="btn" id="clear" type="button" style="flex:1">Vider</button></div>
+    <div style="display:flex;gap:8px"><button class="btn" id="copy" type="button" style="flex:1">Copier</button><button class="btn" id="mail" type="button" style="flex:1">E-mail</button><button class="btn" id="clear" type="button" style="flex:1">Vider</button></div>
   </div>
 </aside>
 <div id="lb" hidden></div>
+<div id="pm" hidden role="dialog" aria-modal="true"></div>
 <section id="print" aria-hidden="true"></section>
 
 <script src="data.js?v=202610301733"></script>
@@ -417,6 +453,7 @@ const MOUNT_OPTS = [
 ];
 const FN_OPTS = [
   {v:'interrupteur', t:'Interrupteurs', s:'3/1 va-et-vient, poussoirs', img:'7563.GMI.A.61'},
+  {v:'combi', t:'Combinaisons', s:'Interrupteur + prises, 2×1, 1×3, 2×2…', img:'7563/87003.FMI.2X1.61'},
   {v:'prise', t:'Prises T13', s:'Simples, doubles, triples', img:'87303.GMI.A.61'},
   {v:'usb', t:'Charge USB', s:'USB-A/C + T13', img:'8780.CC-A.GMI.A.61'},
   {v:'variateur', t:'Variateurs', s:'LED universel, DALI', img:'40200.LED.GMI.A.61'},
@@ -439,6 +476,7 @@ const FLOWS = {
     {key:'design', q:'Quelle ligne de design ?', s:'Le design décide de la référence. Blanc par défaut, couleur ajustable ensuite.', opts:DESIGN_OPTS},
     {key:'mount', q:'Encastré ou apparent ?', opts:MOUNT_OPTS},
     {key:'fn', q:'Quelles fonctions ?', s:'Plusieurs choix possibles.', opts:FN_OPTS, multi:true},
+    {key:'layout', q:'Disposition de la combinaison ?', s:'Lignes × colonnes. 2×1 = deux appareils l\'un sur l\'autre.', opts:[{v:'2x1',t:'2×1 vertical',s:'Interrupteur + prise',rec:'Le plus courant'},{v:'1x2',t:'1×2 horizontal'},{v:'3x1',t:'3×1 vertical'},{v:'1x3',t:'1×3 horizontal'},{v:'2x2',t:'2×2'},{v:'',t:'Toutes'}], compact:true, when:a=>(a.fn||[]).includes('combi')},
   ]},
   smart: { title:'Smart home', steps:[
     {key:'smart', q:'Quel niveau connecté ?', s:'Wiser pour la plupart des rénovations, KNX quand il y a un intégrateur, Matter pour quelques points autonomes.', opts:SMART_OPTS},
@@ -462,7 +500,9 @@ const FLOWS = {
       {v:'KVM', t:'Resi9 apparent multimédia', s:'Avec zone multimédia (routeur, fibre)', img:'R9H10797'},
       {v:'CX', t:'Resi9 CX', s:'13 ou 18 modules par rangée, porte séparée au choix (pleine, transparente, miroir, magnétique)', img:'R9H13603'}], when:a=>a.fam==='Resi9'&&a.install==='AP'},
     {key:'system', q:'Avec ou sans porte ?', opts:[{v:'IP44',t:'Avec porte, IP44',s:'Locaux techniques, humidité',img:'ABWRS103',rec:'Le plus courant'},{v:'IP30',t:'Sans porte, IP30',s:'Local sec, accès fréquent',img:'ABWRS103L04'}], when:a=>a.fam==='PrismaSeT'},
-    {key:'rows', q:'Combien de rangées ?', s:'Tu pourras ajuster dans le composeur selon ce qui rentre.', opts:[{v:'1',t:'1 rangée',s:'Petit tableau, sous-distribution'},{v:'2',t:'2 rangées',s:'Studio, petit appartement'},{v:'3',t:'3 rangées',s:'Appartement 3-4 pièces',rec:'Le cas courant'},{v:'4',t:'4 rangées',s:'Villa, PAC, borne'}], compact:true},
+    {key:'logement', q:'Quel logement ?', s:'Ça fixe le nombre de circuits de base (prises et lumière). Tu ajustes ensuite.', opts:[{v:'studio',t:'Studio / 2 pièces',s:'4 circuits'},{v:'appart',t:'Appartement 3-4 pièces',s:'6 circuits',rec:'Le cas courant'},{v:'grand',t:'5 pièces et plus',s:'8 circuits'},{v:'villa',t:'Villa',s:'10 circuits'}], compact:true},
+    {key:'equip', q:'Quels équipements à alimenter ?', s:'Chaque équipement ajoute son circuit, au bon ampérage.', multi:true, opts:[{v:'cuisiniere',t:'Cuisinière / four',s:'16 A triphasé'},{v:'lavelinge',t:'Lave-linge / sèche-linge',s:'16 A'},{v:'lavevaisselle',t:'Lave-vaisselle',s:'13 A'},{v:'boiler',t:'Boiler',s:'13 A triphasé + contacteur tarif'},{v:'pac',t:'Pompe à chaleur',s:'20 A triphasé'},{v:'borne',t:'Borne de recharge 11 kW',s:'16 A triphasé'},{v:'exterieur',t:'Extérieur / jardin',s:'16 A, différentiel'},{v:'stores',t:'Stores / volets',s:'13 A'}], compact:true},
+    {key:'options', q:'Options à proposer ?', s:'Ce sont les plus-values faciles à argumenter.', multi:true, opts:[{v:'spd',t:'Protection surtension',s:'Parafoudre type 2 : protège PAC, électronique, borne',rec:'Recommandé'},{v:'media',t:'Zone multimédia',s:'Routeur, fibre, switch dans le tableau'},{v:'reserve',t:'Réserve 20 %',s:'Une rangée de plus pour l\'avenir'},{v:'tl',t:'Télérupteurs',s:'Lumières sur poussoirs'}], compact:true},
     {key:'perrow', q:'Modules par rangée ?', opts:[{v:'13',t:'13 modules',rec:'Standard CX'},{v:'18',t:'18 modules',s:'Plus de réserve'}], compact:true, when:a=>a.system==='CX'},
     {key:'door', q:'Quelle porte ?', opts:[{v:'P',t:'Porte pleine',rec:'Standard'},{v:'V',t:'Porte rainurée',s:'Design, aération'}], compact:true, when:a=>a.system==='MOD'},
     {key:'door', q:'Quelle porte ?', opts:[{v:'P',t:'Pleine',rec:'Standard'},{v:'T',t:'Transparente',s:'Voir les disjoncteurs'},{v:'M',t:'Miroir',s:'Entrée, couloir'},{v:'MAG',t:'Magnétique inscriptible',s:'Notes, schémas'},{v:'YOU',t:'YOU personnalisable',s:'Photo ou visuel client'},{v:'',t:'Sans porte'}], compact:true, when:a=>a.system==='CX'},
@@ -486,6 +526,7 @@ const FLOWS = {
   ]},
 };
 const FN_QUERY = {
+  combi:(a)=>`combinaison ${a.design||''} ${a.mount||''} ${a.layout||''}`,
   interrupteur:(a)=>a.smart==='KNX' ? `poussoir KNX ${a.design||''}` : a.smart==='Matter' ? `Matter ${a.design||''}` : a.smart ? `interrupteur ${a.smart} ${a.design||''} ${a.mount||''}` : `interrupteur 3/1 ${a.design||''} ${a.mount||''}`,
   prise:(a)=>`prise t13 ${a.design||''} ${a.mount||''}`,
   usb:(a)=>`usb ${a.design||''} ${a.mount||''}`,
@@ -587,15 +628,15 @@ function resultsHtml(){
   const accCount={}; groups.forEach(g=>g.items.slice(0,24).forEach(it=>(it.acc||[]).forEach(a=>{ if(!a[0]||a[0]===it.f) return; accCount[a[0]]=(accCount[a[0]]||0)+1; })));
   const accItems=Object.entries(accCount).sort((a,b)=>b[1]-a[1]).map(([f])=>byF[f]).filter(Boolean).filter(it=>!groups.some(g=>g.items.includes(it))).slice(0,8);
   const accHtml = accItems.length ? `<section class="group acc"><h2>Pièces détachées et accessoires à prévoir <small>kits frontaux, cadres, boîtes, peignes… liés aux articles ci-dessus</small></h2><div class="cards">${accItems.map(cardHtml).join('')}</div></section>` : '';
-  return `<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig">Configuration complète par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':'Accueil'}</button>`}</div>${filters}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}</div>${body}${total?accHtml:''}`;
+  return `<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig" title="L'assistant compose une offre type avec quantités, accessoires et options, prête à ajouter">Offre type par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':'Accueil'}</button>`}</div>${filters}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}${r.brief?' · clique un produit pour sa fiche, « Ajouter » pour la liste, ou laisse l\'assistant composer une offre type avec quantités':''}</div>${body}${total?accHtml:''}`;
 }
 
 function cardHtml(it){
   const inList=list.find(x=>x.f===it.f);
   return `<article class="card ${it.nw?'is-new':''}" data-f="${esc(it.f)}">${it.nw?`<span class="k">Nouveau ${esc(it.nw)}</span>`:''}
-    <div class="pic" data-zoom="${esc(it.f)}"><img src="${esc(it.img)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"></div>
+    <div class="pic" data-open="${esc(it.f)}" title="Voir la fiche"><img src="${esc(it.img)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"></div>
     <div class="body">
-      <div class="desc">${esc(it.d)}</div>
+      <div class="desc" data-open="${esc(it.f)}" style="cursor:pointer">${esc(it.d)}</div>
       <div class="e num"><small>ELDAS</small>${it.e?esc(it.e):'<span style="font-size:13px;font-weight:400;color:var(--ink-3)">pas de N° ELDAS</span>'}</div>
       <div class="f num">${it.src==='sonepar'?`Schneider · grossiste${it.av?' · '+esc(it.av.replace(/, selon fournisseur/,''))  :''}`:`N° Feller ${esc(it.f)}`}</div>
       ${swatchesHtml(it)}
@@ -606,6 +647,32 @@ function cardHtml(it){
 function swatchesHtml(it){
   if(!it.vars||it.vars.length<2) return '';
   return `<div class="sw">${it.vars.map(v=>{ const c=colorOf(v[3])||{name:v[3].split(' ').slice(-1)[0],hex:'#ddd'}; const cur=v[0]===it.f; return `<button type="button" class="swatch" data-f="${esc(v[0])}" aria-pressed="${cur}" title="${esc(c.name)} · ELDAS ${esc(v[1]||'—')}" style="background:${c.hex}"></button>`; }).join('')}<span class="swl">${esc((colorOf(it.d)||{}).name||'')}</span></div>`;
+}
+function openSheet(f){
+  const it=byF[f]; if(!it) return;
+  const kv=[]; const get=n=>(it.tech||[]).find(x=>x[0].startsWith(n)); 
+  if(it.m) kv.push(['Montage',MOUNT[it.m]]); if(it.ip) kv.push(['Protection',it.ip]);
+  const u=get('Tension nominale'); if(u) kv.push(['Tension',u[1]+' '+(u[2]||'')]); const a=get('Courant nominal'); if(a) kv.push(['Courant',a[1]+' '+(a[2]||'')]);
+  const r=get('Type de raccordement'); if(r) kv.push(['Raccordement',r[1]]); const pr=get('Profondeur minimale'); if(pr) kv.push(['Boîte mini',pr[1]+' mm']);
+  const c=colorOf(it.d); if(c) kv.push(['Couleur',c.name]); if(it._dsg) kv.push(['Ligne',it._dsg]);
+  (it.tech||[]).filter(x=>/Puissance|Type|Rôle|Gestion|Connectivité|Différentiel intégré|Raccordement véhicule/.test(x[0])).forEach(x=>kv.push([x[0],x[1]+(x[2]?' '+x[2]:'')]));
+  const spec=(it.tech||[]).filter(x=>!/^(false)$/.test(x[1])).map(x=>`<div><span>${esc(x[0])}</span><span>${esc(x[1]==='true'?'Oui':x[1])}${x[2]?' '+esc(x[2]):''}</span></div>`).join('');
+  const accs=(it.acc||[]).map(a2=>`<div><span class="d">${esc(a2[2])}</span><span class="num" style="color:var(--muted)">${esc(a2[1]||'')}</span><button class="btn small add-ref" type="button" data-f="${esc(a2[0])}">+</button></div>`).join('');
+  const inList=list.find(x=>x.f===it.f);
+  $('pm').innerHTML=`<div class="sheet"><button class="close" id="pmclose" type="button" aria-label="Fermer">✕</button>
+    <div class="pic" data-f="${esc(it.f)}"><img src="${esc(it.img)}" alt="" onerror="this.style.visibility='hidden'"></div>
+    <div class="info">
+      <h2>${esc(it.d)}</h2>
+      <div class="ids"><span class="e num"><small>ELDAS</small>${it.e?esc(it.e):'—'}</span>${it.src==='sonepar'?`<span>Schneider · grossiste${it.av?' · '+esc(it.av.replace(/, selon fournisseur/,'')):''}</span>`:`<span class="num">N° Feller ${esc(it.f)}</span>`}${it.ean?`<span class="num">EAN ${esc(it.ean)}</span>`:''}</div>
+      <div class="tags">${it.nw?`<span class="tag new">Nouveau ${esc(it.nw)}</span>`:''}${it.soon?'<span class="tag soon">Pas encore disponible</span>':it.buy?'<span class="tag ok">Disponible</span>':'<span class="tag">Non commandable</span>'}${it.fu?`<button type="button" class="tag fu" data-fu="${esc(it.fu)}" style="cursor:pointer;border:0">Remplacé par ${esc(it.fu)} → voir</button>`:''}</div>
+      ${swatchesHtml(it)}
+      ${kv.length?`<div class="kv">${kv.slice(0,8).map(([k,v])=>`<div><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join('')}</div>`:''}
+      ${accs?`<h4>Accessoires et pièces à prévoir</h4><div class="accs">${accs}</div>`:''}
+      ${spec?`<details><summary style="cursor:pointer;color:var(--muted);font-size:13.5px">Toutes les caractéristiques (${(it.tech||[]).length})</summary><div class="spec">${spec}</div></details>`:''}
+      <div class="links"><a href="${docsUrl(it)}" target="_blank" rel="noopener">${it.src==='sonepar'?'Fiche grossiste ↗':'Fiche produit, brochures, plans cotés ↗'}</a>${it.src!=='sonepar'?`<a href="https://www.sonepar.ch/fr/search?q=${encodeURIComponent(it.e||it.f)}" target="_blank" rel="noopener">Prix et stock grossiste ↗</a>`:''}</div>
+      <div class="buy"><div class="cqty"><button type="button" class="st" data-d="-1" aria-label="Moins">−</button><input id="pmqty" class="num" type="number" min="1" value="${inList?inList.q:1}" style="width:54px;text-align:center;border:1px solid var(--line-2);border-radius:999px;padding:6px 4px;background:var(--float)"><button type="button" class="st" data-d="1" aria-label="Plus">+</button></div><button class="btn primary" id="pmadd" type="button" data-f="${esc(it.f)}">${inList?'Ajouter encore':'Ajouter à la liste'}</button></div>
+    </div></div>`;
+  $('pm').hidden=false;
 }
 function specHtml(it){
   const rows=(it.tech||[]).filter(x=>!/^(false|true)$/.test(x[1]) || /Compatible/.test(x[0])).map(x=>`<div><span>${esc(x[0])}</span><span>${esc(x[1]==='true'?'Oui':x[1]==='false'?'Non':x[1])}${x[2]?' '+esc(x[2]):''}</span></div>`).join('');
@@ -618,18 +685,20 @@ function catalogueLinks(q){ const e=encodeURIComponent((q||'').replace(/\b(ENC|A
 /* =============== composeur de tableau =============== */
 const UM_PER_ROW = {Resi9:12, PrismaSeT:24, Mureva:12};
 const COMPONENTS = [
-  {k:'fils13', label:'FI/LS Clario iC40 C13 30 mA, 1 UM', s:'Nouveau 2026 · le standard le plus demandé : prises et lumière, 1 module par circuit, place gagnée', q:'Clario iC40 13A 0.03A 1UM', um:1, def:4, nw:true},
-  {k:'fils16', label:'FI/LS Clario iC40 C16 30 mA, 1 UM', s:'Nouveau 2026 · prises cuisine, salle de bain, extérieur', q:'Clario iC40 16A 0.03A 1UM', um:1, def:2, nw:true},
-  {k:'ls13', label:'Disjoncteur iC40 C13 1LN', s:'Lumière sans différentiel propre', q:'Clario iC40 13A (C) 1LN', um:1, def:0},
-  {k:'ls16_3', label:'Disjoncteur iC40 C16 3LN', s:'Cuisinière, four, boiler triphasé', q:'Clario iC40 16A (C) 3LN', um:3, def:1},
-  {k:'ls20_3', label:'Disjoncteur iC40 C20 3LN', s:'Lave-linge / sèche-linge, PAC', q:'Clario iC40 20A (C) 3LN', um:3, def:0},
-  {k:'fi40', label:'Interrupteur différentiel iID 40 A 30 mA 4L', s:'FI en tête de groupe', q:'interrupteur differentiel iID 40A 30mA', um:4, def:1},
-  {k:'fi63', label:'Interrupteur différentiel iID 63 A 30 mA 4L', s:'Tête d\'installation plus puissante', q:'interrupteur differentiel iID 63A 30mA 4L', um:4, def:0},
-  {k:'spd', label:'Protection de surtension', s:'Parafoudre type 2, recommandé neuf / rénovation', q:'protection surtension', um:2, def:0, up:true},
-  {k:'tl', label:'Télérupteur TL 16 A', s:'Commande des lumières à poussoirs', q:'telerupteur TL', um:1, def:0},
-  {k:'ict', label:'Contacteur iCT 25 A 2F', s:'Boiler, chauffage, tarif nuit', q:'contacteur iCT 25A 2F', um:1, def:0},
-  {k:'min', label:'Minuterie', s:'Escalier, ventilation', q:'minuterie', um:1, def:0},
-  {k:'peigne', label:'Peigne de raccordement Clario iC40', s:'Alimentation propre des rangées', q:'peigne Clario', um:0, def:1, up:true},
+  {g:'Circuits prises et lumière', k:'fils13', label:'Circuit 13 A avec différentiel (FI/LS 1 module)', s:'Prises, lumière, lave-vaisselle, stores', q:'Clario iC40 13A 0.03A 1UM', um:1, def:4, nw:true},
+  {g:'Circuits prises et lumière', k:'fils16', label:'Circuit 16 A avec différentiel (FI/LS 1 module)', s:'Cuisine, salle de bain, lave-linge, extérieur', q:'Clario iC40 16A 0.03A 1UM', um:1, def:2, nw:true},
+  {g:'Circuits prises et lumière', k:'ls13', label:'Circuit 13 A simple (sans différentiel)', s:'Lumière protégée par un FI de groupe', q:'Clario iC40 13A (C) 1LN', um:1, def:0},
+  {g:'Gros consommateurs triphasés', k:'ls16_3', label:'Circuit 16 A triphasé', s:'Cuisinière, four, borne 11 kW', q:'Clario iC40 16A (C) 3LN', um:3, def:0},
+  {g:'Gros consommateurs triphasés', k:'ls13_3', label:'Circuit 13 A triphasé', s:'Boiler', q:'Clario iC40 13A (C) 3LN', um:3, def:0},
+  {g:'Gros consommateurs triphasés', k:'ls20_3', label:'Circuit 20 A triphasé', s:'Pompe à chaleur, sèche-linge puissant', q:'Clario iC40 20A (C) 3LN', um:3, def:0},
+  {g:'Gros consommateurs triphasés', k:'fi40', label:'Différentiel de groupe 40 A, 30 mA', s:'Protège les circuits triphasés ci-dessus', q:'interrupteur differentiel iID 40A 30mA', um:4, def:0},
+  {g:'Gros consommateurs triphasés', k:'fi63', label:'Différentiel de groupe 63 A, 30 mA', s:'Si plus de 40 A en tête', q:'interrupteur differentiel iID 63A 30mA 4L', um:4, def:0},
+  {g:'Commande', k:'ict', label:'Contacteur 25 A (tarif nuit, boiler)', s:'', q:'contacteur iCT 25A 2F', um:1, def:0},
+  {g:'Commande', k:'tl', label:'Télérupteur 16 A', s:'Lumières sur poussoirs', q:'telerupteur TL', um:1, def:0},
+  {g:'Commande', k:'min', label:'Minuterie', s:'Escalier, ventilation', q:'minuterie', um:1, def:0},
+  {g:'Options et finitions', k:'spd', label:'Protection surtension (parafoudre type 2)', s:'Protège PAC, électronique, borne', q:'protection surtension', um:2, def:0, up:true},
+  {g:'Options et finitions', k:'media', label:'Zone multimédia (plaque perforée + rail)', s:'Routeur, fibre, switch : compte 1 rangée', q:'Plaque perforée Resi9 appareils média', um:12, def:0, up:true},
+  {g:'Options et finitions', k:'peigne', label:'Peigne de raccordement', s:'Alimentation propre des rangées', q:'peigne Clario', um:0, def:1},
 ];
 function shellLines(c){
   const r=c.rows||3, L=[];
@@ -648,19 +717,22 @@ function coffretQuery(c){ return shellLines(c)[0].q; }
 function composerHtml(){
   const c=view; const perRow=c.perRow||UM_PER_ROW[c.fam]||12; const cap=(c.rows||3)*perRow;
   const shells = shellLines(c).map(l=>({...l, ref: byF[c.refs[l.k]] || searchFallback(l.q,{},3).items[0]}));
-  let used=0;
-  const rows = COMPONENTS.map(cp=>{ const qty=c.qty[cp.k]??cp.def; const ref=byF[c.refs[cp.k]] || searchFallback(cp.q,{},3).items[0]; const um=ref? umOf(ref,cp.um):cp.um; used+=qty*um;
-    return `<div class="crow ${qty?'':'off'}"><div class="cinfo"><b>${esc(cp.label)}${cp.nw?' <span class="tag new" style="background:var(--tomato);color:#fff;margin-left:6px">Nouveau</span>':''}</b><span>${esc(cp.s)}${cp.up?' · <i class="rec">option à proposer</i>':''}</span>${ref?`<div class="cref"><img src="${esc(ref.img)}" alt="" onerror="this.style.visibility='hidden'"><span>${esc(ref.d)}</span><em class="num">ELDAS ${esc(ref.e||'—')}</em><button class="btn link small" type="button" data-change="${esc(cp.k)}" data-q="${esc(cp.q)}">Changer</button></div>`:`<div class="cref"><span style="color:var(--faint)">Pas de référence trouvée · ${catalogueLinks(cp.q)}</span></div>`}</div><div class="cqty"><button type="button" class="st" data-k="${cp.k}" data-d="-1" aria-label="Moins">−</button><output class="num">${qty}</output><button type="button" class="st" data-k="${cp.k}" data-d="1" aria-label="Plus">+</button><small>${qty*um} UM</small></div></div>`; }).join('');
+  let used=0; const groups={};
+  COMPONENTS.forEach(cp=>{ const qty=c.qty[cp.k]??cp.def; const ref=byF[c.refs[cp.k]] || searchFallback(cp.q,{},3).items[0]; const um=cp.k==='media'?cp.um:(ref? umOf(ref,cp.um):cp.um); used+=qty*um; (groups[cp.g]=groups[cp.g]||[]).push({cp,qty,ref,um}); });
   const free=cap-used; const pct=Math.min(100,Math.round(used/cap*100));
+  const circuits=(c.qty.fils13??0)+(c.qty.fils16??0)+(c.qty.ls13??0)+(c.qty.ls16_3??0)+(c.qty.ls13_3??0)+(c.qty.ls20_3??0);
+  const rowHtml=({cp,qty,ref,um})=>`<div class="crow ${qty?'':'off'}"><div class="cinfo"><b>${esc(cp.label)}${cp.nw?' <span class="tag new" style="background:var(--tomato);color:#fff;margin-left:6px">Nouveau 2026</span>':''}</b>${cp.s?`<span>${esc(cp.s)}</span>`:''}${ref?`<div class="cref"><img src="${esc(ref.img)}" alt="" onerror="this.style.visibility='hidden'"><span>${esc(ref.d)}</span><em class="num">ELDAS ${esc(ref.e||'—')}</em><button class="btn link small" type="button" data-change="${esc(cp.k)}" data-q="${esc(cp.q)}">Changer</button></div>`:`<div class="cref"><span style="color:var(--faint)">Pas de référence trouvée · ${catalogueLinks(cp.q)}</span></div>`}</div><div class="cqty"><button type="button" class="st" data-k="${cp.k}" data-d="-1" aria-label="Moins">−</button><output class="num">${qty}</output><button type="button" class="st" data-k="${cp.k}" data-d="1" aria-label="Plus">+</button><small>${qty*um} UM</small></div></div>`;
+  const sections=Object.entries(groups).map(([g,rows])=>`<h2 class="csec">${esc(g)} <small>${rows.reduce((a,r)=>a+r.qty*r.um,0)} UM</small></h2>${rows.map(rowHtml).join('')}`).join('');
   return `<div class="wiz">
     <div class="crumbs"><button type="button" id="cback">Tableau & protection</button><span class="sep">›</span><span style="color:var(--text)">Composer le tableau</span></div>
-    <h1>${esc(c.fam)} ${c.rows?c.rows+' rangées':''} · ${c.install==='CREUSE'?'paroi creuse':MOUNT[c.mount]||''}${c.system&&c.system!=='KV'?' · '+esc(c.system==='MOD'?'modulaire':c.system):''}</h1>
-    <p class="sub">Règle les quantités : la jauge te dit ce qui rentre. Chaque ligne a sa référence catalogue avec N° ELDAS, modifiable.</p>
-    <div class="gauge ${used>cap?'over':free<cap*0.2?'tight':''}"><div class="bar"><i style="width:${pct}%"></i></div><div class="lbl"><b>${used} / ${cap} UM</b> ${used>cap?`· dépasse de ${used-cap} UM : ajoute une rangée ou retire des appareils`:free<cap*0.2?`· ${free} UM libres, réserve faible (20 % conseillés)`:`· ${free} UM libres pour l'avenir`}</div>
+    <h1>${esc(c.fam)} ${c.rows?c.rows+' rangées':''} · ${c.install==='CREUSE'?'paroi creuse':MOUNT[c.mount]||''}${c.system&&c.system!=='KV'?' · '+esc(c.system==='MOD'?'modulaire':c.system==='KVM'?'multimédia':c.system):''}</h1>
+    <p class="sub">${circuits} circuits · ${used} modules utilisés sur ${cap} · ${used>cap?`<b style="color:var(--tomato)">ça ne rentre pas : ajoute une rangée ou retire ${used-cap} UM</b>`:free<cap*0.2?`réserve faible (${free} UM) : une rangée de plus est prudent`:`${free} UM de réserve pour l'avenir`}</p>
+    <div class="gauge ${used>cap?'over':free<cap*0.2?'tight':''}"><div class="bar"><i style="width:${pct}%"></i></div>
       <div class="rowsel">Rangées <button type="button" class="st" data-rows="-1">−</button><output class="num">${c.rows||3}</output><button type="button" class="st" data-rows="1">+</button> · <span>${perRow} UM / rangée</span> <button type="button" class="btn link small" id="perrow">changer</button></div></div>
+    <h2 class="csec">Coffret et porte</h2>
     ${shells.map(l=>l.ref?`<div class="crow coffret"><div class="cinfo"><b>${esc(l.label)}</b><div class="cref"><img src="${esc(l.ref.img)}" alt="" onerror="this.style.visibility='hidden'"><span>${esc(l.ref.d)}</span><em class="num">ELDAS ${esc(l.ref.e||'—')}</em><button class="btn link small" type="button" data-change="${esc(l.k)}" data-q="${esc(l.q)}">Changer</button></div></div></div>`:`<div class="crow coffret"><div class="cinfo"><b>${esc(l.label)}</b><div class="cref"><span style="color:var(--faint)">Pas trouvé pour « ${esc(l.q)} » · ${catalogueLinks(l.q)}</span></div></div></div>`).join('')}
-    ${rows}
-    <div class="actions"><button class="btn primary" id="caddall" type="button">Ajouter le tableau à la liste</button><button class="btn" id="caskai" type="button">Faire vérifier par l'assistant</button><span class="hint">Quantité 0 = non ajouté.</span></div>
+    ${sections}
+    <div class="actions"><button class="btn primary" id="caddall" type="button">Ajouter le tableau à la liste</button><button class="btn" id="caskai" type="button">Faire vérifier par l'assistant</button><span class="hint">Quantité 0 = non ajouté. + / − pour ajuster.</span></div>
   </div>`;
 }
 function umOf(ref, dflt){ const m=(ref.d||'').match(/(\d+)\s*UM\b/i); if(m) return +m[1]; if(/\b3LN\b|\b3L\+N\b|\b3P\b/.test(ref.d)) return 3; if(/\b4L\b|\b4P\b/.test(ref.d)) return 4; if(/\b1LN\b|\b1L\+N\b|\b2P\b|\b1P\b/.test(ref.d)) return 1; return dflt; }
@@ -681,9 +753,9 @@ document.addEventListener('click',e=>{
   const st=e.target.closest('.st'); if(st&&view.name==='composer'){ if(st.dataset.rows){ view.rows=Math.max(1,Math.min(8,(view.rows||3)+(+st.dataset.rows))); } else { const k=st.dataset.k; const cp=COMPONENTS.find(c=>c.k===k); view.qty[k]=Math.max(0,(view.qty[k]??cp.def)+(+st.dataset.d)); } render(); return; }
   if(e.target.id==='perrow'){ const v=prompt('Modules par rangée (12, 18 ou 24) :', view.perRow||UM_PER_ROW[view.fam]||12); const n=parseInt(v); if(n>0){ view.perRow=n; render(); } return; }
   const ch=e.target.closest('[data-change]'); if(ch&&view.name==='composer'){ const comp={...view}; go({name:'results', q:ch.dataset.q, title:'Choisir : '+ch.dataset.q, pick:{k:ch.dataset.change, comp}}); return; }
-  if(e.target.id==='caddall'){ const c=view; let n=0; shellLines(c).forEach(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; if(ref){ addToList(ref,null,1,true); n++; } }); COMPONENTS.forEach(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; if(ref){ addToList(ref,null,qty,true); n++; } }); renderList(); toast(`${n} références ajoutées`,{label:'Voir la liste',fn:openList}); return; }
+  if(e.target.id==='caddall'){ const c=view; let n=0; shellLines(c).forEach(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; if(ref){ addToList(ref,null,1,true); n++; } }); if(c.qty.media){ const rail=searchFallback('Rail DIN Resi9 appareils média',{},1).items[0]; if(rail){ addToList(rail,null,1,true); n++; } } COMPONENTS.forEach(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; if(ref){ addToList(ref,null,qty,true); n++; } }); renderList(); toast(`${n} références ajoutées`,{label:'Voir la liste',fn:openList}); return; }
   if(e.target.id==='caskai'){ const c=view; const shellTxt=shellLines(c).map(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; return ref?`${l.label} (${ref.f}, ELDAS ${ref.e})`:l.label; }).join(' ; '); const lines=shellTxt+' ; '+COMPONENTS.map(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return null; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; return `${qty}× ${cp.label}${ref?` (${ref.f}, ELDAS ${ref.e})`:''}`; }).filter(Boolean).join(' ; '); openChat(); sendChat(`Vérifie ce tableau ${c.fam} ${c.rows} rangées ${MOUNT[c.mount]||''} : ${lines}. Dis-moi en 5 lignes max ce qui manque ou ce qui est surdimensionné, et 1 ou 2 options à proposer. Pas de questions.`, `Vérification du tableau ${c.fam} ${c.rows} rangées`); return; }
-  if(e.target.id==='askconfig'){ openChat(); sendChat(view.brief, 'Configuration complète : '+(view.title||'')); return; }
+  if(e.target.id==='askconfig'){ openChat(); sendChat(view.brief, 'Offre type : '+(view.title||'')); return; }
   if(e.target.id==='askthis'){ openChat(); sendChat(view.q); return; }
   const chipb=e.target.closest('.filters .chip'); if(chipb){ const k=chipb.dataset.k, v=chipb.dataset.v; if(k==='reset') F={design:'',mount:'',ip:false,nw:false}; else if(k==='ip'||k==='nw') F[k]=!F[k]; else F[k]=F[k]===v?'':v; render(); return; }
   const add=e.target.closest('.add'); if(add){ const it=byF[add.closest('.card').dataset.f]; if(!it) return; if(view.pick){ const {k,comp}=view.pick; view=comp; composerPick(k,it); return; } addToList(it,add); return; }
@@ -691,10 +763,16 @@ document.addEventListener('click',e=>{
   const mb=e.target.closest('.more-btn'); if(mb){ const card=mb.closest('.card'); const open=mb.getAttribute('aria-expanded')==='true'; card.querySelector('.more')?.remove(); if(!open) card.insertAdjacentHTML('beforeend',specHtml(byF[card.dataset.f])); mb.setAttribute('aria-expanded',String(!open)); mb.textContent=open?('Détails'+((byF[card.dataset.f].acc||[]).length?` · ${byF[card.dataset.f].acc.length} acc.`:'')):'Masquer'; return; }
   const fu=e.target.closest('[data-fu]'); if(fu){ const it=byF[fu.dataset.fu]; $('q').value=fu.dataset.fu; F={design:'',mount:'',ip:false,nw:false}; go({name:'results', q:fu.dataset.fu, title:it?`Remplaçant : ${it.d}`:`Remplaçant ${fu.dataset.fu}`}); return; }
   const sw=e.target.closest('.swatch'); if(sw){ const card=sw.closest('.card'); const it=byF[sw.dataset.f]; if(it&&card){ card.outerHTML=cardHtml(it); } return; }
+  const op=e.target.closest('[data-open]'); if(op){ openSheet(op.dataset.open); return; }
+  if(e.target.id==='pmclose' || (e.target.id==='pm')){ $('pm').hidden=true; return; }
+  const pz=e.target.closest('#pm .pic'); if(pz){ const it=byF[pz.dataset.f]; $('lb').innerHTML=`<img src="${esc(it.img)}" alt=""><div class="cap">${esc(it.d)}</div>`; $('lb').hidden=false; return; }
+  const pq=e.target.closest('#pm .st'); if(pq){ const o=$('pmqty'); o.value=Math.max(1,(+o.value||1)+(+pq.dataset.d)); return; }
+  if(e.target.id==='pmadd'){ const it=byF[e.target.dataset.f]; const q=Math.max(1,+$('pmqty').value||1); addToList(it,null,q); $('pm').hidden=true; return; }
+  const psw=e.target.closest('#pm .swatch'); if(psw){ openSheet(psw.dataset.f); return; }
   const z=e.target.closest('[data-zoom]'); if(z){ const it=byF[z.dataset.zoom]; $('lb').innerHTML=`<img src="${esc(it.img)}" alt=""><div class="cap">${esc(it.d)} · ELDAS ${esc(it.e||'—')}</div>`; $('lb').hidden=false; return; }
   if(e.target.closest('#lb')){ $('lb').hidden=true; return; }
 });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ $('lb').hidden=true; closeList(); if(window.innerWidth<=1000) closeChat(); } });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ $('lb').hidden=true; $('pm').hidden=true; closeList(); if(window.innerWidth<=1000) closeChat(); } });
 
 function startFlow(flow){
   if(flow==='nouveautes'){ F={design:'',mount:'',ip:false,nw:true}; go({name:'results', title:'Nouveautés 2025–2026', q:''}); return; }
@@ -734,15 +812,23 @@ function finishFlow(){
   F={design:'',mount:'',ip:false,nw:false};
   let groups=[], title='', brief='';
   if(view.flow==='tableau'){
-    const comp={name:'composer', fam:a.fam||'Resi9', install:a.install||'ENC', system:a.system||'KV', door:a.door??'P', rows:parseInt(a.rows)||3, perRow:a.system==='CX'?parseInt(a.perrow)||13:(a.fam==='PrismaSeT'?24:12), mount:a.install==='AP'?'AP':'ENC', qty:{}, refs:{}, wiz};
+    const eq=a.equip||[], op=a.options||[]; const base={studio:[3,1],appart:[4,2],grand:[6,2],villa:[7,3]}[a.logement||'appart'];
+    const qty={fils13:base[0]+(eq.includes('lavevaisselle')?1:0)+(eq.includes('stores')?1:0), fils16:base[1]+(eq.includes('lavelinge')?1:0)+(eq.includes('exterieur')?1:0),
+      ls16_3:(eq.includes('cuisiniere')?1:0)+(eq.includes('borne')?1:0), ls13_3:eq.includes('boiler')?1:0, ls20_3:eq.includes('pac')?1:0, ict:eq.includes('boiler')?1:0,
+      fi40:(eq.includes('cuisiniere')||eq.includes('boiler')||eq.includes('pac')||eq.includes('borne'))?1:0, spd:op.includes('spd')?1:0, tl:op.includes('tl')?2:0, media:op.includes('media')?1:0, peigne:1};
+    let system=a.system||'KV'; if(op.includes('media')&&a.install==='AP'&&a.fam==='Resi9'&&system==='KV') system='KVM';
+    const perRow=system==='CX'?parseInt(a.perrow)||13:(a.fam==='PrismaSeT'?24:12);
+    const umTotal=qty.fils13+qty.fils16+qty.ls16_3*3+qty.ls13_3*3+qty.ls20_3*3+qty.ict+qty.fi40*4+qty.spd*2+qty.tl+qty.media*12;
+    const rows=Math.min(4,Math.max(1,Math.ceil(umTotal*(op.includes('reserve')?1.45:1.2)/perRow)));
+    const comp={name:'composer', fam:a.fam||'Resi9', install:a.install||'ENC', system, door:a.door??'P', rows, perRow, mount:a.install==='AP'?'AP':'ENC', qty, refs:{}, wiz, why:{logement:a.logement, eq, op}};
     remember(`Tableau ${comp.fam} ${comp.rows} rangées`, comp); go(comp); return;
   } else {
-    const ctx={design:a.design||'', mount:a.mount||'', smart:a.smart||''};
+    const ctx={design:a.design||'', mount:a.mount||'', smart:a.smart||'', layout:a.layout||''};
     if(view.flow==='exterieur') ctx.design='NEVO';
     const fns=(a.fn&&a.fn.length)?a.fn:['interrupteur','prise'];
     fns.forEach(fn=>groups.push({label:FN_LABEL[fn], q:FN_QUERY[fn](ctx)}));
     title=[ctx.smart, ctx.design, MOUNT[ctx.mount]].filter(Boolean).join(' · ')||flow.title;
-    brief=`${flow.title} : ligne ${ctx.design||'au choix'}, montage ${MOUNT[ctx.mount]||'à préciser'}${ctx.smart?`, niveau connecté ${ctx.smart}`:''}, fonctions : ${fns.map(f=>FN_LABEL[f]).join(', ')}. Propose une configuration type pour une pièce avec N° ELDAS (accessoires inclus) et 2 à 3 upsells. Ne me repose pas ces questions.`;
+    brief=`${flow.title} : ligne ${ctx.design||'au choix'}, montage ${MOUNT[ctx.mount]||'à préciser'}${ctx.smart?`, niveau connecté ${ctx.smart}`:''}, fonctions : ${fns.map(f=>FN_LABEL[f]).join(', ')}. Compose une offre type pour une pièce (quantités réalistes : par ex. 1 interrupteur 3/1, 3 prises 3×T13, accessoires inclus) avec propose_list, et 2 à 3 upsells. Ne me repose pas ces questions.`;
   }
   remember(title, {name:'results', title, groups, brief, from:'wizard', wiz});
   go({name:'results', title, groups, brief, from:'wizard', wiz});
@@ -761,7 +847,7 @@ function renderList(){
   $('listbar').hidden=!list.length; $('listbartxt').textContent=`${tot} pièce${tot>1?'s':''} · ${list.length} référence${list.length>1?'s':''}`;
   $('badge').textContent=tot; $('n').textContent = list.length ? `${tot} pièce${tot>1?'s':''}` : '';
   $('aside-empty').style.display = list.length?'none':'block';
-  $('items').innerHTML = list.map((x,i)=>`<div class="item"><img src="${esc(x.img||PIC(x.f))}" alt="" onerror="this.style.visibility='hidden'"><div><div class="d">${esc(x.d)}</div><div class="e num">ELDAS ${esc(x.e||'—')} · ${esc(x.f)}</div></div><input class="q num" type="number" min="1" step="1" value="${x.q}" data-i="${i}" aria-label="Quantité"><button class="x" type="button" data-i="${i}" aria-label="Retirer">×</button></div>`).join('');
+  $('items').innerHTML = list.map((x,i)=>`<div class="item"><img src="${esc(x.img||PIC(x.f))}" alt="" data-open="${esc(x.f)}" style="cursor:pointer" onerror="this.style.visibility='hidden'"><div><div class="d" data-open="${esc(x.f)}" style="cursor:pointer">${esc(x.d)}</div><div class="e num">ELDAS ${esc(x.e||'—')} · ${esc(x.f)}</div></div><input class="q num" type="number" min="1" step="1" value="${x.q}" data-i="${i}" aria-label="Quantité"><button class="x" type="button" data-i="${i}" aria-label="Retirer">×</button></div>`).join('');
   $('c_name').value=client.name; $('c_notes').value=client.notes;
 }
 function saveList(){ store.set('offre.items',list); renderList(); }
@@ -773,6 +859,7 @@ function openList(){ $('drawer').hidden=false; $('scrim').hidden=false; }
 function closeList(){ $('drawer').hidden=true; $('scrim').hidden=true; }
 $('openlist').onclick=openList; $('closelist').onclick=closeList; $('scrim').onclick=closeList; $('lb-open').onclick=openList; $('lb-pdf').onclick=()=>$('pdf').click();
 $('tools').innerHTML='<h3>Configurateurs et outils</h3>'+TOOLS.map(t=>`<a href="${t.url}" target="_blank" rel="noopener">${esc(t.name)}<span>${esc(t.why)}</span></a>`).join('');
+$('mail').onclick=()=>{ if(!list.length){ toast('La liste est vide'); return; } const body=[`Bonjour,`,'',`Voici la liste de matériel${client.name?' pour '+client.name:''} :`,'',...list.map(x=>`${x.q} × ${x.d} (ELDAS ${x.e||'—'}, N° Feller ${x.f})`),'',client.notes||'','Meilleures salutations','Nicola Strummiello'].join('\n'); location.href=`mailto:?subject=${encodeURIComponent('Liste de matériel'+(client.name?' – '+client.name:''))}&body=${encodeURIComponent(body)}`; };
 $('copy').onclick=async()=>{ const txt=[`Liste de matériel${client.name?' – '+client.name:''}`,'',...list.map(x=>`${x.q} × ${x.d}  (ELDAS ${x.e||'—'}, N° Feller ${x.f})`),'',client.notes].join('\n'); try{ await navigator.clipboard.writeText(txt); toast('Liste copiée'); }catch(e){ prompt('Copie manuelle :',txt); } };
 $('pdf').onclick=()=>{
   if(!list.length){ toast('La liste est vide'); return; }
@@ -805,9 +892,14 @@ function renderChat(state){
     const meta=chatMeta[i]||{};
     const refs=(meta.refs||[]).map(x=>`<button type="button" class="add-ref" data-f="${esc(x.f)}" title="${esc(x.d)}"><img src="${PIC(x.f)}" alt="" onerror="this.remove()">+ ${esc(x.e)} · ${esc(x.d.slice(0,34))}${x.d.length>34?'…':''}</button>`).join('');
     const qs=(meta.questions&&meta.questions.length&&i===chat.length-1)?questionsHtml(meta.questions):'';
-    return `${m.content?`<div class="msg a">${md(m.content)}${refs?`<div class="refs">${refs}</div>`:''}</div>`:''}${qs}`;
+    const pr=meta.proposal?proposalHtml(meta.proposal,i):'';
+    return `${m.content&&!(meta.proposal&&/^Proposition :/.test(m.content))?`<div class="msg a">${md(m.content)}${refs?`<div class="refs">${refs}</div>`:''}</div>`:''}${pr}${qs}`;
   }).join('') + (state==='loading'?`<div class="msg think">L'assistant cherche dans le catalogue<span class="dot"></span></div>`: state?`<div class="msg a" style="color:var(--danger)">${esc(state)}</div>`:'');
   th.scrollTop=th.scrollHeight;
+}
+function proposalHtml(pr,i){
+  const row=(x,up)=>`<label class="prow ${up?'up':''}"><input type="checkbox" data-f="${esc(x.f)}" data-q="${x.q}" ${up?'':'checked'}><img src="${esc(x.img||PIC(x.f))}" alt="" onerror="this.style.visibility='hidden'"><span class="t"><b data-open="${esc(x.f)}" style="cursor:pointer">${esc(x.d)}</b><small>${x.note?esc(x.note)+' · ':''}ELDAS ${esc(x.e)}</small></span><span class="q num">${x.q}×</span></label>`;
+  return `<div class="prop" data-i="${i}"><div class="ph"><b>${esc(pr.title)}</b><small>${pr.items.reduce((a,x)=>a+x.q,0)} pièces · coche ce que tu gardes</small></div>${pr.summary?`<p>${md(pr.summary)}</p>`:''}${pr.items.map(x=>row(x,false)).join('')}${pr.upsells&&pr.upsells.length?`<div class="pu">Options à proposer</div>${pr.upsells.map(x=>row(x,true)).join('')}`:''}<div class="pa"><button class="btn primary small padd" type="button">Ajouter la sélection à la liste</button></div></div>`;
 }
 function questionsHtml(qs){
   return `<div class="qs" id="qs">${qs.map((q,qi)=>`<div class="q">${esc(q.q)}</div><div class="o" data-qi="${qi}" data-multi="${q.multi?1:0}">${q.options.map(o=>`<button type="button" data-o="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</div>`).join('')}<div class="send"><button class="btn primary small" type="button" id="qsend" disabled>Envoyer les réponses</button><small>ou écris librement ci-dessous</small></div></div>`;
@@ -815,6 +907,7 @@ function questionsHtml(qs){
 $('thread').addEventListener('click',e=>{
   const st=e.target.closest('[data-starter]'); if(st){ if(st.dataset.starter.startsWith('📷')){ $('cfile').click(); return; } sendChat(st.dataset.starter); return; }
   const ob=e.target.closest('.qs .o button'); if(ob){ const grp=ob.parentElement; if(grp.dataset.multi==='1'){ ob.setAttribute('aria-pressed',String(ob.getAttribute('aria-pressed')!=='true')); } else { grp.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false')); ob.setAttribute('aria-pressed','true'); } $('qsend').disabled=!$('qs').querySelector('[aria-pressed="true"]'); return; }
+  const pa=e.target.closest('.padd'); if(pa){ const box=pa.closest('.prop'); let n=0; box.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{ const it=byF[cb.dataset.f]; if(it){ addToList(it,null,+cb.dataset.q||1,true); n++; } }); renderList(); toast(`${n} références ajoutées`,{label:'Voir la liste',fn:openList}); pa.textContent='Ajouté ✓'; return; }
   if(e.target.id==='qsend'){ const meta=chatMeta[chatMeta.length-1]; const ans=meta.questions.map((q,qi)=>{ const sel=[...$('qs').querySelectorAll(`.o[data-qi="${qi}"] button[aria-pressed="true"]`)].map(b=>b.dataset.o.replace(/\s*\(recommandé\)\s*/i,'')); return sel.length?`${q.q} ${sel.join(', ')}`:null; }).filter(Boolean).join(' · '); if(ans) sendChat(ans); return; }
 });
 let pendingImage=null;
@@ -832,7 +925,7 @@ async function sendChat(text, display){
     const j=await r.json().catch(()=>({}));
     if(r.status===401){ chat.pop(); chatMeta.pop(); accessCode=''; store.set('offre.code',''); renderChat(); showGate("Code d'accès incorrect."); return; }
     if(!r.ok){ chat.pop(); chatMeta.pop(); renderChat(`${j.error||'Assistant indisponible.'}${j.detail?' — '+j.detail:''}`); return; }
-    chat.push({role:'assistant',content:j.answer||''}); chatMeta.push({refs:j.refs||[],searches:j.searches||[],questions:j.questions||[]});
+    chat.push({role:'assistant',content:j.answer||(j.proposal?`Proposition : ${j.proposal.title}`:'')}); chatMeta.push({refs:j.refs||[],searches:j.searches||[],questions:j.questions||[],proposal:j.proposal||null});
     renderChat();
   }catch(e){ chat.pop(); chatMeta.pop(); renderChat("Pas de connexion à l'assistant."); }
   finally{ $('csend').disabled=false; }

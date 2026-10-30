@@ -75,7 +75,7 @@ MÉTHODE DE VENTE (configurateur conversationnel) :
   2. Montage : encastré (ENC) ou apparent (AP) ; extérieur / local humide → IP44+ (NEVO).
   3. Niveau connecté : conventionnel · Wiser by Feller (smart home sans bus, modernisation) · KNX (bus, projets exigeants) · Matter/RF (autonome, compatible Apple/Google/Alexa).
   Pour les tableaux : encastré/apparent, nombre de rangées/modules, IP, Resi9 (habitat) vs PrismaSeT (tertiaire) vs Mureva (IP65).
-- Une fois le cadrage fait, propose UNE configuration recommandée (liste de références avec N° ELDAS, accessoires inclus : kits frontaux, cadres, boîtes si nécessaires) et, séparément, 2 à 3 options d'upsell pertinentes et justifiées en une ligne chacune (ex. prise USB-C de charge, variateur, détecteur de mouvement, capteur Wiser température/CO₂, poussoir de store, thermostat Matter, disjoncteur différentiel Clario iC40 compact, montée en gamme de ligne de design). Jamais plus de 3 upsells, jamais d'upsell sans lien avec le besoin.
+- Une fois le cadrage fait, livre la configuration avec l'outil propose_list (items = la configuration recommandée avec quantités et accessoires nécessaires : kits frontaux, cadres, boîtes ; upsells = 2 à 3 options). N'écris pas la liste dans le texte quand tu utilises propose_list ; le texte sert aux hypothèses et aux points à vérifier. Options d'upsell pertinentes et justifiées en une ligne chacune (ex. prise USB-C de charge, variateur, détecteur de mouvement, capteur Wiser température/CO₂, poussoir de store, thermostat Matter, disjoncteur différentiel Clario iC40 compact, montée en gamme de ligne de design). Jamais plus de 3 upsells, jamais d'upsell sans lien avec le besoin.
 - Toujours vérifier chaque référence proposée avec search_catalogue avant de l'écrire.
 
 BORNES DE RECHARGE (projet e-mobilité) :
@@ -84,6 +84,15 @@ BORNES DE RECHARGE (projet e-mobilité) :
 - Puis livre : architecture recommandée en 4-6 lignes, liste de matériel catalogue (disjoncteur par borne, différentiel type A-EV ou B selon la borne, compteur/mesure pour gestion dynamique, coffret, câblage à prévoir), points à vérifier (puissance de raccordement, OIBT/NIBT, avis d'installation au GRD, câble de données vers l'armoire pour la gestion dynamique), et 2 upsells max (ex. préparation des places futures : tubes et réserve de modules ; borne connectée pour facturation locataires).`;
 
 const TOOLS = [{
+  name: 'propose_list',
+  description: "Livre une configuration / liste de matériel structurée (quantités + justification courte) que Nicola peut ajouter d'un clic à sa liste. À utiliser pour toute proposition de plusieurs références (configuration de pièce, tableau, projet bornes). Chaque eNo doit venir d'un résultat de search_catalogue.",
+  input_schema: { type: 'object', properties: {
+    title: { type: 'string', description: 'Titre court de la proposition' },
+    summary: { type: 'string', description: '1 à 3 phrases : hypothèses prises et points à vérifier' },
+    items: { type: 'array', items: { type: 'object', properties: { eNo: { type: 'string' }, qty: { type: 'integer' }, note: { type: 'string', description: 'À quoi sert cette référence, 5 mots' } }, required: ['eNo', 'qty'] } },
+    upsells: { type: 'array', items: { type: 'object', properties: { eNo: { type: 'string' }, qty: { type: 'integer' }, note: { type: 'string', description: 'Argument de vente en une ligne' } }, required: ['eNo', 'qty'] } }
+  }, required: ['title', 'items'] }
+}, {
   name: 'ask_user',
   description: "Pose à Nicola 1 à 3 questions de cadrage à choix (réponses cliquables). À utiliser pour le cadrage au lieu d'écrire les questions dans le texte. Après l'appel, la réponse de l'utilisateur arrive au tour suivant.",
   input_schema: { type: 'object', properties: {
@@ -142,6 +151,13 @@ module.exports = async (req, res) => {
       const toolUses = (data.content || []).filter(c => c.type === 'tool_use');
       const text = (data.content || []).filter(c => c.type === 'text').map(c => c.text).join('\n');
       debug.push({ step, stop: data.stop_reason, tools: toolUses.map(t => t.name), textLen: text.length });
+      const prop = toolUses.find(t => t.name === 'propose_list');
+      if (prop) {
+        const db = loadDb(); const mk = x => { const it = db.find(i => i.e === String(x.eNo).replace(/\D/g, '')); return it ? { f: it.f, e: it.e, d: it.d, q: Math.max(1, +x.qty || 1), note: x.note || '', img: it.img } : null; };
+        const proposal = { title: prop.input.title || 'Proposition', summary: prop.input.summary || '', items: (prop.input.items || []).map(mk).filter(Boolean), upsells: (prop.input.upsells || []).map(mk).filter(Boolean) };
+        const missing = (prop.input.items || []).length - proposal.items.length;
+        return res.status(200).json({ answer: [text, missing > 0 ? `(${missing} référence(s) non trouvée(s) dans le catalogue ont été écartées.)` : ''].filter(Boolean).join('\n'), proposal, refs: [], searches, debug });
+      }
       const askQ = toolUses.find(t => t.name === 'ask_user');
       if (askQ) {
         const qs = (askQ.input.questions || []).slice(0, 3).map(q => ({ q: q.q, options: (q.options || []).slice(0, 6), multi: !!q.multi }));
