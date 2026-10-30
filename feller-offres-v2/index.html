@@ -321,7 +321,14 @@ $('gateform').onsubmit=e=>{ e.preventDefault(); const c=$('gatecode').value.trim
 function productUrl(it){ return 'https://online-katalog.feller.ch/fr/product?fnr='+encodeURIComponent(it.f); }
 function docsUrl(it){ return productUrl(it)+'#documents'; }
 function esc(s){ return (s||'').toString().replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
-function linkify(s){ return esc(s).replace(/(https?:\/\/[^\s)]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>'); }
+function linkify(s){
+  // markdown minimal : gras, liens, puces, titres légers
+  return esc(s)
+    .replace(/(https?:\/\/[^\s)]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>')
+    .replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/^#{1,3}\s+(.+)$/gm,'<strong>$1</strong>')
+    .replace(/^[-•]\s+/gm,'• ');
+}
 
 function renderFilters(){
   const b=(label,key,val,cls='')=>`<button class="chip ${cls}" type="button" data-k="${key}" data-v="${val}" aria-pressed="${String(F[key])===String(val) || (typeof F[key]==='boolean' && F[key] && val==='1')}">${label}</button>`;

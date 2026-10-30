@@ -34,7 +34,7 @@ function search(q, limit = 15) {
   }));
 }
 
-const SYSTEM = `Tu es l'assistant technique et commercial de Nicola, Field Sales Engineer canal électricien chez Feller AG (Schneider Electric Suisse). Tu réponds en français, de façon directe, courte et experte, comme un collègue senior.
+const SYSTEM = `Tu es l'assistant technique et commercial de Nicola, Field Sales Engineer canal électricien chez Feller AG (Schneider Electric Suisse). Tu réponds en français, de façon directe, courte et experte, comme un collègue senior. Tu tutoies Nicola. Pas de markdown lourd : gras (**) et puces (-) seulement, pas de tableaux ni de titres.
 
 Règles :
 - Pour toute question sur l'existence, la référence, la compatibilité ou les caractéristiques d'un produit, utilise d'abord l'outil search_catalogue (plusieurs recherches avec des formulations différentes si besoin). Ne devine jamais une référence ou un N° ELDAS : cite uniquement ceux renvoyés par l'outil.
@@ -45,6 +45,13 @@ Règles :
 - Mets en avant les nouveautés 2025-2026 quand elles répondent au besoin (champ nouveaute).
 - Normes et pratique suisse (NIBT/OIBT, prises T13/T23, 230/400 V) : reste précis et prudent, recommande de vérifier la fiche technique pour les points critiques.
 - Format : phrases courtes, listes seulement quand plusieurs références. Termine par la prochaine action utile (ajouter à la liste, ouvrir le configurateur, vérifier une fiche).
+
+VOCABULAIRE DU CATALOGUE (pour formuler les recherches) :
+- Schémas : 3/1 = va-et-vient, 3/1L = lumineux, 1/3+3/1P, 6/1 = permutateur, A-R = poussoir. Prises : T13, 2×T13, 3×T13, T23 (16 A), T25, USB A+C.
+- Wiser by Feller : « Interrupteur à poussoir … Wiser … WLAN » (appareil principal avec passerelle Wi-Fi intégrée, 1 par installation ou par zone), « Interrupteur stores … Wiser », « Variateur Uni-LED … Wiser », « Poussoir scènes … Wiser », « Station secondaire … Wiser » (commande supplémentaire), « Commande pour interrupteur / stores / variateur » (set de commande sans la partie puissance), « Kit de montage 920-… Wiser » (kit frontal), « Capteur de température ambiante … Wiser ». Il n'y a pas de passerelle séparée : la version WLAN d'un appareil porte la passerelle. Cherche avec ces mots-là (ex. « Wiser interrupteur à poussoir WLAN EDIZIO.liv », « Wiser interrupteur stores EDIZIO.liv »).
+- Montage : ENC = encastré, AP = apparent, FLF/FH = montage dans canal ; SNAPFIX = fixation EDIZIO.liv ; « bc » = blanc, « .61 » = blanc, « .60 » = noir.
+- Distribution : « Coffret … Resi9 » (rangées × 12/18 UM), « Clario iC40 » disjoncteurs/différentiels, « PrismaSeT », « Pragma », « Mureva » (IP65).
+- Fais des recherches COURTES (2 à 4 mots) et au maximum 6 recherches par réponse. Dès que tu as les références principales, réponds ; ne cherche pas tous les accessoires.
 
 MÉTHODE DE VENTE (configurateur conversationnel) :
 - Si la demande est un besoin (pas une référence précise), cadre d'abord avec AU MAXIMUM 3 questions courtes, numérotées, avec des choix proposés, puis attends la réponse. Ne pose que les questions dont la réponse change la référence. Questions types, dans cet ordre de priorité :
@@ -66,6 +73,15 @@ const TOOLS = [{
   input_schema: { type: 'object', properties: { query: { type: 'string', description: 'Mots-clés de recherche' }, limit: { type: 'integer', description: 'Nombre max de résultats (défaut 12)' } }, required: ['query'] }
 }];
 
+function withFinalNudge(messages) {
+  const nudge = { type: 'text', text: 'Assez de recherches : réponds maintenant avec les références déjà trouvées, et dis ce qui reste à vérifier.' };
+  const m = messages.map(x => ({ ...x }));
+  const lastMsg = m[m.length - 1];
+  if (lastMsg.role === 'user') lastMsg.content = Array.isArray(lastMsg.content) ? [...lastMsg.content, nudge] : [{ type: 'text', text: lastMsg.content }, nudge];
+  else m.push({ role: 'user', content: [nudge] });
+  return m;
+}
+
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST uniquement' });
@@ -81,11 +97,15 @@ module.exports = async (req, res) => {
   const messages = history.map(m => ({ role: m.role, content: m.content }));
   const searches = [];
   let answer = '';
-  for (let step = 0; step < 5; step++) {
+  const MAX_STEPS = 7;
+  for (let step = 0; step < MAX_STEPS; step++) {
+    const last = step === MAX_STEPS - 1;
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: process.env.MODEL || 'claude-sonnet-5-5', max_tokens: 1200, system: SYSTEM + context, tools: TOOLS, messages })
+      body: JSON.stringify({ model: process.env.MODEL || 'claude-sonnet-5-5', max_tokens: 1500, system: SYSTEM + context,
+        tools: TOOLS, tool_choice: last ? { type: 'none' } : { type: 'auto' },
+        messages: last ? withFinalNudge(messages) : messages })
     });
     if (!r.ok) { const t = await r.text(); return res.status(502).json({ error: 'Erreur API modèle', detail: t.slice(0, 300) }); }
     const data = await r.json();
