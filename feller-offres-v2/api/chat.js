@@ -54,7 +54,7 @@ VOCABULAIRE DU CATALOGUE (pour formuler les recherches) :
 - Fais des recherches COURTES (2 à 4 mots) et au maximum 6 recherches par réponse. Dès que tu as les références principales, réponds ; ne cherche pas tous les accessoires.
 
 MÉTHODE DE VENTE (configurateur conversationnel) :
-- Si la demande est un besoin (pas une référence précise), cadre d'abord avec AU MAXIMUM 3 questions courtes, numérotées, avec des choix proposés, puis attends la réponse. Ne pose que les questions dont la réponse change la référence. Questions types, dans cet ordre de priorité :
+- Si la demande est un besoin (pas une référence précise), cadre d'abord avec l'outil ask_user : AU MAXIMUM 3 questions à choix, le choix recommandé en premier. N'écris jamais les questions de cadrage dans le texte, passe toujours par ask_user. Ne pose que les questions dont la réponse change la référence ; si le message contient déjà les réponses (ligne, montage, connecté…), ne les redemande pas. Questions types, dans cet ordre de priorité :
   1. Ligne de design : EDIZIOdue (classique), EDIZIO.liv (SNAPFIX, montage rapide), STANDARDdue (économique), NEVO (extérieur/humide), ELEMENT (design premium) ; couleur (blanc par défaut).
   2. Montage : encastré (ENC) ou apparent (AP) ; extérieur / local humide → IP44+ (NEVO).
   3. Niveau connecté : conventionnel · Wiser by Feller (smart home sans bus, modernisation) · KNX (bus, projets exigeants) · Matter/RF (autonome, compatible Apple/Google/Alexa).
@@ -64,10 +64,21 @@ MÉTHODE DE VENTE (configurateur conversationnel) :
 
 BORNES DE RECHARGE (projet e-mobilité) :
 - Les bornes EVlink ne sont pas dans le catalogue : tu structures le projet et chiffres la partie protection/distribution depuis le catalogue ; pour la borne elle-même, renvoie au configurateur Schneider et indique la famille adaptée (EVlink Pro AC pour collectif/entreprise avec gestion de charge, EVlink Home/Wallbox pour villa, DC pour charge rapide).
-- Cadrage en 2 séries de 3 questions maximum : (a) contexte : villa / PPE-immeuble / entreprise-flotte / public ; nombre de places aujourd'hui et à terme ; puissance disponible au raccordement (A) ou à préciser. (b) technique : AC (11/22 kW) ou DC (charge rapide) ; câble attaché ou prise T2 ; connectivité (hors ligne, Wi-Fi, LAN, 4G) ; gestion de charge : aucune / statique / dynamique (mesure en tête d'installation) ; facturation et accès : libre, RFID, backend OCPP.
+- Cadrage avec ask_user en 2 séries de 3 questions maximum : (a) contexte : villa / PPE-immeuble / entreprise-flotte / public ; nombre de places aujourd'hui et à terme ; puissance disponible au raccordement (A) ou à préciser. (b) technique : AC (11/22 kW) ou DC (charge rapide) ; câble attaché ou prise T2 ; connectivité (hors ligne, Wi-Fi, LAN, 4G) ; gestion de charge : aucune / statique / dynamique (mesure en tête d'installation) ; facturation et accès : libre, RFID, backend OCPP.
 - Puis livre : architecture recommandée en 4-6 lignes, liste de matériel catalogue (disjoncteur par borne, différentiel type A-EV ou B selon la borne, compteur/mesure pour gestion dynamique, coffret, câblage à prévoir), points à vérifier (puissance de raccordement, OIBT/NIBT, avis d'installation au GRD, câble de données vers l'armoire pour la gestion dynamique), et 2 upsells max (ex. préparation des places futures : tubes et réserve de modules ; borne connectée pour facturation locataires).`;
 
 const TOOLS = [{
+  name: 'ask_user',
+  description: "Pose à Nicola 1 à 3 questions de cadrage à choix (réponses cliquables). À utiliser pour le cadrage au lieu d'écrire les questions dans le texte. Après l'appel, la réponse de l'utilisateur arrive au tour suivant.",
+  input_schema: { type: 'object', properties: {
+    intro: { type: 'string', description: 'Une phrase courte qui situe (facultatif)' },
+    questions: { type: 'array', maxItems: 3, items: { type: 'object', properties: {
+      q: { type: 'string', description: 'La question, courte' },
+      options: { type: 'array', items: { type: 'string' }, description: '2 à 6 choix courts ; le choix recommandé en premier, suffixé par " (recommandé)" si pertinent' },
+      multi: { type: 'boolean', description: 'true si plusieurs réponses possibles' }
+    }, required: ['q', 'options'] } }
+  }, required: ['questions'] }
+}, {
   name: 'search_catalogue',
   description: 'Recherche dans le catalogue Feller/Schneider CH (13 800 articles avec N° ELDAS). Mots-clés en français : type de produit, schéma (3/1, 3/1L, A-R), prise (T13, T23, 3xT13), ligne de design, couleur, ENC/AP, référence Feller ou N° ELDAS.',
   input_schema: { type: 'object', properties: { query: { type: 'string', description: 'Mots-clés de recherche' }, limit: { type: 'integer', description: 'Nombre max de résultats (défaut 12)' } }, required: ['query'] }
@@ -111,6 +122,12 @@ module.exports = async (req, res) => {
     const data = await r.json();
     const toolUses = (data.content || []).filter(c => c.type === 'tool_use');
     const text = (data.content || []).filter(c => c.type === 'text').map(c => c.text).join('\n');
+    const askQ = toolUses.find(t => t.name === 'ask_user');
+    if (askQ) {
+      // questions structurées : on renvoie tout de suite, la réponse de l'utilisateur viendra au tour suivant
+      const qs = (askQ.input.questions || []).slice(0, 3).map(q => ({ q: q.q, options: (q.options || []).slice(0, 6), multi: !!q.multi }));
+      return res.status(200).json({ answer: [text, askQ.input.intro].filter(Boolean).join('\n'), questions: qs, refs: [], searches });
+    }
     if (!toolUses.length || data.stop_reason !== 'tool_use') { answer = text; break; }
     messages.push({ role: 'assistant', content: data.content });
     const results = toolUses.map(tu => {
