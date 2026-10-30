@@ -6,7 +6,7 @@ const path = require('path');
 let DB = null;
 function loadDb() {
   if (DB) return DB;
-  const p = path.join(process.cwd(), 'api', '_data', 'catalogue.json');
+  const p = path.join(__dirname, '_data', 'catalogue.json');
   DB = JSON.parse(fs.readFileSync(p, 'utf8')).items;
   for (const it of DB) it._s = norm([it.d, it.t, it.f, it.e, it.ean, it.m, (it.tech || []).map(x => x[1]).join(' ')].join(' '));
   return DB;
