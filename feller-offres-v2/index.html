@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Offres Feller</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1F3F0; --paper:#FFFFFF; --ink:#1B211E; --ink-2:#4A544F; --ink-3:#7C867F;
+  --line:#D9DED9; --accent:#0F5D4E; --accent-ink:#FFFFFF; --accent-soft:#E3EFEA;
+  --ok:#2A7D4F; --warn:#9A5B14; --warn-soft:#FBF0E1; --danger:#9B2F2F; --new:#1F4E9C; --new-soft:#E4ECF8;
+  --r:6px; --r-lg:10px;
+  font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15191A; --paper:#1E2425; --ink:#ECEFEC; --ink-2:#B5BDB8; --ink-3:#7F8A84;
+    --line:#2F3738; --accent:#5FB89E; --accent-ink:#0F1A17; --accent-soft:#1E302B;
+    --ok:#6CC08F; --warn:#E0A75A; --warn-soft:#2E261A; --new:#8FB4F0; --new-soft:#1C2A40;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15191A; --paper:#1E2425; --ink:#ECEFEC; --ink-2:#B5BDB8; --ink-3:#7F8A84;
+  --line:#2F3738; --accent:#5FB89E; --accent-ink:#0F1A17; --accent-soft:#1E302B;
+  --ok:#6CC08F; --warn:#E0A75A; --warn-soft:#2E261A; --new:#8FB4F0; --new-soft:#1C2A40;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--accent)}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- gate ---------- */
+#gate{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;z-index:50;padding:16px}
+#gate[hidden]{display:none}
+#gate form{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;max-width:360px;width:100%}
+#gate h1{font-size:18px;margin:0 0 6px}
+#gate p{color:var(--ink-2);margin:0 0 16px;font-size:14px}
+#gate input{width:100%;border:1.5px solid var(--line);border-radius:var(--r);padding:10px 12px;background:var(--bg);font-size:17px;letter-spacing:.1em}
+#gate .err{color:var(--danger);font-size:13px;min-height:18px;margin-top:6px}
+
+/* ---------- shell ---------- */
+.app{display:grid;grid-template-columns:minmax(0,1fr) 380px;min-height:100vh}
+@media (max-width:980px){.app{grid-template-columns:1fr}}
+header.top{grid-column:1/-1;display:flex;align-items:baseline;gap:18px;padding:16px 24px 0;flex-wrap:wrap}
+header.top h1{font-size:17px;font-weight:600;margin:0;letter-spacing:-.01em}
+header.top .meta{color:var(--ink-3);font-size:13px}
+header.top .spacer{flex:1}
+header.top button.ghost{background:none;border:1px solid var(--line);border-radius:var(--r);padding:5px 10px;font-size:13px;color:var(--ink-2)}
+@media (max-width:560px){header.top{padding:12px 16px 0}main{padding:12px 16px 40px!important}aside{padding:14px 16px 40px!important}}
+
+main{padding:16px 24px 48px;min-width:0}
+aside{border-left:1px solid var(--line);background:var(--paper);padding:16px 20px 48px;position:sticky;top:0;height:100vh;overflow:auto}
+@media (max-width:980px){aside{position:static;height:auto;border-left:0;border-top:1px solid var(--line)}}
+
+/* ---------- search ---------- */
+.search{display:flex;gap:8px;align-items:stretch}
+.search .field{flex:1;display:flex;align-items:center;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--r-lg);padding:0 6px 0 14px;transition:border-color .15s}
+.search .field:focus-within{border-color:var(--accent)}
+.search input{flex:1;border:0;background:none;outline:none;padding:14px 0;font-size:17px;min-width:0}
+.search input::placeholder{color:var(--ink-3)}
+.mic{width:42px;height:42px;border-radius:50%;border:0;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:none}
+.mic svg{width:20px;height:20px}
+.mic.listening{background:var(--accent);color:var(--accent-ink);animation:pulse 1.2s ease-in-out infinite}
+.mic[disabled]{opacity:.35;cursor:not-allowed}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(15,93,78,.35)}50%{box-shadow:0 0 0 10px rgba(15,93,78,0)}}
+@media (prefers-reduced-motion:reduce){.mic.listening{animation:none}}
+.ask{border:1.5px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:var(--r-lg);padding:0 16px;font-weight:500;white-space:nowrap}
+.ask[disabled]{opacity:.5}
+@media (max-width:560px){.ask{padding:0 12px}}
+.hint{color:var(--ink-3);font-size:13px;margin:8px 2px 0;min-height:18px}
+.hint b{color:var(--ink-2);font-weight:500}
+
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0;align-items:center}
+.filters .sep{width:1px;height:18px;background:var(--line);margin:0 4px}
+.chip{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:4px 11px;font-size:13px;color:var(--ink-2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip.new[aria-pressed="true"]{background:var(--new);border-color:var(--new);color:#fff}
+
+/* ---------- assistant ---------- */
+.assistant{margin:14px 0 4px;background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:var(--r-lg);padding:12px 14px}
+.assistant .q{color:var(--ink-2);font-size:13.5px;margin:12px 0 6px;padding-left:10px;border-left:2px solid var(--line)}
+.assistant .q:first-child{margin-top:0}
+.assistant .a{white-space:pre-wrap;line-height:1.5}
+.assistant .a a{word-break:break-all}
+.assistant .refs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.assistant .refs button{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:4px 10px;font-size:13px}
+.assistant .foot{display:flex;gap:10px;align-items:center;margin-top:10px;color:var(--ink-3);font-size:12.5px;flex-wrap:wrap}
+.assistant .foot button{background:none;border:0;color:var(--accent);padding:0;font-size:12.5px}
+.assistant.loading .a{color:var(--ink-3)}
+.thinking{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);animation:blink 1s infinite;margin-left:4px}
+@keyframes blink{50%{opacity:.2}}
+
+/* ---------- configurator suggestion ---------- */
+.conf{display:flex;gap:12px;align-items:center;background:var(--warn-soft);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent);border-radius:var(--r-lg);padding:10px 14px;margin:12px 0 4px}
+.conf .t{flex:1;font-size:14px}
+.conf .t b{font-weight:600;color:var(--warn)}
+.conf a.btn{white-space:nowrap}
+
+/* ---------- results ---------- */
+.results{margin-top:10px}
+.count{color:var(--ink-3);font-size:13px;margin:6px 2px 8px}
+.row{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:10px 12px;margin-bottom:6px}
+.row.is-new{border-color:color-mix(in srgb,var(--new) 45%,var(--line))}
+.row img{width:64px;height:64px;object-fit:contain;background:#fff;border-radius:var(--r)}
+.row .desc{font-weight:500;line-height:1.3}
+.row .ids{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:4px;font-size:13px;color:var(--ink-2)}
+.row .ids .e{font-size:16px;font-weight:600;color:var(--ink);letter-spacing:.02em}
+.row .ids .e small{font-size:11px;font-weight:500;color:var(--ink-3);margin-right:5px;letter-spacing:0}
+.row .tags{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap;align-items:center}
+.tag{font-size:12px;color:var(--ink-2);background:var(--bg);border-radius:4px;padding:1px 7px}
+.tag.ok{color:var(--ok)}
+.tag.fu{color:var(--warn)}
+.tag.new{color:#fff;background:var(--new);font-weight:500}
+.tag.soon{color:var(--new);background:var(--new-soft)}
+.row .act{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.row .more{grid-column:1/-1;border-top:1px solid var(--line);padding-top:10px;margin-top:2px;font-size:13.5px}
+.row .more .spec{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2px 18px}
+.row .more .spec div{display:flex;justify-content:space-between;gap:10px;padding:2px 0;border-bottom:1px dotted var(--line)}
+.row .more .spec span:first-child{color:var(--ink-2)}
+.row .more h4{font-size:12.5px;font-weight:600;color:var(--ink-3);margin:10px 0 4px}
+.row .more .accs div{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:3px 0}
+.row .more .accs .d{flex:1}
+.row .more .accs .e{color:var(--ink-2);white-space:nowrap}
+@media (max-width:560px){.row{grid-template-columns:48px minmax(0,1fr)}.row img{width:48px;height:48px}.row .act{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--paper);border-radius:var(--r);padding:7px 12px;font-size:13.5px;font-weight:500;text-decoration:none;color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.small{padding:4px 9px;font-size:12.5px}
+.btn.link{border:0;background:none;color:var(--accent);padding:4px 2px}
+
+.empty{padding:40px 10px;color:var(--ink-2);max-width:52ch}
+.empty h2{font-size:16px;font-weight:600;margin:0 0 8px;color:var(--ink)}
+.empty ul{padding-left:18px;margin:8px 0}
+.empty li{margin:3px 0}
+.empty code{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-family:inherit}
+
+/* ---------- offer list ---------- */
+aside h2{font-size:15px;font-weight:600;margin:0 0 12px}
+aside h2 .n{color:var(--ink-3);font-weight:400}
+.client{display:grid;gap:8px;margin-bottom:14px}
+.client input,.client textarea{width:100%;border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;background:var(--bg)}
+.client textarea{resize:vertical;min-height:38px}
+.items{display:grid;gap:6px}
+.item{display:grid;grid-template-columns:minmax(0,1fr) 68px 28px;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:8px 0}
+.item .d{font-size:13.5px;line-height:1.3}
+.item .e{font-size:12.5px;color:var(--ink-2);margin-top:2px}
+.item input.q{width:68px;text-align:center;border:1px solid var(--line);border-radius:var(--r);padding:5px 4px;background:var(--bg)}
+.item button.x{border:0;background:none;color:var(--ink-3);font-size:18px;line-height:1;padding:2px}
+.item button.x:hover{color:var(--danger)}
+.aside-empty{color:var(--ink-3);font-size:13.5px;padding:18px 0}
+.actions{display:grid;gap:8px;margin-top:16px}
+.actions .btn{padding:10px}
+.tools{margin-top:22px;border-top:1px solid var(--line);padding-top:14px}
+.tools h3{font-size:13px;font-weight:600;color:var(--ink-3);margin:0 0 8px}
+.tools a{display:block;font-size:13.5px;padding:4px 0;text-decoration:none;color:var(--ink)}
+.tools a span{color:var(--ink-3);font-size:12.5px;display:block}
+
+/* ---------- print ---------- */
+#print{display:none}
+@media print{
+  body{background:#fff;color:#000}
+  .app,#gate{display:none}
+  #print{display:block;padding:0;font-size:12px}
+  #print h1{font-size:20px;margin:0 0 2px}
+  #print .sub{color:#555;margin-bottom:18px}
+  #print table{width:100%;border-collapse:collapse}
+  #print th,#print td{text-align:left;padding:7px 6px;border-bottom:1px solid #ccc;vertical-align:top}
+  #print th{font-weight:600;border-bottom:2px solid #000}
+  #print td.q{text-align:center;width:40px}
+  #print td.e{white-space:nowrap;font-weight:600}
+  #print .notes{margin-top:16px;white-space:pre-wrap}
+  #print .foot{margin-top:28px;color:#555;font-size:11px}
+  #print a{color:#000;text-decoration:none}
+  #print .doc{font-size:11px;color:#444}
+  #print .sp{font-size:10.5px;color:#555}
+  @page{margin:18mm 16mm}
+}
+</style>
+</head>
+<body>
+<div id="gate" hidden>
+  <form id="gateform">
+    <h1>Offres Feller</h1>
+    <p>Outil personnel. Saisis le code d'accès pour continuer.</p>
+    <input id="gatecode" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="Code d'accès" aria-label="Code d'accès">
+    <div class="err" id="gateerr"></div>
+    <button class="btn primary" type="submit" style="width:100%;margin-top:8px;padding:10px">Entrer</button>
+  </form>
+</div>
+
+<div class="app">
+  <header class="top">
+    <h1>Offres Feller</h1>
+    <span class="meta" id="dbinfo">Catalogue en cours de chargement…</span>
+    <span class="spacer"></span>
+    <button class="ghost" id="theme" type="button">Thème</button>
+  </header>
+
+  <main>
+    <div class="search">
+      <div class="field">
+        <input id="q" type="search" autocomplete="off" placeholder="Ex. : interrupteur 3/1L EDIZIOdue blanc · ou une question : ce thermostat est-il compatible Hue ?" aria-label="Recherche ou question">
+        <button class="mic" id="mic" type="button" aria-label="Dicter" title="Dicter">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+        </button>
+      </div>
+      <button class="ask" id="askbtn" type="button" title="Poser la question à l'assistant (Entrée)">Demander</button>
+    </div>
+    <div class="hint" id="hint"></div>
+
+    <div class="filters" id="filters" role="group" aria-label="Filtres"></div>
+
+    <div id="assistant"></div>
+    <div id="conf"></div>
+
+    <div class="results">
+      <div class="count" id="count"></div>
+      <div id="list"></div>
+    </div>
+  </main>
+
+  <aside>
+    <h2>Liste de matériel <span class="n" id="n"></span></h2>
+    <div class="client">
+      <input id="c_name" placeholder="Client / chantier">
+      <textarea id="c_notes" placeholder="Remarque pour le client (facultatif)"></textarea>
+    </div>
+    <div class="items" id="items"></div>
+    <div class="aside-empty" id="aside-empty">Ajoute des articles depuis la recherche ou depuis une réponse de l'assistant. La liste reste enregistrée dans ce navigateur.</div>
+    <div class="actions">
+      <button class="btn primary" id="pdf" type="button">Exporter en PDF</button>
+      <button class="btn" id="copy" type="button">Copier la liste (texte)</button>
+      <button class="btn" id="clear" type="button">Vider la liste</button>
+    </div>
+    <div class="tools" id="tools"></div>
+  </aside>
+</div>
+
+<section id="print" aria-hidden="true"></section>
+
+<script src="data.js"></script>
+<script>
+/* ---------------- configurateurs & outils ---------------- */
+const TOOLS = [
+  {name:'Module de combinaison Feller', url:'https://online-katalog.feller.ch/fr/combinations', why:'Composer une combinaison (interrupteurs + prises) et obtenir la référence exacte', rx:/combin|combi\b|schéma|schema|\d\s*[x×]\s*t13|t13\s*\+|\+\s*t13|\b\d\/\d[lp]?\s*\+/i},
+  {name:'Planification Wiser by Feller', url:'https://www.feller.ch/fr/connected-buildings/wiser-by-feller/planification', why:'Dimensionner une installation Wiser (actionneurs, scènes, gateway)', rx:/wiser|smart ?home|domotique|zeptrion/i},
+  {name:'Planification SNAPFIX', url:'https://www.feller.ch/fr/gamme/snapfix/planification', why:'Choisir les kits SNAPFIX (EDIZIO.liv) adaptés au montage', rx:/snapfix|edizio\.?liv/i},
+  {name:'DispoSuite (planification Feller)', url:'https://www.feller.ch/fr/services/logiciel-de-planification-disposuite', why:'Planifier un projet complet et sortir la liste de matériel', rx:/disposuite|planif|projet complet|villa|immeuble|appartement/i},
+  {name:'Kombi Tool Sonepar', url:'https://www.sonepar.ch/fr/kombitool', why:'Configurer les combinaisons chez le grossiste avec prix et stock', rx:/kombi|grossiste|sonepar|prix|stock/i},
+  {name:'Configurateurs Schneider Electric (CH)', url:'https://www.se.com/ch/fr/work/products/tools/product-configurators/', why:'TGBT, onduleurs, bornes EVlink et produits Schneider hors catalogue', rx:/tgbt|onduleur|\bups\b|evlink|wallbox|borne|recharge/i},
+  {name:'Centre de téléchargement Feller', url:'https://online-katalog.feller.ch/fr/download-center', why:'Brochures, fiches techniques et plans cotés par ligne de design', rx:/brochure|fiche|catalogue|documentation|plan cot/i},
+];
+
+/* ---------------- données ---------------- */
+const DB = (window.FELLER_DATA && window.FELLER_DATA.items) || [];
+const EXPORTED = window.FELLER_DATA && window.FELLER_DATA.exportedAt;
+const DESIGNS = ['EDIZIOdue','EDIZIO.liv','STANDARDdue','NEVO','ELEMENT','SNAPFIX','FLF'];
+const MOUNT = [['ENC','Encastré'],['AP','Apparent'],['REG','Tableau / REG']];
+
+const norm = s => (s||'').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[×x]/g,'x').replace(/\s+/g,' ').trim();
+const SYN = [
+  [/\bencastre(e|s)?\b/g,'enc'],[/\bapparent(e|s)?\b/g,'ap'],[/\bblanche?\b/g,'blanc'],[/\bnoire?\b/g,'noir'],
+  [/\btriple\b/g,'3x'],[/\bdouble\b/g,'2x'],[/\bsimple\b/g,'1x'],[/\bprise(s)? (t|type) ?13\b/g,'prise t13'],[/\bt ?13\b/g,'t13'],[/\bt ?23\b/g,'t23'],
+  [/\b(trois|3) (sur|slash|\/) (un|1)\b/g,'3/1'],[/\bsix (sur|\/) (un|1)\b/g,'6/1'],[/\bva[- ]et[- ]vient\b/g,'3/1'],[/\binter\b/g,'interrupteur'],
+  [/\bedizio due\b/g,'ediziodue'],[/\bedizio liv\b/g,'edizio.liv'],[/\bstandard due\b/g,'standarddue'],[/\bbouton[- ]poussoir\b/g,'poussoir'],
+  [/\bdiff(erentiel)?\b/g,'differentiel'],[/\bfi\/ls\b/g,'differentiel'],[/\btableau electrique\b/g,'tableau'],
+];
+function prep(q){ let s=norm(q); for(const [a,b] of SYN) s=s.replace(a,b); return s; }
+DB.forEach(it=>{
+  it._s = norm([it.d,it.t,it.f,it.e,it.ean,it.m].join(' '));
+  it._dsg = DESIGNS.find(x=>norm(it.d).includes(norm(x))) || '';
+  if(!it.m){ const d=' '+it.d+' '; it.m = / ENC /.test(d)||/ENC\b/.test(it.d.split(' ')[1]||'') ? 'ENC' : / AP /.test(d) ? 'AP' : /\.REG\b|REG\b|rail DIN|\bUM\b/.test(it.d+' '+it.f) ? 'REG' : ''; }
+});
+const NEW_COUNT = DB.filter(x=>x.nw).length;
+
+function search(q, F){
+  const s = prep(q); const toks = s.split(' ').filter(Boolean);
+  if(!toks.length && !F.design && !F.mount && !F.ip && !F.nw) return [];
+  const out=[];
+  for(const it of DB){
+    if(F.design && it._dsg!==F.design) continue;
+    if(F.mount && it.m!==F.mount) continue;
+    if(F.ip && !(it.ip && parseInt(it.ip.replace(/\D/g,''))>=44)) continue;
+    if(F.nw && !it.nw) continue;
+    let score=0, ok=true;
+    for(const t of toks){
+      if(it._s.includes(t)){ score += (it.e===t||norm(it.f)===t) ? 50 : (it._s.indexOf(t)<40?3:1); }
+      else { ok=false; break; }
+    }
+    if(!ok) continue;
+    if(it.nw) score+=8;                 // nouveautés en tête
+    if(it.buy) score+=1; if(it.fu) score-=2; if(it.soon) score-=1;
+    if(/\.61\b|blanc/.test(it._s)) score+=.5;
+    out.push([score,it]);
+  }
+  out.sort((a,b)=>b[0]-a[0] || a[1].d.length-b[1].d.length);
+  return out.slice(0,60).map(x=>x[1]);
+}
+
+/* ---------------- état ---------------- */
+const $ = id=>document.getElementById(id);
+const store = { get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)) }catch(e){} } };
+let list = store.get('offre.items', []);
+let client = store.get('offre.client', {name:'',notes:''});
+let F = {design:'',mount:'',ip:false,nw:false};
+let chat = []; // historique assistant (session)
+
+$('dbinfo').textContent = DB.length ? `${DB.length.toLocaleString('fr-CH')} articles Feller & Schneider CH · ${NEW_COUNT} nouveautés · catalogue du ${EXPORTED ? new Date(EXPORTED).toLocaleDateString('fr-CH') : '—'}` : 'Catalogue introuvable : data.js doit être à côté de index.html.';
+
+/* ---------------- code d'accès ---------------- */
+let accessCode = store.get('offre.code','');
+function showGate(msg){ $('gate').hidden=false; $('gateerr').textContent=msg||''; setTimeout(()=>$('gatecode').focus(),50); }
+if(!accessCode) showGate('');
+$('gateform').onsubmit=e=>{ e.preventDefault(); const c=$('gatecode').value.trim(); if(!c) return; accessCode=c; store.set('offre.code',c); $('gate').hidden=true; $('q').focus(); };
+
+/* ---------------- rendu ---------------- */
+function productUrl(it){ return 'https://online-katalog.feller.ch/fr/product?fnr='+encodeURIComponent(it.f); }
+function docsUrl(it){ return productUrl(it)+'#documents'; }
+function esc(s){ return (s||'').toString().replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function linkify(s){ return esc(s).replace(/(https?:\/\/[^\s)]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>'); }
+
+function renderFilters(){
+  const b=(label,key,val,cls='')=>`<button class="chip ${cls}" type="button" data-k="${key}" data-v="${val}" aria-pressed="${String(F[key])===String(val) || (typeof F[key]==='boolean' && F[key] && val==='1')}">${label}</button>`;
+  $('filters').innerHTML = [
+    b('Nouveautés','nw','1','new'), '<span class="sep"></span>',
+    ...MOUNT.map(([v,l])=>b(l,'mount',v)), b('Extérieur / humide (IP44+)','ip','1'), '<span class="sep"></span>',
+    ...DESIGNS.map(d=>b(d,'design',d))
+  ].join('');
+}
+$('filters').addEventListener('click',e=>{ const b=e.target.closest('.chip'); if(!b) return; const k=b.dataset.k, v=b.dataset.v;
+  if(k==='ip'||k==='nw') F[k]=!F[k]; else F[k]= F[k]===v ? '' : v; renderFilters(); run(); });
+
+function renderConf(q){
+  const hits = TOOLS.filter(t=>t.rx.test(q));
+  $('conf').innerHTML = hits.slice(0,2).map(t=>`<div class="conf"><div class="t"><b>Configurateur conseillé :</b> ${esc(t.name)}<br><span style="color:var(--ink-2);font-size:13px">${esc(t.why)}</span></div><a class="btn" href="${t.url}" target="_blank" rel="noopener">Ouvrir</a></div>`).join('');
+}
+$('tools').innerHTML = '<h3>Configurateurs et outils</h3>'+TOOLS.map(t=>`<a href="${t.url}" target="_blank" rel="noopener">${esc(t.name)}<span>${esc(t.why)}</span></a>`).join('');
+
+function specHtml(it){
+  const rows=(it.tech||[]).filter(x=>!/^(false|true)$/.test(x[1]) || /Compatible/.test(x[0])).map(x=>`<div><span>${esc(x[0])}</span><span>${esc(x[1]==='true'?'Oui':x[1]==='false'?'Non':x[1])}${x[2]?' '+esc(x[2]):''}</span></div>`).join('');
+  const accs=(it.acc||[]).map(a=>`<div><span class="d">${esc(a[2])}</span><span class="e num">${esc(a[1]||'')}</span><button class="btn small add-ref" type="button" data-f="${esc(a[0])}">Ajouter</button></div>`).join('');
+  return `<div class="more">${rows?`<div class="spec">${rows}</div>`:'<span style="color:var(--ink-3)">Pas de fiche technique détaillée dans la base.</span>'}${accs?`<h4>Accessoires et compléments</h4><div class="accs">${accs}</div>`:''}<div style="margin-top:8px"><a class="btn link" href="${docsUrl(it)}" target="_blank" rel="noopener">Fiche produit, brochures et plans cotés</a></div></div>`;
+}
+function rowHtml(it){
+  const inList = list.find(x=>x.f===it.f);
+  const sub=[it.m?MOUNT.find(m=>m[0]===it.m)?.[1]:'',it.ip||''].filter(Boolean);
+  return `<article class="row ${it.nw?'is-new':''}" data-f="${esc(it.f)}">
+    <img src="${esc(it.img)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+    <div>
+      <div class="desc">${esc(it.d)}</div>
+      <div class="ids"><span class="e num"><small>ELDAS</small>${it.e ? esc(it.e) : '<span style="color:var(--ink-3);font-weight:400">pas de N° ELDAS</span>'}</span><span class="num">N° Feller ${esc(it.f)}</span>${it.ean?`<span class="num">EAN ${esc(it.ean)}</span>`:''}</div>
+      <div class="tags">${it.nw?`<span class="tag new">Nouveau ${esc(it.nw)}</span>`:''}${it._dsg?`<span class="tag">${esc(it._dsg)}</span>`:''}${sub.map(s=>`<span class="tag">${esc(s)}</span>`).join('')}${it.soon?'<span class="tag soon">Pas encore disponible</span>':it.buy?'<span class="tag ok">Disponible</span>':'<span class="tag">Non commandable</span>'}${it.fu?`<span class="tag fu">Remplacé par ${esc(it.fu)}</span>`:''}</div>
+    </div>
+    <div class="act">
+      <button class="btn primary small add" type="button">${inList?'Ajouter encore':'Ajouter'}</button>
+      <button class="btn small more-btn" type="button" aria-expanded="false">Détails techniques</button>
+    </div>
+  </article>`;
+}
+function renderResults(items, q){
+  const anyF = F.design||F.mount||F.ip||F.nw;
+  if(!q && !anyF){
+    $('count').textContent='';
+    $('list').innerHTML = `<div class="empty"><h2>Dis ou tape ce dont tu as besoin</h2>
+      Recherche dans le catalogue Feller et distribution Schneider CH (description, N° Feller, N° ELDAS, EAN). Pour une question ouverte, appuie sur <b>Demander</b> : l'assistant répond avec les références du catalogue.
+      <ul><li><code>interrupteur 3/1L EDIZIOdue blanc</code> · <code>coffret Resi9 3 rangées</code></li><li><code>combinaison 3/1P + T13</code> → propose aussi le configurateur</li><li><code>Le thermostat Matter est-il compatible Philips Hue ?</code> → Demander</li><li><code>Rénovation appartement 4 pièces, client veut du connecté</code> → l'assistant pose 2-3 questions (ligne, montage, niveau connecté) puis propose une configuration et des options</li><li><code>Projet 6 bornes de recharge pour une PPE</code> → cadrage AC/DC, câble, connectivité, gestion de charge</li></ul>
+      Les nouveautés 2025–2026 remontent en tête des résultats.</div>`;
+    return;
+  }
+  if(!items.length){
+    $('count').textContent='';
+    $('list').innerHTML = `<div class="empty"><h2>Aucun article ne correspond</h2>
+      Ce matériel n'existe pas sous cette description dans le catalogue, ou c'est un produit hors base (bornes EVlink, TGBT, onduleurs).
+      <ul><li>Essaie moins de mots, retire un filtre, ou saisis le N° ELDAS.</li><li>Ou pose la question à l'assistant avec <b>Demander</b> : il cherche avec d'autres formulations.</li></ul></div>`;
+    return;
+  }
+  $('count').textContent = `${items.length} article${items.length>1?'s':''}${items.length===60?' (affichage limité : précise la recherche)':''}`;
+  $('list').innerHTML = items.map(rowHtml).join('');
+}
+function addToList(it,btn){ const ex=list.find(x=>x.f===it.f); if(ex) ex.q+=1; else list.push({f:it.f,e:it.e,d:it.d,q:1,m:it.m||''}); saveList(); if(btn){ const t=btn.textContent; btn.textContent='Ajouté'; setTimeout(()=>btn.textContent='Ajouter encore',900);} }
+document.addEventListener('click',e=>{
+  const add=e.target.closest('.add'); if(add){ const it=DB.find(x=>x.f===add.closest('.row').dataset.f); if(it) addToList(it,add); return; }
+  const ref=e.target.closest('.add-ref'); if(ref){ const it=DB.find(x=>x.f===ref.dataset.f); if(it) addToList(it,ref); else ref.textContent='Hors base'; return; }
+  const mb=e.target.closest('.more-btn'); if(mb){ const row=mb.closest('.row'); const open=mb.getAttribute('aria-expanded')==='true'; row.querySelector('.more')?.remove(); if(!open){ const it=DB.find(x=>x.f===row.dataset.f); row.insertAdjacentHTML('beforeend',specHtml(it)); } mb.setAttribute('aria-expanded',String(!open)); mb.textContent=open?'Détails techniques':'Masquer'; }
+});
+
+function renderList(){
+  const tot=list.reduce((a,x)=>a+x.q,0);
+  $('n').textContent = list.length ? `· ${tot} pièce${tot>1?'s':''}` : '';
+  $('aside-empty').style.display = list.length?'none':'block';
+  $('items').innerHTML = list.map((x,i)=>`<div class="item">
+    <div><div class="d">${esc(x.d)}</div><div class="e num">ELDAS ${esc(x.e||'—')} · ${esc(x.f)}</div></div>
+    <input class="q num" type="number" min="1" step="1" value="${x.q}" data-i="${i}" aria-label="Quantité">
+    <button class="x" type="button" data-i="${i}" aria-label="Retirer">×</button></div>`).join('');
+  $('c_name').value=client.name; $('c_notes').value=client.notes;
+}
+$('items').addEventListener('input',e=>{ const i=e.target.dataset.i; if(e.target.classList.contains('q')){ list[i].q=Math.max(1,parseInt(e.target.value)||1); store.set('offre.items',list); const tot=list.reduce((a,x)=>a+x.q,0); $('n').textContent=`· ${tot} pièce${tot>1?'s':''}`; }});
+$('items').addEventListener('click',e=>{ const b=e.target.closest('.x'); if(!b) return; list.splice(+b.dataset.i,1); saveList(); run(); });
+function saveList(){ store.set('offre.items',list); renderList(); }
+['c_name','c_notes'].forEach(id=>$(id).addEventListener('input',()=>{ client={name:$('c_name').value,notes:$('c_notes').value}; store.set('offre.client',client); }));
+$('clear').onclick=()=>{ if(!list.length||confirm('Vider la liste de matériel ?')){ list=[]; saveList(); run(); } };
+
+$('copy').onclick=async()=>{
+  const txt=[`Liste de matériel${client.name?' – '+client.name:''}`,'',...list.map(x=>`${x.q} × ${x.d}  (ELDAS ${x.e||'—'}, N° Feller ${x.f})`),'',client.notes].join('\n');
+  try{ await navigator.clipboard.writeText(txt); $('copy').textContent='Copié'; setTimeout(()=>$('copy').textContent='Copier la liste (texte)',1200);}catch(e){ prompt('Copie manuelle :',txt); }
+};
+
+$('pdf').onclick=()=>{
+  if(!list.length){ alert('La liste est vide.'); return; }
+  const d=new Date().toLocaleDateString('fr-CH',{day:'2-digit',month:'long',year:'numeric'});
+  $('print').innerHTML=`<h1>Liste de matériel${client.name?' – '+esc(client.name):''}</h1>
+    <div class="sub">${d} · ${list.reduce((a,x)=>a+x.q,0)} pièces · références Feller / Schneider Electric Suisse</div>
+    <table><thead><tr><th>Qté</th><th>Désignation</th><th>N° ELDAS</th><th>N° Feller</th><th>Documentation</th></tr></thead><tbody>
+    ${list.map(x=>{const it=DB.find(y=>y.f===x.f)||x; const sp=(it.tech||[]).filter(t=>/IP|Tension|Courant|montage|raccordement/i.test(t[0])).map(t=>`${t[1]}${t[2]?' '+t[2]:''}`).join(' · '); return `<tr><td class="q num">${x.q}</td><td>${esc(x.d)}${sp?`<div class="sp">${esc(sp)}</div>`:''}</td><td class="e num">${esc(x.e||'—')}</td><td class="num">${esc(x.f)}</td><td class="doc"><a href="${docsUrl(it)}">Fiche &amp; brochures</a></td></tr>`}).join('')}
+    </tbody></table>
+    ${client.notes?`<div class="notes">${esc(client.notes)}</div>`:''}
+    <div class="foot">Les numéros ELDAS permettent la commande chez tout grossiste électro suisse. Fiches techniques et brochures : online-katalog.feller.ch</div>`;
+  window.print();
+};
+
+/* ---------------- recherche ---------------- */
+let timer;
+$('q').addEventListener('input',()=>{ clearTimeout(timer); timer=setTimeout(run,120); });
+$('q').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); ask(); } });
+function run(){
+  const q=$('q').value.trim();
+  renderConf(q);
+  renderResults(search(q,F), q);
+}
+
+/* ---------------- assistant ---------------- */
+$('askbtn').onclick=ask;
+let chatMeta = []; // refs/searches par réponse, même index que chat
+function renderChat(state){
+  const box=$('assistant');
+  if(!chat.length && !state){ box.innerHTML=''; return; }
+  const turns = chat.map((m,i)=>{
+    if(m.role==='user') return `<div class="q">${esc(m.content)}</div>`;
+    const meta=chatMeta[i]||{};
+    const refs=(meta.refs||[]).map(x=>`<button type="button" class="add-ref" data-f="${esc(x.f)}" title="${esc(x.d)}">+ ${esc(x.e)} · ${esc(x.d.slice(0,42))}${x.d.length>42?'…':''}</button>`).join('');
+    return `<div class="a">${linkify(m.content)}</div>${refs?`<div class="refs">${refs}</div>`:''}`;
+  }).join('');
+  const tail = state==='loading' ? `<div class="a" style="color:var(--ink-3)">L'assistant cherche dans le catalogue<span class="thinking"></span></div>`
+             : state ? `<div class="a" style="color:var(--danger)">${esc(state)}</div>` : '';
+  box.innerHTML=`<div class="assistant">${turns}${tail}<div class="foot"><span>Réponds dans le champ ci-dessus puis « Demander » : la conversation continue.</span><button type="button" id="chatreset">Nouvelle conversation</button></div></div>`;
+  $('chatreset').onclick=()=>{ chat=[]; chatMeta=[]; box.innerHTML=''; };
+  box.querySelector('.assistant').scrollIntoView({block:'nearest'});
+}
+async function ask(){
+  const q=$('q').value.trim(); if(!q) return;
+  if(!accessCode){ showGate(''); return; }
+  chat.push({role:'user',content:q}); chatMeta.push(null);
+  renderChat('loading');
+  $('askbtn').disabled=true; $('q').value=''; run();
+  try{
+    const r=await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json','x-access-code':accessCode},body:JSON.stringify({messages:chat,list:list.map(x=>({q:x.q,d:x.d,e:x.e}))})});
+    const j=await r.json().catch(()=>({}));
+    if(r.status===401){ chat.pop(); chatMeta.pop(); accessCode=''; store.set('offre.code',''); renderChat(); showGate("Code d'accès incorrect."); return; }
+    if(!r.ok){ chat.pop(); chatMeta.pop(); renderChat(`${j.error||'Assistant indisponible.'}${j.detail?' — '+j.detail:''}`); return; }
+    chat.push({role:'assistant',content:j.answer}); chatMeta.push({refs:j.refs||[],searches:j.searches||[]});
+    renderChat(); $('q').focus();
+  }catch(e){ chat.pop(); chatMeta.pop(); renderChat("Pas de connexion à l'assistant."); }
+  finally{ $('askbtn').disabled=false; }
+}
+
+/* ---------------- voix ---------------- */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const mic=$('mic'), hint=$('hint');
+if(!SR){ mic.disabled=true; mic.title='Dictée non disponible dans ce navigateur (utilise Chrome, Edge ou Safari)'; hint.textContent='Dictée indisponible dans ce navigateur : tape ta demande.'; }
+else{
+  let rec=null, listening=false;
+  mic.onclick=()=>{
+    if(listening){ rec.stop(); return; }
+    rec=new SR(); rec.lang='fr-CH'; rec.interimResults=true; rec.continuous=false;
+    rec.onstart=()=>{ listening=true; mic.classList.add('listening'); hint.innerHTML='<b>Je t\'écoute…</b> une recherche (« prise triple NEVO ») ou une question (« est-ce compatible Hue ? »)'; };
+    rec.onresult=e=>{ const t=[...e.results].map(r=>r[0].transcript).join(' '); $('q').value=t; hint.innerHTML=`Entendu : <b>${esc(t)}</b> — Entrée ou « Demander » pour l'assistant`; run(); };
+    rec.onerror=e=>{ hint.textContent = e.error==='not-allowed' ? 'Micro refusé : autorise le microphone pour ce site.' : 'Reconnaissance interrompue, réessaie.'; };
+    rec.onend=()=>{ listening=false; mic.classList.remove('listening'); const t=$('q').value.trim(); if(t && /\?$|^(est[- ]ce|quel|quelle|comment|pourquoi|peut|combien|y a)/i.test(t)) ask(); };
+    rec.start();
+  };
+}
+
+/* ---------------- thème ---------------- */
+$('theme').onclick=()=>{ const r=document.documentElement; const cur=r.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); r.dataset.theme = cur==='dark'?'light':'dark'; store.set('offre.theme',r.dataset.theme); };
+const th=store.get('offre.theme',null); if(th) document.documentElement.dataset.theme=th;
+
+renderFilters(); renderList(); run();
+if(accessCode) $('q').focus();
+</script>
+</body>
+</html>

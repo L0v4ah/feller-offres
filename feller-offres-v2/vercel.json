@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "api/chat.js": { "includeFiles": "api/_data/catalogue.json", "maxDuration": 60, "memory": 1024 }
+  },
+  "headers": [
+    { "source": "/data.js", "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }] }
+  ]
+}
