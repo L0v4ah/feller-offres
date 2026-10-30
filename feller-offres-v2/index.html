@@ -170,7 +170,7 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 #lb .cap{position:absolute;bottom:26px;left:0;right:0;text-align:center;color:#fff;font-size:14px}
 
 /* ---------- chat panel ---------- */
-#chat{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));display:flex;flex-direction:column;min-width:0;padding:0 clamp(16px,1.6vw,28px) 16px 0}
+#chat{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));height:calc(100dvh - var(--bar));display:flex;flex-direction:column;min-width:0;padding:0 clamp(16px,1.6vw,28px) 16px 0}
 #chat>.panel{display:flex;flex-direction:column;height:100%;background:var(--glass-3);backdrop-filter:blur(16px);border:1px solid var(--rim);border-radius:var(--r-card);box-shadow:var(--shadow-pop);overflow:hidden}
 .stage:not(.chat-open) #chat{display:none}
 @media (max-width:1000px){ .stage.chat-open #chat{position:fixed;inset:0;top:0;height:100vh;z-index:60;padding:0} .stage.chat-open #chat>.panel{border-radius:0;border:0} }
@@ -233,6 +233,26 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--on-ink);padding:10px 18px;border-radius:999px;font-size:14px;z-index:85;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-pop)}
 .toast button{background:none;border:0;color:var(--butter);padding:0;font-weight:600}
 
+.listbar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:40;display:flex;align-items:center;gap:10px;background:var(--glass-3);backdrop-filter:blur(14px);border:1px solid var(--rim);box-shadow:var(--shadow-pop);border-radius:999px;padding:8px 10px 8px 18px;font-size:14px;font-weight:500;white-space:nowrap;max-width:calc(100vw - 24px)}
+.stage.chat-open .listbar{left:calc((100% - 440px)/2)}
+@media (max-width:1000px){.stage.chat-open .listbar{display:none}}
+.gauge{background:var(--glass-2);border:1px solid var(--rim);border-radius:var(--r-tile);padding:14px 16px;margin:0 0 14px;box-shadow:var(--shadow)}
+.gauge .bar{height:10px;border-radius:999px;background:var(--well);overflow:hidden}
+.gauge .bar i{display:block;height:100%;background:var(--pine);border-radius:999px;transition:width .25s var(--ease)}
+.gauge.tight .bar i{background:var(--butter)}.gauge.over .bar i{background:var(--tomato)}
+.gauge .lbl{margin-top:8px;font-size:14px;color:var(--muted)}.gauge .lbl b{color:var(--text)}
+.gauge.over .lbl{color:var(--tomato)}
+.gauge .rowsel{margin-top:8px;display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted)}
+.crow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--glass-2);border:1px solid var(--rim);border-radius:var(--r-tile);padding:12px 16px;margin-bottom:8px;box-shadow:var(--shadow)}
+.crow.off{opacity:.6}.crow.coffret{box-shadow:0 0 0 1.5px var(--pine) inset,var(--shadow)}
+.crow .cinfo b{display:block;font-weight:600}.crow .cinfo>span{display:block;color:var(--muted);font-size:13px}
+.crow .cref{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:13px;flex-wrap:wrap}
+.crow .cref img{width:40px;height:40px;object-fit:contain;border-radius:10px;border:1px solid var(--line)}
+.crow .cref em{font-style:normal;font-weight:600;white-space:nowrap}
+.cqty{display:grid;grid-template-columns:36px 44px 36px;align-items:center;justify-items:center;gap:2px}
+.cqty .st,.rowsel .st{width:36px;height:36px;border-radius:50%;border:1px solid var(--line-2);background:var(--float);font-size:18px;line-height:1}
+.cqty output{font-size:18px;font-weight:600}.cqty small{grid-column:1/-1;color:var(--faint);font-size:12px}
+@media (max-width:700px){.crow{grid-template-columns:1fr}.cqty{justify-items:start;grid-template-columns:36px 44px 36px}}
 /* ---------- print ---------- */
 #print{display:none}
 @media print{
@@ -271,7 +291,7 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 <header class="bar">
   <button class="brand" id="home" type="button">Offres Feller<small id="dbinfo">chargement…</small></button>
   <div class="sbox">
-    <input id="q" type="search" autocomplete="off" placeholder="Référence, produit ou question…" aria-label="Recherche">
+    <input id="q" type="search" autocomplete="off" placeholder="Référence, produit, borne, ou une question…" aria-label="Recherche">
     <button class="mic" id="mic" type="button" aria-label="Dicter" title="Dicter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
   </div>
   <button class="barbtn primary" id="openchat" type="button" title="Assistant"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg><span class="t">Assistant</span></button>
@@ -286,12 +306,14 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
     <div id="thread"></div>
     <div class="in">
       <textarea id="cin" rows="1" placeholder="Décris le besoin ou réponds…" aria-label="Message à l'assistant"></textarea>
+      <input type="file" id="cfile" accept="image/*" hidden><button class="mic" id="cphoto" type="button" aria-label="Envoyer une photo" title="Photo d'un produit, d'un concurrent ou d'un plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg></button>
       <button class="mic" id="cmic" type="button" aria-label="Dicter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
       <button class="send" id="csend" type="button">Envoyer</button>
     </div>
   </div></aside>
 </div>
 
+<div class="listbar" id="listbar" hidden><span id="listbartxt"></span><button class="btn small" type="button" id="lb-open">Voir la liste</button><button class="btn primary small" type="button" id="lb-pdf">Exporter en PDF</button></div>
 <div id="scrim" hidden></div>
 <aside id="drawer" hidden aria-label="Liste de matériel">
   <div class="head"><h2>Liste de matériel <small id="n"></small></h2><button class="btn small" id="closelist" type="button">Fermer</button></div>
@@ -319,7 +341,7 @@ const DB = (window.FELLER_DATA && window.FELLER_DATA.items) || [];
 const EXPORTED = window.FELLER_DATA && window.FELLER_DATA.exportedAt;
 const DESIGNS = ['EDIZIOdue','EDIZIO.liv','STANDARDdue','NEVO','ELEMENT','SNAPFIX','FLF'];
 const MOUNT = {ENC:'Encastré',AP:'Apparent',REG:'Tableau / REG'};
-const PIC = f => 'https://mam.feller.ch/pict/'+f;
+const PIC = f => (window.__byF && window.__byF[f] && window.__byF[f].img) || ('https://mam.feller.ch/pict/'+f);
 const norm = s => (s||'').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[×x]/g,'x').replace(/\s+/g,' ').trim();
 const SYN = [
   [/\bencastre(e|s)?\b/g,'enc'],[/\bapparent(e|s)?\b/g,'ap'],[/\bblanche?\b/g,'blanc'],[/\bnoire?\b/g,'noir'],
@@ -327,11 +349,12 @@ const SYN = [
   [/\b(trois|3) (sur|slash|\/) (un|1)\b/g,'3/1'],[/\bsix (sur|\/) (un|1)\b/g,'6/1'],[/\bva[- ]et[- ]vient\b/g,'3/1'],[/\binter\b/g,'interrupteur'],
   [/\bedizio due\b/g,'ediziodue'],[/\bedizio liv\b/g,'edizio.liv'],[/\bstandard due\b/g,'standarddue'],[/\bbouton[- ]poussoir\b/g,'poussoir'],
   [/\bdiff(erentiel)?\b/g,'differentiel'],[/\bfi\/ls\b/g,'differentiel'],[/\btableau electrique\b/g,'tableau'],
+  [/\bborne(s)? de recharge\b/g,'station de charge'],[/\bborne(s)?\b/g,'station de charge'],[/\bchargeur\b/g,'station de charge'],[/\bbornes?\s+ac\b/g,'station de charge'],
 ];
 const prep = q => { let s=norm(q); for(const [a,b] of SYN) s=s.replace(a,b); return s; };
 DB.forEach(it=>{ it._s = norm([it.d,it.t,it.f,it.e,it.ean,it.m].join(' ')); it._dsg = DESIGNS.find(x=>norm(it.d).includes(norm(x))) || '';
   if(!it.m){ const d=' '+it.d+' '; it.m = / ENC /.test(d) ? 'ENC' : / AP /.test(d) ? 'AP' : /\.REG\b|\bREG\b|\bUM\b|rail DIN/.test(it.d+' '+it.f) ? 'REG' : ''; } });
-const byF = Object.fromEntries(DB.map(it=>[it.f,it]));
+const byF = Object.fromEntries(DB.map(it=>[it.f,it])); window.__byF=byF;
 const NEW_COUNT = DB.filter(x=>x.nw).length;
 
 function search(q, F={}, limit=60){
@@ -344,7 +367,7 @@ function search(q, F={}, limit=60){
     if(F.ip && !(it.ip && parseInt(it.ip.replace(/\D/g,''))>=44)) continue;
     if(F.nw && !it.nw) continue;
     let score=0, ok=true;
-    for(const t of toks){ if(it._s.includes(t)) score += (it.e===t||norm(it.f)===t) ? 50 : (it._s.indexOf(t)<40?3:1); else { ok=false; break; } }
+    for(const t of toks){ const hit = /^\d{1,2}$/.test(t) ? new RegExp('(^|[^0-9])'+t+'(?![0-9])').test(it._s) : it._s.includes(t); if(hit) score += (it.e===t||norm(it.f)===t) ? 50 : (it._s.indexOf(t)<40?3:1); else { ok=false; break; } }
     if(!ok) continue;
     if(it.nw) score+=8; if(it.buy) score+=1; if(it.fu) score-=2; if(it.soon) score-=1; if(/\.61\b|blanc| bc\b/.test(it._s)) score+=.5;
     out.push([score,it]);
@@ -370,7 +393,7 @@ const DESIGN_OPTS = [
   {v:'EDIZIO.liv', t:'EDIZIO.liv', s:'SNAPFIX, montage rapide sans vis', img:'7563.GMI.A.61', rec:'Gain de temps à la pose'},
   {v:'STANDARDdue', t:'STANDARDdue', s:'Économique, fonctionnel', img:'7411-3.QMI.61'},
   {v:'ELEMENT', t:'ELEMENT', s:'Premium, aluminium', img:'3400.1.GUP.Q.A.09'},
-  {v:'NEVO', t:'NEVO', s:'Extérieur et locaux humides, IP55', img:'7563.KS.NAP.Q.A.L.61.34'},
+  {v:'NEVO', t:'NEVO', s:'Extérieur et locaux humides, IP55', img:'3402.2.NAP.Q.A.61'},
 ];
 const MOUNT_OPTS = [
   {v:'ENC', t:'Encastré', s:'Dans la boîte d\'encastrement', img:'87303.GMI.A.61', rec:'Standard en rénovation et neuf'},
@@ -388,7 +411,7 @@ const FN_OPTS = [
 const SMART_OPTS = [
   {v:'Wiser', t:'Wiser by Feller', s:'Smart home sans bus, idéal rénovation, app + Wi-Fi', img:'3401.1.W.GMI.A.61', rec:'Le plus simple à vendre et à poser'},
   {v:'KNX', t:'KNX', s:'Bus, projets exigeants, intégrateur', img:'4708-1-C.GMI.A.L.P.61'},
-  {v:'Matter', t:'Matter / RF', s:'Autonome, Apple Home, Google, Alexa', img:'4123.2.A.GMI.A.61'},
+  {v:'Matter', t:'Matter / RF', s:'Autonome, Apple Home, Google, Alexa', img:'4250.GMI.A.61'},
 ];
 const TAB_OPTS = [
   {v:'Resi9', t:'Resi9', s:'Habitat, appartement, villa', img:'R9H10937B', rec:'Standard résidentiel'},
@@ -409,33 +432,57 @@ const FLOWS = {
   ]},
   tableau: { title:'Tableau & protection', steps:[
     {key:'fam', q:'Quelle famille de coffret ?', opts:TAB_OPTS},
-    {key:'mount', q:'Encastré ou apparent ?', opts:MOUNT_OPTS.map(o=>({...o,img:o.v==='ENC'?'R9H10937B':'13431'}))},
-    {key:'rows', q:'Combien de rangées ?', opts:[{v:'1',t:'1 rangée'},{v:'2',t:'2 rangées'},{v:'3',t:'3 rangées',rec:'Appartement type'},{v:'4',t:'4 rangées'},{v:'',t:'Je ne sais pas'}], compact:true},
-    {key:'prot', q:'Protection à ajouter ?', opts:[{v:'differentiel',t:'Disjoncteurs différentiels',s:'Clario iC40 FI/LS'},{v:'disjoncteur',t:'Disjoncteurs',s:'Clario iC40'},{v:'',t:'Coffret seul'}], compact:true, multi:true},
+    {key:'install', q:'Où se monte le tableau ?', s:'Le support décide du coffret : maçonnerie, cloison creuse (Alba, bois, plaque) ou en saillie.', opts:[
+      {v:'ENC', t:'Encastré, maçonnerie', s:'Béton, brique : coffret à sceller', img:'R9H10937B', rec:'Neuf et rénovation lourde'},
+      {v:'CREUSE', t:'Encastré, paroi creuse', s:'Cloison légère, ossature bois, plaque', img:'R9H10837B'},
+      {v:'AP', t:'Apparent', s:'En saillie, cave, garage, local technique', img:'R9H10737'}], when:a=>a.fam==='Resi9'},
+    {key:'install', q:'Où se monte le tableau ?', opts:[{v:'AP', t:'Apparent mural', s:'PrismaSeT XL se pose en saillie', img:'ABWRS103'}], when:a=>a.fam==='PrismaSeT'},
+    {key:'install', q:'Où se monte le tableau ?', opts:[{v:'AP', t:'Apparent IP65', s:'Extérieur, cave humide, garage', img:'13431'}], when:a=>a.fam==='Mureva'},
+    {key:'system', q:'Quelle formule ?', s:'KV = tableau complet livré avec porte. Modulaire = coffret seul, tu choisis porte et kit de montage.', opts:[
+      {v:'KV', t:'Resi9 KV, complet', s:'Coffret + porte + rails, une seule référence', img:'R9H10937', rec:'Le plus simple à commander'},
+      {v:'MOD', t:'Resi9 modulaire', s:'Coffret seul + porte au choix + kit rails', img:'R9H10937B'}], when:a=>a.fam==='Resi9'&&a.install!=='AP'},
+    {key:'system', q:'Quelle formule ?', opts:[
+      {v:'KV', t:'Resi9 apparent, complet', s:'Tableau AP 12 UM par rangée, porte incluse', img:'R9H10737', rec:'Standard'},
+      {v:'KVM', t:'Resi9 apparent multimédia', s:'Avec zone multimédia (routeur, fibre)', img:'R9H10797'},
+      {v:'CX', t:'Resi9 CX', s:'13 ou 18 modules par rangée, porte séparée au choix (pleine, transparente, miroir, magnétique)', img:'R9H13603'}], when:a=>a.fam==='Resi9'&&a.install==='AP'},
+    {key:'system', q:'Avec ou sans porte ?', opts:[{v:'IP44',t:'Avec porte, IP44',s:'Locaux techniques, humidité',img:'ABWRS103',rec:'Le plus courant'},{v:'IP30',t:'Sans porte, IP30',s:'Local sec, accès fréquent',img:'ABWRS103L04'}], when:a=>a.fam==='PrismaSeT'},
+    {key:'rows', q:'Combien de rangées ?', s:'Tu pourras ajuster dans le composeur selon ce qui rentre.', opts:[{v:'1',t:'1 rangée',s:'Petit tableau, sous-distribution'},{v:'2',t:'2 rangées',s:'Studio, petit appartement'},{v:'3',t:'3 rangées',s:'Appartement 3-4 pièces',rec:'Le cas courant'},{v:'4',t:'4 rangées',s:'Villa, PAC, borne'}], compact:true},
+    {key:'perrow', q:'Modules par rangée ?', opts:[{v:'13',t:'13 modules',rec:'Standard CX'},{v:'18',t:'18 modules',s:'Plus de réserve'}], compact:true, when:a=>a.system==='CX'},
+    {key:'door', q:'Quelle porte ?', opts:[{v:'P',t:'Porte pleine',rec:'Standard'},{v:'V',t:'Porte rainurée',s:'Design, aération'}], compact:true, when:a=>a.system==='MOD'},
+    {key:'door', q:'Quelle porte ?', opts:[{v:'P',t:'Pleine',rec:'Standard'},{v:'T',t:'Transparente',s:'Voir les disjoncteurs'},{v:'M',t:'Miroir',s:'Entrée, couloir'},{v:'MAG',t:'Magnétique inscriptible',s:'Notes, schémas'},{v:'YOU',t:'YOU personnalisable',s:'Photo ou visuel client'},{v:'',t:'Sans porte'}], compact:true, when:a=>a.system==='CX'},
   ]},
   exterieur: { title:'Extérieur & humide', steps:[
-    {key:'mount', q:'Encastré ou apparent ?', opts:MOUNT_OPTS.map(o=>({...o,img:o.v==='AP'?'7563.KS.NAP.Q.A.L.61.34':'87303.GMI.A.61'}))},
+    {key:'mount', q:'Encastré ou apparent ?', opts:MOUNT_OPTS.map(o=>({...o,img:o.v==='AP'?'3402.2.NAP.Q.A.61':'87303.GMI.A.61'}))},
     {key:'fn', q:'Quelles fonctions ?', opts:FN_OPTS.filter(o=>['interrupteur','prise','detecteur','stores'].includes(o.v)), multi:true},
   ]},
-  bornes: { title:'Bornes de recharge', assistant:true, steps:[
+  bornes: { title:'Bornes de recharge', steps:[
     {key:'ctx', q:'Quel contexte ?', opts:[{v:'Villa',t:'Villa',s:'1 à 2 places'},{v:'PPE / immeuble',t:'PPE / immeuble',s:'Places locataires, facturation'},{v:'Entreprise / flotte',t:'Entreprise / flotte'},{v:'Public',t:'Parking public'}], compact:true},
     {key:'places', q:'Combien de places à équiper ?', opts:[{v:'1',t:'1'},{v:'2',t:'2'},{v:'3 à 6',t:'3 à 6'},{v:'7 à 20',t:'7 à 20'},{v:'plus de 20',t:'Plus de 20'}], compact:true},
-    {key:'type', q:'AC ou DC ?', opts:[{v:'AC 11 kW',t:'AC 11 kW',s:'Villa, PPE, charge de nuit',rec:'Le cas général'},{v:'AC 22 kW',t:'AC 22 kW',s:'Entreprise, rotation'},{v:'DC rapide',t:'DC rapide',s:'Flotte, public, 50 kW et plus'}], compact:true},
-    {key:'cable', q:'Câble attaché ou prise T2 ?', opts:[{v:'câble attaché',t:'Câble attaché',s:'Confort, villa'},{v:'prise T2',t:'Prise T2',s:'Collectif, public'}], compact:true},
+    {key:'type', q:'Quelle borne ?', s:'Wallbox pour la villa, EVlink Pro AC pour le collectif et l\'entreprise (Master + Extender), DC pour la charge rapide.', opts:[
+      {v:'AC 11 kW',t:'Wallbox 11 kW',s:'Villa, charge de nuit, Wi-Fi + app',img:'SE-834020809',rec:'Le cas général en villa'},
+      {v:'AC 22 kW',t:'EVlink Pro AC 22 kW',s:'PPE, entreprise, gestion de charge Master/Extender',img:'SE-834000289'},
+      {v:'DC rapide',t:'EVlink Pro DC',s:'Flotte, public, 2×CCS2',img:'SE-834320809'}]},
+    {key:'cable', q:'Câble attaché ou prise T2 ?', opts:[{v:'câble attaché',t:'Câble attaché',s:'Confort, villa, pas de câble à sortir',img:'SE-834020819',rec:'Villa'},{v:'prise T2',t:'Prise T2',s:'Collectif, public, chacun son câble',img:'SE-834020829'}], when:a=>a.type!=='DC rapide'},
     {key:'conn', q:'Connectivité ?', opts:[{v:'Wi-Fi',t:'Wi-Fi'},{v:'LAN',t:'LAN'},{v:'4G',t:'4G'},{v:'hors ligne',t:'Hors ligne'}], compact:true},
     {key:'lm', q:'Gestion de charge ?', opts:[{v:'dynamique',t:'Dynamique',s:'Mesure en tête, puissance limitée',rec:'PPE et flottes'},{v:'statique',t:'Statique',s:'Répartition fixe'},{v:'aucune',t:'Aucune'}], compact:true},
     {key:'bill', q:'Accès et facturation ?', opts:[{v:'libre',t:'Libre'},{v:'RFID',t:'Badge RFID'},{v:'backend OCPP',t:'Backend OCPP',s:'Facturation locataires / public'}], compact:true},
   ]},
 };
 const FN_QUERY = {
-  interrupteur:(a)=>a.smart ? `interrupteur ${a.smart} ${a.design||''} ${a.mount||''}` : `interrupteur 3/1 ${a.design||''} ${a.mount||''}`,
+  interrupteur:(a)=>a.smart==='KNX' ? `poussoir KNX ${a.design||''}` : a.smart==='Matter' ? `Matter ${a.design||''}` : a.smart ? `interrupteur ${a.smart} ${a.design||''} ${a.mount||''}` : `interrupteur 3/1 ${a.design||''} ${a.mount||''}`,
   prise:(a)=>`prise t13 ${a.design||''} ${a.mount||''}`,
   usb:(a)=>`usb ${a.design||''} ${a.mount||''}`,
-  variateur:(a)=>`variateur ${a.smart||''} ${a.design||''} ${a.mount||''}`,
-  stores:(a)=>`stores ${a.smart||''} ${a.design||''} ${a.mount||''}`,
-  detecteur:(a)=>`detecteur mouvement ${a.design||''} ${a.mount||''}`,
-  thermostat:(a)=>`thermostat ${a.smart||''} ${a.design||''} ${a.mount||''}`,
+  variateur:(a)=>a.smart==='KNX' ? `variateur KNX` : a.smart==='Matter' ? `Matter ${a.design||''}` : `variateur ${a.smart||''} ${a.design||''} ${a.mount||''}`,
+  stores:(a)=>a.smart==='KNX' ? `poussoir KNX ${a.design||''}` : a.smart==='Matter' ? `Matter ${a.design||''}` : `stores ${a.smart||''} ${a.design||''} ${a.mount||''}`,
+  detecteur:(a)=>a.smart==='KNX' ? `detecteur KNX ${a.design||''}` : `detecteur mouvement ${a.design||''} ${a.mount||''}`,
+  thermostat:(a)=>a.smart==='KNX' ? `thermostat KNX ${a.design||''}` : a.smart==='Matter' ? `thermostat ${a.design||''}` : a.smart==='Wiser' ? `capteur temperature Wiser ${a.design||''}` : `thermostat ${a.design||''} ${a.mount||''}`,
 };
+function searchFallback(q, F, limit){
+  let items=search(q,F,limit); if(items.length) return {items, note:''};
+  const q2=q.replace(/\b(ENC|AP|REG)\b/gi,'').trim(); items=search(q2,{...F,mount:''},limit); if(items.length) return {items, note:'montage non filtré'};
+  const q3=q2.replace(/EDIZIOdue|EDIZIO\.liv|STANDARDdue|NEVO|ELEMENT/gi,'').replace(/\s+/g,' ').trim(); items=search(q3,{...F,mount:'',design:''},limit); if(items.length) return {items, note:'toutes lignes de design'};
+  return {items:[], note:''};
+}
 const FN_LABEL = Object.fromEntries(FN_OPTS.map(o=>[o.v,o.t]));
 
 /* =============== état =============== */
@@ -449,8 +496,8 @@ let view = {name:'home'};
 let chat=[], chatMeta=[], chatOpen=false;
 const esc = s => (s||'').toString().replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const md = s => esc(s).replace(/(https?:\/\/[^\s)]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>').replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>').replace(/^#{1,3}\s+(.+)$/gm,'<strong>$1</strong>').replace(/^[-•]\s+/gm,'• ');
-const productUrl = it => 'https://online-katalog.feller.ch/fr/product?fnr='+encodeURIComponent(it.f);
-const docsUrl = it => productUrl(it)+'#documents';
+const productUrl = it => it.url || ('https://online-katalog.feller.ch/fr/product?fnr='+encodeURIComponent(it.f));
+const docsUrl = it => it.url ? it.url : productUrl(it)+'#documents';
 $('dbinfo').textContent = DB.length ? `${DB.length.toLocaleString('fr-CH')} articles · ${NEW_COUNT} nouveautés · ${EXPORTED ? new Date(EXPORTED).toLocaleDateString('fr-CH') : ''}` : 'catalogue introuvable';
 
 let accessCode = store.get('offre.code','');
@@ -466,6 +513,7 @@ function render(){
   if(view.name==='home') v.innerHTML=homeHtml();
   else if(view.name==='wizard') v.innerHTML=wizardHtml();
   else if(view.name==='results') v.innerHTML=resultsHtml();
+  else if(view.name==='composer') v.innerHTML=composerHtml();
   window.scrollTo({top:0});
 }
 function go(nv){ view=nv; render(); }
@@ -475,8 +523,8 @@ function homeHtml(){
     {flow:'appareillage', t:'Appareillage', s:'Interrupteurs, prises, USB, variateurs', imgs:['7563.GMI.A.61','87303.GMI.A.61']},
     {flow:'smart', t:'Smart home', s:'Wiser, KNX, Matter', imgs:['3401.1.W.GMI.A.61','4708-1-C.GMI.A.L.P.61']},
     {flow:'tableau', t:'Tableau & protection', s:'Resi9, PrismaSeT, Clario iC40', imgs:['R9H10937B','A9D67410']},
-    {flow:'exterieur', t:'Extérieur & humide', s:'NEVO, IP44 et plus', imgs:['7563.KS.NAP.Q.A.L.61.34','13431']},
-    {flow:'bornes', t:'Bornes de recharge', s:'Cadrage du projet avec l\'assistant', ico:'⚡'},
+    {flow:'exterieur', t:'Extérieur & humide', s:'NEVO, IP44 et plus', imgs:['3402.2.NAP.Q.A.61','13431']},
+    {flow:'bornes', t:'Bornes de recharge', s:'Wallbox, EVlink Pro AC et DC, gestion de charge', imgs:['SE-834020819','SE-834000289']},
     {flow:'nouveautes', t:'Nouveautés 2025–2026', s:`${NEW_COUNT} articles : Feller 4, Wiser, Clario, NEVO SNAPFIX`, imgs:['3400.D.T3.GMI.A.61','A9DSC3613'], k:'Nouveau'},
   ];
   return `<div class="home">
@@ -489,8 +537,9 @@ function homeHtml(){
   </div>`;
 }
 
+function visibleSteps(flow,a){ return flow.steps.filter(st=>!st.when||st.when(a)); }
 function wizardHtml(){
-  const flow=FLOWS[view.flow]; const step=flow.steps[view.step]; const a=view.answers;
+  const flow0=FLOWS[view.flow]; const a=view.answers; const flow={...flow0, steps:visibleSteps(flow0,a)}; if(view.step>=flow.steps.length) view.step=flow.steps.length-1; const step=flow.steps[view.step];
   const crumbs = flow.steps.slice(0,view.step).map((s,i)=>{ const val=a[s.key]; const label=Array.isArray(val)? val.map(v=>(s.opts.find(o=>o.v===v)||{}).t||v).join(', ') : ((s.opts.find(o=>o.v===val)||{}).t||val||'—'); return `<button type="button" data-step="${i}">${esc(label)}</button><span class="sep">›</span>`; }).join('');
   const sel = a[step.key];
   const isSel = v => step.multi ? (sel||[]).includes(v) : sel===v;
@@ -511,12 +560,12 @@ function resultsHtml(){
   const filters = `<div class="filters">${chip('Nouveautés','nw','1','new')}${Object.entries(MOUNT).map(([v,l])=>chip(l,'mount',v)).join('')}${chip('IP44+','ip','1')}${DESIGNS.slice(0,5).map(d=>chip(d,'design',d)).join('')}${anyF?'<button class="chip x" type="button" data-k="reset">Réinitialiser</button>':''}</div>`;
   const conf = r.q ? TOOLS.filter(t=>t.rx.test(r.q)).slice(0,1).map(t=>`<div class="conf"><div class="t"><b>Configurateur conseillé :</b> ${esc(t.name)} <span style="color:var(--ink-2)">· ${esc(t.why)}</span></div><a class="btn small" href="${t.url}" target="_blank" rel="noopener">Ouvrir</a></div>`).join('') : '';
   let groups;
-  if(r.groups) groups = r.groups.map(g=>({label:g.label, items:search(g.q,{...F, ...(g.F||{})},24)}));
+  if(r.groups) groups = r.groups.map(g=>{ const sr=searchFallback(g.q,{...F, ...(g.F||{})},24); return {label:g.label, items:sr.items, note:sr.note, q:g.q}; });
   else groups = [{label:'', items:search(r.q||'',F,60)}];
   const total = groups.reduce((a,g)=>a+g.items.length,0);
-  const body = total ? groups.map(g=>`<section class="group">${g.label?`<h2>${esc(g.label)} <small>${g.items.length} article${g.items.length>1?'s':''}</small></h2>`:''}<div class="cards">${g.items.map(cardHtml).join('')}</div></section>`).join('')
-    : `<div class="empty"><h2>Aucun article ne correspond</h2>Essaie moins de mots, retire un filtre, ou pose la question à l'assistant : il cherche avec d'autres formulations.<div style="margin-top:12px"><button class="btn primary" type="button" id="askthis">Demander à l'assistant</button></div></div>`;
-  return `<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig">Configuration complète par l'assistant</button>`:''}<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':'Accueil'}</button></div>${filters}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}</div>${body}`;
+  const body = total ? groups.map(g=>`<section class="group">${g.label?`<h2>${esc(g.label)} <small>${g.items.length} article${g.items.length>1?'s':''}${g.note?' · '+esc(g.note):''}</small></h2>`:''}${g.items.length?`<div class="cards">${g.items.map(cardHtml).join('')}</div>`:`<div class="empty" style="padding:10px 6px">Rien dans le catalogue pour « ${esc(g.q)} ». ${catalogueLinks(g.q)}</div>`}</section>`).join('')
+    : `<div class="empty"><h2>Aucun article ne correspond</h2>Essaie moins de mots ou retire un filtre. Sinon, vérifie directement dans les catalogues : ${catalogueLinks(r.q||r.title||'')}<br><small style="color:var(--faint)">Astuce : tape un N° ELDAS, un N° Feller ou un EAN pour tomber directement sur l'article.</small><div style="margin-top:12px"><button class="btn primary" type="button" id="askthis">Demander à l'assistant</button></div></div>`;
+  return `<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig">Configuration complète par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':'Accueil'}</button>`}</div>${filters}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}</div>${body}`;
 }
 
 function cardHtml(it){
@@ -526,9 +575,9 @@ function cardHtml(it){
     <div class="body">
       <div class="desc">${esc(it.d)}</div>
       <div class="e num"><small>ELDAS</small>${it.e?esc(it.e):'<span style="font-size:13px;font-weight:400;color:var(--ink-3)">pas de N° ELDAS</span>'}</div>
-      <div class="f num">N° Feller ${esc(it.f)}</div>
-      <div class="tags">${it._dsg?`<span class="tag">${esc(it._dsg)}</span>`:''}${it.m?`<span class="tag">${MOUNT[it.m]}</span>`:''}${it.ip?`<span class="tag">${esc(it.ip)}</span>`:''}${it.soon?'<span class="tag soon">Pas encore disponible</span>':it.buy?'<span class="tag ok">Disponible</span>':'<span class="tag">Non commandable</span>'}${it.fu?`<span class="tag fu">Remplacé par ${esc(it.fu)}</span>`:''}</div>
-      <div class="act"><button class="btn primary small add" type="button">${inList?'Ajouter encore':'Ajouter'}</button><button class="btn small more-btn" type="button" aria-expanded="false">Détails</button></div>
+      <div class="f num">${it.src==='sonepar'?`Schneider · grossiste${it.av?' · '+esc(it.av.replace(/, selon fournisseur/,''))  :''}`:`N° Feller ${esc(it.f)}`}</div>
+      <div class="tags">${it._dsg?`<span class="tag">${esc(it._dsg)}</span>`:''}${it.m?`<span class="tag">${MOUNT[it.m]}</span>`:''}${it.ip?`<span class="tag">${esc(it.ip)}</span>`:''}${it.soon?'<span class="tag soon">Pas encore disponible</span>':it.buy?'<span class="tag ok">Disponible</span>':'<span class="tag">Non commandable</span>'}${it.fu?`<button type="button" class="tag fu" data-fu="${esc(it.fu)}" style="cursor:pointer;border:0">Remplacé par ${esc(it.fu)} → voir</button>`:''}</div>
+      <div class="act"><button class="btn primary small add" type="button">${view.pick?'Choisir':inList?'Ajouter encore':'Ajouter'}</button><button class="btn small more-btn" type="button" aria-expanded="false">Détails</button></div>
     </div></article>`;
 }
 function specHtml(it){
@@ -536,6 +585,59 @@ function specHtml(it){
   const accs=(it.acc||[]).map(a=>`<div><span class="d">${esc(a[2])}</span><span class="num" style="color:var(--ink-2)">${esc(a[1]||'')}</span><button class="btn small add-ref" type="button" data-f="${esc(a[0])}">+</button></div>`).join('');
   return `<div class="more">${rows?`<div class="spec">${rows}</div>`:'<span style="color:var(--ink-3)">Pas de fiche technique détaillée.</span>'}${accs?`<h4>Accessoires et compléments</h4><div class="accs">${accs}</div>`:''}<div style="margin-top:8px"><a class="btn link" href="${docsUrl(it)}" target="_blank" rel="noopener">Fiche produit, brochures, plans cotés ↗</a></div></div>`;
 }
+
+function catalogueLinks(q){ const e=encodeURIComponent((q||'').replace(/\b(ENC|AP)\b/g,'').trim()); return `<a href="https://online-katalog.feller.ch/fr/products?search=${e}" target="_blank" rel="noopener">Catalogue Feller ↗</a> · <a href="https://www.se.com/ch/fr/search/?q=${e}" target="_blank" rel="noopener">Schneider Electric CH ↗</a>`; }
+
+/* =============== composeur de tableau =============== */
+const UM_PER_ROW = {Resi9:12, PrismaSeT:24, Mureva:12};
+const COMPONENTS = [
+  {k:'fils13', label:'FI/LS Clario iC40 C13 30 mA, 1 UM', s:'Prises et lumière, 1 module par circuit', q:'Clario iC40 13A 0.03A 1UM', um:1, def:4},
+  {k:'fils16', label:'FI/LS Clario iC40 C16 30 mA, 1 UM', s:'Prises cuisine, salle de bain, extérieur', q:'Clario iC40 16A 0.03A 1UM', um:1, def:2},
+  {k:'ls13', label:'Disjoncteur iC40 C13 1LN', s:'Lumière sans différentiel propre', q:'Clario iC40 13A (C) 1LN', um:1, def:0},
+  {k:'ls16_3', label:'Disjoncteur iC40 C16 3LN', s:'Cuisinière, four, boiler triphasé', q:'Clario iC40 16A (C) 3LN', um:3, def:1},
+  {k:'ls20_3', label:'Disjoncteur iC40 C20 3LN', s:'Lave-linge / sèche-linge, PAC', q:'Clario iC40 20A (C) 3LN', um:3, def:0},
+  {k:'fi40', label:'Interrupteur différentiel iID 40 A 30 mA 4L', s:'FI en tête de groupe', q:'interrupteur differentiel iID 40A 30mA', um:4, def:1},
+  {k:'fi63', label:'Interrupteur différentiel iID 63 A 30 mA 4L', s:'Tête d\'installation plus puissante', q:'interrupteur differentiel iID 63A 30mA 4L', um:4, def:0},
+  {k:'spd', label:'Protection de surtension', s:'Parafoudre type 2, recommandé neuf / rénovation', q:'protection surtension', um:2, def:0, up:true},
+  {k:'tl', label:'Télérupteur TL 16 A', s:'Commande des lumières à poussoirs', q:'telerupteur TL', um:1, def:0},
+  {k:'ict', label:'Contacteur iCT 25 A 2F', s:'Boiler, chauffage, tarif nuit', q:'contacteur iCT 25A 2F', um:1, def:0},
+  {k:'min', label:'Minuterie', s:'Escalier, ventilation', q:'minuterie', um:1, def:0},
+  {k:'peigne', label:'Peigne de raccordement Clario iC40', s:'Alimentation propre des rangées', q:'peigne Clario', um:0, def:1, up:true},
+];
+function shellLines(c){
+  const r=c.rows||3, L=[];
+  if(c.fam==='Resi9'){
+    if(c.install==='ENC'&&c.system==='KV') L.push({k:'coffret',label:'Tableau complet Resi9 KV, encastré',q:`Tableau ENC Resi9 KV ${r} rangées`});
+    else if(c.install==='CREUSE'&&c.system==='KV') L.push({k:'coffret',label:'Tableau complet Resi9 KV, paroi creuse',q:`Coffret paroi creuse Resi9 KV ${r} rangées`});
+    else if(c.install!=='AP'&&c.system==='MOD'){ L.push({k:'coffret',label:c.install==='CREUSE'?'Coffret Resi9 cloison creuse':'Coffret Resi9 encastré',q:c.install==='CREUSE'?`Coffret cloison creuse Resi9 ${r} rangées`:`Coffret ENC Resi9 ${r} rangées 12UM`}); L.push({k:'porte',label:c.door==='V'?'Porte rainurée avec cadre':'Porte pleine avec cadre',q:c.door==='V'?`Porte rainurée Resi9 ${r} rangées`:`Porte Resi9 cadre ${r} rangées`}); L.push({k:'kit',label:'Kit de montage rails DIN + barrettes PE/N',q:`Kit de montage Resi9 rail DIN ${r} rangées`}); }
+    else if(c.install==='AP'&&c.system==='KVM') L.push({k:'coffret',label:'Tableau apparent Resi9 multimédia',q:`Tableau AP Resi9 multimédia ${r} rangées`});
+    else if(c.install==='AP'&&c.system==='CX'){ const pre=c.perRow===18?'R9H18':'R9H13'; L.push({k:'coffret',label:`Tableau apparent Resi9 CX, ${c.perRow} modules`,q:`Resi9CX ${r} rangées sans porte ${pre}`}); const d={P:`Porte Resi9CX ${r} rangées ${c.perRow} modules ${pre}`,T:`Porte Resi9CX ${r} rangées ${c.perRow} modules transparent`,M:`Porte Resi9CX ${r} rangées miroir ${pre}`,MAG:`Porte Resi9CX ${r} rangées magnétique ${pre}`,YOU:'Porte Resi9CX YOU'}[c.door]; if(d) L.push({k:'porte',label:'Porte Resi9 CX',q:d}); }
+    else L.push({k:'coffret',label:'Tableau apparent Resi9 complet',q:`Tableau AP Resi9 ${r} rangées 12UM`});
+  } else if(c.fam==='PrismaSeT') L.push({k:'coffret',label:`Coffret mural PrismaSeT XL ${c.system==='IP30'?'sans porte IP30':'avec porte IP44'}`,q:`Coffret mural PrismaSeT XL ${c.system==='IP30'?'IP30':'IP44 porte'} ${r} rangées`});
+  else L.push({k:'coffret',label:'Tableau apparent Mureva IP65',q:`Tableau AP Mureva ${Math.min(r,2)}×${c.perRow===18?'18':'12'}UM`});
+  return L;
+}
+function coffretQuery(c){ return shellLines(c)[0].q; }
+function composerHtml(){
+  const c=view; const perRow=c.perRow||UM_PER_ROW[c.fam]||12; const cap=(c.rows||3)*perRow;
+  const shells = shellLines(c).map(l=>({...l, ref: byF[c.refs[l.k]] || searchFallback(l.q,{},3).items[0]}));
+  let used=0;
+  const rows = COMPONENTS.map(cp=>{ const qty=c.qty[cp.k]??cp.def; const ref=byF[c.refs[cp.k]] || searchFallback(cp.q,{},3).items[0]; const um=ref? umOf(ref,cp.um):cp.um; used+=qty*um;
+    return `<div class="crow ${qty?'':'off'}"><div class="cinfo"><b>${esc(cp.label)}</b><span>${esc(cp.s)}${cp.up?' · <i class="rec">option à proposer</i>':''}</span>${ref?`<div class="cref"><img src="${esc(ref.img)}" alt="" onerror="this.style.visibility='hidden'"><span>${esc(ref.d)}</span><em class="num">ELDAS ${esc(ref.e||'—')}</em><button class="btn link small" type="button" data-change="${esc(cp.k)}" data-q="${esc(cp.q)}">Changer</button></div>`:`<div class="cref"><span style="color:var(--faint)">Pas de référence trouvée · ${catalogueLinks(cp.q)}</span></div>`}</div><div class="cqty"><button type="button" class="st" data-k="${cp.k}" data-d="-1" aria-label="Moins">−</button><output class="num">${qty}</output><button type="button" class="st" data-k="${cp.k}" data-d="1" aria-label="Plus">+</button><small>${qty*um} UM</small></div></div>`; }).join('');
+  const free=cap-used; const pct=Math.min(100,Math.round(used/cap*100));
+  return `<div class="wiz">
+    <div class="crumbs"><button type="button" id="cback">Tableau & protection</button><span class="sep">›</span><span style="color:var(--text)">Composer le tableau</span></div>
+    <h1>${esc(c.fam)} ${c.rows?c.rows+' rangées':''} · ${c.install==='CREUSE'?'paroi creuse':MOUNT[c.mount]||''}${c.system&&c.system!=='KV'?' · '+esc(c.system==='MOD'?'modulaire':c.system):''}</h1>
+    <p class="sub">Règle les quantités : la jauge te dit ce qui rentre. Chaque ligne a sa référence catalogue avec N° ELDAS, modifiable.</p>
+    <div class="gauge ${used>cap?'over':free<cap*0.2?'tight':''}"><div class="bar"><i style="width:${pct}%"></i></div><div class="lbl"><b>${used} / ${cap} UM</b> ${used>cap?`· dépasse de ${used-cap} UM : ajoute une rangée ou retire des appareils`:free<cap*0.2?`· ${free} UM libres, réserve faible (20 % conseillés)`:`· ${free} UM libres pour l'avenir`}</div>
+      <div class="rowsel">Rangées <button type="button" class="st" data-rows="-1">−</button><output class="num">${c.rows||3}</output><button type="button" class="st" data-rows="1">+</button> · <span>${perRow} UM / rangée</span> <button type="button" class="btn link small" id="perrow">changer</button></div></div>
+    ${shells.map(l=>l.ref?`<div class="crow coffret"><div class="cinfo"><b>${esc(l.label)}</b><div class="cref"><img src="${esc(l.ref.img)}" alt="" onerror="this.style.visibility='hidden'"><span>${esc(l.ref.d)}</span><em class="num">ELDAS ${esc(l.ref.e||'—')}</em><button class="btn link small" type="button" data-change="${esc(l.k)}" data-q="${esc(l.q)}">Changer</button></div></div></div>`:`<div class="crow coffret"><div class="cinfo"><b>${esc(l.label)}</b><div class="cref"><span style="color:var(--faint)">Pas trouvé pour « ${esc(l.q)} » · ${catalogueLinks(l.q)}</span></div></div></div>`).join('')}
+    ${rows}
+    <div class="actions"><button class="btn primary" id="caddall" type="button">Ajouter le tableau à la liste</button><button class="btn" id="caskai" type="button">Faire vérifier par l'assistant</button><span class="hint">Quantité 0 = non ajouté.</span></div>
+  </div>`;
+}
+function umOf(ref, dflt){ const m=(ref.d||'').match(/(\d+)\s*UM\b/i); if(m) return +m[1]; if(/\b3LN\b|\b3L\+N\b|\b3P\b/.test(ref.d)) return 3; if(/\b4L\b|\b4P\b/.test(ref.d)) return 4; if(/\b1LN\b|\b1L\+N\b|\b2P\b|\b1P\b/.test(ref.d)) return 1; return dflt; }
+function composerPick(k, it){ view.refs[k]=it.f; view.name='composer'; render(); }
 
 /* =============== navigation & événements =============== */
 $('home').onclick=()=>{ $('q').value=''; go({name:'home'}); };
@@ -545,14 +647,22 @@ document.addEventListener('click',e=>{
   const opt=e.target.closest('.opt'); if(opt){ pickOpt(opt.dataset.v); return; }
   const crumb=e.target.closest('.crumbs button'); if(crumb){ const s=+crumb.dataset.step; if(s<0){ view.step=0; } else view.step=s; render(); return; }
   if(e.target.id==='wnext'){ nextStep(); return; }
-  if(e.target.id==='wskip'){ const step=FLOWS[view.flow].steps[view.step]; view.answers[step.key]=step.multi?[]:''; nextStep(); return; }
+  if(e.target.id==='wskip'){ const step=visibleSteps(FLOWS[view.flow],view.answers)[view.step]; view.answers[step.key]=step.multi?[]:''; nextStep(); return; }
+  if(e.target.id==='pickback'){ go(view.pick.comp); return; }
   if(e.target.id==='back'){ if(view.from==='wizard'&&view.wiz){ go(view.wiz); } else go({name:'home'}); return; }
+  if(e.target.id==='cback'){ go(view.wiz||{name:'home'}); return; }
+  const st=e.target.closest('.st'); if(st&&view.name==='composer'){ if(st.dataset.rows){ view.rows=Math.max(1,Math.min(8,(view.rows||3)+(+st.dataset.rows))); } else { const k=st.dataset.k; const cp=COMPONENTS.find(c=>c.k===k); view.qty[k]=Math.max(0,(view.qty[k]??cp.def)+(+st.dataset.d)); } render(); return; }
+  if(e.target.id==='perrow'){ const v=prompt('Modules par rangée (12, 18 ou 24) :', view.perRow||UM_PER_ROW[view.fam]||12); const n=parseInt(v); if(n>0){ view.perRow=n; render(); } return; }
+  const ch=e.target.closest('[data-change]'); if(ch&&view.name==='composer'){ const comp={...view}; go({name:'results', q:ch.dataset.q, title:'Choisir : '+ch.dataset.q, pick:{k:ch.dataset.change, comp}}); return; }
+  if(e.target.id==='caddall'){ const c=view; let n=0; shellLines(c).forEach(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; if(ref){ addToList(ref,null,1,true); n++; } }); COMPONENTS.forEach(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; if(ref){ addToList(ref,null,qty,true); n++; } }); renderList(); toast(`${n} références ajoutées`,{label:'Voir la liste',fn:openList}); return; }
+  if(e.target.id==='caskai'){ const c=view; const shellTxt=shellLines(c).map(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; return ref?`${l.label} (${ref.f}, ELDAS ${ref.e})`:l.label; }).join(' ; '); const lines=shellTxt+' ; '+COMPONENTS.map(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return null; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; return `${qty}× ${cp.label}${ref?` (${ref.f}, ELDAS ${ref.e})`:''}`; }).filter(Boolean).join(' ; '); openChat(); sendChat(`Vérifie ce tableau ${c.fam} ${c.rows} rangées ${MOUNT[c.mount]||''} : ${lines}. Dis-moi en 5 lignes max ce qui manque ou ce qui est surdimensionné, et 1 ou 2 options à proposer. Pas de questions.`, `Vérification du tableau ${c.fam} ${c.rows} rangées`); return; }
   if(e.target.id==='askconfig'){ openChat(); sendChat(view.brief, 'Configuration complète : '+(view.title||'')); return; }
   if(e.target.id==='askthis'){ openChat(); sendChat(view.q); return; }
   const chipb=e.target.closest('.filters .chip'); if(chipb){ const k=chipb.dataset.k, v=chipb.dataset.v; if(k==='reset') F={design:'',mount:'',ip:false,nw:false}; else if(k==='ip'||k==='nw') F[k]=!F[k]; else F[k]=F[k]===v?'':v; render(); return; }
-  const add=e.target.closest('.add'); if(add){ const it=byF[add.closest('.card').dataset.f]; if(it) addToList(it,add); return; }
+  const add=e.target.closest('.add'); if(add){ const it=byF[add.closest('.card').dataset.f]; if(!it) return; if(view.pick){ const {k,comp}=view.pick; view=comp; composerPick(k,it); return; } addToList(it,add); return; }
   const ref=e.target.closest('.add-ref'); if(ref){ const it=byF[ref.dataset.f]; if(it) addToList(it,ref); else toast('Référence hors base'); return; }
   const mb=e.target.closest('.more-btn'); if(mb){ const card=mb.closest('.card'); const open=mb.getAttribute('aria-expanded')==='true'; card.querySelector('.more')?.remove(); if(!open) card.insertAdjacentHTML('beforeend',specHtml(byF[card.dataset.f])); mb.setAttribute('aria-expanded',String(!open)); mb.textContent=open?'Détails':'Masquer'; return; }
+  const fu=e.target.closest('[data-fu]'); if(fu){ const it=byF[fu.dataset.fu]; $('q').value=fu.dataset.fu; F={design:'',mount:'',ip:false,nw:false}; go({name:'results', q:fu.dataset.fu, title:it?`Remplaçant : ${it.d}`:`Remplaçant ${fu.dataset.fu}`}); return; }
   const z=e.target.closest('[data-zoom]'); if(z){ const it=byF[z.dataset.zoom]; $('lb').innerHTML=`<img src="${esc(it.img)}" alt=""><div class="cap">${esc(it.d)} · ELDAS ${esc(it.e||'—')}</div>`; $('lb').hidden=false; return; }
   if(e.target.closest('#lb')){ $('lb').hidden=true; return; }
 });
@@ -563,31 +673,40 @@ function startFlow(flow){
   go({name:'wizard', flow, step:0, answers:{}});
 }
 function pickOpt(v){
-  const step=FLOWS[view.flow].steps[view.step];
+  const step=visibleSteps(FLOWS[view.flow],view.answers)[view.step];
   if(step.multi){ const cur=view.answers[step.key]||[]; view.answers[step.key]= cur.includes(v)? cur.filter(x=>x!==v) : [...cur,v]; render(); }
   else { view.answers[step.key]=v; nextStep(); }
 }
 function nextStep(){
-  const flow=FLOWS[view.flow];
-  if(view.step < flow.steps.length-1){ view.step++; render(); return; }
+  const steps=visibleSteps(FLOWS[view.flow],view.answers);
+  if(view.step < steps.length-1){ view.step++; render(); return; }
   finishFlow();
 }
 function finishFlow(){
   const flow=FLOWS[view.flow], a=view.answers, wiz={...view};
-  const label = s => { const st=flow.steps.find(x=>x.key===s); const val=a[s]; if(!st||!val||(Array.isArray(val)&&!val.length)) return ''; return Array.isArray(val)? val.map(v=>(st.opts.find(o=>o.v===v)||{}).t||v).join(', ') : ((st.opts.find(o=>o.v===val)||{}).t||val); };
-  if(flow.assistant){
-    const brief = `Projet bornes de recharge. Contexte : ${label('ctx')||'à préciser'} ; places : ${label('places')||'à préciser'} ; type : ${label('type')||'à préciser'} ; raccordement véhicule : ${label('cable')||'à préciser'} ; connectivité : ${label('conn')||'à préciser'} ; gestion de charge : ${label('lm')||'à préciser'} ; accès/facturation : ${label('bill')||'à préciser'}. Propose l'architecture, la liste de matériel catalogue (protections, distribution, mesure) avec N° ELDAS, les points à vérifier, et 2 upsells max. Ne me repose pas les questions déjà répondues.`;
-    remember(`Bornes · ${label('ctx')} · ${label('places')} pl.`, wiz);
-    go({name:'home'}); openChat(); sendChat(brief, `Projet bornes : ${[label('ctx'),label('places')&&label('places')+' places',label('type'),label('lm')&&'gestion '+label('lm')].filter(Boolean).join(' · ')}`); return;
+  const label = s => { const st=visibleSteps(flow,a).find(x=>x.key===s); const val=a[s]; if(!st||!val||(Array.isArray(val)&&!val.length)) return ''; return Array.isArray(val)? val.map(v=>(st.opts.find(o=>o.v===v)||{}).t||v).join(', ') : ((st.opts.find(o=>o.v===val)||{}).t||val); };
+  if(view.flow==='bornes'){
+    const cable=a.cable==='câble attaché', dc=a.type==='DC rapide', p22=a.type==='AC 22 kW', many=/3|7|plus/.test(a.places||'');
+    const groups=[];
+    if(dc) groups.push({label:'Borne DC rapide', q:'EVlink Pro CCS2'});
+    else if(p22){ groups.push({label:'Borne Master (1 par groupe)', q:'EVlink Pro AC 22kW Master'}); if(many) groups.push({label:'Bornes Extender (places suivantes)', q:cable?'EVlink Pro AC 22kW câble 5m Extender':'EVlink Pro AC 22kW Extender'}); else groups.push({label:'Variante '+(cable?'câble attaché':'prise T2'), q:cable?'EVlink Pro AC 22kW câble 5m':'EVlink Pro AC 22kW FI'}); }
+    else groups.push({label:'Wallbox 11 kW '+(cable?'câble attaché':'prise T2'), q:cable?'Wallbox 11kW câble':'Wallbox prise T2'});
+    if(a.lm==='dynamique') groups.push({label:'Gestion de charge dynamique', q:p22||dc?'Exten.dyn':'Peak Controller'});
+    if(a.lm==='statique') groups.push({label:'Gestion de charge statique', q:'gestion de charge statique'});
+    if(a.bill==='RFID'||a.bill==='backend OCPP') groups.push({label:'Accès et facturation', q:'Carte RFID EVlink'});
+    if(a.conn==='4G') groups.push({label:'Connectivité 4G', q:'modem EVlink'});
+    if(p22||dc) groups.push({label:'Montage', q:'pied de support EVlink'});
+    groups.push({label:'Protection au tableau (par borne)', q:dc?'interrupteur differentiel iID 63A 30mA 4L':p22?'Clario iC40 32A 3LN':'Clario iC40 16A (C) 3LN'});
+    const title=`Bornes · ${label('ctx')||''} · ${label('places')||''} place(s) · ${label('type')||''}`.replace(/\s+/g,' ');
+    const brief=`Projet bornes de recharge. Contexte : ${label('ctx')||'à préciser'} ; places : ${label('places')||'à préciser'} ; type : ${label('type')||'à préciser'} ; raccordement véhicule : ${label('cable')||'à préciser'} ; connectivité : ${label('conn')||'à préciser'} ; gestion de charge : ${label('lm')||'à préciser'} ; accès/facturation : ${label('bill')||'à préciser'}. Donne l'architecture en 4 lignes, la liste de matériel (bornes EVlink/Wallbox du catalogue, protections, mesure) avec N° ELDAS, les points à vérifier, 2 upsells max. Ne me repose pas ces questions.`;
+    remember(title, {name:'results', title, groups, brief, from:'wizard', wiz});
+    go({name:'results', title, groups, brief, from:'wizard', wiz}); return;
   }
   F={design:'',mount:'',ip:false,nw:false};
   let groups=[], title='', brief='';
   if(view.flow==='tableau'){
-    const fam=a.fam||'', rows=a.rows?`${a.rows} rangées`:''; const m=a.mount||'';
-    groups.push({label:`Coffrets ${fam}`, q:`coffret ${fam} ${rows} ${m}`.trim()});
-    (a.prot||[]).filter(Boolean).forEach(p=>groups.push({label:p==='differentiel'?'Disjoncteurs différentiels Clario iC40':'Disjoncteurs Clario iC40', q:`${p==='differentiel'?'disjoncteur differentiel':'disjoncteur'} clario`}));
-    title=`Tableau ${fam} ${rows} ${MOUNT[m]||''}`.replace(/\s+/g,' ').trim();
-    brief=`Tableau ${fam||''} ${rows} ${MOUNT[m]||''}, protections : ${label('prot')||'à définir'}. Propose la configuration complète du coffret (coffret, rails, différentiels, disjoncteurs, parafoudre si pertinent) avec N° ELDAS et 2 upsells max. Ne me repose pas ces questions.`;
+    const comp={name:'composer', fam:a.fam||'Resi9', install:a.install||'ENC', system:a.system||'KV', door:a.door??'P', rows:parseInt(a.rows)||3, perRow:a.system==='CX'?parseInt(a.perrow)||13:(a.fam==='PrismaSeT'?24:12), mount:a.install==='AP'?'AP':'ENC', qty:{}, refs:{}, wiz};
+    remember(`Tableau ${comp.fam} ${comp.rows} rangées`, comp); go(comp); return;
   } else {
     const ctx={design:a.design||'', mount:a.mount||'', smart:a.smart||''};
     if(view.flow==='exterieur') ctx.design='NEVO';
@@ -607,9 +726,10 @@ $('q').addEventListener('input',()=>{ clearTimeout(timer); timer=setTimeout(()=>
 $('q').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); const q=$('q').value.trim(); if(!q) return; if(/\?|^(est|quel|quelle|comment|pourquoi|peut|combien|y a|propose|je veux|il me faut|client)/i.test(q) || q.split(' ').length>6){ openChat(); sendChat(q); $('q').value=''; } } });
 
 /* =============== liste =============== */
-function addToList(it,btn){ const ex=list.find(x=>x.f===it.f); if(ex) ex.q+=1; else list.push({f:it.f,e:it.e,d:it.d,q:1,img:it.img}); saveList(); if(btn){ btn.textContent='Ajouté ✓'; setTimeout(()=>btn.textContent='Ajouter encore',900);} toast(`${it.d.slice(0,40)}… ajouté`, {label:'Voir la liste', fn:openList}); }
+function addToList(it,btn,qty=1,silent=false){ const ex=list.find(x=>x.f===it.f); if(ex) ex.q+=qty; else list.push({f:it.f,e:it.e,d:it.d,q:qty,img:it.img}); store.set('offre.items',list); if(silent) return; renderList(); if(btn){ btn.textContent='Ajouté ✓'; setTimeout(()=>btn.textContent='Ajouter encore',900);} toast(`${it.d.slice(0,40)}… ajouté`, {label:'Voir la liste', fn:openList}); }
 function renderList(){
   const tot=list.reduce((a,x)=>a+x.q,0);
+  $('listbar').hidden=!list.length; $('listbartxt').textContent=`${tot} pièce${tot>1?'s':''} · ${list.length} référence${list.length>1?'s':''}`;
   $('badge').textContent=tot; $('n').textContent = list.length ? `${tot} pièce${tot>1?'s':''}` : '';
   $('aside-empty').style.display = list.length?'none':'block';
   $('items').innerHTML = list.map((x,i)=>`<div class="item"><img src="${esc(x.img||PIC(x.f))}" alt="" onerror="this.style.visibility='hidden'"><div><div class="d">${esc(x.d)}</div><div class="e num">ELDAS ${esc(x.e||'—')} · ${esc(x.f)}</div></div><input class="q num" type="number" min="1" step="1" value="${x.q}" data-i="${i}" aria-label="Quantité"><button class="x" type="button" data-i="${i}" aria-label="Retirer">×</button></div>`).join('');
@@ -622,7 +742,7 @@ $('items').addEventListener('click',e=>{ const b=e.target.closest('.x'); if(!b) 
 $('clear').onclick=()=>{ if(!list.length||confirm('Vider la liste de matériel ?')){ list=[]; saveList(); } };
 function openList(){ $('drawer').hidden=false; $('scrim').hidden=false; }
 function closeList(){ $('drawer').hidden=true; $('scrim').hidden=true; }
-$('openlist').onclick=openList; $('closelist').onclick=closeList; $('scrim').onclick=closeList;
+$('openlist').onclick=openList; $('closelist').onclick=closeList; $('scrim').onclick=closeList; $('lb-open').onclick=openList; $('lb-pdf').onclick=()=>$('pdf').click();
 $('tools').innerHTML='<h3>Configurateurs et outils</h3>'+TOOLS.map(t=>`<a href="${t.url}" target="_blank" rel="noopener">${esc(t.name)}<span>${esc(t.why)}</span></a>`).join('');
 $('copy').onclick=async()=>{ const txt=[`Liste de matériel${client.name?' – '+client.name:''}`,'',...list.map(x=>`${x.q} × ${x.d}  (ELDAS ${x.e||'—'}, N° Feller ${x.f})`),'',client.notes].join('\n'); try{ await navigator.clipboard.writeText(txt); toast('Liste copiée'); }catch(e){ prompt('Copie manuelle :',txt); } };
 $('pdf').onclick=()=>{
@@ -641,6 +761,8 @@ const STARTERS=[
   {b:'Compatibilité', t:'Le thermostat Matter est-il compatible Philips Hue ?'},
   {b:'Projet bornes', t:'Projet 6 bornes de recharge pour une PPE'},
   {b:'Remplacement', t:'Quel remplaçant pour la référence 7563.FMI.61 en EDIZIO.liv ?'},
+  {b:'Concurrent', t:'Le client a un tableau Hager Volta : que lui proposer et pourquoi ?'},
+  {b:'Photo', t:'📷 Envoie la photo d\'un produit ou d\'un plan avec le bouton appareil photo'},
 ];
 function openChat(){ chatOpen=true; $('stage').classList.add('chat-open'); renderChat(); setTimeout(()=>$('cin').focus(),50); }
 function closeChat(){ chatOpen=false; $('stage').classList.remove('chat-open'); }
@@ -650,7 +772,7 @@ function renderChat(state){
   const th=$('thread');
   if(!chat.length && !state){ th.innerHTML=`<div class="msg a">Dis-moi le besoin du client. Je pose deux ou trois questions à choix, puis je te donne la configuration avec les N° ELDAS et des options à proposer.</div><div class="starters">${STARTERS.map(s=>`<button type="button" data-starter="${esc(s.t)}"><b>${esc(s.b)}</b>${esc(s.t)}</button>`).join('')}</div>`; return; }
   th.innerHTML = chat.map((m,i)=>{
-    if(m.role==='user'){ const dm=chatMeta[i]&&chatMeta[i].display; return `<div class="msg u">${esc(dm||m.content)}</div>`; }
+    if(m.role==='user'){ const dm=chatMeta[i]&&chatMeta[i].display; const txt=typeof m.content==='string'?m.content:(m.content.find(c=>c.type==='text')||{}).text||''; return `<div class="msg u">${esc(dm||txt)}</div>`; }
     const meta=chatMeta[i]||{};
     const refs=(meta.refs||[]).map(x=>`<button type="button" class="add-ref" data-f="${esc(x.f)}" title="${esc(x.d)}"><img src="${PIC(x.f)}" alt="" onerror="this.remove()">+ ${esc(x.e)} · ${esc(x.d.slice(0,34))}${x.d.length>34?'…':''}</button>`).join('');
     const qs=(meta.questions&&meta.questions.length&&i===chat.length-1)?questionsHtml(meta.questions):'';
@@ -662,17 +784,22 @@ function questionsHtml(qs){
   return `<div class="qs" id="qs">${qs.map((q,qi)=>`<div class="q">${esc(q.q)}</div><div class="o" data-qi="${qi}" data-multi="${q.multi?1:0}">${q.options.map(o=>`<button type="button" data-o="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</div>`).join('')}<div class="send"><button class="btn primary small" type="button" id="qsend" disabled>Envoyer les réponses</button><small>ou écris librement ci-dessous</small></div></div>`;
 }
 $('thread').addEventListener('click',e=>{
-  const st=e.target.closest('[data-starter]'); if(st){ sendChat(st.dataset.starter); return; }
+  const st=e.target.closest('[data-starter]'); if(st){ if(st.dataset.starter.startsWith('📷')){ $('cfile').click(); return; } sendChat(st.dataset.starter); return; }
   const ob=e.target.closest('.qs .o button'); if(ob){ const grp=ob.parentElement; if(grp.dataset.multi==='1'){ ob.setAttribute('aria-pressed',String(ob.getAttribute('aria-pressed')!=='true')); } else { grp.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false')); ob.setAttribute('aria-pressed','true'); } $('qsend').disabled=!$('qs').querySelector('[aria-pressed="true"]'); return; }
   if(e.target.id==='qsend'){ const meta=chatMeta[chatMeta.length-1]; const ans=meta.questions.map((q,qi)=>{ const sel=[...$('qs').querySelectorAll(`.o[data-qi="${qi}"] button[aria-pressed="true"]`)].map(b=>b.dataset.o.replace(/\s*\(recommandé\)\s*/i,'')); return sel.length?`${q.q} ${sel.join(', ')}`:null; }).filter(Boolean).join(' · '); if(ans) sendChat(ans); return; }
 });
+let pendingImage=null;
+$('cphoto').onclick=()=>$('cfile').click();
+$('cfile').addEventListener('change',async e=>{ const f=e.target.files[0]; if(!f) return; const data=await shrinkImage(f); pendingImage=data; $('cphoto').style.background='var(--butter)'; toast('Photo prête : décris ce que tu veux (équivalent, remplaçant, identification) puis Envoyer'); $('cin').focus(); e.target.value=''; });
+async function shrinkImage(file){ const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(file); }); const max=1280; const sc=Math.min(1,max/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=Math.round(img.width*sc); c.height=Math.round(img.height*sc); c.getContext('2d').drawImage(img,0,0,c.width,c.height); return c.toDataURL('image/jpeg',0.82).split(',')[1]; }
 async function sendChat(text, display){
-  text=(text||'').trim(); if(!text) return;
+  text=(text||'').trim(); if(!text && !pendingImage) return; if(!text) text='Identifie ce produit et propose l\'équivalent Feller / Schneider avec N° ELDAS.';
   if(!accessCode){ showGate(''); return; }
   if(!chatOpen) openChat();
-  chat.push({role:'user',content:text}); chatMeta.push(display?{display}:null); renderChat('loading'); $('cin').value=''; $('csend').disabled=true;
+  const content = pendingImage ? [{type:'image',source:{type:'base64',media_type:'image/jpeg',data:pendingImage}},{type:'text',text}] : text;
+  chat.push({role:'user',content}); chatMeta.push({display: display || (pendingImage?'📷 '+text:null)}); pendingImage=null; $('cphoto').style.background=''; renderChat('loading'); $('cin').value=''; $('csend').disabled=true;
   try{
-    const r=await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json','x-access-code':accessCode},body:JSON.stringify({messages:chat,list:list.map(x=>({q:x.q,d:x.d,e:x.e}))})});
+    const r=await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json','x-access-code':accessCode},body:JSON.stringify({messages:chat.map((m,i)=>(i<chat.length-1&&Array.isArray(m.content))?{role:m.role,content:'[photo envoyée] '+((m.content.find(c=>c.type==='text')||{}).text||'')}:m),list:list.map(x=>({q:x.q,d:x.d,e:x.e}))})});
     const j=await r.json().catch(()=>({}));
     if(r.status===401){ chat.pop(); chatMeta.pop(); accessCode=''; store.set('offre.code',''); renderChat(); showGate("Code d'accès incorrect."); return; }
     if(!r.ok){ chat.pop(); chatMeta.pop(); renderChat(`${j.error||'Assistant indisponible.'}${j.detail?' — '+j.detail:''}`); return; }

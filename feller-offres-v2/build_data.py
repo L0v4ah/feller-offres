@@ -49,7 +49,30 @@ for it in src['items']:
     if d.get('dim'): out['dim'] = d['dim']
     items.append(out)
 
-payload = {'source': 'online-katalog.feller.ch', 'lang': 'fr', 'exportedAt': src.get('exportedAt'),
+# Bornes de recharge Schneider (EVlink / Wallbox) — source grossiste Sonepar (E-No + photos), hors catalogue Feller
+ev_path = os.path.join(ROOT, 'data', 'ev-sonepar.json')
+if os.path.exists(ev_path):
+    for x in json.load(open(ev_path)):
+        if not x.get('d'): continue
+        d = x['d']
+        tech = []
+        if re.search(r'22\s?kW', d): tech.append(['Puissance', '22', 'kW'])
+        elif re.search(r'11\s?kW', d): tech.append(['Puissance', '11', 'kW'])
+        if 'CCS' in d: tech.append(['Type', 'DC rapide, CCS2', ''])
+        if re.search(r'câble', d, re.I): tech.append(['Raccordement véhicule', 'Câble attaché', ''])
+        elif re.search(r'prise T2', d, re.I): tech.append(['Raccordement véhicule', 'Prise T2', ''])
+        if 'FI type B' in d: tech.append(['Différentiel intégré', 'Type B (DC 6 mA)', ''])
+        if 'FI type A' in d: tech.append(['Différentiel intégré', 'Type A + DC 6 mA', ''])
+        if 'Wi-Fi' in d: tech.append(['Connectivité', 'Wi-Fi, app', ''])
+        if '4G' in d: tech.append(['Connectivité', '4G, ISO 15118', ''])
+        if 'Master' in d: tech.append(['Rôle', 'Master (pilote jusqu\'à 7 Extender)', ''])
+        if 'Extender' in d or 'Exten.' in d: tech.append(['Rôle', 'Extender (esclave du Master)', ''])
+        if 'dyn' in d: tech.append(['Gestion de charge', 'Dynamique', ''])
+        items.append({'f': 'SE-' + x['e'], 'e': x['e'], 't': d[:40], 'd': d, 'c': '', 'img': (x.get('img') or '').replace('/thumb/', '/zoom/'),
+                      'fu': None, 'ean': None, 'buy': True, 'm': 'AP', 'ip': 'IP55' if 'IP55' in d else None, 'lab': [],
+                      'src': 'sonepar', 'url': 'https://www.sonepar.ch' + x.get('href', ''), 'av': x.get('av', ''), 'tech': tech, 'cat': 'ev'})
+
+payload = {'source': 'online-katalog.feller.ch + sonepar.ch (EVlink)', 'lang': 'fr', 'exportedAt': src.get('exportedAt'),
            'builtAt': datetime.datetime.now().isoformat(timespec='seconds'), 'count': len(items),
            'withTech': sum(1 for x in items if x.get('tech')), 'items': items}
 js = json.dumps(payload, ensure_ascii=False, separators=(',', ':'))
