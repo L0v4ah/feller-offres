@@ -125,6 +125,14 @@ for e, x in sonepar.items():
     items.append(it); byE[e] = it; added += 1
 print(f"Schneider via Sonepar : {len(sonepar)} articles lus, {added} ajoutés (le reste enrichit des articles existants)")
 
+# Produits « sur projet » (pas de N° ELDAS grossiste) : bornes DC 120-720 kW, TGBT PrismaSeT G/P, onduleurs Galaxy — data/schneider-projet.json
+prj_path = os.path.join(ROOT, 'data', 'schneider-projet.json')
+if os.path.exists(prj_path):
+    for x in json.load(open(prj_path)):
+        items.append({'f': x['f'], 'e': None, 't': x.get('t', x['d'][:40]), 'd': x['d'], 'c': '', 'img': x.get('img', ''), 'fu': None, 'ean': None,
+                      'buy': False, 'm': 'AP', 'ip': None, 'lab': ['sur-projet'], 'src': 'projet', 'url': x.get('url', ''), 'av': 'sur projet',
+                      'cat': x.get('cat', ''), 'tech': x.get('tech', []), 'note': x.get('note', ''), 'nw': '2025' if 'StarCharge' in x['d'] else None})
+        if not items[-1]['nw']: items[-1].pop('nw')
 payload = {'source': 'online-katalog.feller.ch + sonepar.ch (EVlink)', 'lang': 'fr', 'exportedAt': src.get('exportedAt'),
            'builtAt': datetime.datetime.now().isoformat(timespec='seconds'), 'count': len(items),
            'withTech': sum(1 for x in items if x.get('tech')), 'withPrice': sum(1 for x in items if x.get('p')), 'withParts': sum(1 for x in items if x.get('parts')), 'items': items}

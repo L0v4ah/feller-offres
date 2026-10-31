@@ -80,7 +80,7 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 .home h1{font-size:clamp(28px,3.4vw,40px);font-weight:500;margin:10px 0 6px;letter-spacing:-.03em;line-height:1.05}
 .home .lead{color:var(--muted);margin:0 0 22px;max-width:58ch;font-size:15.5px}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
-.tile{position:relative;display:flex;flex-direction:column;background:var(--glass-2);backdrop-filter:blur(14px);border:1px solid var(--rim);box-shadow:var(--shadow);border-radius:var(--r-card);overflow:hidden;text-align:left;padding:0;transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.tile{cursor:pointer;font:inherit;color:inherit;position:relative;display:flex;flex-direction:column;background:var(--glass-2);backdrop-filter:blur(14px);border:1px solid var(--rim);box-shadow:var(--shadow);border-radius:var(--r-card);overflow:hidden;text-align:left;padding:0;transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
 .tile:hover,.tile:focus-visible{transform:translateY(-3px);box-shadow:var(--shadow-pop);outline:none}
 .tile .pic{height:150px;display:grid;place-items:center;background:#fff;margin:10px 10px 0;border-radius:18px}
 .tile .pic img{max-height:118px;max-width:78%;object-fit:contain}
@@ -165,6 +165,10 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 .card .act{display:flex;gap:6px;margin-top:auto;padding-top:6px}
 .card .act .btn{flex:1}
 .card .act .btn.primary{background:var(--pine);border-color:var(--pine);color:var(--on-pine)}
+.tips{margin:0 0 12px;padding:10px 14px;background:var(--float);border:1px solid var(--line-2);border-radius:14px;font-size:13.5px}
+.tips summary{cursor:pointer;font-weight:600;color:var(--pine)}
+.tips ul{margin:8px 0 0;padding-left:18px;color:var(--ink-2)}
+.tips li{margin:4px 0}
 .cards.rows{display:flex;flex-direction:column;gap:8px}
 .cards.rows .card.row{flex-direction:row;align-items:center;gap:14px;padding:8px 12px 8px 8px}
 .cards.rows .card.row .pic{height:64px;width:64px;margin:0;border-radius:12px;flex:none}
@@ -394,7 +398,7 @@ body:has(#drawer:not([hidden])) .toast{bottom:auto;top:14px}
 <div id="pm" hidden role="dialog" aria-modal="true"></div>
 <section id="print" aria-hidden="true"></section>
 
-<script src="data.js?v=202610310259"></script>
+<script src="data.js?v=202610311043"></script>
 <script>
 /* =============== données =============== */
 const DB = (window.FELLER_DATA && window.FELLER_DATA.items) || [];
@@ -420,12 +424,12 @@ const SYN = [
 ];
 const COMPETITORS=/\b(hager|legrand|abb|siemens|busch[- ]?jaeger|gira|jung|berker|niko|bticino|eaton|zaptec|easee|keba|alfen|webasto|mennekes|go-?e|juice|wallbe|weidm[uü]ller|phoenix|theben|finder|eltako|dehn|obo|hensel|spelsberg|gewiss|striebel)\b/i;
 const prep = q => { let s=norm(q); for(const [a,b] of SYN) s=s.replace(a,b); return s; };
-DB.forEach(it=>{ it._s = norm([it.d,it.t,it.f,it.e,it.ean,it.m].join(' ')).replace(/\bwi-fi\b/g,'wifi'); if(/\b4P\b/.test(it.d)) it._s+=' 4l'; if(/\b4L\b/.test(it.d)) it._s+=' 4p'; if(/\b3P\b/.test(it.d)) it._s+=' 3ln'; if(/\b3LN\b/.test(it.d)) it._s+=' 3p'; if(/\b2P\b/.test(it.d)) it._s+=' 1ln'; if(/a\.gestion c/i.test(it.d)) it._s+=' enrouleur'; if(/s\.gestion c/i.test(it.d)) it._s+=' sansenrouleur'; if(/a\.porte tr\b/i.test(it.d)) it._s+=' transparente'; if(/barre collectrice/i.test(it.d)) it._s+=' peigne'; else if(/\bpeigne/i.test(it.d)) it._s+=' barre collectrice'; it._dsg = DESIGNS.find(x=>norm(it.d).includes(norm(x))) || '';
+DB.forEach(it=>{ it._s = norm([it.d,it.t,it.f,it.e,it.ean,it.m].join(' ')).replace(/\bwi-fi\b/g,'wifi').replace(/(\d+(?:[.,]\d+)?) (kw|kva|va|w|ma|mm|m|a|v)\b/g,'$1$2'); if(/\b1P\+N\b/.test(it.d)) it._s+=' 1ln'; if(/\b3P\+N\b/.test(it.d)) it._s+=' 3ln'; if(/\b4P\b/.test(it.d)) it._s+=' 4l'; if(/\b4L\b/.test(it.d)) it._s+=' 4p'; if(/\b3P\b/.test(it.d)) it._s+=' 3ln'; if(/\b3LN\b/.test(it.d)) it._s+=' 3p'; if(/\b2P\b/.test(it.d)) it._s+=' 1ln'; if(/a\.gestion c/i.test(it.d)) it._s+=' enrouleur'; if(/s\.gestion c/i.test(it.d)) it._s+=' sansenrouleur'; if(/a\.porte tr\b/i.test(it.d)) it._s+=' transparente'; if(/barre collectrice/i.test(it.d)) it._s+=' peigne'; else if(/\bpeigne/i.test(it.d)) it._s+=' barre collectrice'; it._dsg = DESIGNS.find(x=>norm(it.d).includes(norm(x))) || '';
   if(!it.m){ const d=' '+it.d+' '; it.m = / ENC /.test(d) ? 'ENC' : / AP /.test(d) ? 'AP' : /\.REG\b|\bREG\b|\bUM\b|rail DIN/.test(it.d+' '+it.f) ? 'REG' : ''; } });
 const byF = Object.fromEntries(DB.map(it=>[it.f,it])); window.__byF=byF; window.__byE=Object.fromEntries(DB.filter(it=>it.e&&!it._variantOf).map(it=>[it.e,it]));
 // fiches techniques + accessoires chargés en arrière-plan (tech.json) pour garder data.js léger
 let techReady=false; const techWaiters=[];
-(function loadTech(){ if(!(window.FELLER_DATA||{}).techFile) { techReady=true; return; } const url='tech.json?v=202610310259'; const go=()=>fetch(url).then(r=>r.json()).then(T=>{ for(const [f,t] of Object.entries(T)){ const it=byF[f]; if(!it) continue; Object.assign(it,t); } DB.forEach(it=>{ if(it._variantOf&&byF[it._variantOf]){ const b=byF[it._variantOf]; if(b.tech) it.tech=b.tech; if(b.acc) it.acc=b.acc; if(b.dim) it.dim=b.dim; } }); techReady=true; techWaiters.splice(0).forEach(fn=>fn()); document.querySelectorAll('.card[data-f] .more-btn:not(.row .more-btn)').forEach(mb=>{ const it=byF[mb.closest('.card').dataset.f]; if(it&&mb.getAttribute('aria-expanded')!=='true') mb.textContent='Détails'+((it.parts||[]).length?` · ${it.parts.length} pièces`:'')+((it.acc||[]).length?` · ${it.acc.length} acc.`:''); }); }).catch(()=>{ techReady=true; }); if('requestIdleCallback' in window) requestIdleCallback(go,{timeout:3000}); else setTimeout(go,800); })();
+(function loadTech(){ if(!(window.FELLER_DATA||{}).techFile) { techReady=true; return; } const url='tech.json?v=202610311043'; const go=()=>fetch(url).then(r=>r.json()).then(T=>{ for(const [f,t] of Object.entries(T)){ const it=byF[f]; if(!it) continue; Object.assign(it,t); } DB.forEach(it=>{ if(it._variantOf&&byF[it._variantOf]){ const b=byF[it._variantOf]; if(b.tech) it.tech=b.tech; if(b.acc) it.acc=b.acc; if(b.dim) it.dim=b.dim; } }); techReady=true; techWaiters.splice(0).forEach(fn=>fn()); document.querySelectorAll('.card[data-f] .more-btn:not(.row .more-btn)').forEach(mb=>{ const it=byF[mb.closest('.card').dataset.f]; if(it&&mb.getAttribute('aria-expanded')!=='true') mb.textContent='Détails'+((it.parts||[]).length?` · ${it.parts.length} pièces`:'')+((it.acc||[]).length?` · ${it.acc.length} acc.`:''); }); }).catch(()=>{ techReady=true; }); if('requestIdleCallback' in window) requestIdleCallback(go,{timeout:3000}); else setTimeout(go,800); })();
 function whenTech(fn){ if(techReady) fn(); else techWaiters.push(fn); }
 const COLORS = [['gris clair','#cfd2d3'],['gris foncé','#6d7073'],['verre noir','#111'],['verre blanc','#f4f4f4'],['noir','#1b1b1b'],['blanc','#ffffff'],['coffee','#5a3b2b'],['crema','#efe4cc'],['aluminium','#b8bcc0'],['orange','#e8731d'],['rouge','#c8431f'],['laiton','#c9a349'],['acier','#9ea4a8'],['anthrazit','#3a3d40'],['graphite','#4a4d50'],['chrome','#c0c4c8'],['ardoise','#55606a'],['umbra','#5c4a3a'],['arctic','#eaf1f3'],['pearl','#e9e5dd'],['hazel','#8b6d4b'],['stone','#9a948a'],['moca','#6f5646'],['marbre','#ece9e4'],['indigo','#2d3a6b'],['champagne','#d9c8a5'],['nickel','#8e8e8e'],['chêne','#b3885a'],['fibrociment','#b7b7b2']];
 function colorOf(d){ const n=norm(d); for(const [name,hex] of COLORS){ if(n.includes(norm(name))) return {name,hex}; } return null; }
@@ -552,7 +556,8 @@ const FLOWS = {
       {v:'Villa',t:'Villa / maison',s:'1 à 2 places · Wallbox Wi-Fi + app',img:'SE-834020819',rec:'Le plus fréquent'},
       {v:'PPE / immeuble',t:'PPE / immeuble',s:'Places locataires, facturation au kWh',img:'SE-834001909'},
       {v:'Entreprise / flotte',t:'Entreprise / flotte',s:'Rotation, 22 kW, AC ou DC, gestion de charge',img:'SE-834000729'},
-      {v:'Public',t:'Parking public',s:'DC rapide 60 kW, 4G, OCPP',img:'SE-834320809'}]},
+      {v:'Public',t:'Parking public',s:'DC rapide 60 kW en stock, 120-720 kW sur projet',img:'SE-834320809'}]},
+    {key:'pubp', q:'Quelle puissance DC ?', opts:[{v:'60',t:'EVlink Pro DC 60 kW',s:'En stock grossiste, 2×CCS2',img:'SE-834320809',rec:'Le plus courant'},{v:'120',t:'EVlink Pro DC 120-180 kW',s:'Sur projet',img:'PRJ-EVDC180'},{v:'SC',t:'StarCharge Fast 60-720',s:'Sur projet, nouvelle génération',img:'PRJ-SCF180'}], when:a=>a.ctx==='Public'},
     // --- villa : 3 à 4 choix ---
     {key:'cable', q:'Câble attaché ou prise T2 ?', opts:[{v:'câble attaché',t:'Câble attaché 11 kW',s:'Rien à sortir du coffre · 5 ou 7 m',img:'SE-834020819',rec:'Villa'},{v:'prise T2',t:'Prise T2 22 kW',s:'Chacun son câble, 22 kW si le raccordement le permet',img:'SE-834020829'}], when:a=>a.ctx==='Villa'},
     {key:'mount', q:'Au mur ou sur pied ?', opts:[{v:'mur',t:'Au mur',s:'Garage, façade, place couverte',img:'SE-834100029',rec:'Le plus simple'},{v:'pied',t:'Sur pied',s:'Place extérieure sans mur',img:'SE-834930109'}], when:a=>a.ctx==='Villa'},
@@ -562,19 +567,156 @@ const FLOWS = {
     {key:'type', q:'Quelle gamme ?', s:'Charge Pro = borne noire PPE avec compteur MID. EVlink Pro AC = Master + Extender pour les flottes. DC = rotation rapide.', opts:[
       {v:'Charge Pro',t:'Schneider Charge Pro (noir)',s:'22 kW, MID, Wi-Fi/Ethernet/4G, OCPP 1.6, IP55 IK10',img:'SE-834001909',rec:'PPE'},
       {v:'AC 22 kW',t:'EVlink Pro AC 22 kW',s:'Master + Extender, FI type A ou B intégré',img:'SE-834000289',rec:'Flotte'},
-      {v:'DC rapide',t:'EVlink Pro DC 60 kW',s:'2×CCS2, câbles 5 ou 7 m',img:'SE-834320809'},
+      {v:'DC rapide',t:'EVlink Pro DC 60 kW',s:'2×CCS2, câbles 5 ou 7 m — en stock grossiste',img:'SE-834320809'},
+      {v:'DC projet',t:'DC 120 à 720 kW (sur projet)',s:'EVlink Pro DC 120-180, StarCharge Fast 60-720 — offre Schneider',img:'PRJ-SCF180'},
       {v:'Mix AC + DC',t:'Mix AC + DC',s:'Flotte : bornes AC + 1 rapide DC',img:'SE-834000729'}], when:a=>a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte'},
+    {key:'dcp', q:'Quelle puissance DC ?', s:'Au-delà de 60 kW : étude et offre Schneider (raccordement, génie civil, mise en service).', opts:[
+      {v:'120',t:'EVlink Pro DC 120 kW',s:'2×CCS2, charge simultanée 2×60 kW',img:'PRJ-EVDC120'},
+      {v:'180',t:'EVlink Pro DC 180 kW',s:'2×CCS2, charge simultanée 2×90 kW',img:'PRJ-EVDC180',rec:'Flottes'},
+      {v:'SC60',t:'StarCharge Fast 60',s:'Nouvelle génération compacte',img:'PRJ-SCF60'},
+      {v:'SC180',t:'StarCharge Fast 180 / 320',s:'Dépôts, hubs',img:'PRJ-SCF180'},
+      {v:'SC720',t:'StarCharge Fast 720',s:'Armoire 360-720 kW + satellites, poids lourds',img:'PRJ-SCF720'}], when:a=>a.type==='DC projet'},
     // --- AC (Charge Pro / EVlink Pro AC / mix) ---
-    {key:'cable', q:'Prise T2 ou câble attaché ?', opts:[{v:'prise T2',t:'Prise T2',s:'Chacun son câble · standard collectif',img:'SE-834001909',rec:'PPE'},{v:'câble attaché',t:'Câble attaché 7 m',s:'Confort, flotte interne',img:'SE-834001939'}], when:a=>(a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte')&&a.type!=='DC rapide'},
-    {key:'bill', q:'Facturation et accès ?', opts:[{v:'MID',t:'Compteur MID + badge',s:'Refacturation au kWh (locataires, employés)',rec:'PPE'},{v:'RFID',t:'Badge RFID seul',s:'Accès contrôlé, pas de refacturation'},{v:'libre',t:'Libre',s:'Places privées attribuées'}], compact:true, when:a=>(a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte')&&a.type!=='DC rapide'},
-    {key:'conn', q:'Réseau sur place ?', opts:[{v:'LAN',t:'Ethernet / Wi-Fi du bâtiment',rec:'Si disponible'},{v:'4G',t:'4G (pas de réseau)',s:'Modem intégré, carte SIM'}], compact:true, when:a=>(a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte')&&a.type!=='DC rapide'},
-    {key:'mount', q:'Au mur ou sur poteau ?', opts:[{v:'mur',t:'Au mur',s:'Parking souterrain, façade',img:'SE-834100079',rec:'Le plus simple'},{v:'pied',t:'Sur poteau / pied',s:'Places extérieures, 1 ou 2 bornes dos à dos',img:'SE-834100059'}], when:a=>(a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte')},
+    {key:'cable', q:'Prise T2 ou câble attaché ?', opts:[{v:'prise T2',t:'Prise T2',s:'Chacun son câble · standard collectif',img:'SE-834001909',rec:'PPE'},{v:'câble attaché',t:'Câble attaché 7 m',s:'Confort, flotte interne',img:'SE-834001939'}], when:a=>(a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte')&&a.type!=='DC rapide'&&a.type!=='DC projet'},
+    {key:'bill', q:'Facturation et accès ?', opts:[{v:'MID',t:'Compteur MID + badge',s:'Refacturation au kWh (locataires, employés)',rec:'PPE'},{v:'RFID',t:'Badge RFID seul',s:'Accès contrôlé, pas de refacturation'},{v:'libre',t:'Libre',s:'Places privées attribuées'}], compact:true, when:a=>(a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte')&&a.type!=='DC rapide'&&a.type!=='DC projet'},
+    {key:'conn', q:'Réseau sur place ?', opts:[{v:'LAN',t:'Ethernet / Wi-Fi du bâtiment',rec:'Si disponible'},{v:'4G',t:'4G (pas de réseau)',s:'Modem intégré, carte SIM'}], compact:true, when:a=>(a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte')&&a.type!=='DC rapide'&&a.type!=='DC projet'},
+    {key:'mount', q:'Au mur ou sur poteau ?', opts:[{v:'mur',t:'Au mur',s:'Parking souterrain, façade',img:'SE-834100079',rec:'Le plus simple'},{v:'pied',t:'Sur poteau / pied',s:'Places extérieures, 1 ou 2 bornes dos à dos',img:'SE-834100059'}], when:a=>(a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte')&&a.type!=='DC rapide'&&a.type!=='DC projet'},
     // --- DC ---
-    {key:'dcopt', q:'Borne DC : gestion de câbles ?', s:'Les bornes DC ont toujours leurs câbles CCS2 attachés.', opts:[{v:'avec',t:'Avec enrouleur de câbles',s:'Câbles 5 m suspendus, reste propre',img:'SE-834320809',rec:'Public'},{v:'sans',t:'Sans gestion de câbles',s:'Câbles 5 ou 7 m, porte-câbles en option',img:'SE-834320819'}], when:a=>a.type==='DC rapide'||a.type==='Mix AC + DC'||a.ctx==='Public'},
-    {key:'dcmount', q:'Fixation de la borne DC ?', opts:[{v:'poteau',t:'Poteau de montage DC',s:'0.75 m ou 1 m, raccords 2×CCS',img:'SE-834100039',rec:'Standard'},{v:'socle',t:'Socle existant / génie civil',s:'Rien à ajouter'}], compact:true, when:a=>a.type==='DC rapide'||a.type==='Mix AC + DC'||a.ctx==='Public'},
+    {key:'dcopt', q:'Borne DC : gestion de câbles ?', s:'Les bornes DC ont toujours leurs câbles CCS2 attachés.', opts:[{v:'avec',t:'Avec enrouleur de câbles',s:'Câbles 5 m suspendus, reste propre',img:'SE-834320809',rec:'Public'},{v:'sans',t:'Sans gestion de câbles',s:'Câbles 5 ou 7 m, porte-câbles en option',img:'SE-834320819'}], when:a=>a.type==='DC rapide'||a.type==='Mix AC + DC'||(a.ctx==='Public'&&(!a.pubp||a.pubp==='60'))},
+    {key:'dcmount', q:'Fixation de la borne DC ?', opts:[{v:'poteau',t:'Poteau de montage DC',s:'0.75 m ou 1 m, raccords 2×CCS',img:'SE-834100039',rec:'Standard'},{v:'socle',t:'Socle existant / génie civil',s:'Rien à ajouter'}], compact:true, when:a=>a.type==='DC rapide'||a.type==='Mix AC + DC'||(a.ctx==='Public'&&(!a.pubp||a.pubp==='60'))},
     // --- gestion de charge collective ---
     {key:'lm', q:'Gestion de charge ?', s:'Statique = puissance fixe partagée. Dynamique = compteur en tête, s\'adapte au bâtiment.', opts:[{v:'dynamique',t:'Dynamique',s:'EV Charging Expert + compteur (PowerTag / PM5320 / iEM3250)',rec:'PPE et flottes'},{v:'statique',t:'Statique',s:'Répartition fixe entre bornes'},{v:'aucune',t:'Aucune',s:'1 borne ou puissance largement suffisante'}], compact:true, when:a=>a.ctx!=='Villa'},
   ]},
+  asi: { title:'Onduleur / ASI', steps:[
+    {key:'use', q:'Qu\'est-ce qu\'on protège ?', s:'L\'usage décide de la technologie : line-interactive pour l\'informatique simple, On-Line (double conversion) pour tout ce qui a un moteur, une régulation ou qui ne doit jamais voir une coupure.', opts:[
+      {v:'pc',t:'PC, box internet, NAS, TV',s:'Jusqu\'à ~300 W · quelques minutes pour éteindre proprement',imgq:'Easy UPS BVS 800VA',rec:'Bureau, maison'},
+      {v:'reseau',t:'Baie réseau, serveur, caméras, alarme',s:'300 à 1500 W · onde sinusoïdale, format rack possible',imgq:'Easy UPS SMVS 1500VA'},
+      {v:'chauffage',t:'Chaudière, PAC, régulation, pompes',s:'Moteurs et électronique : On-Line sinus pur obligatoire',imgq:'Easy UPS On-Line SRVS 1000VA',rec:'Villa avec PAC'},
+      {v:'pro',t:'Commerce, cabinet, labo, caisse',s:'Zéro coupure : On-Line + carte réseau',imgq:'Easy UPS On-Line SRVS 3000VA'},
+      {v:'tri',t:'Local technique triphasé',s:'10 à 40 kVA : Easy UPS 3S · au-delà Galaxy sur projet',imgq:'Easy UPS 3S 20kVA 3:3'}]},
+    {key:'pw', q:'Puissance des appareils à protéger ?', s:'Additionne les watts des étiquettes. Règle : VA = W ÷ 0,8, puis +25 % de marge. Jamais d\'imprimante laser ni de chauffage sur un onduleur.', opts:[{v:'300',t:'jusqu\'à 300 W'},{v:'600',t:'300 à 600 W'},{v:'1000',t:'600 à 1000 W'},{v:'2000',t:'1 à 2 kW'},{v:'4000',t:'2 à 4 kW'},{v:'8000',t:'4 à 8 kW'}], compact:true, when:a=>a.use!=='tri'},
+    {key:'kva', q:'Puissance triphasée ?', opts:[{v:'10',t:'10 kVA'},{v:'15',t:'15 kVA'},{v:'20',t:'20 kVA'},{v:'30',t:'30 kVA'},{v:'40',t:'40 kVA'},{v:'plus',t:'Plus de 40 kVA',s:'Galaxy VS sur projet'}], compact:true, when:a=>a.use==='tri'},
+    {key:'out', q:'Sortie de l\'onduleur triphasé ?', opts:[{v:'3:3',t:'Triphasée (3:3)',rec:'Tableau secouru'},{v:'3:1',t:'Monophasée (3:1)',s:'Charges 230 V uniquement'}], compact:true, when:a=>a.use==='tri'&&a.kva!=='plus'},
+    {key:'auto', q:'Autonomie souhaitée ?', s:'L\'autonomie se divise par deux quand la charge double.', opts:[{v:'min',t:'Quelques minutes',s:'Le temps d\'arrêter proprement',rec:'Standard'},{v:'15',t:'15 à 30 minutes',s:'Modules batteries en plus'},{v:'long',t:'Plus de 30 minutes',s:'Batteries externes, sur étude'}], compact:true},
+    {key:'form', q:'Format ?', opts:[{v:'tour',t:'Tour',s:'Posé au sol ou sur une étagère',rec:'Villa, bureau'},{v:'rack',t:'Rack 19"',s:'Dans la baie réseau'}], compact:true, when:a=>a.use!=='tri'&&a.use!=='pc'},
+    {key:'sup', q:'Supervision ?', opts:[{v:'aucune',t:'Aucune',s:'Voyants + USB',rec:'Maison'},{v:'snmp',t:'Carte réseau SNMP',s:'Arrêt automatique des serveurs, alertes e-mail'},{v:'contact',t:'Contact sec',s:'Report d\'alarme vers GTB / alarme'},{v:'modbus',t:'Modbus',s:'Intégration GTB'}], compact:true, when:a=>a.use!=='pc'},
+  ], finish:(a,label)=>{
+    const W=+a.pw||600, va=Math.ceil(W/0.8*1.25/50)*50; const g=[]; const tips=[
+      'VA ≠ W : la puissance utile est en watts (facteur 0,8). Un onduleur 1000 VA tient ~800 W.',
+      'Line-interactive (BVS / Back-UPS) : coupure de 4-8 ms et onde pseudo-sinus → informatique seulement. SMVS = line-interactive à onde sinusoïdale. On-Line SRVS = double conversion, zéro coupure, sinus pur → moteurs, PAC, régulations, médical, caisses.',
+      'Autonomie standard : 5-10 min à pleine charge. Elle double si la charge baisse de moitié ; modules batteries en option sur les On-Line SRVS.',
+      'Batteries plomb : 3 à 5 ans, remplacement à prévoir dans le devis. Local ventilé, 20-25 °C.',
+      'Sorties IEC C13/C19 sur Easy UPS et APC : prévoir les cordons C13 → T12 (non fournis par Schneider).',
+      'Carte SNMP = arrêt propre des serveurs et alertes ; contact sec = report vers l\'alarme ou la GTB. Triphasé 3:1 = sortie 230 V, 3:3 = sortie tri 400 V.'];
+    if(a.use==='tri'){ if(a.kva==='plus'){ g.push({label:'Onduleur triphasé > 40 kVA — sur projet', q:'Galaxy VS', qty:1, note:'étude Schneider : batteries, bypass, mise en service'}); }
+      else { const k=a.kva||'20', o=a.out||'3:3'; const mins={min:{'10':'15 min','15':'9 min','20':'15 min','30':'9 min','40':'10 min'},'15':{'10':'40 min','15':'25 min','20':'30 min','30':'25 min','40':'15 min'}}; g.push({label:`Easy UPS 3S ${k} kVA ${o}`, q:`Easy UPS 3S ${k}kVA ${o} ${a.auto==='long'?'pour batterie interne':'avec batterie '+((mins[a.auto==='15'?'15':'min']||{})[k]||'15 min')}`, qty:1, note:a.auto==='long'?'version « pour batterie » + armoire batteries externes sur étude':'autonomie selon variante (9 à 40 min)'}); g.push({label:'Batterie haute performance 3S (remplacement / extension)', q:'Batterie haute performance Easy UPS 3S', qty:0}); g.push({label:'Panneau de bypass / maintenance', q:'Panneau Easy UPS 3S', qty:1}); g.push({label:'Kit de démarrage à froid', q:'Kit de démarrage à froid Easy UPS 3S', qty:1}); }
+    } else {
+      const rack=a.form==='rack'; const sz=va<=500?'500VA':va<=650?'650VA':va<=800?'800VA':va<=1000?'1000VA':va<=1500?'1500VA':va<=2000?'2000VA':va<=3000?'3000VA':va<=5000?'5000VA':va<=6000?'6000VA':'10000VA';
+      if(a.use==='pc') g.push({label:`Line-interactive ${sz} (bureau)`, q:va<=1000?`Easy UPS BVS ${sz} AVR`:`Easy UPS SMVS ${sz}`, qty:1, note:'prise USB, sorties IEC'});
+      else if(a.use==='reseau') g.push({label:`Line-interactive sinus ${sz}${rack?' rack':''}`, q:rack?`Smart-UPS ${sz} Rack`:`Easy UPS SMVS ${sz}`, qty:1, note:'onde sinusoïdale : serveurs, NAS, NVR'});
+      else g.push({label:`On-Line double conversion ${sz}${rack?' rack':''}`, q:rack?`Easy UPS On-Line SRVS Rack ${sz}`:`Easy UPS On-Line SRVS ${sz}`, qty:1, note:'zéro coupure, sinus pur : PAC, régulation, caisse, médical'});
+      if(a.use!=='pc') g.push({label:'Alternative APC Smart-UPS On-Line', q:`APC Smart-UPS On-Line ${sz}${rack?' Rack':' Tower'}`, qty:0});
+      if(a.auto==='15'||a.auto==='long') g.push({label:'Module batterie supplémentaire (On-Line SRVS)', q:va<=1000?'Module de batterie Easy UPS On-Line SRVS 1KVA 36V':va<=3000?'Module de batterie Easy UPS On-Line SRVS 2/3KVA 72V':'Module de batterie Easy UPS On-Line SRVS 6/10KVA 240V', qty:a.auto==='long'?2:1, note:'chaque module ajoute environ une autonomie de base'});
+      if(a.sup==='snmp') g.push({label:'Carte réseau SNMP', q:'Carte Easy UPS On-Line SNMP', qty:1});
+      if(a.sup==='contact') g.push({label:'Carte contacts secs', q:'Carte Easy UPS I/O contact libre de potentiel', qty:1});
+      if(a.sup==='modbus') g.push({label:'Carte Modbus', q:'Carte Modbus Easy UPS On-Line SRVS', qty:1});
+      if(rack){ g.push({label:'Kit de rails rack', q:'Kit de montage rack Easy UPS', qty:1}); g.push({label:'Bandeau de prises C13 (PDU)', q:'Prise multiple Rack PDU Basic 8×C13', qty:1}); }
+    }
+    const title=`ASI · ${label('use')||''}${a.use==='tri'?' · '+(label('kva')||''):' · ≈ '+va+' VA'}`;
+    const brief=`Projet onduleur. Usage : ${label('use')} ; puissance : ${a.use==='tri'?label('kva'):(label('pw')+' → ≈ '+va+' VA')} ; autonomie : ${label('auto')||'standard'} ; format : ${label('form')||'tour'} ; supervision : ${label('sup')||'aucune'}. Propose la référence Easy UPS / APC la plus adaptée avec N° ELDAS, les accessoires (batteries, carte, rails, cordons C13) et 3 points à vérifier chez le client. Ne me repose pas ces questions.`;
+    return {title, groups:g, brief, tips};
+  }},
+  surtension: { title:'Protection surtension', steps:[
+    {key:'where', q:'Où va le parafoudre ?', s:'Type 1+2 à l\'arrivée quand il y a un paratonnerre ou une ligne aérienne ; type 2 au tableau principal ; type 2+3 compact dans le tableau d\'appartement.', opts:[
+      {v:'resi',t:'Tableau d\'appartement / villa',s:'Resi9 iPRD compact : 1 module, type 2+3',imgq:'Parasurtension Resi9 iPRD compact',rec:'Le plus fréquent'},
+      {v:'t2',t:'Tableau principal',s:'iPRD 40r type 2, 1LN ou 3LN',imgq:'Parasurtension Acti9 iPRD F40r'},
+      {v:'t1',t:'Arrivée avec paratonnerre / ligne aérienne',s:'Type 1+2, Iimp 25 kA',imgq:'iPRD1 25r T1+2'},
+      {v:'t3',t:'Protection fine d\'un appareil',s:'Type 3 : PAC, électronique, réseau RJ45',imgq:'IPRD8r 8kA T3'}]},
+    {key:'ph', q:'Mono ou tri ?', opts:[{v:'1',t:'Monophasé (L+N)'},{v:'3',t:'Triphasé (3L+N)',rec:'Tableau principal'}], compact:true, when:a=>a.where!=='resi'},
+    {key:'sig', q:'Report d\'alarme ?', s:'Les versions « r » ont un contact de signalisation (fin de vie de la cartouche).', opts:[{v:'oui',t:'Avec contact (r)',rec:'Tableau principal, GTB'},{v:'non',t:'Sans'}], compact:true, when:a=>a.where==='t2'||a.where==='t1'},
+    {key:'fi', q:'Disjoncteur de déconnexion déjà prévu ?', opts:[{v:'non',t:'Non, à ajouter',rec:'Standard'},{v:'oui',t:'Oui, existant'}], compact:true},
+  ], finish:(a,label)=>{
+    const g=[], tri=a.ph!=='1'; const tips=[
+      'Type 1+2 (iPRD1 25r) uniquement si paratonnerre, ligne aérienne ou zone très exposée ; sinon type 2 (iPRD 40r) au tableau principal suffit.',
+      'Type 2+3 compact Resi9 (1 module, « sans courant de fuite ») : parfait dans un tableau d\'appartement, en aval du FI.',
+      'Toujours un disjoncteur de déconnexion en amont du parafoudre (20 A C 3LN en général, voir notice) et des conducteurs courts (< 50 cm) vers la barre PE.',
+      'Version « r » = contact sec de signalisation : à relier à l\'alarme ou la GTB pour savoir quand remplacer la cartouche (modules enfichables).',
+      'Pour une PAC ou une borne de recharge, le type 2 au tableau + un type 3 près de l\'appareil est l\'argument « protection complète » facile à vendre.'];
+    if(a.where==='resi') g.push({label:'Parafoudre compact Resi9 iPRD 40r type 2+3 (1 module)', q:'Parasurtension Resi9 iPRD compact 40r', qty:1});
+    else if(a.where==='t2') g.push({label:`iPRD 40r type 2 ${tri?'3LN':'1LN'}${a.sig==='oui'?' avec contact':''}`, q:tri?'Parasurtension Acti9 iPRD F40r type 2+3 3P':'Protection surtension IPRD40R 1P+N type 2', qty:1, note:'modules enfichables remplaçables'});
+    else if(a.where==='t1') g.push({label:`Type 1+2 ${tri?'4P':'1P'} Iimp 25 kA`, q:tri?'iPRD1 25r T1+2 4P':'Module enfichable iPRD C25r type 1+2 L-N 1P', qty:1, note:'arrivée bâtiment, avant le comptage selon GRD'});
+    else g.push({label:'Type 3 (protection fine)', q:tri?'IPRD8 8kA 3P T3':'IPRD8r 8kA 1P+N T3', qty:1, note:'à moins de 10 m de l\'appareil ; RJ45 : iPRE Ethernet'});
+    if(a.where==='t3') g.push({label:'Protection réseau Ethernet (RJ45)', q:'iPRE Typ 3 ethernet RJ45', qty:0});
+    if(a.fi!=='oui') g.push({label:'Disjoncteur de déconnexion (20 A C)', q:tri?'Clario iC40 20A (C) 3LN':'Clario iC40 20A (C) 1LN', qty:1, note:'selon notice iPRD'});
+    g.push({label:'Cartouche de rechange (stock de service)', q:a.where==='resi'?'Module enfichable Resi9 iPRD C40r':'Module enfichable iPRD F40r', qty:0});
+    const title=`Parafoudre · ${label('where')||''}${a.ph?' · '+label('ph'):''}`;
+    const brief=`Protection surtension : emplacement ${label('where')}, ${label('ph')||'monophasé'}, ${a.sig==='oui'?'avec':'sans'} report d'alarme, disjoncteur de déconnexion ${a.fi==='oui'?'existant':'à ajouter'}. Propose la référence iPRD adaptée avec N° ELDAS, le disjoncteur de déconnexion et 2 arguments de vente. Ne me repose pas ces questions.`;
+    return {title, groups:g, brief, tips};
+  }},
+  protection: { title:'Disjoncteur & différentiel', steps:[
+    {key:'circ', q:'Quel circuit ?', opts:[
+      {v:'13',t:'Prises / lumière 13 A',s:'Monophasé',imgq:'Clario iC40 13A 0.03A 1UM',rec:'Le plus fréquent'},
+      {v:'16',t:'Cuisine, lave-linge, extérieur 16 A',s:'Monophasé',imgq:'Clario iC40 16A 0.03A 1UM'},
+      {v:'316',t:'Cuisinière, four, borne 11 kW',s:'3×16 A',imgq:'Clario iC40 16A (C) 3LN'},
+      {v:'313',t:'Boiler',s:'3×13 A',imgq:'Clario iC40 13A (C) 3LN'},
+      {v:'320',t:'Pompe à chaleur',s:'3×20 A',imgq:'Clario iC40 20A (C) 3LN'},
+      {v:'332',t:'Borne 22 kW, gros consommateur',s:'3×32 A',imgq:'Clario iC40 32A (C) 3LN'},
+      {v:'big',t:'Alimentation 40 à 125 A',s:'NG125, iID 63 A',imgq:'disjoncteur NG125N 4P 63A'}]},
+    {key:'fi', q:'Différentiel ?', s:'FI/LS 1 module = protection complète par circuit (recommandé). Disjoncteur seul = un FI de groupe protège plusieurs circuits.', opts:[{v:'fils',t:'FI/LS intégré (1 module, 30 mA)',rec:'Standard CH'},{v:'ls',t:'Disjoncteur seul',s:'Sous un FI de groupe'},{v:'fi',t:'Différentiel de groupe seul',s:'iID 40 / 63 A'}], compact:true, when:a=>a.circ!=='big'},
+    {key:'type', q:'Type de différentiel ?', s:'Type A = standard. Type F = variateurs, PAC, lave-linge. Type B = DC (bornes sans détection 6 mA, PV).', opts:[{v:'A',t:'Type A',rec:'Standard'},{v:'F',t:'Type F',s:'PAC, variateurs'},{v:'B',t:'Type B / B-EV',s:'Bornes, PV, DC'}], compact:true, when:a=>a.fi!=='ls'&&a.circ!=='big'},
+    {key:'icu', q:'Pouvoir de coupure ?', opts:[{v:'6',t:'6 kA',rec:'Habitat'},{v:'10',t:'10 kA',s:'Proche du transformateur, industrie'},{v:'4.5',t:'4,5 kA',s:'Petit tableau divisionnaire'}], compact:true, when:a=>a.circ!=='big'},
+    {key:'qty', q:'Combien de circuits identiques ?', opts:[{v:'1',t:'1'},{v:'2',t:'2'},{v:'4',t:'4'},{v:'6',t:'6'},{v:'10',t:'10'}], compact:true},
+  ], finish:(a,label)=>{
+    const g=[], n=+a.qty||1; const amp={13:'13A',16:'16A',316:'16A',313:'13A',320:'20A',332:'32A'}[a.circ]||'16A'; const tri=/^3/.test(a.circ); const icu=a.icu==='10'?'10kA':a.icu==='4.5'?'4.5kA':'6kA';
+    const tips=['Clario iC40 : FI/LS 1LN sur 1 module — 2 fois plus de circuits par rangée qu\'un FI/LS classique. C\'est l\'argument n° 1 face à Hager.',
+      'Courbe C = standard ; B pour les longues lignes ou l\'éclairage LED massif ; D pour les moteurs à fort appel.',
+      'Type A suffit pour les bornes Wallbox / Charge Pro (détection DC 6 mA intégrée). Type B seulement si la borne n\'a pas cette détection. Type F pour PAC et variateurs.',
+      '6 kA en habitat ; 10 kA près du transformateur ou en industrie (vérifier l\'Icc au point d\'installation).',
+      'Prévoir le peigne 1LN ou 3LN par rangée et un jeu de capuchons : c\'est ce qui fait un tableau propre.'];
+    if(a.circ==='big'){ g.push({label:'Disjoncteur NG125 (63–125 A)', q:'disjoncteur NG125N 4P', qty:n}); g.push({label:'Interrupteur différentiel iID 63 A', q:'interrupteur différentiel iID 63A 30mA 4L', qty:n}); g.push({label:'Bloc Vigi NG125 (différentiel associé)', q:'Bloc FI VIGI NG125 4P 63A 30mA', qty:0}); }
+    else {
+      const t=a.type||'A';
+      if(a.fi==='fils') g.push({label:`FI/LS ${tri?'3LN':'1 module'} ${amp} 30 mA type ${t}`, q:tri?`Clario iC40 3LN ${amp} 30mA ${icu}${t==='F'?' t.F':t==='B'?' type B':''}`:`Clario iC40 ${amp} 0.03A 1UM ${icu}${t==='F'?' F':''}`, qty:n, note:t==='B'&&!tri?'1 module type B indisponible : prendre un FI type B-EV + disjoncteur':''});
+      if(a.fi==='ls') g.push({label:`Disjoncteur ${amp} (C) ${tri?'3LN':'1LN'} ${icu}`, q:`Clario iC40 ${amp} (C) ${tri?'3LN':'1LN'} ${icu}`, qty:n});
+      if(a.fi==='fi'||a.fi==='ls') g.push({label:`Différentiel de groupe type ${t} 40 A 30 mA`, q:t==='B'?'différentiel type B-EV 40A':t==='F'?'interrupteur différentiel iID 40A 30mA type F':'interrupteur différentiel iID 40A 30mA 4L', qty:a.fi==='fi'?n:1});
+      g.push({label:`Peigne ${tri?'3LN':'1LN'} 12 UM`, q:`barre collectrice Clario iC40 ${tri?'3LN':'1LN'} 12 UM`, qty:Math.ceil(n*(tri?3:1)/12)});
+      g.push({label:`Capuchons peigne ${tri?'3LN':'1LN'}`, q:`capuchon Clario iC40 peigne ${tri?'3LN':'1LN'}`, qty:1});
+    }
+    const title=`Protection · ${label('circ')||''} ×${n}`;
+    const brief=`Protection de circuit : ${label('circ')}, ${label('fi')||''}, type ${a.type||'A'}, ${icu}, ${n} circuits. Donne la référence Clario iC40 exacte avec N° ELDAS, le peigne et 1 argument face à Hager. Ne me repose pas ces questions.`;
+    return {title, groups:g, brief, tips};
+  }},
+  tgbt: { title:'TGBT & armoires', steps:[
+    {key:'amp', q:'Courant de tête ?', s:'Le calibre de l\'arrivée décide du disjoncteur de tête et de la gamme d\'armoire.', opts:[
+      {v:'125',t:'jusqu\'à 125 A',s:'NG125 + PrismaSeT XL',imgq:'disjoncteur NG125N 4P 100A',rec:'Immeuble, PME'},
+      {v:'250',t:'160 à 250 A',s:'ComPacT NSX + PrismaSeT XL / G',imgq:'ComPacT NSX160'},
+      {v:'630',t:'400 à 630 A',s:'NSX 400/630 + PrismaSeT G (sur projet)',imgq:'PrismaSeT G'},
+      {v:'4000',t:'Plus de 630 A',s:'MasterPact + PrismaSeT P (sur projet)',imgq:'PrismaSeT P'}]},
+    {key:'enc', q:'Enveloppe ?', opts:[{v:'mur',t:'Coffret mural PrismaSeT XL',s:'3 à 6 rangées, 1 à 3 champs'},{v:'sol',t:'Armoire de sol PrismaSeT XL',s:'12 rangées, 1 à 3 champs',rec:'Local technique'},{v:'exist',t:'Existant / tableautier'}], compact:true, when:a=>a.amp==='125'||a.amp==='250'},
+    {key:'champs', q:'Combien de champs ?', opts:[{v:'1',t:'1 champ (300 mm)'},{v:'2',t:'2 champs (550 mm)',rec:'Courant'},{v:'3',t:'3 champs (800 mm)'}], compact:true, when:a=>(a.amp==='125'||a.amp==='250')&&a.enc!=='exist'},
+    {key:'ip', q:'Porte ?', opts:[{v:'IP44',t:'Avec porte IP44',rec:'Standard'},{v:'IP30',t:'Sans porte IP30',s:'Local fermé'}], compact:true, when:a=>(a.amp==='125'||a.amp==='250')&&a.enc!=='exist'},
+    {key:'opts', q:'Options ?', multi:true, opts:[{v:'spd',t:'Parafoudre type 1+2 / type 2',rec:'Recommandé'},{v:'mes',t:'Mesure PowerTag / compteur',s:'Suivi énergétique, EV Charging Expert'},{v:'fi',t:'Différentiels 63 A et plus'},{v:'sect',t:'Interrupteur-sectionneur de tête'}], compact:true},
+  ], finish:(a,label)=>{
+    const g=[], o=a.opts||[]; const tips=['PrismaSeT XL (jusqu\'à 125-250 A en modulaire) se commande en articles ELDAS : coffret/armoire, montants, plastrons, barres. PrismaSeT G (630 A) et P (4000 A) se chiffrent avec un tableautier ou Schneider (constituants LVS…).',
+      'Disjoncteur de tête : NG125 jusqu\'à 125 A (modulaire, 25 kA) ; ComPacT NSX 100-250 A (TM-D réglable) ; au-delà NSX 400-630 ou MasterPact MTZ.',
+      'Parafoudre type 1+2 à l\'arrivée si paratonnerre / ligne aérienne, sinon type 2 ; toujours avec disjoncteur de déconnexion.',
+      'Mesure : PowerTag (sans fil, 63-630 A) + PowerTag Link ou Panel Server ; PM5320 pour une mesure classe 0,5 ; c\'est aussi ce qui alimente EV Charging Expert pour les bornes.',
+      'Sélectivité : différentiels de groupe 300 mA sélectifs (S) en tête, 30 mA en aval.'];
+    if(a.amp==='125'){ g.push({label:'Disjoncteur de tête NG125 4P', q:'disjoncteur NG125N 4P 125A', qty:1}); }
+    else if(a.amp==='250'){ g.push({label:'Disjoncteur de tête ComPacT NSX 160-250 A', q:'ComPacT NSX250 TM250D 4P', qty:1, note:'vérifier 3P/4P et le déclencheur TM-D'}); }
+    else if(a.amp==='630'){ g.push({label:'Disjoncteur de tête NSX 400-630 A', q:'ComPacT NSX630 4P', qty:1}); g.push({label:'Système PrismaSeT G (sur projet)', q:'PrismaSeT G', qty:1}); }
+    else { g.push({label:'TGBT PrismaSeT P (sur projet)', q:'PrismaSeT P', qty:1}); }
+    if(a.enc==='mur') g.push({label:`Coffret mural PrismaSeT XL ${a.ip||'IP44'} ${a.champs||'2'} champ(s)`, q:`Coffret mural PrismaSeT XL ${a.ip||'IP44'} ${a.champs||'2'} champs 6 rangées`, qty:1});
+    if(a.enc==='sol') g.push({label:`Armoire de sol PrismaSeT XL ${a.ip||'IP44'} ${a.champs||'2'} champ(s)`, q:`Armoire de sol PrismaSeT XL ${a.ip||'IP44'} ${a.champs||'2'} champs 12 rangées`, qty:1});
+    if(a.enc&&a.enc!=='exist'){ g.push({label:'Montants avec plaque de montage DIN', q:'Montant plaque de montage DIN 6 rangées', qty:+a.champs||2}); g.push({label:'Barres collectrices Prisma (kit modulaire)', q:'Barre collectrice kit modulaire Prisma', qty:1}); }
+    if(o.includes('sect')) g.push({label:'Interrupteur-sectionneur de tête', q:a.amp==='125'?'Interrupteur de charge iSW 125A 4L':'Sectionneur de charge ComPacT NSX', qty:1});
+    if(o.includes('spd')) g.push({label:'Parafoudre type 1+2 ou type 2', q:'iPRD1 25r T1+2 4P', qty:1, note:'+ disjoncteur de déconnexion 20 A'});
+    if(o.includes('fi')) g.push({label:'Différentiels de groupe 63 A (sélectifs en tête)', q:'interrupteur différentiel iID 63A 300mA 4L', qty:2});
+    if(o.includes('mes')) { g.push({label:'PowerTag (mesure sans fil)', q:'PowerTag', qty:1}); g.push({label:'PowerTag Link / Panel Server', q:'Panel Server Entry PowerTag', qty:1}); }
+    const title=`TGBT · ${label('amp')||''}${a.enc?' · '+label('enc'):''}`;
+    const brief=`Projet TGBT : courant de tête ${label('amp')}, enveloppe ${label('enc')||'à définir'}, ${a.champs||''} champs, ${a.ip||''}, options : ${(o.map(x=>x)).join(', ')||'aucune'}. Propose l'architecture (tête, répartition, différentiels, parafoudre, mesure) avec N° ELDAS quand ils existent et indique ce qui part en projet Schneider / tableautier. Ne me repose pas ces questions.`;
+    return {title, groups:g, brief, tips};
+  }},
 };
 const FN_QUERY = {
   combi:(a)=>`combinaison ${a.design||''} ${a.mount||''} ${a.layout||''}`,
@@ -611,6 +753,8 @@ const esc = s => (s||'').toString().replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;
 const md = s => esc(s).replace(/(https?:\/\/[^\s)]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>').replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>').replace(/^#{1,3}\s+(.+)$/gm,'<strong>$1</strong>').replace(/^[-•]\s+/gm,'• ');
 const productUrl = it => it.url || ('https://online-katalog.feller.ch/fr/product?fnr='+encodeURIComponent(it.f));
 const docsUrl = it => it.url ? it.url : productUrl(it)+'#documents';
+const srcLabel = it => it.src==='projet' ? 'Schneider · sur projet (pas de N° ELDAS)' : it.src==='sonepar' ? `Schneider · grossiste${it.av?' · '+esc(it.av.replace(/, selon fournisseur/,'')):''}` : `N° Feller ${esc(it.f)}`;
+const availTag = it => it.src==='projet' ? '<span class="tag soon">Sur projet</span>' : it.soon ? '<span class="tag soon">Pas encore disponible</span>' : it.buy ? '<span class="tag ok">Disponible</span>' : '<span class="tag">Non commandable</span>';
 $('dbinfo').textContent = DB.length ? `${((window.FELLER_DATA||{}).count||DB.length).toLocaleString('fr-CH')} articles · ${DB.filter(x=>x.nw&&!x._variantOf).length||NEW_COUNT} nouveautés · ${EXPORTED ? new Date(EXPORTED).toLocaleDateString('fr-CH') : ''}` : 'catalogue introuvable';
 
 let accessCode = store.get('offre.code','');
@@ -644,7 +788,8 @@ const SECTIONS = [
   {id:'bornes', flow:'bornes', t:'Bornes de recharge', s:'Wallbox, Charge Pro, EVlink Pro AC et DC, gestion de charge', imgs:['SE-834020819','SE-834001909']},
   {id:'smart', flow:'smart', t:'Smart home', s:'Wiser, KNX, Matter', imgs:['3401.1.W.GMI.A.61','4708-1-C.GMI.A.L.P.61']},
   {id:'exterieur', flow:'exterieur', t:'Extérieur & humide', s:'NEVO, IP44 et plus', imgs:['3402.2.NAP.Q.A.61','13431']},
-  {id:'tgbt', t:'TGBT & armoires', s:'PrismaSeT XL de sol, NSX, NG125, parafoudre type 1+2, mesure', imgs:['SE-834010149','SE-550810216'], q:'TGBT armoire', groups:[
+  {id:'tgbt', flow:'tgbt', t:'TGBT & armoires', s:'Courant de tête, enveloppe PrismaSeT XL/G/P, parafoudre, mesure', imgs:['SE-834010149','SE-550810216']},
+  {id:'tgbt_all', t:'TGBT — tout voir', s:'Armoires, NSX, NG125, sectionneurs, barres, mesure', imgs:['PRJ-PRISMAG','SE-834010309'], q:'TGBT armoire', groups:[
     {label:'Armoires de sol PrismaSeT XL (12 rangées, 1 à 3 champs)', q:'Armoire de sol PrismaSeT XL'},
     {label:'Coffrets muraux PrismaSeT XL', q:'Coffret mural PrismaSeT XL'},
     {label:'Montants et kits modulaires', q:'Montant plaque de montage DIN rangées'},
@@ -655,7 +800,8 @@ const SECTIONS = [
     {label:'Parafoudre type 1+2 (arrivée)', q:'iPRD1 type 1+2'},
     {label:'Répartition : barres collectrices Prisma', q:'Barre collectrice kit modulaire Prisma'},
     {label:'Mesure : PowerTag, compteurs, Panel Server', q:'PowerTag F 3PN'}]},
-  {id:'protection', t:'Disjoncteurs & différentiels', s:'Clario iC40, Acti9 iC60, iID, type B-EV, NG125', imgs:['A9D67410','SE-531033410'], groups:[
+  {id:'protection', flow:'protection', t:'Disjoncteur & différentiel', s:'Le bon Clario iC40 par circuit, type A/F/B, peigne', imgs:['A9D67410','SE-531033410']},
+  {id:'protection_all', t:'Protection — tout voir', s:'Clario iC40, Acti9 iC60, iID, type B-EV, NG125', imgs:['A9P54716','SE-531012310'], groups:[
     {label:'FI/LS 1 module Clario iC40 (13 / 16 / 20 A, 30 mA)', q:'Clario iC40 1UM 0.03A'},
     {label:'Disjoncteurs 1LN Clario iC40', q:'Clario iC40 (C) 1LN'},
     {label:'Disjoncteurs 3LN Clario iC40', q:'Clario iC40 (C) 3LN'},
@@ -672,7 +818,8 @@ const SECTIONS = [
     {label:'Relais et interfaces', q:'relais iRTC'},
     {label:'Compteurs d\'énergie iEM (MID)', q:'Compteur d\'énergie iEM3'},
     {label:'PowerTag sans fil + Panel Server', q:'PowerTag'}]},
-  {id:'surtension', t:'Protection surtension', s:'iPRD compact Resi9, iPRD 40r, type 1+2, Quick', imgs:['SE-808000507','SE-808000207'], groups:[
+  {id:'surtension', flow:'surtension', t:'Protection surtension', s:'Type 1+2, type 2, compact Resi9, type 3 — avec déconnexion', imgs:['SE-808000507','SE-808000207']},
+  {id:'surtension_all', t:'Surtension — tout voir', s:'iPRD compact Resi9, iPRD 40r, type 1+2, Quick', imgs:['SE-808000027','A9L16617'], groups:[
     {label:'Parafoudre compact Resi9 iPRD (type 2+3, 1 module)', q:'parasurtension Resi9 iPRD compact'},
     {label:'iPRD 40r type 2+3 (tableau)', q:'parasurtension iPRD 40r'},
     {label:'Type 1+2 (arrivée, paratonnerre)', q:'iPRD1 type 1+2'},
@@ -686,7 +833,8 @@ const SECTIONS = [
     {label:'Borniers et répartiteurs', q:'bornier Resi9'},
     {label:'Rails DIN et plaques', q:'Rail DIN Resi9'},
     {label:'Obturateurs', q:'obturateur Resi9'}]},
-  {id:'asi', t:'Onduleurs / ASI', s:'Easy UPS : protection des serveurs, chaudières, alarmes', imgs:['SE-960000028','SE-960001858'], groups:[
+  {id:'asi', flow:'asi', t:'Onduleur / ASI', s:'Quoi protéger, puissance, autonomie → Easy UPS, APC, 3S, Galaxy', imgs:['SE-960954018','SE-960960138']},
+  {id:'asi_all', t:'ASI — tout voir', s:'Easy UPS BVS / SMVS / On-Line, APC, 3S, batteries, cartes', imgs:['SE-960953718','SE-960998018'], groups:[
     {label:'Easy UPS 1 kVA et moins', q:'ASI Easy UPS 1KVA'},
     {label:'Easy UPS 1,5 à 3 kVA', q:'ASI Easy UPS 2000VA'},
     {label:'Easy UPS On-Line (serveurs)', q:'ASI Easy UPS On-Line'},
@@ -710,10 +858,10 @@ function orderedSections(){ const ord=homePrefs.order||[]; const byId=Object.fro
 function saveHome(){ store.set('offre.home', homePrefs); }
 function homeHtml(){
   const secs=orderedSections(); const hidden=new Set(homePrefs.hidden||[]);
-  const tile=(t,i,arr)=>`<button class="tile ${organizing?'org':''}" type="button" data-sec="${t.id}" draggable="${organizing}">${t.k?`<span class="k">${t.k}</span>`:''}
+  const tile=(t,i,arr)=>`<div class="tile ${organizing?'org':''}" role="button" tabindex="0" data-sec="${t.id}" draggable="${organizing}">${t.k?`<span class="k">${t.k}</span>`:''}
       ${organizing?`<span class="orgbar"><button type="button" class="ob" data-move="-1" data-sec="${t.id}" title="Monter" ${i===0?'disabled':''}>▲</button><button type="button" class="ob" data-move="1" data-sec="${t.id}" title="Descendre" ${i===arr.length-1?'disabled':''}>▼</button><button type="button" class="ob" data-hide="${t.id}" title="Masquer">Masquer</button></span>`:''}
       <div class="pic multi">${(t.imgs||t.imgq||[]).map(i=>{ const src=t.imgs?PIC(i):((searchFallback(i,{},1).items[0]||{}).img||''); return `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`; }).join('')}</div>
-      <div class="txt"><b>${esc(t.t)}</b><span>${esc(t.s)}</span></div></button>`;
+      <div class="txt"><b>${esc(t.t)}</b><span>${esc(t.s)}</span></div></div>`;
   const shown=secs.filter(t=>!hidden.has(t.id)), hid=secs.filter(t=>hidden.has(t.id));
   return `<div class="home">
     <div class="res-head"><h1>Que veux-tu proposer ?</h1><button class="btn small" type="button" id="orghome">${organizing?'Terminé':'Organiser'}</button></div>
@@ -740,7 +888,7 @@ function wizardHtml(){
     <div class="crumbs"><button type="button" data-step="-1">${esc(flow.title)}</button><span class="sep">›</span>${crumbs}<span style="color:var(--ink)">${view.step+1}/${flow.steps.length}</span></div>
     <h1>${esc(step.q)}</h1><p class="sub">${esc(step.s||(step.multi?'Plusieurs choix possibles.':'Un seul choix, tu pourras revenir.'))}</p>
     <div class="opts ${step.compact?'compact':''}">${step.opts.map(o=>`<button class="opt" type="button" data-v="${esc(o.v)}" aria-pressed="${isSel(o.v)}">
-      <div class="pic ${o.img?'':'ico'}">${o.img?`<img src="${PIC(o.img)}" alt="" loading="lazy" onerror="this.parentElement.classList.add('ico');this.remove()">`:''}</div>
+      <div class="pic ${(o.img||o.imgq)?'':'ico'}">${(o.img||o.imgq)?`<img src="${o.img?PIC(o.img):esc((searchFallback(o.imgq,{},1).items[0]||{}).img||'')}" alt="" loading="lazy" onerror="this.parentElement.classList.add('ico');this.remove()">`:''}</div>
       <div class="txt"><b>${esc(o.t)}</b>${o.s?`<span>${esc(o.s)}</span>`:''}${o.rec?`<i class="rec">Recommandé · ${esc(o.rec)}</i>`:''}</div></button>`).join('')}</div>
     <div class="actions"><button class="btn" id="wback" type="button">← Retour</button>${step.multi?`<button class="btn primary" id="wnext" type="button">${(sel||[]).length?'Continuer':'Continuer sans option'}</button>`:''}<button class="btn" id="wskip" type="button">Passer</button><span class="hint">${flow.assistant?'À la fin, l\'assistant structure le projet et chiffre la distribution.':'À la fin : les références, puis l\'assistant pour une configuration complète si tu veux.'}</span></div>
   </div>`;
@@ -763,7 +911,8 @@ function resultsHtml(){
   const accCount={}; groups.forEach(g=>g.items.slice(0,24).forEach(it=>(it.acc||[]).forEach(a=>{ if(!a[0]||a[0]===it.f) return; accCount[a[0]]=(accCount[a[0]]||0)+1; })));
   const accItems=Object.entries(accCount).sort((a,b)=>b[1]-a[1]).map(([f])=>byF[f]).filter(Boolean).filter(it=>!groups.some(g=>g.items.includes(it))).slice(0,8);
   const accHtml = accItems.length ? `<section class="group acc"><h2>Pièces détachées et accessoires à prévoir <small>kits frontaux, cadres, boîtes, peignes… liés aux articles ci-dessus</small></h2><div class="cards">${accItems.map(cardHtml).join('')}</div></section>` : '';
-  return `<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig" title="L'assistant compose une offre type avec quantités, accessoires et options, prête à ajouter">Offre type par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':'Accueil'}</button>`}</div>${filters}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}${r.brief?' · touche un produit pour sa fiche':''}</div>${body}${total?accHtml:''}`;
+  const tipsHtml = r.tips&&r.tips.length ? `<details class="tips"><summary>À savoir pour conseiller (${r.tips.length})</summary><ul>${r.tips.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></details>` : '';
+  return `${tipsHtml}<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig" title="L'assistant compose une offre type avec quantités, accessoires et options, prête à ajouter">Offre type par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':'Accueil'}</button>`}</div>${filters}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}${r.brief?' · touche un produit pour sa fiche':''}</div>${body}${total?accHtml:''}`;
 }
 
 function rowHtml(it){
@@ -771,7 +920,7 @@ function rowHtml(it){
   return `<article class="card row ${it.nw?'is-new':''}" data-f="${esc(it.f)}">
     <div class="pic" data-open="${esc(it.f)}" title="Voir la fiche"><img src="${esc(it.img)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"></div>
     <div class="body"><div class="desc" data-open="${esc(it.f)}" style="cursor:pointer">${esc(it.d)}</div>
-      <div class="meta"><span class="e num"><small>ELDAS</small>${it.e?esc(it.e):'—'}</span><span>${it.src==='sonepar'?`grossiste${it.av?' · '+esc(it.av.replace(/, selon fournisseur/,'')):''}`:`N° Feller ${esc(it.f)}`}</span>${it.nw?`<span class="tag">Nouveau ${esc(it.nw)}</span>`:''}${it.soon?'<span class="tag soon">Pas encore disponible</span>':it.buy?'':'<span class="tag">Non commandable</span>'}${it.fu?`<button type="button" class="tag fu" data-fu="${esc(it.fu)}" style="cursor:pointer;border:0">Remplacé par ${esc(it.fu)} →</button>`:''}</div>
+      <div class="meta"><span class="e num"><small>ELDAS</small>${it.e?esc(it.e):'—'}</span><span>${it.src==='projet'?'Schneider · sur projet':it.src==='sonepar'?`grossiste${it.av?' · '+esc(it.av.replace(/, selon fournisseur/,'')):''}`:`N° Feller ${esc(it.f)}`}</span>${it.nw?`<span class="tag">Nouveau ${esc(it.nw)}</span>`:''}${it.src==='projet'?'<span class="tag soon">Sur projet</span>':it.soon?'<span class="tag soon">Pas encore disponible</span>':it.buy?'':'<span class="tag">Non commandable</span>'}${it.fu?`<button type="button" class="tag fu" data-fu="${esc(it.fu)}" style="cursor:pointer;border:0">Remplacé par ${esc(it.fu)} →</button>`:''}</div>
       ${swatchesHtml(it)}</div>
     <div class="act"><button class="btn primary small add" type="button" ${it._gq?`data-q="${it._gq}"`:''}>${view.pick?'Choisir':it._gq?`Ajouter ×${it._gq}`:inList?'Encore':'Ajouter'}</button><button class="btn small more-btn" type="button" aria-expanded="false" data-open="${esc(it.f)}">Fiche</button></div>
   </article>`;
@@ -782,10 +931,10 @@ function cardHtml(it){
     <div class="pic" data-open="${esc(it.f)}" title="Voir la fiche"><img src="${esc(it.img)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"></div>
     <div class="body">
       <div class="desc" data-open="${esc(it.f)}" style="cursor:pointer">${esc(it.d)}</div>
-      <div class="e num"><small>ELDAS</small>${it.e?esc(it.e):'<span style="font-size:13px;font-weight:400;color:var(--ink-3)">pas de N° ELDAS</span>'}</div>
-      <div class="f num">${it.src==='sonepar'?`Schneider · grossiste${it.av?' · '+esc(it.av.replace(/, selon fournisseur/,''))  :''}`:`N° Feller ${esc(it.f)}`}</div>
+      <div class="e num"><small>ELDAS</small>${it.e?esc(it.e):`<span style="font-size:13px;font-weight:400;color:var(--ink-3)">${it.src==='projet'?'sur projet':'pas de N° ELDAS'}</span>`}</div>
+      <div class="f num">${srcLabel(it)}</div>
       ${swatchesHtml(it)}
-      <div class="tags">${it._dsg?`<span class="tag">${esc(it._dsg)}</span>`:''}${it.m?`<span class="tag">${MOUNT[it.m]}</span>`:''}${it.ip?`<span class="tag">${esc(it.ip)}</span>`:''}${it.soon?'<span class="tag soon">Pas encore disponible</span>':it.buy?'<span class="tag ok">Disponible</span>':'<span class="tag">Non commandable</span>'}${it.fu?`<button type="button" class="tag fu" data-fu="${esc(it.fu)}" style="cursor:pointer;border:0">Remplacé par ${esc(it.fu)} → voir</button>`:''}</div>
+      <div class="tags">${it._dsg?`<span class="tag">${esc(it._dsg)}</span>`:''}${it.m?`<span class="tag">${MOUNT[it.m]}</span>`:''}${it.ip?`<span class="tag">${esc(it.ip)}</span>`:''}${availTag(it)}${it.fu?`<button type="button" class="tag fu" data-fu="${esc(it.fu)}" style="cursor:pointer;border:0">Remplacé par ${esc(it.fu)} → voir</button>`:''}</div>
       <div class="act"><button class="btn primary small add" type="button" ${it._gq?`data-q="${it._gq}"`:''}>${view.pick?'Choisir':it._gq?`Ajouter ×${it._gq}`:inList?'Ajouter encore':'Ajouter'}</button><button class="btn small more-btn" type="button" aria-expanded="false">Détails${(it.parts&&it.parts.length)?` · ${it.parts.length} pièces`:''}${(it.acc&&it.acc.length)?` · ${it.acc.length} acc.`:''}</button></div>
     </div></article>`;
 }
@@ -816,14 +965,15 @@ function openSheet(f){
     <div class="pic" data-f="${esc(it.f)}"><img src="${esc(it.img)}" alt="" onerror="this.style.visibility='hidden'"></div>
     <div class="info">
       <h2>${esc(it.d)}</h2>
-      <div class="ids"><span class="e num"><small>ELDAS</small>${it.e?esc(it.e):'—'}</span>${it.src==='sonepar'?`<span>Schneider · grossiste${it.av?' · '+esc(it.av.replace(/, selon fournisseur/,'')):''}</span>`:`<span class="num">N° Feller ${esc(it.f)}</span>`}${it.ean?`<span class="num">EAN ${esc(it.ean)}</span>`:''}</div>
-      <div class="tags">${it.nw?`<span class="tag new">Nouveau ${esc(it.nw)}</span>`:''}${it.soon?'<span class="tag soon">Pas encore disponible</span>':it.buy?'<span class="tag ok">Disponible</span>':'<span class="tag">Non commandable</span>'}${it.fu?`<button type="button" class="tag fu" data-fu="${esc(it.fu)}" style="cursor:pointer;border:0">Remplacé par ${esc(it.fu)} → voir</button>`:''}</div>
+      <div class="ids"><span class="e num"><small>ELDAS</small>${it.e?esc(it.e):'—'}</span><span class="num">${srcLabel(it)}</span>${it.ean?`<span class="num">EAN ${esc(it.ean)}</span>`:''}</div>
+      <div class="tags">${it.nw?`<span class="tag new">Nouveau ${esc(it.nw)}</span>`:''}${availTag(it)}${it.fu?`<button type="button" class="tag fu" data-fu="${esc(it.fu)}" style="cursor:pointer;border:0">Remplacé par ${esc(it.fu)} → voir</button>`:''}</div>
       ${swatchesHtml(it)}
       ${kv.length?`<div class="kv">${kv.slice(0,8).map(([k,v])=>`<div><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join('')}</div>`:''}
       ${partsHtml(it)}
       ${accs?`<h4>Accessoires et pièces à prévoir</h4><div class="accs">${accs}</div>`:''}
       ${spec?`<details><summary style="cursor:pointer;color:var(--muted);font-size:13.5px">Toutes les caractéristiques (${(it.tech||[]).length})</summary><div class="spec">${spec}</div></details>`:''}
-      <div class="links"><a href="${docsUrl(it)}" target="_blank" rel="noopener">${it.src==='sonepar'?'Fiche grossiste ↗':'Fiche produit, brochures, plans cotés ↗'}</a>${it.src!=='sonepar'?`<a href="https://www.sonepar.ch/fr/search?q=${encodeURIComponent(it.e||it.f)}" target="_blank" rel="noopener">Prix et stock grossiste ↗</a>`:''}</div>
+      ${it.note?`<p style="margin:8px 0 0;font-size:13.5px;color:var(--ink-2)">${esc(it.note)}</p>`:''}
+      <div class="links"><a href="${docsUrl(it)}" target="_blank" rel="noopener">${it.src==='projet'?'Gamme Schneider (fiche, brochure) ↗':it.src==='sonepar'?'Fiche grossiste ↗':'Fiche produit, brochures, plans cotés ↗'}</a>${it.src==='projet'?`<a href="https://www.se.com/ch/fr/work/support/contact/" target="_blank" rel="noopener">Demander une offre Schneider ↗</a>`:it.src!=='sonepar'?`<a href="https://www.sonepar.ch/fr/search?q=${encodeURIComponent(it.e||it.f)}" target="_blank" rel="noopener">Prix et stock grossiste ↗</a>`:''}</div>
       <div class="buy"><div class="cqty"><button type="button" class="st" data-d="-1" aria-label="Moins">−</button><input id="pmqty" class="num" type="number" min="1" value="${inList?inList.q:1}" style="width:54px;text-align:center;border:1px solid var(--line-2);border-radius:999px;padding:6px 4px;background:var(--float)"><button type="button" class="st" data-d="1" aria-label="Plus">+</button></div><button class="btn primary" id="pmadd" type="button" data-f="${esc(it.f)}">${inList?'Ajouter encore':'Ajouter à la liste'}</button></div>
     </div></div>`;
   $('pm').hidden=false;
@@ -968,9 +1118,10 @@ function nextStep(){
 function finishFlow(){
   const flow=FLOWS[view.flow], a=view.answers, wiz={...view};
   const label = s => { const st=visibleSteps(flow,a).find(x=>x.key===s); const val=a[s]; if(!st||!val||(Array.isArray(val)&&!val.length)) return ''; return Array.isArray(val)? val.map(v=>(st.opts.find(o=>o.v===v)||{}).t||v).join(', ') : ((st.opts.find(o=>o.v===val)||{}).t||val); };
+  if(flow.finish){ F={design:'',mount:'',ip:false,nw:false}; const r=flow.finish(a,label); r.groups.forEach(g=>{ if(g.qty===0) delete g.qty; }); const v={name:'results', title:r.title, groups:r.groups, brief:r.brief, tips:r.tips, from:'wizard', wiz}; remember(r.title, v); go(v); return; }
   if(view.flow==='bornes'){
     const villa=a.ctx==='Villa', pub=a.ctx==='Public';
-    const dc=pub||a.type==='DC rapide'||a.type==='Mix AC + DC', ac=!pub&&(villa||a.type!=='DC rapide');
+    const dcprj=a.type==='DC projet'||(pub&&a.pubp&&a.pubp!=='60'); const dc=!dcprj&&(pub||a.type==='DC rapide'||a.type==='Mix AC + DC'), ac=!pub&&(villa||(a.type!=='DC rapide'&&a.type!=='DC projet'));
     const pro=a.type==='Charge Pro', evl=a.type==='AC 22 kW'||a.type==='Mix AC + DC';
     const cable=a.cable==='câble attaché', mid=a.bill==='MID', g4=a.conn==='4G';
     const n=villa?1:({'1':1,'2':2,'3 à 6':4,'7 à 20':10,'plus de 20':24}[a.places]||2), many=n>=3, huge=n>20;
@@ -979,12 +1130,14 @@ function finishFlow(){
     if(villa) groups.push({label:'Wallbox '+(cable?'11 kW câble attaché':'22 kW prise T2'), q:cable?'Wallbox 11kW câble':'Wallbox prise T2', qty:1, note:'Schneider Charge : Wi-Fi + app, FI 6 mA DC intégré'});
     if(pro) groups.push({label:`Schneider Charge Pro ${cable?'câble 7 m':'prise T2'}${mid?' · compteur MID':''}${g4?' · 4G':''}`, q:`SE Charge Pro ${cable?'7m':'136mm'} ${mid?'MID':''} ${g4?'4G':''}`.replace(/\s+/g,' ').trim(), qty:n, note:`${n} borne${n>1?'s':''} · OCPP 1.6 · ${mid?'facturation au kWh':'sans compteur MID'} · ${g4?'modem 4G intégré':'Ethernet / Wi-Fi'}`});
     if(evl){ groups.push({label:'EVlink Pro AC Master (1 par groupe)'+(mid?' avec compteur d\'énergie':''), q:mid?'EVlink Pro AC 22kW Master comp.énergie':'EVlink Pro AC 22kW Master', qty:1, note:'pilote les Extender en Ethernet · '+(mid?'variante « comp. énergie » = compteur MID intégré pour refacturer':'variante « comp. énergie » = compteur intégré')+' · FI type B1 = différentiel type B intégré'}); if(n>1) groups.push({label:`EVlink Pro AC Extender ${cable?'câble 5 m':'prise T2'} (places suivantes)`, q:cable?'EVlink Pro AC 22kW câble 5m Extender':'EVlink Pro AC 22kW Extender', qty:n-1}); }
+    // --- bornes DC sur projet (pas de N° ELDAS) ---
+    if(dcprj){ const k=a.dcp||(a.pubp==='SC'?'SC180':'120'); const q={'120':'EVlink Pro DC 120 kW','180':'EVlink Pro DC 180 kW','SC60':'StarCharge Fast 60','SC180':'StarCharge Fast 180','SC720':'StarCharge Fast 720'}[k]||'StarCharge Fast'; groups.push({label:'Borne DC sur projet', q, qty:pub?2:1, note:'offre Schneider : étude de raccordement (≈ 200–300 A par borne 120-180 kW), génie civil, mise en service · OCPP 1.6 · pilotée par EV Charging Expert'}); if(k==='SC180') groups.push({label:'Variante 320 kW', q:'StarCharge Fast 320', qty:1}); }
     // --- bornes DC ---
     if(dc){ groups.push({label:`EVlink Pro DC 60 kW 2×CCS2 ${a.dcopt==='avec'?'avec gestion de câbles':'sans gestion de câbles'}`, q:a.dcopt==='avec'?'EVlink Pro 2×CCS2 enrouleur':'EVlink Pro 2×CCS2 sansenrouleur', qty:pub?2:1, note:'4G + ISO 15118 intégrés · câbles CCS2 attachés · autres puissances DC (120-180 kW, StarCharge) : sur projet, pas de N° ELDAS grossiste'});
       if(a.dcmount!=='socle') groups.push({label:'Poteau de montage DC (0.75 m ou 1 m)', q:'Poteau de montage Evlink Pro DC', qty:pub?2:1});
       if(a.dcopt!=='avec') groups.push({label:'Porte-câbles DC (option)', q:'Porte-câbles EVlink Pro', qty:1}); }
     // --- gestion de charge : compatibilité par gamme ---
-    const multi=n>1||dc&&ac;
+    const multi=n>1||(dc||dcprj)&&ac;
     if(a.lm==='dynamique'){
       if(villa||(pro&&n===1&&!dc)) groups.push({label:'Gestion dynamique · Peak Controller (pince en tête)', q:'Peak Controller', qty:1, note:villa?'compatible Wallbox Schneider Charge : la borne baisse quand la maison consomme':'compatible Schneider Charge Pro (1 borne) : option « contrôleur de pointe » dans eSetup'});
       else groups.push({label:'Gestion dynamique · EcoStruxure EV Charging Expert', q:huge?'Régulateur de charge Evlink 250 stations':n>5?'Régulateur de charge Evlink 15 stations':'Régulateur de charge Evlink 5 stations', qty:1, note:(dc&&ac?'un seul gestionnaire pour le mix AC + DC (zones et priorités) · ':'')+'compatible EVlink Pro AC, Pro DC et Charge Pro · Ethernet entre bornes + compteur en tête'});
@@ -1003,11 +1156,12 @@ function finishFlow(){
     if(villa) groups.push({label:'Protection au tableau (FI/LS 3LN 30 mA)', q:cable?'Clario 3LN 16A 30mA':'Clario 3LN 32A 30mA', qty:1, note:'la Wallbox détecte le DC 6 mA : un type A suffit en amont'});
     if(pro) groups.push({label:'Protection au tableau par borne (FI/LS 3LN 32 A 30 mA)', q:'Clario 3LN 32A 30mA', qty:n, note:'Charge Pro : détection DC 6 mA intégrée (CEI 62955) → type A en amont'});
     if(evl) groups.push({label:'Disjoncteur par borne (32 A 3LN)', q:'Clario iC40 32A (C) 3LN', qty:n, note:'différentiel : intégré dans la borne (variantes FI type A1 / B1), sinon iID 40 A type A + DC 6 mA'});
+    if(dcprj&&a.lm!=='dynamique'&&a.lm!=='statique') groups.push({label:'Pilotage (EV Charging Expert)', q:'Régulateur de charge Evlink 15 stations', qty:1, note:'recommandé pour piloter la puissance d\'une borne DC de projet avec le reste du parc'});
     if(dc) groups.push({label:'Protection par borne DC (≈ 100 A triphasé)', q:'disjoncteur NG125N 4P 100A', qty:pub?2:1, note:'à valider sur la notice EVlink Pro DC 60 kW (différentiel type B 300 mA côté tableau si demandé)'});
     if(!villa) groups.push({label:'Parafoudre type 2 (tableau bornes)', q:'parasurtension Resi9 iPRD 40r', qty:1, note:'électronique de puissance exposée : protection surtension recommandée'});
     groups.forEach(g=>{ if(g.qty===0) delete g.qty; });
     const title=`Bornes · ${label('ctx')||''}${villa?'':' · '+n+' place'+(n>1?'s':'')}${villa?' · Wallbox':' · '+(label('type')||'DC 60 kW')}`.replace(/\s+/g,' ');
-    const brief=`Projet bornes de recharge. Contexte : ${label('ctx')||'à préciser'} ; places : ${villa?'1-2':n} ; gamme : ${villa?'Wallbox Schneider Charge':(label('type')||'EVlink Pro DC 60 kW')} ; raccordement véhicule : ${dc&&!ac?'câbles CCS2 attachés':(label('cable')||'à préciser')} ; gestion de charge : ${label('lm')||'aucune'} ; facturation/accès : ${label('bill')||(pub?'backend OCPP':'libre')} ; réseau : ${label('conn')||'à préciser'} ; fixation : ${label('mount')||label('dcmount')||'au mur'}. Règles : Wallbox → Peak Controller ; Charge Pro seule → Peak Controller, plusieurs → EV Charging Expert ; EVlink Pro AC → statique via Master/Extender, dynamique via EV Charging Expert + compteur ; mix AC+DC → EV Charging Expert unique avec zones. Donne l'architecture en 4 lignes, la liste de matériel avec N° ELDAS et quantités (bornes, fixation, gestion de charge, compteur, protections, badges), les points à vérifier (puissance de raccordement, avis GRD, Ethernet entre bornes), 2 upsells max. Ne me repose pas ces questions.`;
+    const brief=`Projet bornes de recharge. Contexte : ${label('ctx')||'à préciser'} ; places : ${villa?'1-2':n} ; gamme : ${villa?'Wallbox Schneider Charge':(label('type')||label('pubp')||'EVlink Pro DC 60 kW')}${a.dcp?' '+label('dcp'):''} ; raccordement véhicule : ${dc&&!ac?'câbles CCS2 attachés':(label('cable')||'à préciser')} ; gestion de charge : ${label('lm')||'aucune'} ; facturation/accès : ${label('bill')||(pub?'backend OCPP':'libre')} ; réseau : ${label('conn')||'à préciser'} ; fixation : ${label('mount')||label('dcmount')||'au mur'}. Règles : Wallbox → Peak Controller ; Charge Pro seule → Peak Controller, plusieurs → EV Charging Expert ; EVlink Pro AC → statique via Master/Extender, dynamique via EV Charging Expert + compteur ; mix AC+DC → EV Charging Expert unique avec zones. Donne l'architecture en 4 lignes, la liste de matériel avec N° ELDAS et quantités (bornes, fixation, gestion de charge, compteur, protections, badges), les points à vérifier (puissance de raccordement, avis GRD, Ethernet entre bornes), 2 upsells max. Ne me repose pas ces questions.`;
     remember(title, {name:'results', title, groups, brief, from:'wizard', wiz});
     go({name:'results', title, groups, brief, from:'wizard', wiz}); return;
   }
@@ -1042,6 +1196,7 @@ let timer;
 $('q').addEventListener('input',()=>{ clearTimeout(timer); timer=setTimeout(()=>{ const q=$('q').value.trim(); if(!q){ if(view.name==='results'&&!view.groups&&!view.title) go({name:'home'}); return; } F={design:'',mount:'',ip:false,nw:false}; go({name:'results', q}); },140); });
 $('q').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); const q=$('q').value.trim(); if(!q) return; if(/\?|^(est|quel|quelle|comment|pourquoi|peut|combien|y a|propose|je veux|il me faut|client)/i.test(q) || q.split(' ').length>6){ openChat(); sendChat(q); $('q').value=''; } } });
 
+document.addEventListener('keydown',e=>{ if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('tile')&&!organizing){ e.preventDefault(); openSection(e.target.dataset.sec); } });
 document.addEventListener('dragstart',e=>{ const t=e.target.closest&&e.target.closest('.tile.org'); if(!t) return; e.dataTransfer.setData('text/plain', t.dataset.sec); e.dataTransfer.effectAllowed='move'; });
 document.addEventListener('dragover',e=>{ const t=e.target.closest&&e.target.closest('.tile.org'); if(t){ e.preventDefault(); t.classList.add('over'); } });
 document.addEventListener('dragleave',e=>{ const t=e.target.closest&&e.target.closest('.tile.org'); if(t) t.classList.remove('over'); });
