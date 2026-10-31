@@ -1,8 +1,29 @@
 {
   "functions": {
-    "api/chat.js": { "includeFiles": "api/_data/catalogue.json", "maxDuration": 60, "memory": 1024 }
+    "api/chat.js": {
+      "includeFiles": "api/_data/catalogue.json.gz",
+      "maxDuration": 60,
+      "memory": 1024
+    }
   },
   "headers": [
-    { "source": "/data.js", "headers": [{ "key": "Cache-Control", "value": "public, max-age=600, stale-while-revalidate=86400" }] }
+    {
+      "source": "/data.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=600, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/tech.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=600, stale-while-revalidate=86400"
+        }
+      ]
+    }
   ]
 }

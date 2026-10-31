@@ -370,7 +370,7 @@ body:has(#drawer:not([hidden])) .toast{bottom:auto;top:14px}
 <div class="listbar" id="listbar" hidden><span id="listbartxt"></span><button class="btn small" type="button" id="lb-open">Voir la liste</button><button class="btn primary small" type="button" id="lb-pdf">Exporter en PDF</button></div>
 <div id="scrim" hidden></div>
 <aside id="drawer" hidden aria-label="Liste de matériel">
-  <div class="head"><h2>Liste de matériel <small id="n"></small></h2><button class="btn small" id="closelist" type="button">Fermer</button></div>
+  <div class="head"><h2>Liste de matériel <small id="n"></small></h2><div style="display:flex;gap:6px"><button class="btn small" id="priceToggle" type="button" title="Afficher ou masquer les prix bruts (hors TVA, sans remise)">Prix bruts</button><button class="btn small" id="closelist" type="button">Fermer</button></div></div>
   <div class="body">
     <div class="client">
       <input id="c_name" placeholder="Client / chantier">
@@ -389,7 +389,7 @@ body:has(#drawer:not([hidden])) .toast{bottom:auto;top:14px}
 <div id="pm" hidden role="dialog" aria-modal="true"></div>
 <section id="print" aria-hidden="true"></section>
 
-<script src="data.js?v=202610301733"></script>
+<script src="data.js?v=202610310259"></script>
 <script>
 /* =============== données =============== */
 const DB = (window.FELLER_DATA && window.FELLER_DATA.items) || [];
@@ -399,6 +399,7 @@ const MOUNT = {ENC:'Encastré',AP:'Apparent',REG:'Tableau / REG'};
 const PIC = f => (window.__byF && window.__byF[f] && window.__byF[f].img) || ('https://mam.feller.ch/pict/'+f);
 const norm = s => (s||'').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[×x]/g,'x').replace(/\s+/g,' ').trim();
 const SYN = [
+  [/\bwi[- ]?fi\b/g,'wifi'],[/\b4g\b/g,'4g'],
   [/\bencastre(e|s)?\b/g,'enc'],[/\bapparent(e|s)?\b/g,'ap'],[/\bblanche?\b/g,'blanc'],[/\bnoire?\b/g,'noir'],
   [/\btriple\b/g,'3x'],[/\bdouble\b/g,'2x'],[/\bsimple\b/g,'1x'],[/\bprise(s)? (t|type) ?13\b/g,'prise t13'],[/\bt ?13\b/g,'t13'],[/\bt ?23\b/g,'t23'],
   [/\b(trois|3) (sur|slash|\/) (un|1)\b/g,'3/1'],[/\bsix (sur|\/) (un|1)\b/g,'6/1'],[/\bva[- ]et[- ]vient\b/g,'3/1'],[/\binter\b/g,'interrupteur'],
@@ -409,18 +410,22 @@ const SYN = [
   [/\btriphase(e|es)?\b/g,'3ln'],[/\bmonophase(e|es)?\b/g,'1ln'],[/\b3p\b/g,'3ln'],[/\b4p\b/g,'4l'],[/\b1p\+?n\b/g,'1ln'],[/\b[cb](\d{1,2})\b/g,'$1a'],
   [/\bparafoudre\b/g,'surtension'],[/\bexterieur(e|s)?\b/g,'nevo'],[/\bhumide(s)?\b/g,'nevo'],[/\b(\d) postes?\b/g,'$1'],[/\bcouleur\b/g,''],
   [/\bdisjoncteur fi\b|\bfi ls\b|\bdisjoncteur de protection a courant de defaut\b/g,'disjoncteur differentiel'],[/\bfi\b/g,'differentiel'],
-  [/\bschemas? ?(\d)\b/g,'$1/1'],[/\brecharge\b/g,'charge'],[/\bmate?\b/g,''],[/\bsonnette\b/g,'sonnerie'],[/\bbrillant\b/g,''],
+  [/\bschemas? ?(\d)\b/g,'$1/1'],[/\brecharge\b/g,'charge'],[/\bonduleurs?\b/g,'asi'],[/\bups\b/g,'asi'],[/\bbarre collectrice\b|\bpeignes?\b/g,'barre collectrice'],[/\bmate?\b/g,''],[/\bsonnette\b/g,'sonnerie'],[/\bbrillant\b/g,''],
   [/\b(\d{2,3}) modules?\b/g,(m,n)=>n>=12?`${Math.ceil(n/12)} rangees`:m],[/\btableau (de )?(distribution|appartement|divisionnaire)\b/g,'coffret'],
 ];
 const COMPETITORS=/\b(hager|legrand|abb|siemens|busch[- ]?jaeger|gira|jung|berker|niko|bticino|eaton|zaptec|easee|keba|alfen|webasto|mennekes|go-?e|juice|wallbe|weidm[uü]ller|phoenix|theben|finder|eltako|dehn|obo|hensel|spelsberg|gewiss|striebel)\b/i;
 const prep = q => { let s=norm(q); for(const [a,b] of SYN) s=s.replace(a,b); return s; };
-DB.forEach(it=>{ it._s = norm([it.d,it.t,it.f,it.e,it.ean,it.m].join(' ')); it._dsg = DESIGNS.find(x=>norm(it.d).includes(norm(x))) || '';
+DB.forEach(it=>{ it._s = norm([it.d,it.t,it.f,it.e,it.ean,it.m].join(' ')).replace(/\bwi-fi\b/g,'wifi'); if(/\b4P\b/.test(it.d)) it._s+=' 4l'; if(/\b4L\b/.test(it.d)) it._s+=' 4p'; if(/\b3P\b/.test(it.d)) it._s+=' 3ln'; if(/\b3LN\b/.test(it.d)) it._s+=' 3p'; if(/\b2P\b/.test(it.d)) it._s+=' 1ln'; if(/a\.gestion c/i.test(it.d)) it._s+=' enrouleur'; if(/s\.gestion c/i.test(it.d)) it._s+=' sansenrouleur'; if(/a\.porte tr\b/i.test(it.d)) it._s+=' transparente'; it._dsg = DESIGNS.find(x=>norm(it.d).includes(norm(x))) || '';
   if(!it.m){ const d=' '+it.d+' '; it.m = / ENC /.test(d) ? 'ENC' : / AP /.test(d) ? 'AP' : /\.REG\b|\bREG\b|\bUM\b|rail DIN/.test(it.d+' '+it.f) ? 'REG' : ''; } });
 const byF = Object.fromEntries(DB.map(it=>[it.f,it])); window.__byF=byF;
+// fiches techniques + accessoires chargés en arrière-plan (tech.json) pour garder data.js léger
+let techReady=false; const techWaiters=[];
+(function loadTech(){ if(!(window.FELLER_DATA||{}).techFile) { techReady=true; return; } const url='tech.json?v=202610310259'; const go=()=>fetch(url).then(r=>r.json()).then(T=>{ for(const [f,t] of Object.entries(T)){ const it=byF[f]; if(!it) continue; Object.assign(it,t); } DB.forEach(it=>{ if(it._variantOf&&byF[it._variantOf]){ const b=byF[it._variantOf]; if(b.tech) it.tech=b.tech; if(b.acc) it.acc=b.acc; if(b.dim) it.dim=b.dim; } }); techReady=true; techWaiters.splice(0).forEach(fn=>fn()); if(view&&view.name==='results') render(); }).catch(()=>{ techReady=true; }); if('requestIdleCallback' in window) requestIdleCallback(go,{timeout:3000}); else setTimeout(go,800); })();
+function whenTech(fn){ if(techReady) fn(); else techWaiters.push(fn); }
 const COLORS = [['gris clair','#cfd2d3'],['gris foncé','#6d7073'],['verre noir','#111'],['verre blanc','#f4f4f4'],['noir','#1b1b1b'],['blanc','#ffffff'],['coffee','#5a3b2b'],['crema','#efe4cc'],['aluminium','#b8bcc0'],['orange','#e8731d'],['rouge','#c8431f'],['laiton','#c9a349'],['acier','#9ea4a8'],['anthrazit','#3a3d40'],['graphite','#4a4d50'],['chrome','#c0c4c8'],['ardoise','#55606a'],['umbra','#5c4a3a'],['arctic','#eaf1f3'],['pearl','#e9e5dd'],['hazel','#8b6d4b'],['stone','#9a948a'],['moca','#6f5646'],['marbre','#ece9e4'],['indigo','#2d3a6b'],['champagne','#d9c8a5'],['nickel','#8e8e8e'],['chêne','#b3885a'],['fibrociment','#b7b7b2']];
 function colorOf(d){ const n=norm(d); for(const [name,hex] of COLORS){ if(n.includes(norm(name))) return {name,hex}; } return null; }
 // variantes couleur (champ vars : [fellerNr, eNo, code, description, ean, dispo]) → articles virtuels ajoutables
-DB.slice().forEach(it=>{ if(!it.vars) return; it.vars.forEach(v=>{ if(v[0]===it.f||byF[v[0]]) return; const c=colorOf(v[3]); const nit={...it, f:v[0], e:v[1], c:v[2], d:v[3], ean:v[4], buy:v[5]!==false, img:'https://mam.feller.ch/pict/'+v[0], vars:it.vars, _variantOf:it.f, nw:it.nw}; nit._s=norm([nit.d,nit.t,nit.f,nit.e,nit.ean,nit.m].join(' ')); nit._dsg=it._dsg; byF[v[0]]=nit; DB.push(nit); }); });
+DB.slice().forEach(it=>{ if(!it.vars) return; it.vars.forEach(v=>{ if(v[0]===it.f||byF[v[0]]) return; const c=colorOf(v[3]); const nit={...it, f:v[0], e:v[1], c:v[2], d:v[3], ean:v[4], buy:v[5]!==false, img:'https://mam.feller.ch/pict/'+v[0], vars:it.vars, _variantOf:it.f, nw:it.nw, p:undefined, url:undefined, parts:undefined}; nit._s=norm([nit.d,nit.t,nit.f,nit.e,nit.ean,nit.m].join(' ')); nit._dsg=it._dsg; byF[v[0]]=nit; DB.push(nit); }); });
 const NEW_COUNT = DB.filter(x=>x.nw).length;
 
 const STOP = new Set(['il','me','faut','je','veux','voudrais','cherche','besoin','un','une','des','du','de','d','le','la','les','l','pour','avec','et','a','au','aux','en','sur','dans','chez','ce','cet','cette','ces','mon','ma','mes','son','sa','ses','client','villa','maison','appartement','immeuble','ppe','chantier','piece','pieces','chambre','cuisine','salon','salle','bain','garage','cave','bureau','quel','quelle','quels','quelles','est','sont','ou','que','qui','svp','merci','tu','as','avez','vous','on','nous','type','modele','reference','ref','article','produit','feller','schneider','se']);
@@ -434,10 +439,17 @@ function search(q, F={}, limit=60){
     if(F.ip && !(it.ip && parseInt(it.ip.replace(/\D/g,''))>=44)) continue;
     if(F.nw && !it.nw) continue;
     let score=0, ok=true;
-    for(const t of toks){ const hit = /^\d{1,2}$/.test(t) ? new RegExp('(^|[^0-9])'+t+'(?![0-9])').test(it._s) : it._s.includes(t); if(hit) score += (it.e===t||norm(it.f)===t) ? 50 : (it._s.indexOf(t)<40?3:1); else { ok=false; break; } }
+    for(const t of toks){ const hit = /^\d{1,2}$/.test(t) ? new RegExp('(^|[^0-9])'+t+'(?![0-9])').test(it._s) : (t.length<=3 && /^[a-z]+$/.test(t) ? new RegExp('(^|[^a-z0-9])'+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?![a-z0-9])').test(it._s) : it._s.includes(t)); if(hit) score += (it.e===t||norm(it.f)===t) ? 50 : (it._s.indexOf(t)<40?3:1); else { ok=false; break; } }
     if(!ok) continue;
     if(toks.length && it._s.startsWith(toks[0])) score+=6; else if(toks.some(t=>t.length>3 && it._s.startsWith(t))) score+=4;
-    if(/^(couvercle|kit|cadre|plaque|obturateur|piece de rechange|accessoire)/.test(it._s) && !toks.some(t=>/^(couvercle|kit|cadre|plaque|obturateur|rechange|accessoire)/.test(t))) score-=3;
+    if(/^(couvercle|kit|cadre|plaque|obturateur|piece de rechange|accessoire|porte|cache|bloc de bornes|connecteur|serrure|capuchon|etiquette|joint|vis |adaptateur|support|embase|rail|bornier|jeu de)/.test(it._s) && !toks.some(t=>/^(couvercle|kit|cadre|plaque|obturateur|rechange|accessoire|porte|cache|bloc|connecteur|serrure|capuchon|etiquette|joint|vis|adaptateur|support|embase|rail|bornier|jeu)/.test(t))) score-=3;
+    if(/^(tableau|coffret|petit tableau|armoire|station de charge|disjoncteur|interrupteur|prise|poussoir|variateur|detecteur|thermostat|contacteur|telerupteur|minuterie|compteur|capteur|protection surtension|parasurtension|carillon|combinaison|regulateur|gestionnaire|wallbox)/.test(it._s)) score+=1.5;
+    if(it.src==='sonepar') score-=1.5;
+    if(!toks.some(t=>/^(tesys|lc1|lc2|gv2|gv3|zelio|nsx|compact|altivar|atv|harmony|modicon|12v|24v|48v|dc|vdc|moteur|industrie)$/.test(t)) && /\b(tesys|lc1|lc2|gv2|gv3|zelio|nsx|compact|altivar|atv|harmony|modicon|tm221|lrd|lr9|ca2|cad|xb4|xb5|rxm|rsb)\b|\b(12|24|48)v\b|\bvdc\b|\b277vd?\b|moteur/.test(it._s)) score-=4;
+    if(toks.includes('surtension') && /\b(iprd|quick)\b/.test(it._s)) score+=3;
+    if(toks.includes('contacteur') && !toks.some(t=>/auxiliaire|\d+v/.test(t)) && /auxiliaire|basse consommation|\bbc\b/.test(it._s)) score-=2;
+    if(toks.includes('disjoncteur') && /\bclario\b/.test(it._s)) score+=2;
+    if(toks.includes('disjoncteur') && !toks.some(t=>/^\(?[bdkz]\)?$/.test(t)) && /\(c\)/.test(it._s)) score+=1;
     if(it.nw) score+=8; if(it.buy) score+=1; if(it.fu) score-=2; if(it.soon) score-=1; if(/\.61\b|blanc| bc\b/.test(it._s)) score+=.5;
     out.push([score,it]);
   }
@@ -516,7 +528,9 @@ const FLOWS = {
       {v:'KV', t:'Resi9 apparent, complet', s:'Tableau AP 12 UM par rangée, porte incluse', img:'R9H10737', rec:'Standard'},
       {v:'KVM', t:'Resi9 apparent multimédia', s:'Avec zone multimédia (routeur, fibre)', img:'R9H10797'},
       {v:'CX', t:'Resi9 CX', s:'13 ou 18 modules par rangée, porte séparée au choix (pleine, transparente, miroir, magnétique)', img:'R9H13603'}], when:a=>a.fam==='Resi9'&&a.install==='AP'},
-    {key:'system', q:'Avec ou sans porte ?', opts:[{v:'IP44',t:'Avec porte, IP44',s:'Locaux techniques, humidité',img:'ABWRS103',rec:'Le plus courant'},{v:'IP30',t:'Sans porte, IP30',s:'Local sec, accès fréquent',img:'ABWRS103L04'}], when:a=>a.fam==='PrismaSeT'},
+    {key:'system', q:'PrismaSeT XS ou XL ?', s:'XS = petit tableau de 1 à 6 rangées (18 ou 24 UM). XL = coffret mural à équiper, 1 à 3 champs.', opts:[{v:'XS',t:'PrismaSeT XS, petit tableau',s:'Jusqu\'à 6 rangées · porte pleine, transparente ou sans',img:'SE-822100049',rec:'Tertiaire courant'},{v:'IP44',t:'PrismaSeT XL, avec porte IP44',s:'Locaux techniques, humidité',img:'ABWRS103'},{v:'IP30',t:'PrismaSeT XL, sans porte IP30',s:'Local sec, accès fréquent',img:'ABWRS103L04'}], when:a=>a.fam==='PrismaSeT'},
+    {key:'perrow', q:'Largeur des rangées ?', opts:[{v:'24',t:'24 modules',s:'550 mm de large',rec:'Standard'},{v:'18',t:'18 modules',s:'426 mm de large, gaine étroite'}], compact:true, when:a=>a.fam==='PrismaSeT'&&a.system==='XS'},
+    {key:'door', q:'Quelle porte ?', opts:[{v:'P',t:'Porte pleine',rec:'Standard'},{v:'T',t:'Porte transparente',s:'Lecture des appareils sans ouvrir'},{v:'S',t:'Sans porte',s:'Local technique fermé'}], compact:true, when:a=>a.fam==='PrismaSeT'&&a.system==='XS'},
     {key:'logement', q:'Quel logement ?', s:'Ça fixe le nombre de circuits de base (prises et lumière). Tu ajustes ensuite.', opts:[{v:'studio',t:'Studio / 2 pièces',s:'4 circuits'},{v:'appart',t:'Appartement 3-4 pièces',s:'6 circuits',rec:'Le cas courant'},{v:'grand',t:'5 pièces et plus',s:'8 circuits'},{v:'villa',t:'Villa',s:'10 circuits'}], compact:true},
     {key:'equip', q:'Quels équipements à alimenter ?', s:'Chaque équipement ajoute son circuit, au bon ampérage.', multi:true, opts:[{v:'cuisiniere',t:'Cuisinière / four',s:'16 A triphasé'},{v:'lavelinge',t:'Lave-linge / sèche-linge',s:'16 A'},{v:'lavevaisselle',t:'Lave-vaisselle',s:'13 A'},{v:'boiler',t:'Boiler',s:'13 A triphasé + contacteur tarif'},{v:'pac',t:'Pompe à chaleur',s:'20 A triphasé'},{v:'borne',t:'Borne de recharge 11 kW',s:'16 A triphasé'},{v:'exterieur',t:'Extérieur / jardin',s:'16 A, différentiel'},{v:'stores',t:'Stores / volets',s:'13 A'}], compact:true},
     {key:'options', q:'Options à proposer ?', s:'Ce sont les plus-values faciles à argumenter.', multi:true, opts:[{v:'spd',t:'Protection surtension',s:'Parafoudre type 2 : protège PAC, électronique, borne',rec:'Recommandé'},{v:'media',t:'Zone multimédia',s:'Routeur, fibre, switch dans le tableau'},{v:'reserve',t:'Réserve 20 %',s:'Une rangée de plus pour l\'avenir'},{v:'tl',t:'Télérupteurs',s:'Lumières sur poussoirs'}], compact:true},
@@ -529,18 +543,32 @@ const FLOWS = {
     {key:'fn', q:'Quelles fonctions ?', opts:FN_OPTS.filter(o=>['interrupteur','prise','detecteur','stores'].includes(o.v)), multi:true},
   ]},
   bornes: { title:'Bornes de recharge', steps:[
-    {key:'ctx', q:'Pour qui ?', s:'Villa = Wallbox simple. Collectif et entreprise = EVlink Pro AC avec gestion de charge.', opts:[
-      {v:'Villa',t:'Villa / maison',s:'1 à 2 places, Wallbox Wi-Fi + app',img:'SE-834020819',rec:'Le plus fréquent'},
-      {v:'PPE / immeuble',t:'PPE / immeuble',s:'Places locataires, facturation',img:'SE-834000289'},
-      {v:'Entreprise / flotte',t:'Entreprise / flotte',s:'Rotation, 22 kW, gestion de charge',img:'SE-834000729'},
-      {v:'Public',t:'Parking public',s:'DC rapide, 4G, OCPP',img:'SE-834320809'}]},
-    {key:'cable', q:'Câble attaché ou prise T2 ?', opts:[{v:'câble attaché',t:'Câble attaché',s:'Confort : rien à sortir du coffre',img:'SE-834020819',rec:'Villa'},{v:'prise T2',t:'Prise T2',s:'Chacun son câble, collectif',img:'SE-834020829'}]},
-    {key:'mount', q:'Au mur ou sur pied ?', s:'Le support décide des accessoires de montage.', opts:[{v:'mur',t:'Au mur',s:'Garage, façade, place couverte',img:'SE-834100029',rec:'Le plus simple'},{v:'pied',t:'Sur pied (support)',s:'Place extérieure sans mur, 1 ou 2 bornes dos à dos',img:'SE-834930109'}]},
-    {key:'lm', q:'Gestion de charge ?', s:'Évite de dépasser la puissance du raccordement.', opts:[{v:'aucune',t:'Aucune',s:'Raccordement suffisant, 1 borne',rec:'Villa simple'},{v:'dynamique',t:'Dynamique',s:'Mesure en tête, s\'adapte à la maison (PAC, cuisine)'}], compact:true, when:a=>a.ctx==='Villa'},
-    {key:'places', q:'Combien de places ?', opts:[{v:'2',t:'2'},{v:'3 à 6',t:'3 à 6'},{v:'7 à 20',t:'7 à 20'},{v:'plus de 20',t:'Plus de 20'}], compact:true, when:a=>a.ctx!=='Villa'},
-    {key:'type', q:'AC ou DC ?', opts:[{v:'AC 22 kW',t:'EVlink Pro AC 22 kW',s:'Master + Extender, gestion de charge',img:'SE-834000289',rec:'PPE, entreprise'},{v:'DC rapide',t:'EVlink Pro DC',s:'2×CCS2, rotation rapide',img:'SE-834320809'}], when:a=>a.ctx!=='Villa'},
-    {key:'lm', q:'Gestion de charge ?', opts:[{v:'dynamique',t:'Dynamique',s:'Mesure en tête d\'installation',rec:'PPE et flottes'},{v:'statique',t:'Statique',s:'Répartition fixe entre bornes'},{v:'aucune',t:'Aucune'}], compact:true, when:a=>a.ctx!=='Villa'},
-    {key:'bill', q:'Accès et facturation ?', opts:[{v:'RFID',t:'Badge RFID',rec:'PPE'},{v:'backend OCPP',t:'Backend OCPP',s:'Facturation locataires / public'},{v:'libre',t:'Libre'}], compact:true, when:a=>a.ctx!=='Villa'},
+    {key:'ctx', q:'Pour qui ?', s:'Le contexte décide de la gamme : Wallbox, Charge Pro, EVlink Pro AC ou DC.', opts:[
+      {v:'Villa',t:'Villa / maison',s:'1 à 2 places · Wallbox Wi-Fi + app',img:'SE-834020819',rec:'Le plus fréquent'},
+      {v:'PPE / immeuble',t:'PPE / immeuble',s:'Places locataires, facturation au kWh',img:'SE-834001909'},
+      {v:'Entreprise / flotte',t:'Entreprise / flotte',s:'Rotation, 22 kW, AC ou DC, gestion de charge',img:'SE-834000729'},
+      {v:'Public',t:'Parking public',s:'DC rapide 60 kW, 4G, OCPP',img:'SE-834320809'}]},
+    // --- villa : 3 à 4 choix ---
+    {key:'cable', q:'Câble attaché ou prise T2 ?', opts:[{v:'câble attaché',t:'Câble attaché 11 kW',s:'Rien à sortir du coffre · 5 ou 7 m',img:'SE-834020819',rec:'Villa'},{v:'prise T2',t:'Prise T2 22 kW',s:'Chacun son câble, 22 kW si le raccordement le permet',img:'SE-834020829'}], when:a=>a.ctx==='Villa'},
+    {key:'mount', q:'Au mur ou sur pied ?', opts:[{v:'mur',t:'Au mur',s:'Garage, façade, place couverte',img:'SE-834100029',rec:'Le plus simple'},{v:'pied',t:'Sur pied',s:'Place extérieure sans mur',img:'SE-834930109'}], when:a=>a.ctx==='Villa'},
+    {key:'lm', q:'Gestion de charge ?', s:'Évite de dépasser la puissance du raccordement (PAC, cuisine, boiler).', opts:[{v:'aucune',t:'Aucune',s:'Raccordement suffisant',rec:'Villa simple'},{v:'dynamique',t:'Dynamique',s:'Peak Controller : pince en tête, la borne module seule'}], compact:true, when:a=>a.ctx==='Villa'},
+    // --- PPE / entreprise : places puis gamme ---
+    {key:'places', q:'Combien de places à équiper ?', opts:[{v:'1',t:'1'},{v:'2',t:'2'},{v:'3 à 6',t:'3 à 6'},{v:'7 à 20',t:'7 à 20'},{v:'plus de 20',t:'Plus de 20'}], compact:true, when:a=>a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte'},
+    {key:'type', q:'Quelle gamme ?', s:'Charge Pro = borne noire PPE avec compteur MID. EVlink Pro AC = Master + Extender pour les flottes. DC = rotation rapide.', opts:[
+      {v:'Charge Pro',t:'Schneider Charge Pro (noir)',s:'22 kW, MID, Wi-Fi/Ethernet/4G, OCPP 1.6, IP55 IK10',img:'SE-834001909',rec:'PPE'},
+      {v:'AC 22 kW',t:'EVlink Pro AC 22 kW',s:'Master + Extender, FI type A ou B intégré',img:'SE-834000289',rec:'Flotte'},
+      {v:'DC rapide',t:'EVlink Pro DC 60 kW',s:'2×CCS2, câbles 5 ou 7 m',img:'SE-834320809'},
+      {v:'Mix AC + DC',t:'Mix AC + DC',s:'Flotte : bornes AC + 1 rapide DC',img:'SE-834000729'}], when:a=>a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte'},
+    // --- AC (Charge Pro / EVlink Pro AC / mix) ---
+    {key:'cable', q:'Prise T2 ou câble attaché ?', opts:[{v:'prise T2',t:'Prise T2',s:'Chacun son câble · standard collectif',img:'SE-834001909',rec:'PPE'},{v:'câble attaché',t:'Câble attaché 7 m',s:'Confort, flotte interne',img:'SE-834001939'}], when:a=>(a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte')&&a.type!=='DC rapide'},
+    {key:'bill', q:'Facturation et accès ?', opts:[{v:'MID',t:'Compteur MID + badge',s:'Refacturation au kWh (locataires, employés)',rec:'PPE'},{v:'RFID',t:'Badge RFID seul',s:'Accès contrôlé, pas de refacturation'},{v:'libre',t:'Libre',s:'Places privées attribuées'}], compact:true, when:a=>(a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte')&&a.type!=='DC rapide'},
+    {key:'conn', q:'Réseau sur place ?', opts:[{v:'LAN',t:'Ethernet / Wi-Fi du bâtiment',rec:'Si disponible'},{v:'4G',t:'4G (pas de réseau)',s:'Modem intégré, carte SIM'}], compact:true, when:a=>(a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte')&&a.type!=='DC rapide'},
+    {key:'mount', q:'Au mur ou sur poteau ?', opts:[{v:'mur',t:'Au mur',s:'Parking souterrain, façade',img:'SE-834100079',rec:'Le plus simple'},{v:'pied',t:'Sur poteau / pied',s:'Places extérieures, 1 ou 2 bornes dos à dos',img:'SE-834100059'}], when:a=>(a.ctx==='PPE / immeuble'||a.ctx==='Entreprise / flotte')},
+    // --- DC ---
+    {key:'dcopt', q:'Borne DC : gestion de câbles ?', s:'Les bornes DC ont toujours leurs câbles CCS2 attachés.', opts:[{v:'avec',t:'Avec enrouleur de câbles',s:'Câbles 5 m suspendus, reste propre',img:'SE-834320809',rec:'Public'},{v:'sans',t:'Sans gestion de câbles',s:'Câbles 5 ou 7 m, porte-câbles en option',img:'SE-834320819'}], when:a=>a.type==='DC rapide'||a.type==='Mix AC + DC'||a.ctx==='Public'},
+    {key:'dcmount', q:'Fixation de la borne DC ?', opts:[{v:'poteau',t:'Poteau de montage DC',s:'0.75 m ou 1 m, raccords 2×CCS',img:'SE-834100039',rec:'Standard'},{v:'socle',t:'Socle existant / génie civil',s:'Rien à ajouter'}], compact:true, when:a=>a.type==='DC rapide'||a.type==='Mix AC + DC'||a.ctx==='Public'},
+    // --- gestion de charge collective ---
+    {key:'lm', q:'Gestion de charge ?', s:'Statique = puissance fixe partagée. Dynamique = compteur en tête, s\'adapte au bâtiment.', opts:[{v:'dynamique',t:'Dynamique',s:'EV Charging Expert + compteur (PowerTag / PM5320 / iEM3250)',rec:'PPE et flottes'},{v:'statique',t:'Statique',s:'Répartition fixe entre bornes'},{v:'aucune',t:'Aucune',s:'1 borne ou puissance largement suffisante'}], compact:true, when:a=>a.ctx!=='Villa'},
   ]},
 };
 const FN_QUERY = {
@@ -567,6 +595,9 @@ const $ = id=>document.getElementById(id);
 const store = { get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)) }catch(e){} } };
 let list = store.get('offre.items', []);
 let client = store.get('offre.client', {name:'',notes:''});
+let showPrice = !!store.get('offre.price', false);
+const priceOf = x => { const it=byF[x.f]||x; const v=it.p; if(v==null||v==='') return null; const n=parseFloat(String(v).replace(/[’']/g,'').replace(',','.')); return isNaN(n)?null:n; };
+const chf = n => 'CHF '+n.toLocaleString('fr-CH',{minimumFractionDigits:2,maximumFractionDigits:2});
 let recent = store.get('offre.recent', []);
 let F = {design:'',mount:'',ip:false,nw:false};
 let view = {name:'home'};
@@ -575,7 +606,7 @@ const esc = s => (s||'').toString().replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;
 const md = s => esc(s).replace(/(https?:\/\/[^\s)]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>').replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>').replace(/^#{1,3}\s+(.+)$/gm,'<strong>$1</strong>').replace(/^[-•]\s+/gm,'• ');
 const productUrl = it => it.url || ('https://online-katalog.feller.ch/fr/product?fnr='+encodeURIComponent(it.f));
 const docsUrl = it => it.url ? it.url : productUrl(it)+'#documents';
-$('dbinfo').textContent = DB.length ? `${DB.length.toLocaleString('fr-CH')} articles · ${NEW_COUNT} nouveautés · ${EXPORTED ? new Date(EXPORTED).toLocaleDateString('fr-CH') : ''}` : 'catalogue introuvable';
+$('dbinfo').textContent = DB.length ? `${((window.FELLER_DATA||{}).count||DB.length).toLocaleString('fr-CH')} articles · ${DB.filter(x=>x.nw&&!x._variantOf).length||NEW_COUNT} nouveautés · ${EXPORTED ? new Date(EXPORTED).toLocaleDateString('fr-CH') : ''}` : 'catalogue introuvable';
 
 let accessCode = store.get('offre.code','');
 function showGate(msg){ $('gate').hidden=false; $('gateerr').textContent=msg||''; setTimeout(()=>$('gatecode').focus(),50); }
@@ -637,7 +668,7 @@ function resultsHtml(){
   const filters = `<div class="filters">${chip('Nouveautés','nw','1','new')}${Object.entries(MOUNT).map(([v,l])=>chip(l,'mount',v)).join('')}${chip('IP44+','ip','1')}${DESIGNS.slice(0,5).map(d=>chip(d,'design',d)).join('')}${anyF?'<button class="chip x" type="button" data-k="reset">Réinitialiser</button>':''}</div>`;
   const conf = r.q ? TOOLS.filter(t=>t.rx.test(r.q)).slice(0,1).map(t=>`<div class="conf"><div class="t"><b>Configurateur conseillé :</b> ${esc(t.name)} <span style="color:var(--ink-2)">· ${esc(t.why)}</span></div><a class="btn small" href="${t.url}" target="_blank" rel="noopener">Ouvrir</a></div>`).join('') : '';
   let groups;
-  if(r.groups) groups = r.groups.map(g=>{ const sr=searchFallback(g.q,{...F, ...(g.F||{})},24); return {label:g.label, items:sr.items, note:[g.note,sr.note].filter(Boolean).join(' · '), q:g.q}; });
+  if(r.groups) groups = r.groups.map(g=>{ const sr=searchFallback(g.q,{...F, ...(g.F||{})},24); return {label:g.label, items:sr.items.map(it=>g.qty>1?Object.assign(Object.create(it),{_gq:g.qty}):it), note:[g.qty>1?'quantité conseillée : '+g.qty:'' ,g.note,sr.note].filter(Boolean).join(' · '), q:g.q, qty:g.qty}; });
   else { const sr=searchFallback(r.q||'',F,60); groups=[{label:sr.note?`Rien ne correspond exactement — résultats proches ${sr.note}`:'', items:sr.items, q:r.q, hint:sr.note?`Pas d'article « ${esc(r.q)} » tel quel dans la base. Vérifie aussi : ${catalogueLinks(r.q)} — ou demande à l'assistant.`:''}]; }
   const total = groups.reduce((a,g)=>a+g.items.length,0);
   const body = total ? groups.map(g=>`<section class="group">${g.label?`<h2>${esc(g.label)} <small>${g.items.length} article${g.items.length>1?'s':''}${g.note?' · '+esc(g.note):''}</small></h2>`:''}${g.hint?`<div style="font-size:13px;color:var(--ink-2);margin:-4px 0 10px">${g.hint}</div>`:''}${g.items.length?((g.compact||(r.groups&&g.items.length<=2))?`<div class="cards rows">${g.items.map(rowHtml).join('')}</div>`:`<div class="cards">${g.items.map(cardHtml).join('')}</div>`):`<div class="empty" style="padding:10px 6px">Rien dans le catalogue pour « ${esc(g.q)} ». ${catalogueLinks(g.q)}</div>`}</section>`).join('')
@@ -657,7 +688,7 @@ function rowHtml(it){
     <div class="body"><div class="desc" data-open="${esc(it.f)}" style="cursor:pointer">${esc(it.d)}</div>
       <div class="meta"><span class="e num"><small>ELDAS</small>${it.e?esc(it.e):'—'}</span><span>${it.src==='sonepar'?`grossiste${it.av?' · '+esc(it.av.replace(/, selon fournisseur/,'')):''}`:`N° Feller ${esc(it.f)}`}</span>${it.nw?`<span class="tag">Nouveau ${esc(it.nw)}</span>`:''}${it.soon?'<span class="tag soon">Pas encore disponible</span>':it.buy?'':'<span class="tag">Non commandable</span>'}${it.fu?`<button type="button" class="tag fu" data-fu="${esc(it.fu)}" style="cursor:pointer;border:0">Remplacé par ${esc(it.fu)} →</button>`:''}</div>
       ${swatchesHtml(it)}</div>
-    <div class="act"><button class="btn primary small add" type="button">${view.pick?'Choisir':inList?'Encore':'Ajouter'}</button><button class="btn small more-btn" type="button" aria-expanded="false" data-open="${esc(it.f)}">Fiche</button></div>
+    <div class="act"><button class="btn primary small add" type="button" ${it._gq?`data-q="${it._gq}"`:''}>${view.pick?'Choisir':it._gq?`Ajouter ×${it._gq}`:inList?'Encore':'Ajouter'}</button><button class="btn small more-btn" type="button" aria-expanded="false" data-open="${esc(it.f)}">Fiche</button></div>
   </article>`;
 }
 function cardHtml(it){
@@ -670,18 +701,18 @@ function cardHtml(it){
       <div class="f num">${it.src==='sonepar'?`Schneider · grossiste${it.av?' · '+esc(it.av.replace(/, selon fournisseur/,''))  :''}`:`N° Feller ${esc(it.f)}`}</div>
       ${swatchesHtml(it)}
       <div class="tags">${it._dsg?`<span class="tag">${esc(it._dsg)}</span>`:''}${it.m?`<span class="tag">${MOUNT[it.m]}</span>`:''}${it.ip?`<span class="tag">${esc(it.ip)}</span>`:''}${it.soon?'<span class="tag soon">Pas encore disponible</span>':it.buy?'<span class="tag ok">Disponible</span>':'<span class="tag">Non commandable</span>'}${it.fu?`<button type="button" class="tag fu" data-fu="${esc(it.fu)}" style="cursor:pointer;border:0">Remplacé par ${esc(it.fu)} → voir</button>`:''}</div>
-      <div class="act"><button class="btn primary small add" type="button">${view.pick?'Choisir':inList?'Ajouter encore':'Ajouter'}</button><button class="btn small more-btn" type="button" aria-expanded="false">Détails${(it.parts&&it.parts.length)?` · ${it.parts.length} pièces`:''}${(it.acc&&it.acc.length)?` · ${it.acc.length} acc.`:''}</button></div>
+      <div class="act"><button class="btn primary small add" type="button" ${it._gq?`data-q="${it._gq}"`:''}>${view.pick?'Choisir':it._gq?`Ajouter ×${it._gq}`:inList?'Ajouter encore':'Ajouter'}</button><button class="btn small more-btn" type="button" aria-expanded="false">Détails${(it.parts&&it.parts.length)?` · ${it.parts.length} pièces`:''}${(it.acc&&it.acc.length)?` · ${it.acc.length} acc.`:''}</button></div>
     </div></article>`;
 }
 function swatchesHtml(it){
   if(!it.vars||it.vars.length<2) return '';
   return `<div class="sw">${it.vars.map(v=>{ const c=colorOf(v[3])||{name:v[3].split(' ').slice(-1)[0],hex:'#ddd'}; const cur=v[0]===it.f; return `<button type="button" class="swatch" data-f="${esc(v[0])}" aria-pressed="${cur}" title="${esc(c.name)} · ELDAS ${esc(v[1]||'—')}" style="background:${c.hex}"></button>`; }).join('')}<span class="swl">${esc((colorOf(it.d)||{}).name||'')}</span></div>`;
 }
-function partItem(pt){ if(!pt) return null; return byF[pt[0]]||{f:pt[0],e:pt[1],d:pt[3],img:pt[5]||PIC(pt[0]),buy:true,part:true}; }
+function partItem(pt){ if(!pt) return null; return byF[pt[0]]||{f:pt[0],e:pt[1],d:pt[3]||pt[0],img:pt[5]||PIC(pt[0]),buy:true,part:true}; }
 function findPart(f){ for(const it of DB){ const pt=(it.parts||[]).find(x=>x[0]===f); if(pt) return pt; } return null; }
 function partsHtml(it, compact=false){
   if(!it.parts||!it.parts.length) return '';
-  const rows=it.parts.map(pt=>`<div><img src="${esc(pt[5]||PIC(pt[0]))}" alt="" loading="lazy" onerror="this.style.visibility='hidden'" style="width:34px;height:34px;object-fit:contain;border-radius:8px;background:#fff;flex:none"><span class="d" ${byF[pt[0]]?`data-open="${esc(pt[0])}" style="cursor:pointer"`:''}>${esc(pt[3])}</span><span class="num" style="color:var(--ink-2)">${pt[2]>1?pt[2]+'× · ':''}${esc(pt[1]||pt[0])}</span><button class="btn small add-ref" type="button" data-f="${esc(pt[0])}" data-q="${pt[2]||1}" title="Ajouter cette pièce">+</button></div>`).join('');
+  const rows=it.parts.map(pt=>`<div><img src="${esc(pt[5]||PIC(pt[0]))}" alt="" loading="lazy" onerror="this.style.visibility='hidden'" style="width:34px;height:34px;object-fit:contain;border-radius:8px;background:#fff;flex:none"><span class="d" ${byF[pt[0]]?`data-open="${esc(pt[0])}" style="cursor:pointer"`:''}>${esc(pt[3]||(byF[pt[0]]||{}).d||pt[0])}</span><span class="num" style="color:var(--ink-2)">${pt[2]>1?pt[2]+'× · ':''}${esc(pt[1]||pt[0])}</span><button class="btn small add-ref" type="button" data-f="${esc(pt[0])}" data-q="${pt[2]||1}" title="Ajouter cette pièce">+</button></div>`).join('');
   const n=it.parts.reduce((a,x)=>a+(x[2]||1),0);
   return `<h4>Composition · pièces détachées <small style="font-weight:400;color:var(--ink-3)">${it.parts.length} référence${it.parts.length>1?'s':''}, ${n} pièce${n>1?'s':''}</small></h4><div class="accs parts">${rows}</div><div style="margin-top:6px"><button class="btn small" type="button" data-parts="${esc(it.f)}">Ajouter toutes les pièces détachées</button>${compact?'':' <span style="font-size:12.5px;color:var(--ink-3)">Pour remplacer une seule pièce ou commander en détaché au lieu du set complet.</span>'}</div>`;
 }
@@ -691,7 +722,7 @@ function openSheet(f){
   if(it.m) kv.push(['Montage',MOUNT[it.m]]); if(it.ip) kv.push(['Protection',it.ip]);
   const u=get('Tension nominale'); if(u) kv.push(['Tension',u[1]+' '+(u[2]||'')]); const a=get('Courant nominal'); if(a) kv.push(['Courant',a[1]+' '+(a[2]||'')]);
   const r=get('Type de raccordement'); if(r) kv.push(['Raccordement',r[1]]); const pr=get('Profondeur minimale'); if(pr) kv.push(['Boîte mini',pr[1]+' mm']);
-  const c=colorOf(it.d); if(c) kv.push(['Couleur',c.name]); if(it._dsg) kv.push(['Ligne',it._dsg]);
+  const c=colorOf(it.d); if(c) kv.push(['Couleur',c.name]); if(it._dsg) kv.push(['Ligne',it._dsg]); if(showPrice&&priceOf(it)!=null) kv.unshift(['Prix brut',chf(priceOf(it))]);
   (it.tech||[]).filter(x=>/Puissance|Type|Rôle|Gestion|Connectivité|Différentiel intégré|Raccordement véhicule/.test(x[0])).forEach(x=>kv.push([x[0],x[1]+(x[2]?' '+x[2]:'')]));
   const spec=(it.tech||[]).filter(x=>!/^(false)$/.test(x[1])).map(x=>`<div><span>${esc(x[0])}</span><span>${esc(x[1]==='true'?'Oui':x[1])}${x[2]?' '+esc(x[2]):''}</span></div>`).join('');
   const accs=(it.acc||[]).map(a2=>`<div><span class="d">${esc(a2[2])}</span><span class="num" style="color:var(--muted)">${esc(a2[1]||'')}</span><button class="btn small add-ref" type="button" data-f="${esc(a2[0])}">+</button></div>`).join('');
@@ -711,6 +742,7 @@ function openSheet(f){
       <div class="buy"><div class="cqty"><button type="button" class="st" data-d="-1" aria-label="Moins">−</button><input id="pmqty" class="num" type="number" min="1" value="${inList?inList.q:1}" style="width:54px;text-align:center;border:1px solid var(--line-2);border-radius:999px;padding:6px 4px;background:var(--float)"><button type="button" class="st" data-d="1" aria-label="Plus">+</button></div><button class="btn primary" id="pmadd" type="button" data-f="${esc(it.f)}">${inList?'Ajouter encore':'Ajouter à la liste'}</button></div>
     </div></div>`;
   $('pm').hidden=false;
+  if(!techReady) whenTech(()=>{ if(!$('pm').hidden && $('pm').querySelector('.sheet .pic')?.dataset.f===f) openSheet(f); });
 }
 function specHtml(it){
   const rows=(it.tech||[]).filter(x=>!/^(false|true)$/.test(x[1]) || /Compatible/.test(x[0])).map(x=>`<div><span>${esc(x[0])}</span><span>${esc(x[1]==='true'?'Oui':x[1]==='false'?'Non':x[1])}${x[2]?' '+esc(x[2]):''}</span></div>`).join('');
@@ -736,8 +768,20 @@ const COMPONENTS = [
   {g:'Commande', k:'min', label:'Minuterie', s:'Escalier, ventilation', q:'minuterie', um:1, def:0},
   {g:'Options et finitions', k:'spd', label:'Protection surtension (parafoudre type 2)', s:'Protège PAC, électronique, borne', q:'protection surtension', um:2, def:0, up:true},
   {g:'Options et finitions', k:'media', label:'Zone multimédia (plaque perforée + rail)', s:'Routeur, fibre, switch : compte 1 rangée', q:'Plaque perforée Resi9 appareils média', um:12, def:0, up:true},
-  {g:'Options et finitions', k:'peigne', label:'Peigne de raccordement', s:'Alimentation propre des rangées', q:'peigne Clario', um:0, def:1},
 ];
+// Peignes (barres collectrices) calculés par rangée : 1LN pour les FI/LS 1 module, 3LN pour les circuits triphasés, « alim. gauche » quand un FI de groupe alimente la rangée.
+function combLines(c){
+  const perRow=c.perRow||UM_PER_ROW[c.fam]||12, q=k=>c.qty[k]??(COMPONENTS.find(x=>x.k===k)||{}).def??0;
+  const um1=q('fils13')+q('fils16')+q('ls13'), um3=3*(q('ls16_3')+q('ls13_3')+q('ls20_3')), fi=q('fi40')+q('fi63');
+  const rows1=Math.ceil(um1/perRow), rows3=Math.ceil((um3+(fi?4*fi:0))/perRow);
+  const len=perRow>=24?'24':perRow>=18?'24':'12'; const L=[];
+  if(rows1) L.push({k:'comb1', label:`Peigne 1LN ${len} UM — rangées de FI/LS 1 module`, s:`${um1} modules 1LN → ${rows1} rangée${rows1>1?'s':''}${perRow===18?' · peigne 24 UM à couper':''}`, q:`barre collectrice Clario iC40 1LN ${len} UM`, qty:rows1});
+  if(rows3&&fi) L.push({k:'comb3fi', label:`Peigne 3LN ${len} UM « alim. gauche » — FI de groupe + circuits triphasés`, s:'le FI 4 modules alimente le peigne par la gauche', q:`barre collectrice Clario iC40 3LN alim.gauche ${len} UM`, qty:Math.min(rows3,fi)});
+  if(rows3-(fi?Math.min(rows3,fi):0)>0) L.push({k:'comb3', label:`Peigne 3LN ${len} UM — circuits triphasés`, s:`${um3} modules 3LN`, q:`barre collectrice Clario iC40 3LN ${len}UM`, qty:rows3-(fi?Math.min(rows3,fi):0)});
+  if(rows1) L.push({k:'cap1', label:'Capuchons pour peigne 1LN coupé (kit 40 pièces)', q:'capuchon peigne Clario iC40 1LN', qty:1});
+  if(rows3) L.push({k:'cap3', label:'Capuchons pour peigne 3LN coupé (kit 40 pièces)', q:'capuchon peigne Clario iC40 3LN', qty:1});
+  return L.map(l=>({...l, qty:c.qty[l.k]??l.qty}));
+}
 function shellLines(c){
   const r=c.rows||3, L=[];
   if(c.fam==='Resi9'){
@@ -747,7 +791,8 @@ function shellLines(c){
     else if(c.install==='AP'&&c.system==='KVM') L.push({k:'coffret',label:'Tableau apparent Resi9 multimédia',q:`Tableau AP Resi9 multimédia ${r} rangées`});
     else if(c.install==='AP'&&c.system==='CX'){ const pre=c.perRow===18?'R9H18':'R9H13'; L.push({k:'coffret',label:`Tableau apparent Resi9 CX, ${c.perRow} modules`,q:`Resi9CX ${r} rangées sans porte ${pre}`}); const d={P:`Porte Resi9CX ${r} rangées ${c.perRow} modules ${pre}`,T:`Porte Resi9CX ${r} rangées ${c.perRow} modules transparent`,M:`Porte Resi9CX ${r} rangées miroir ${pre}`,MAG:`Porte Resi9CX ${r} rangées magnétique ${pre}`,YOU:'Porte Resi9CX YOU'}[c.door]; if(d) L.push({k:'porte',label:'Porte Resi9 CX',q:d}); }
     else L.push({k:'coffret',label:'Tableau apparent Resi9 complet',q:`Tableau AP Resi9 ${r} rangées 12UM`});
-  } else if(c.fam==='PrismaSeT') L.push({k:'coffret',label:`Coffret mural PrismaSeT XL ${c.system==='IP30'?'sans porte IP30':'avec porte IP44'}`,q:`Coffret mural PrismaSeT XL ${c.system==='IP30'?'IP30':'IP44 porte'} ${r} rangées`});
+  } else if(c.fam==='PrismaSeT'&&c.system==='XS'){ const w=(c.door==='S'&&c.perRow===18)?24:(c.perRow||24); const size=`${r}x${w}um`; let q=`Petit tableau PrismaSeT XS ${c.door==='S'?'s.porte':'a.porte'}${c.door==='T'?' transparente':''} ${r}×${w}UM`; let door=c.door; const top=searchFallback(q,{},1).items[0]; if(c.door==='T'&&!(top&&norm(top.d).includes(size))){ q=`Petit tableau PrismaSeT XS a.porte ${r}×${w}UM`; door='P'; } L.push({k:'coffret',label:`Petit tableau PrismaSeT XS ${door==='S'?'sans porte (existe en 24 UM seulement)':door==='T'?'porte transparente':'porte pleine'+(c.door==='T'?' (pas de porte transparente dans cette taille)':'')}, ${r}×${w} UM`,q}); }
+  else if(c.fam==='PrismaSeT') L.push({k:'coffret',label:`Coffret mural PrismaSeT XL ${c.system==='IP30'?'sans porte IP30':'avec porte IP44'}`,q:`Coffret mural PrismaSeT XL ${c.system==='IP30'?'IP30':'IP44 porte'} ${r} rangées`});
   else L.push({k:'coffret',label:'Tableau apparent Mureva IP65',q:`Tableau AP Mureva ${Math.min(r,2)}×${c.perRow===18?'18':'12'}UM`});
   return L;
 }
@@ -763,14 +808,17 @@ function composerHtml(){
   const sections=Object.entries(groups).map(([g,rows])=>`<h2 class="csec">${esc(g)} <small>${rows.reduce((a,r)=>a+r.qty*r.um,0)} UM</small></h2>${rows.map(rowHtml).join('')}`).join('');
   return `<div class="wiz">
     <div class="crumbs"><button type="button" id="cback">Tableau & protection</button><span class="sep">›</span><span style="color:var(--text)">Composer le tableau</span></div>
-    <h1>${esc(c.fam)} ${c.rows?c.rows+' rangées':''} · ${c.install==='CREUSE'?'paroi creuse':MOUNT[c.mount]||''}${c.system&&c.system!=='KV'?' · '+esc(c.system==='MOD'?'modulaire':c.system==='KVM'?'multimédia':c.system):''}</h1>
+    <h1>${esc(c.fam)} ${c.rows?c.rows+' rangée'+(c.rows>1?'s':''):''} · ${c.install==='CREUSE'?'paroi creuse':MOUNT[c.mount]||''}${c.system&&c.system!=='KV'?' · '+esc(c.system==='MOD'?'modulaire':c.system==='KVM'?'multimédia':c.system):''}</h1>
     <p class="sub">${circuits} circuits · ${used} modules utilisés sur ${cap} · ${used>cap?`<b style="color:var(--tomato)">ça ne rentre pas : ajoute une rangée ou retire ${used-cap} UM</b>`:free<cap*0.2?`réserve faible (${free} UM) : une rangée de plus est prudent`:`${free} UM de réserve pour l'avenir`}</p>
     <div class="gauge ${used>cap?'over':free<cap*0.2?'tight':''}"><div class="bar"><i style="width:${pct}%"></i></div>
       <div class="rowsel">Rangées <button type="button" class="st" data-rows="-1">−</button><output class="num">${c.rows||3}</output><button type="button" class="st" data-rows="1">+</button> · <span>${perRow} UM / rangée</span> <button type="button" class="btn link small" id="perrow">changer</button></div></div>
+    <div class="rowsel" style="margin:-4px 0 10px">Tableaux identiques <button type="button" class="st" data-mult="-1">−</button><output class="num">×${c.mult||1}</output><button type="button" class="st" data-mult="1">+</button> <span style="color:var(--ink-3)">· toutes les quantités seront multipliées à l'ajout</span></div>
     <h2 class="csec">Coffret et porte</h2>
     ${shells.map(l=>l.ref?`<div class="crow coffret"><div class="cinfo"><b>${esc(l.label)}</b><div class="cref"><img src="${esc(l.ref.img)}" alt="" onerror="this.style.visibility='hidden'"><span>${esc(l.ref.d)}</span><em class="num">ELDAS ${esc(l.ref.e||'—')}</em><button class="btn link small" type="button" data-change="${esc(l.k)}" data-q="${esc(l.q)}">Changer</button></div></div></div>`:`<div class="crow coffret"><div class="cinfo"><b>${esc(l.label)}</b><div class="cref"><span style="color:var(--faint)">Pas trouvé pour « ${esc(l.q)} » · ${catalogueLinks(l.q)}</span></div></div></div>`).join('')}
     ${sections}
-    <div class="actions"><button class="btn primary" id="caddall" type="button">Ajouter le tableau à la liste</button><button class="btn" id="caskai" type="button">Faire vérifier par l'assistant</button><span class="hint">Quantité 0 = non ajouté. + / − pour ajuster.</span></div>
+    <h2 class="csec">Peignes et raccordement <small>calculés par rangée · à vérifier selon la disposition</small></h2>
+    ${combLines(c).map(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},3).items[0]; return `<div class="crow ${l.qty?'':'off'}"><div class="cinfo"><b>${esc(l.label)}</b>${l.s?`<span>${esc(l.s)}</span>`:''}${ref?`<div class="cref"><img src="${esc(ref.img)}" alt="" onerror="this.style.visibility='hidden'"><span>${esc(ref.d)}</span><em class="num">ELDAS ${esc(ref.e||'—')}</em><button class="btn link small" type="button" data-change="${esc(l.k)}" data-q="${esc(l.q)}">Changer</button></div>`:`<div class="cref"><span style="color:var(--tomato)">Pas trouvé : ${esc(l.q)}</span></div>`}</div><div class="cqty"><button type="button" class="st" data-k="${l.k}" data-d="-1" aria-label="Moins">−</button><output class="num">${l.qty}</output><button type="button" class="st" data-k="${l.k}" data-d="1" aria-label="Plus">+</button></div></div>`; }).join('')||'<div class="crow off"><div class="cinfo"><span>Aucun circuit : pas de peigne.</span></div></div>'}
+    <div class="actions"><button class="btn primary" id="caddall" type="button">Ajouter ${(c.mult||1)>1?'les '+c.mult+' tableaux':'le tableau'} à la liste</button><button class="btn" id="caskai" type="button">Faire vérifier par l'assistant</button><span class="hint">Quantité 0 = non ajouté. + / − pour ajuster.</span></div>
   </div>`;
 }
 function umOf(ref, dflt){ const m=(ref.d||'').match(/(\d+)\s*UM\b/i); if(m) return +m[1]; if(/\b3LN\b|\b3L\+N\b|\b3P\b/.test(ref.d)) return 3; if(/\b4L\b|\b4P\b/.test(ref.d)) return 4; if(/\b1LN\b|\b1L\+N\b|\b2P\b|\b1P\b/.test(ref.d)) return 1; return dflt; }
@@ -789,16 +837,16 @@ document.addEventListener('click',e=>{
   if(e.target.id==='pickback'){ go(view.pick.comp); return; }
   if(e.target.id==='back'){ if(view.from==='wizard'&&view.wiz){ go(view.wiz); } else go({name:'home'}); return; }
   if(e.target.id==='cback'){ go(view.wiz||{name:'home'}); return; }
-  const st=e.target.closest('.st'); if(st&&view.name==='composer'){ if(st.dataset.rows){ view.rows=Math.max(1,Math.min(8,(view.rows||3)+(+st.dataset.rows))); } else { const k=st.dataset.k; const cp=COMPONENTS.find(c=>c.k===k); view.qty[k]=Math.max(0,(view.qty[k]??cp.def)+(+st.dataset.d)); } render(); return; }
+  const st=e.target.closest('.st'); if(st&&view.name==='composer'){ if(st.dataset.rows){ view.rows=Math.max(1,Math.min(8,(view.rows||3)+(+st.dataset.rows))); } else if(st.dataset.mult){ view.mult=Math.max(1,Math.min(200,(view.mult||1)+(+st.dataset.mult))); } else { const k=st.dataset.k; const cp=COMPONENTS.find(c=>c.k===k); const cur=view.qty[k]??(cp?cp.def:(combLines(view).find(l=>l.k===k)||{}).qty??0); view.qty[k]=Math.max(0,cur+(+st.dataset.d)); } render(); return; }
   if(e.target.id==='perrow'){ const v=prompt('Modules par rangée (12, 18 ou 24) :', view.perRow||UM_PER_ROW[view.fam]||12); const n=parseInt(v); if(n>0){ view.perRow=n; render(); } return; }
   const ch=e.target.closest('[data-change]'); if(ch&&view.name==='composer'){ const comp={...view}; go({name:'results', q:ch.dataset.q, title:'Choisir : '+ch.dataset.q, pick:{k:ch.dataset.change, comp}}); return; }
-  if(e.target.id==='caddall'){ const c=view; let n=0; shellLines(c).forEach(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; if(ref){ addToList(ref,null,1,true); n++; } }); if(c.qty.media){ const rail=searchFallback('Rail DIN Resi9 appareils média',{},1).items[0]; if(rail){ addToList(rail,null,1,true); n++; } } COMPONENTS.forEach(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; if(ref){ addToList(ref,null,qty,true); n++; } }); renderList(); toast(`${n} références ajoutées`,{label:'Voir la liste',fn:openList}); return; }
-  if(e.target.id==='caskai'){ const c=view; const shellTxt=shellLines(c).map(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; return ref?`${l.label} (${ref.f}, ELDAS ${ref.e})`:l.label; }).join(' ; '); const lines=shellTxt+' ; '+COMPONENTS.map(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return null; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; return `${qty}× ${cp.label}${ref?` (${ref.f}, ELDAS ${ref.e})`:''}`; }).filter(Boolean).join(' ; '); openChat(); sendChat(`Vérifie ce tableau ${c.fam} ${c.rows} rangées ${MOUNT[c.mount]||''} : ${lines}. Dis-moi en 5 lignes max ce qui manque ou ce qui est surdimensionné, et 1 ou 2 options à proposer. Pas de questions.`, `Vérification du tableau ${c.fam} ${c.rows} rangées`); return; }
+  if(e.target.id==='caddall'){ const c=view, M=c.mult||1; let n=0; shellLines(c).forEach(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; if(ref){ addToList(ref,null,M,true); n++; } }); if(c.qty.media){ const rail=searchFallback('Rail DIN Resi9 appareils média',{},1).items[0]; if(rail){ addToList(rail,null,M,true); n++; } } COMPONENTS.forEach(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; if(ref){ addToList(ref,null,qty*M,true); n++; } }); combLines(c).forEach(l=>{ if(!l.qty) return; const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; if(ref){ addToList(ref,null,l.qty*M,true); n++; } }); renderList(); toast(`${n} références ajoutées${M>1?' · ×'+M+' tableaux':''}`,{label:'Voir la liste',fn:openList}); return; }
+  if(e.target.id==='caskai'){ const c=view; const shellTxt=shellLines(c).map(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; return ref?`${l.label} (${ref.f}, ELDAS ${ref.e})`:l.label; }).join(' ; '); const lines=shellTxt+' ; '+COMPONENTS.map(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return null; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; return `${qty}× ${cp.label}${ref?` (${ref.f}, ELDAS ${ref.e})`:''}`; }).filter(Boolean).join(' ; ')+' ; peignes : '+combLines(c).filter(l=>l.qty).map(l=>`${l.qty}× ${l.label}`).join(' ; ')+((c.mult||1)>1?` ; ${c.mult} tableaux identiques`:''); openChat(); sendChat(`Vérifie ce tableau ${c.fam} ${c.rows} rangées ${MOUNT[c.mount]||''} : ${lines}. Dis-moi en 5 lignes max ce qui manque ou ce qui est surdimensionné, et 1 ou 2 options à proposer. Pas de questions.`, `Vérification du tableau ${c.fam} ${c.rows} rangées`); return; }
   if(e.target.id==='askconfig'){ openChat(); sendChat(view.brief, 'Offre type : '+(view.title||'')); return; }
   if(e.target.id==='askthis'){ openChat(); sendChat(view.q); return; }
   if(e.target.id==='askequiv'){ openChat(); sendChat(`Équivalent Feller / Schneider de « ${view.q} » : référence avec N° ELDAS, accessoires à prévoir, et un argument factuel face au concurrent.`, 'Équivalent de « '+view.q+' »'); return; }
   const chipb=e.target.closest('.filters .chip'); if(chipb){ const k=chipb.dataset.k, v=chipb.dataset.v; if(k==='reset') F={design:'',mount:'',ip:false,nw:false}; else if(k==='ip'||k==='nw') F[k]=!F[k]; else F[k]=F[k]===v?'':v; render(); return; }
-  const add=e.target.closest('.add'); if(add){ const it=byF[add.closest('.card').dataset.f]; if(!it) return; if(view.pick){ const {k,comp}=view.pick; view=comp; composerPick(k,it); return; } addToList(it,add); return; }
+  const add=e.target.closest('.add'); if(add){ const it=byF[add.closest('.card').dataset.f]; if(!it) return; if(view.pick){ const {k,comp}=view.pick; view=comp; composerPick(k,it); return; } addToList(it,add,Math.max(1,+add.dataset.q||1)); return; }
   const ref=e.target.closest('.add-ref'); if(ref){ const it=byF[ref.dataset.f]||partItem(findPart(ref.dataset.f)); if(it) addToList(it,ref,Math.max(1,+ref.dataset.q||1)); else toast('Référence hors base'); return; }
   const pb=e.target.closest('[data-parts]'); if(pb){ const it=byF[pb.dataset.parts]; let n=0; (it&&it.parts||[]).forEach(pt=>{ addToList(partItem(pt),null,pt[2]||1,true); n++; }); renderList(); toast(`${n} référence${n>1?'s':''} en pièces détachées ajoutée${n>1?'s':''}`, {label:'Voir la liste', fn:openList}); return; }
   const mb=e.target.closest('.more-btn'); if(mb&&!mb.closest('.card.row')){ const card=mb.closest('.card'); const open=mb.getAttribute('aria-expanded')==='true'; card.querySelector('.more')?.remove(); if(!open) card.insertAdjacentHTML('beforeend',specHtml(byF[card.dataset.f])); mb.setAttribute('aria-expanded',String(!open)); mb.textContent=open?('Détails'+((byF[card.dataset.f].parts||[]).length?` · ${byF[card.dataset.f].parts.length} pièces`:'')+((byF[card.dataset.f].acc||[]).length?` · ${byF[card.dataset.f].acc.length} acc.`:'')):'Masquer'; return; }
@@ -833,28 +881,45 @@ function finishFlow(){
   const flow=FLOWS[view.flow], a=view.answers, wiz={...view};
   const label = s => { const st=visibleSteps(flow,a).find(x=>x.key===s); const val=a[s]; if(!st||!val||(Array.isArray(val)&&!val.length)) return ''; return Array.isArray(val)? val.map(v=>(st.opts.find(o=>o.v===v)||{}).t||v).join(', ') : ((st.opts.find(o=>o.v===val)||{}).t||val); };
   if(view.flow==='bornes'){
-    const villa=a.ctx==='Villa', cable=a.cable!=='prise T2', dc=a.type==='DC rapide', p22=!villa&&!dc, many=/3|7|plus/.test(a.places||'');
+    const villa=a.ctx==='Villa', pub=a.ctx==='Public';
+    const dc=pub||a.type==='DC rapide'||a.type==='Mix AC + DC', ac=!pub&&(villa||a.type!=='DC rapide');
+    const pro=a.type==='Charge Pro', evl=a.type==='AC 22 kW'||a.type==='Mix AC + DC';
+    const cable=a.cable==='câble attaché', mid=a.bill==='MID', g4=a.conn==='4G';
+    const n=villa?1:({'1':1,'2':2,'3 à 6':4,'7 à 20':10,'plus de 20':24}[a.places]||2), many=n>=3, huge=n>20;
     const groups=[];
-    if(villa) groups.push({label:'Wallbox '+(cable?'câble attaché':'prise T2'), q:cable?'Wallbox 11kW câble':'Wallbox prise T2'});
-    else if(dc) groups.push({label:'Borne DC rapide', q:'EVlink Pro CCS2'});
-    else { groups.push({label:'Borne Master (1 par groupe)', q:'EVlink Pro AC 22kW Master'}); if(many) groups.push({label:'Bornes Extender (places suivantes)', q:cable?'EVlink Pro AC 22kW câble 5m Extender':'EVlink Pro AC 22kW Extender'}); else groups.push({label:'Variante '+(cable?'câble attaché':'prise T2'), q:cable?'EVlink Pro AC 22kW câble 5m':'EVlink Pro AC 22kW FI'}); }
-    const big=/7|plus/.test(a.places||''), huge=/plus/.test(a.places||'');
+    // --- bornes AC ---
+    if(villa) groups.push({label:'Wallbox '+(cable?'11 kW câble attaché':'22 kW prise T2'), q:cable?'Wallbox 11kW câble':'Wallbox prise T2', qty:1, note:'Schneider Charge : Wi-Fi + app, FI 6 mA DC intégré'});
+    if(pro) groups.push({label:`Schneider Charge Pro ${cable?'câble 7 m':'prise T2'}${mid?' · compteur MID':''}${g4?' · 4G':''}`, q:`SE Charge Pro ${cable?'7m':'136mm'} ${mid?'MID':''} ${g4?'4G':''}`.replace(/\s+/g,' ').trim(), qty:n, note:`${n} borne${n>1?'s':''} · OCPP 1.6 · ${mid?'facturation au kWh':'sans compteur MID'} · ${g4?'modem 4G intégré':'Ethernet / Wi-Fi'}`});
+    if(evl){ groups.push({label:'EVlink Pro AC Master (1 par groupe)'+(mid?' avec compteur d\'énergie':''), q:mid?'EVlink Pro AC 22kW Master comp.énergie':'EVlink Pro AC 22kW Master', qty:1, note:'pilote les Extender en Ethernet · '+(mid?'variante « comp. énergie » = compteur MID intégré pour refacturer':'variante « comp. énergie » = compteur intégré')+' · FI type B1 = différentiel type B intégré'}); if(n>1) groups.push({label:`EVlink Pro AC Extender ${cable?'câble 5 m':'prise T2'} (places suivantes)`, q:cable?'EVlink Pro AC 22kW câble 5m Extender':'EVlink Pro AC 22kW Extender', qty:n-1}); }
+    // --- bornes DC ---
+    if(dc){ groups.push({label:`EVlink Pro DC 60 kW 2×CCS2 ${a.dcopt==='avec'?'avec gestion de câbles':'sans gestion de câbles'}`, q:a.dcopt==='avec'?'EVlink Pro 2×CCS2 enrouleur':'EVlink Pro 2×CCS2 sansenrouleur', qty:pub?2:1, note:'4G + ISO 15118 intégrés · câbles CCS2 attachés · autres puissances DC (120-180 kW, StarCharge) : sur projet, pas de N° ELDAS grossiste'});
+      if(a.dcmount!=='socle') groups.push({label:'Poteau de montage DC (0.75 m ou 1 m)', q:'Poteau de montage Evlink Pro DC', qty:pub?2:1});
+      if(a.dcopt!=='avec') groups.push({label:'Porte-câbles DC (option)', q:'Porte-câbles EVlink Pro', qty:1}); }
+    // --- gestion de charge : compatibilité par gamme ---
+    const multi=n>1||dc&&ac;
     if(a.lm==='dynamique'){
-      if(villa) groups.push({label:'Gestion de charge dynamique · module Peak Controller', q:'Peak Controller', note:'compatible Wallbox Schneider Charge : pince de mesure en tête, la borne baisse quand la maison consomme'});
-      else groups.push({label:'Gestion de charge dynamique · régulateur EV Charging Expert', q:huge?'Régulateur de charge Evlink 250 stations':big?'Régulateur de charge Evlink 15 stations':'Régulateur de charge Evlink 5 stations', note:'compatible EVlink Pro AC et Pro DC · réseau Ethernet entre bornes + compteur en tête (PowerTag / PM) à prévoir'});
+      if(villa||(pro&&n===1&&!dc)) groups.push({label:'Gestion dynamique · Peak Controller (pince en tête)', q:'Peak Controller', qty:1, note:villa?'compatible Wallbox Schneider Charge : la borne baisse quand la maison consomme':'compatible Schneider Charge Pro (1 borne) : option « contrôleur de pointe » dans eSetup'});
+      else groups.push({label:'Gestion dynamique · EcoStruxure EV Charging Expert', q:huge?'Régulateur de charge Evlink 250 stations':n>5?'Régulateur de charge Evlink 15 stations':'Régulateur de charge Evlink 5 stations', qty:1, note:(dc&&ac?'un seul gestionnaire pour le mix AC + DC (zones et priorités) · ':'')+'compatible EVlink Pro AC, Pro DC et Charge Pro · Ethernet entre bornes + compteur en tête'});
+      if(!villa&&!(pro&&n===1&&!dc)) groups.push({label:'Compteur en tête pour la dynamique (au choix)', q:'PowerTag F 3PN 63A', qty:1, note:'PowerTag (+ PowerTag Link) jusqu\'à 63 A, ou PM5320 / iEM3250 avec TI au-delà · Modbus TCP vers le gestionnaire'});
     }
-    if(a.lm==='statique'){ if(big) groups.push({label:'Gestion de charge statique · système', q:'gestion de charge statique', note:'au-delà d\'un groupe Master + Extenders'}); else groups[0].note='répartition statique incluse : la Master pilote les Extenders en Ethernet, sans compteur'; }
-    if(a.bill==='RFID'||a.bill==='backend OCPP') groups.push({label:'Accès et facturation', q:'Carte RFID EVlink'});
-    if(a.ctx==='Public') groups.push({label:'Connectivité 4G', q:'modem EVlink'});
-    if(a.mount==='pied'){ groups.push({label:'Support sur pied', q:villa?'pied de support EVlink':(many?'pied de support EVlink 2 stations':'pied de support EVlink 1 station'), note:villa?'le pied EVlink Pro AC convient aussi à une Wallbox : vérifier la plaque d\'adaptation':''}); groups.push({label:'Kit de montage au sol', q:many?'kit de montage EVlink 2 points au sol':'kit de montage EVlink 1 point au sol'}); if(many) groups.push({label:'Kit 2e station sur le même pied', q:'kit de montage EVlink deuxième station'}); }
-    else if(!villa) groups.push({label:'Montage mural', q:'kit de montage EVlink mural'});
-    groups.push({label:'Support mural pour le câble', q:'Support mural EVlink câble'}); groups.push({label:'Antivol du câble (option)', q:'Protection antivol EVlink câble'});
-    if(dc) groups.push({label:'Porte-câbles et poteau DC', q:'Porte-câbles EVlink Pro'});
-    if(!villa) groups.push({label:'Boîte de raccordement IP66 (arrivée câble)', q:'Boîte de raccordement EVlink'});
-    if(villa) groups.push({label:'Câble de recharge en plus (option)', q:'câble de charge EVlink type 2'});
-    groups.push({label:'Protection au tableau (par borne)', q:dc?'interrupteur differentiel iID 63A 30mA 4L':p22?'Clario iC40 32A 3LN':'Clario iC40 16A (C) 3LN'});
-    const title=`Bornes · ${label('ctx')||''}${villa?'':' · '+(label('places')||'')+' places'} · ${villa?'Wallbox 11 kW':(label('type')||'')}`.replace(/\s+/g,' ');
-    const brief=`Projet bornes de recharge. Contexte : ${label('ctx')||'à préciser'} ; places : ${villa?'1-2':(label('places')||'à préciser')} ; type : ${villa?'Wallbox 11 kW':(label('type')||'à préciser')} ; raccordement véhicule : ${label('cable')||'à préciser'} ; gestion de charge : ${label('lm')||'aucune'} ; fixation : ${label('mount')||'au mur'} ; accès/facturation : ${label('bill')||'libre'}. Vérifie la compatibilité de la gestion de charge avec la borne choisie (Peak Controller = Wallbox Schneider Charge ; EV Charging Expert = EVlink Pro). Donne l'architecture en 4 lignes, la liste de matériel (bornes EVlink/Wallbox du catalogue, protections, mesure) avec N° ELDAS, les points à vérifier, 2 upsells max. Ne me repose pas ces questions.`;
+    if(a.lm==='statique'){ if(evl&&!dc) groups[groups.findIndex(g=>/Master/.test(g.label))].note+=' · répartition statique incluse : pas de gestionnaire à ajouter'; else if(multi) groups.push({label:'Gestion statique · EV Charging Expert', q:n>5?'Régulateur de charge Evlink 15 stations':'Régulateur de charge Evlink 5 stations', qty:1, note:pro?'Charge Pro n\'a pas de Master : la répartition entre bornes passe par EV Charging Expert ou le backend OCPP':'une seule consigne de puissance pour tout le parc'}); }
+    // --- accès ---
+    if(a.bill==='MID'||a.bill==='RFID'||pub) groups.push({label:'Badges RFID (kit de 10)', q:'Carte RFID EVlink', qty:Math.ceil(n/10), note:pub?'backend OCPP pour le paiement public':'badges ISO 14443 ; refacturation via backend OCPP ou lecture du compteur MID'});
+    if(g4&&evl) groups.push({label:'Modem 4G EVlink Pro AC', q:'Modem EVlink Pro AC micro SIM', qty:1, note:'un modem par groupe (la Master) · carte SIM à prévoir'});
+    // --- fixation et accessoires ---
+    if(villa&&a.mount==='pied'){ groups.push({label:'Pied de support (1 station)', q:'pied de support EVlink 1 station', qty:1, note:'pied EVlink Pro AC : vérifier la plaque d\'adaptation pour la Wallbox'}); groups.push({label:'Kit de montage au sol', q:'kit de montage EVlink 1 point au sol', qty:1}); }
+    if(pro){ if(a.mount==='pied') groups.push({label:'Poteau de montage Schneider Charge Pro', q:'Poteau de montage SE Charge Pro 1213', qty:n, note:'2 variantes (9 kg / 10 kg) selon le modèle : vérifier dans la fiche'}); else groups.push({label:'Kit de montage mural Charge Pro', q:'Kit de montage SE Charge Pro', qty:n}); }
+    if(evl){ if(a.mount==='pied'){ const pairs=Math.floor(n/2), single=n%2; if(pairs) groups.push({label:'Pied de support 2 stations (dos à dos)', q:'pied de support EVlink 2 stations', qty:pairs}); if(single) groups.push({label:'Pied de support 1 station', q:'pied de support EVlink 1 station', qty:1}); groups.push({label:'Kit de montage au sol', q:pairs?'kit de montage EVlink 2 points au sol':'kit de montage EVlink 1 point au sol', qty:pairs||1}); if(pairs) groups.push({label:'Kit 2e station sur le même pied', q:'kit de montage EVlink deuxième station', qty:pairs}); } else groups.push({label:'Kit de montage mural EVlink Pro AC', q:'kit de montage EVlink mural', qty:n}); groups.push({label:'Boîte de raccordement IP66 (arrivée 25…35 mm²)', q:'Boîte de raccordement EVlink', qty:n}); }
+    if(ac){ groups.push({label:'Support mural pour le câble', q:'Support mural EVlink câble', qty:cable?n:0, note:cable?'':'inutile avec une prise T2'}); if(cable) groups.push({label:'Antivol du câble (option)', q:'Protection antivol EVlink câble', qty:n}); if(!cable) groups.push({label:'Câble de recharge T2 (option utilisateur)', q:'câble de charge EVlink type 2', qty:0}); }
+    // --- protection au tableau ---
+    if(villa) groups.push({label:'Protection au tableau (FI/LS 3LN 30 mA)', q:cable?'Clario 3LN 16A 30mA':'Clario 3LN 32A 30mA', qty:1, note:'la Wallbox détecte le DC 6 mA : un type A suffit en amont'});
+    if(pro) groups.push({label:'Protection au tableau par borne (FI/LS 3LN 32 A 30 mA)', q:'Clario 3LN 32A 30mA', qty:n, note:'Charge Pro : détection DC 6 mA intégrée (CEI 62955) → type A en amont'});
+    if(evl) groups.push({label:'Disjoncteur par borne (32 A 3LN)', q:'Clario iC40 32A (C) 3LN', qty:n, note:'différentiel : intégré dans la borne (variantes FI type A1 / B1), sinon iID 40 A type A + DC 6 mA'});
+    if(dc) groups.push({label:'Protection par borne DC (≈ 100 A triphasé)', q:'disjoncteur NG125N 4P 100A', qty:pub?2:1, note:'à valider sur la notice EVlink Pro DC 60 kW (différentiel type B 300 mA côté tableau si demandé)'});
+    if(!villa) groups.push({label:'Parafoudre type 2 (tableau bornes)', q:'parasurtension Resi9 iPRD 40r', qty:1, note:'électronique de puissance exposée : protection surtension recommandée'});
+    groups.forEach(g=>{ if(g.qty===0) delete g.qty; });
+    const title=`Bornes · ${label('ctx')||''}${villa?'':' · '+n+' place'+(n>1?'s':'')}${villa?' · Wallbox':' · '+(label('type')||'DC 60 kW')}`.replace(/\s+/g,' ');
+    const brief=`Projet bornes de recharge. Contexte : ${label('ctx')||'à préciser'} ; places : ${villa?'1-2':n} ; gamme : ${villa?'Wallbox Schneider Charge':(label('type')||'EVlink Pro DC 60 kW')} ; raccordement véhicule : ${dc&&!ac?'câbles CCS2 attachés':(label('cable')||'à préciser')} ; gestion de charge : ${label('lm')||'aucune'} ; facturation/accès : ${label('bill')||(pub?'backend OCPP':'libre')} ; réseau : ${label('conn')||'à préciser'} ; fixation : ${label('mount')||label('dcmount')||'au mur'}. Règles : Wallbox → Peak Controller ; Charge Pro seule → Peak Controller, plusieurs → EV Charging Expert ; EVlink Pro AC → statique via Master/Extender, dynamique via EV Charging Expert + compteur ; mix AC+DC → EV Charging Expert unique avec zones. Donne l'architecture en 4 lignes, la liste de matériel avec N° ELDAS et quantités (bornes, fixation, gestion de charge, compteur, protections, badges), les points à vérifier (puissance de raccordement, avis GRD, Ethernet entre bornes), 2 upsells max. Ne me repose pas ces questions.`;
     remember(title, {name:'results', title, groups, brief, from:'wizard', wiz});
     go({name:'results', title, groups, brief, from:'wizard', wiz}); return;
   }
@@ -866,9 +931,9 @@ function finishFlow(){
       ls16_3:(eq.includes('cuisiniere')?1:0)+(eq.includes('borne')?1:0), ls13_3:eq.includes('boiler')?1:0, ls20_3:eq.includes('pac')?1:0, ict:eq.includes('boiler')?1:0,
       fi40:(eq.includes('cuisiniere')||eq.includes('boiler')||eq.includes('pac')||eq.includes('borne'))?1:0, spd:op.includes('spd')?1:0, tl:op.includes('tl')?2:0, media:op.includes('media')?1:0, peigne:1};
     let system=a.system||'KV'; if(op.includes('media')&&a.install==='AP'&&a.fam==='Resi9'&&system==='KV') system='KVM';
-    const perRow=system==='CX'?parseInt(a.perrow)||13:(a.fam==='PrismaSeT'?24:12);
+    const perRow=system==='CX'?parseInt(a.perrow)||13:(a.fam==='PrismaSeT'?(system==='XS'?(parseInt(a.perrow)||24):24):12);
     const umTotal=qty.fils13+qty.fils16+qty.ls16_3*3+qty.ls13_3*3+qty.ls20_3*3+qty.ict+qty.fi40*4+qty.spd*2+qty.tl+qty.media*12;
-    const rows=Math.min(4,Math.max(1,Math.ceil(umTotal*(op.includes('reserve')?1.45:1.2)/perRow)));
+    const rows=Math.min(a.fam==='PrismaSeT'&&system==='XS'?6:4,Math.max(1,Math.ceil(umTotal*(op.includes('reserve')?1.45:1.2)/perRow)));
     const comp={name:'composer', fam:a.fam||'Resi9', install:a.install||'ENC', system, door:a.door??'P', rows, perRow, mount:a.install==='AP'?'AP':'ENC', qty, refs:{}, wiz, why:{logement:a.logement, eq, op}};
     remember(`Tableau ${comp.fam} ${comp.rows} rangées`, comp); go(comp); return;
   } else {
@@ -896,26 +961,30 @@ function renderList(){
   $('listbar').hidden=!list.length; $('listbartxt').textContent=`${tot} pièce${tot>1?'s':''} · ${list.length} référence${list.length>1?'s':''}`;
   $('badge').textContent=tot; $('n').textContent = list.length ? `${tot} pièce${tot>1?'s':''}` : '';
   $('aside-empty').style.display = list.length?'none':'block';
-  $('items').innerHTML = list.map((x,i)=>`<div class="item"><img src="${esc(x.img||PIC(x.f))}" alt="" data-open="${esc(x.f)}" style="cursor:pointer" onerror="this.style.visibility='hidden'"><div><div class="d" data-open="${esc(x.f)}" style="cursor:pointer">${esc(x.d)}</div><div class="e num">ELDAS ${esc(x.e||'—')} · ${esc(x.f)}${(byF[x.f]&&byF[x.f].parts&&byF[x.f].parts.length)?` · <button type="button" class="explode" data-i="${i}" style="border:0;background:none;color:var(--pine);cursor:pointer;font:inherit;font-size:12px;padding:0;text-decoration:underline dotted">en pièces détachées</button>`:''}</div></div><input class="q num" type="number" min="1" step="1" value="${x.q}" data-i="${i}" aria-label="Quantité"><button class="x" type="button" data-i="${i}" aria-label="Retirer">×</button></div>`).join('');
+  const hasP=DB.some(x=>x.p); const pt=$('priceToggle'); if(pt){ pt.textContent=showPrice?'Prix : affichés':'Prix bruts'; pt.setAttribute('aria-pressed',String(showPrice)); pt.title=hasP?'Afficher ou masquer les prix bruts (hors TVA, sans remise)':'Pas encore de prix dans la base — ils s\'afficheront ici dès qu\'une source est connectée'; }
+  const tot$=list.reduce((a,x)=>{ const pv=priceOf(x); return pv==null?a:a+pv*x.q; },0), miss=list.filter(x=>priceOf(x)==null).length;
+  $('items').innerHTML = list.map((x,i)=>`<div class="item"><img src="${esc(x.img||PIC(x.f))}" alt="" data-open="${esc(x.f)}" style="cursor:pointer" onerror="this.style.visibility='hidden'"><div><div class="d" data-open="${esc(x.f)}" style="cursor:pointer">${esc(x.d)}</div><div class="e num">ELDAS ${esc(x.e||'—')} · ${esc(x.f)}${showPrice?` · <b>${priceOf(x)==null?'prix n/d':chf(priceOf(x)*x.q)}</b>`:''}${(byF[x.f]&&byF[x.f].parts&&byF[x.f].parts.length)?` · <button type="button" class="explode" data-i="${i}" style="border:0;background:none;color:var(--pine);cursor:pointer;font:inherit;font-size:12px;padding:0;text-decoration:underline dotted">en pièces détachées</button>`:''}</div></div><input class="q num" type="number" min="1" step="1" value="${x.q}" data-i="${i}" aria-label="Quantité"><button class="x" type="button" data-i="${i}" aria-label="Retirer">×</button></div>`).join('')+(showPrice&&list.length?`<div class="item" style="justify-content:flex-end;font-weight:600">Total brut ${chf(tot$)}${miss?` <small style="font-weight:400;color:var(--ink-3)">· ${miss} réf. sans prix</small>`:''}<small style="font-weight:400;color:var(--ink-3)"> · hors TVA, sans remise</small></div>`:'');
   $('c_name').value=client.name; $('c_notes').value=client.notes;
 }
 function saveList(){ store.set('offre.items',list); renderList(); }
 $('items').addEventListener('input',e=>{ const i=e.target.dataset.i; if(e.target.classList.contains('q')){ list[i].q=Math.max(1,parseInt(e.target.value)||1); store.set('offre.items',list); const tot=list.reduce((a,x)=>a+x.q,0); $('badge').textContent=tot; $('n').textContent=`${tot} pièce${tot>1?'s':''}`; }});
 $('items').addEventListener('click',e=>{ const ex=e.target.closest('.explode'); if(ex){ const i=+ex.dataset.i, x=list[i], it=byF[x.f]; if(!it||!it.parts) return; const q=x.q; list.splice(i,1); it.parts.forEach(pt=>{ addToList(partItem(pt),null,(pt[2]||1)*q,true); }); saveList(); toast('Set remplacé par ses pièces détachées'); return; } const b=e.target.closest('.x'); if(!b) return; list.splice(+b.dataset.i,1); saveList(); });
 ['c_name','c_notes'].forEach(id=>$(id).addEventListener('input',()=>{ client={name:$('c_name').value,notes:$('c_notes').value}; store.set('offre.client',client); }));
+$('priceToggle').onclick=()=>{ showPrice=!showPrice; store.set('offre.price',showPrice); renderList(); if(showPrice&&!DB.some(x=>x.p)) toast('Pas encore de prix dans la base : la colonne apparaîtra dès qu\'une source de prix est connectée'); };
 $('clear').onclick=()=>{ if(!list.length||confirm('Vider la liste de matériel ?')){ list=[]; saveList(); } };
 function openList(){ $('drawer').hidden=false; $('scrim').hidden=false; }
 function closeList(){ $('drawer').hidden=true; $('scrim').hidden=true; }
 $('openlist').onclick=openList; $('closelist').onclick=closeList; $('scrim').onclick=closeList; $('lb-open').onclick=openList; $('lb-pdf').onclick=()=>$('pdf').click();
 $('tools').innerHTML='<h3>Configurateurs et outils</h3>'+TOOLS.map(t=>`<a href="${t.url}" target="_blank" rel="noopener">${esc(t.name)}<span>${esc(t.why)}</span></a>`).join('');
-$('mail').onclick=()=>{ if(!list.length){ toast('La liste est vide'); return; } const body=[`Bonjour,`,'',`Voici la liste de matériel${client.name?' pour '+client.name:''} :`,'',...list.map(x=>`${x.q} × ${x.d} (ELDAS ${x.e||'—'}, N° Feller ${x.f})`),'',client.notes||'','Meilleures salutations','Nicola Strummiello'].join('\n'); location.href=`mailto:?subject=${encodeURIComponent('Liste de matériel'+(client.name?' – '+client.name:''))}&body=${encodeURIComponent(body)}`; };
-$('copy').onclick=async()=>{ const txt=[`Liste de matériel${client.name?' – '+client.name:''}`,'',...list.map(x=>`${x.q} × ${x.d}  (ELDAS ${x.e||'—'}, N° Feller ${x.f})`),'',client.notes].join('\n'); try{ await navigator.clipboard.writeText(txt); toast('Liste copiée'); }catch(e){ prompt('Copie manuelle :',txt); } };
+$('mail').onclick=()=>{ if(!list.length){ toast('La liste est vide'); return; } const body=[`Bonjour,`,'',`Voici la liste de matériel${client.name?' pour '+client.name:''} :`,'',...list.map(x=>`${x.q} × ${x.d} (ELDAS ${x.e||'—'}, N° Feller ${x.f})${showPrice&&priceOf(x)!=null?' – '+chf(priceOf(x)*x.q):''}`),'',showPrice?'Total brut hors TVA, sans remise : '+chf(list.reduce((a,x)=>{ const pv=priceOf(x); return pv==null?a:a+pv*x.q; },0)):'',client.notes||'','Meilleures salutations','Nicola Strummiello'].join('\n'); location.href=`mailto:?subject=${encodeURIComponent('Liste de matériel'+(client.name?' – '+client.name:''))}&body=${encodeURIComponent(body)}`; };
+$('copy').onclick=async()=>{ const txt=[`Liste de matériel${client.name?' – '+client.name:''}`,'',...list.map(x=>`${x.q} × ${x.d}  (ELDAS ${x.e||'—'}, N° Feller ${x.f})${showPrice&&priceOf(x)!=null?'  '+chf(priceOf(x)*x.q):''}`),'',showPrice?'Total brut hors TVA, sans remise : '+chf(list.reduce((a,x)=>{ const pv=priceOf(x); return pv==null?a:a+pv*x.q; },0)):'',client.notes].join('\n'); try{ await navigator.clipboard.writeText(txt); toast('Liste copiée'); }catch(e){ prompt('Copie manuelle :',txt); } };
 $('pdf').onclick=()=>{
   if(!list.length){ toast('La liste est vide'); return; }
   const d=new Date().toLocaleDateString('fr-CH',{day:'2-digit',month:'long',year:'numeric'});
   $('print').innerHTML=`<h1>Liste de matériel${client.name?' – '+esc(client.name):''}</h1><div class="sub">${d} · ${list.reduce((a,x)=>a+x.q,0)} pièces · références Feller / Schneider Electric Suisse</div>
-    <table><thead><tr><th></th><th>Qté</th><th>Désignation</th><th>N° ELDAS</th><th>N° Feller</th><th>Documentation</th></tr></thead><tbody>
-    ${list.map(x=>{const it=byF[x.f]||x; const sp=(it.tech||[]).filter(t=>/IP|Tension|Courant|montage|raccordement/i.test(t[0])).map(t=>`${t[1]}${t[2]?' '+t[2]:''}`).join(' · '); return `<tr><td class="i"><img src="${esc(x.img||'')}" alt=""></td><td class="q num">${x.q}</td><td>${esc(x.d)}${sp?`<div class="sp">${esc(sp)}</div>`:''}</td><td class="e num">${esc(x.e||'—')}</td><td class="num">${esc(x.f)}</td><td class="doc"><a href="${docsUrl(it)}">Fiche &amp; brochures</a></td></tr>`}).join('')}
+    <table><thead><tr><th></th><th>Qté</th><th>Désignation</th><th>N° ELDAS</th><th>N° Feller</th>${showPrice?'<th>Prix brut</th><th>Total</th>':''}<th>Documentation</th></tr></thead><tbody>
+    ${list.map(x=>{const it=byF[x.f]||x; const sp=(it.tech||[]).filter(t=>/IP|Tension|Courant|montage|raccordement/i.test(t[0])).map(t=>`${t[1]}${t[2]?' '+t[2]:''}`).join(' · '); return `<tr><td class="i"><img src="${esc(x.img||'')}" alt=""></td><td class="q num">${x.q}</td><td>${esc(x.d)}${sp?`<div class="sp">${esc(sp)}</div>`:''}</td><td class="e num">${esc(x.e||'—')}</td><td class="num">${esc(x.f)}</td>${showPrice?`<td class="num">${priceOf(x)==null?'n/d':chf(priceOf(x))}</td><td class="num">${priceOf(x)==null?'—':chf(priceOf(x)*x.q)}</td>`:''}<td class="doc"><a href="${docsUrl(it)}">Fiche &amp; brochures</a></td></tr>`}).join('')}
+    ${showPrice?`<tr><td colspan="5" style="text-align:right;font-weight:600">Total brut (hors TVA, sans remise)</td><td></td><td class="num" style="font-weight:600">${chf(list.reduce((a,x)=>{ const pv=priceOf(x); return pv==null?a:a+pv*x.q; },0))}</td><td></td></tr>`:''}
     </tbody></table>${client.notes?`<div class="notes">${esc(client.notes)}</div>`:''}<div class="foot">Les numéros ELDAS permettent la commande chez tout grossiste électro suisse. Fiches techniques et brochures : online-katalog.feller.ch</div>`;
   window.print();
 };
