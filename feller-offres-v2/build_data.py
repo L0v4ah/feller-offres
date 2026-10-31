@@ -10,6 +10,8 @@ det_path = os.path.join(ROOT, 'data', 'feller-details-fr.json')
 det = json.load(open(det_path)) if os.path.exists(det_path) else {}
 vars_path = os.path.join(ROOT, 'data', 'feller-vars-fr.json')
 vars_ = json.load(open(vars_path)) if os.path.exists(vars_path) else {}
+dis_path = os.path.join(ROOT, 'data', 'feller-dis-fr.json')  # composition (disassembleItems) + chapitre
+dis_ = json.load(open(dis_path)) if os.path.exists(dis_path) else {}
 
 # Nouveautés officielles feller.ch (page Nouveautés, 30.10.2026) — règles de reconnaissance
 NEW_RULES = [
@@ -51,6 +53,11 @@ for it in src['items']:
     if d.get('dim'): out['dim'] = d['dim']
     v = (vars_.get(it['f']) or {}).get('sim') or []
     if len(v) > 1: out['vars'] = [[x[0], x[1], x[2], x[3], x[4], x[5]] for x in v]
+    dd_ = dis_.get(it['f']) or {}
+    parts = [x for x in (dd_.get('dis') or []) if x and x[0] and x[0] != it['f']]
+    if parts: out['parts'] = [[x[0], x[1], x[2], x[3], '', ('' if (x[5] or '').endswith('/pict/' + x[0]) else (x[5] or ''))] for x in parts]
+    lv = dd_.get('lv') or []
+    if lv and lv[1]: out['ch'] = lv[1]
     items.append(out)
 
 # Bornes de recharge Schneider (EVlink / Wallbox) — source grossiste Sonepar (E-No + photos), hors catalogue Feller
@@ -78,7 +85,7 @@ if os.path.exists(ev_path):
 
 payload = {'source': 'online-katalog.feller.ch + sonepar.ch (EVlink)', 'lang': 'fr', 'exportedAt': src.get('exportedAt'),
            'builtAt': datetime.datetime.now().isoformat(timespec='seconds'), 'count': len(items),
-           'withTech': sum(1 for x in items if x.get('tech')), 'items': items}
+           'withTech': sum(1 for x in items if x.get('tech')), 'withParts': sum(1 for x in items if x.get('parts')), 'items': items}
 js = json.dumps(payload, ensure_ascii=False, separators=(',', ':'))
 open(os.path.join(ROOT, 'data.js'), 'w').write('window.FELLER_DATA=' + js + ';')
 os.makedirs(os.path.join(ROOT, 'api', '_data'), exist_ok=True)
@@ -87,4 +94,4 @@ idx = os.path.join(ROOT, 'index.html')
 if os.path.exists(idx):
     h = open(idx).read(); h2 = re.sub(r'data\.js\?v=\d+', 'data.js?v=' + datetime.datetime.now().strftime('%Y%m%d%H%M'), h)
     if h2 != h: open(idx, 'w').write(h2)
-print(f"{len(items)} articles, {payload['withTech']} avec fiche technique, {sum(1 for x in items if x.get('nw'))} nouveautés, data.js = {len(js)/1e6:.1f} Mo")
+print(f"{len(items)} articles, {payload['withTech']} avec fiche technique, {payload['withParts']} avec composition, {sum(1 for x in items if x.get('vars'))} avec variantes de couleur, {sum(1 for x in items if x.get('nw'))} nouveautés, data.js = {len(js)/1e6:.1f} Mo")

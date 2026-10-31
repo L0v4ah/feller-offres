@@ -160,6 +160,17 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 .card .act{display:flex;gap:6px;margin-top:auto;padding-top:6px}
 .card .act .btn{flex:1}
 .card .act .btn.primary{background:var(--pine);border-color:var(--pine);color:var(--on-pine)}
+.cards.rows{display:flex;flex-direction:column;gap:8px}
+.cards.rows .card.row{flex-direction:row;align-items:center;gap:14px;padding:8px 12px 8px 8px}
+.cards.rows .card.row .pic{height:64px;width:64px;margin:0;border-radius:12px;flex:none}
+.cards.rows .card.row .pic img{max-height:56px;max-width:56px}
+.cards.rows .card.row .body{padding:0;gap:3px;min-width:0}
+.cards.rows .card.row .desc{min-height:0;font-size:14px}
+.cards.rows .card.row .meta{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.cards.rows .card.row .meta .e{font-size:16px}
+.cards.rows .card.row .act{margin:0;padding:0;flex:none;width:auto}
+.cards.rows .card.row .act .btn{flex:none}
+@media (max-width:760px){ .res-head{gap:8px} .res-head h1{font-size:21px;min-width:100%} .res-head .btn{padding:8px 12px;font-size:13.5px} .filters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;margin:0 -16px;padding-left:16px;padding-right:16px;scrollbar-width:none} .filters::-webkit-scrollbar{display:none} .filters .chip{flex:none} .cards.rows .card.row .act .btn.more-btn{display:none} }
 .card .more{border-top:1px solid var(--line);padding:10px 16px 14px;font-size:13px}
 .card .more .spec div{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px dotted var(--line-2)}
 .card .more .spec span:first-child{color:var(--muted)}
@@ -269,7 +280,10 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 .tools h3{font-size:13px;font-weight:600;color:var(--faint);margin:0 0 6px}
 .tools a{display:block;font-size:13.5px;padding:5px 0;text-decoration:none;color:var(--text)}
 .tools a span{color:var(--faint);font-size:12.5px;display:block}
-.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:var(--on-ink);padding:10px 18px;border-radius:999px;font-size:14px;z-index:85;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-pop)}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:var(--on-ink);padding:10px 18px;border-radius:999px;font-size:14px;z-index:85;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-pop);max-width:min(92vw,560px);white-space:nowrap}
+.toast span{overflow:hidden;text-overflow:ellipsis}
+.toast button{flex:none}
+body:has(#drawer:not([hidden])) .toast{bottom:auto;top:14px}
 .toast button{background:none;border:0;color:var(--butter);padding:0;font-weight:600}
 
 .listbar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:40;display:flex;align-items:center;gap:10px;background:var(--glass-3);backdrop-filter:blur(14px);border:1px solid var(--rim);box-shadow:var(--shadow-pop);border-radius:999px;padding:8px 10px 8px 18px;font-size:14px;font-weight:500;white-space:nowrap;max-width:calc(100vw - 24px)}
@@ -395,7 +409,10 @@ const SYN = [
   [/\btriphase(e|es)?\b/g,'3ln'],[/\bmonophase(e|es)?\b/g,'1ln'],[/\b3p\b/g,'3ln'],[/\b4p\b/g,'4l'],[/\b1p\+?n\b/g,'1ln'],[/\b[cb](\d{1,2})\b/g,'$1a'],
   [/\bparafoudre\b/g,'surtension'],[/\bexterieur(e|s)?\b/g,'nevo'],[/\bhumide(s)?\b/g,'nevo'],[/\b(\d) postes?\b/g,'$1'],[/\bcouleur\b/g,''],
   [/\bdisjoncteur fi\b|\bfi ls\b|\bdisjoncteur de protection a courant de defaut\b/g,'disjoncteur differentiel'],[/\bfi\b/g,'differentiel'],
+  [/\bschemas? ?(\d)\b/g,'$1/1'],[/\brecharge\b/g,'charge'],[/\bmate?\b/g,''],[/\bsonnette\b/g,'sonnerie'],[/\bbrillant\b/g,''],
+  [/\b(\d{2,3}) modules?\b/g,(m,n)=>n>=12?`${Math.ceil(n/12)} rangees`:m],[/\btableau (de )?(distribution|appartement|divisionnaire)\b/g,'coffret'],
 ];
+const COMPETITORS=/\b(hager|legrand|abb|siemens|busch[- ]?jaeger|gira|jung|berker|niko|bticino|eaton|zaptec|easee|keba|alfen|webasto|mennekes|go-?e|juice|wallbe|weidm[uü]ller|phoenix|theben|finder|eltako|dehn|obo|hensel|spelsberg|gewiss|striebel)\b/i;
 const prep = q => { let s=norm(q); for(const [a,b] of SYN) s=s.replace(a,b); return s; };
 DB.forEach(it=>{ it._s = norm([it.d,it.t,it.f,it.e,it.ean,it.m].join(' ')); it._dsg = DESIGNS.find(x=>norm(it.d).includes(norm(x))) || '';
   if(!it.m){ const d=' '+it.d+' '; it.m = / ENC /.test(d) ? 'ENC' : / AP /.test(d) ? 'AP' : /\.REG\b|\bREG\b|\bUM\b|rail DIN/.test(it.d+' '+it.f) ? 'REG' : ''; } });
@@ -518,6 +535,7 @@ const FLOWS = {
       {v:'Entreprise / flotte',t:'Entreprise / flotte',s:'Rotation, 22 kW, gestion de charge',img:'SE-834000729'},
       {v:'Public',t:'Parking public',s:'DC rapide, 4G, OCPP',img:'SE-834320809'}]},
     {key:'cable', q:'Câble attaché ou prise T2 ?', opts:[{v:'câble attaché',t:'Câble attaché',s:'Confort : rien à sortir du coffre',img:'SE-834020819',rec:'Villa'},{v:'prise T2',t:'Prise T2',s:'Chacun son câble, collectif',img:'SE-834020829'}]},
+    {key:'mount', q:'Au mur ou sur pied ?', s:'Le support décide des accessoires de montage.', opts:[{v:'mur',t:'Au mur',s:'Garage, façade, place couverte',img:'SE-834100029',rec:'Le plus simple'},{v:'pied',t:'Sur pied (support)',s:'Place extérieure sans mur, 1 ou 2 bornes dos à dos',img:'SE-834930109'}]},
     {key:'lm', q:'Gestion de charge ?', s:'Évite de dépasser la puissance du raccordement.', opts:[{v:'aucune',t:'Aucune',s:'Raccordement suffisant, 1 borne',rec:'Villa simple'},{v:'dynamique',t:'Dynamique',s:'Mesure en tête, s\'adapte à la maison (PAC, cuisine)'}], compact:true, when:a=>a.ctx==='Villa'},
     {key:'places', q:'Combien de places ?', opts:[{v:'2',t:'2'},{v:'3 à 6',t:'3 à 6'},{v:'7 à 20',t:'7 à 20'},{v:'plus de 20',t:'Plus de 20'}], compact:true, when:a=>a.ctx!=='Villa'},
     {key:'type', q:'AC ou DC ?', opts:[{v:'AC 22 kW',t:'EVlink Pro AC 22 kW',s:'Master + Extender, gestion de charge',img:'SE-834000289',rec:'PPE, entreprise'},{v:'DC rapide',t:'EVlink Pro DC',s:'2×CCS2, rotation rapide',img:'SE-834320809'}], when:a=>a.ctx!=='Villa'},
@@ -608,7 +626,7 @@ function wizardHtml(){
     <div class="opts ${step.compact?'compact':''}">${step.opts.map(o=>`<button class="opt" type="button" data-v="${esc(o.v)}" aria-pressed="${isSel(o.v)}">
       <div class="pic ${o.img?'':'ico'}">${o.img?`<img src="${PIC(o.img)}" alt="" loading="lazy" onerror="this.parentElement.classList.add('ico');this.remove()">`:''}</div>
       <div class="txt"><b>${esc(o.t)}</b>${o.s?`<span>${esc(o.s)}</span>`:''}${o.rec?`<i class="rec">Recommandé · ${esc(o.rec)}</i>`:''}</div></button>`).join('')}</div>
-    <div class="actions">${step.multi?`<button class="btn primary" id="wnext" type="button" ${(sel||[]).length?'':'disabled'}>Continuer</button>`:''}<button class="btn" id="wskip" type="button">Passer</button><span class="hint">${flow.assistant?'À la fin, l\'assistant structure le projet et chiffre la distribution.':'À la fin : les références, puis l\'assistant pour une configuration complète si tu veux.'}</span></div>
+    <div class="actions"><button class="btn" id="wback" type="button">← Retour</button>${step.multi?`<button class="btn primary" id="wnext" type="button" ${(sel||[]).length?'':'disabled'}>Continuer</button>`:''}<button class="btn" id="wskip" type="button">Passer</button><span class="hint">${flow.assistant?'À la fin, l\'assistant structure le projet et chiffre la distribution.':'À la fin : les références, puis l\'assistant pour une configuration complète si tu veux.'}</span></div>
   </div>`;
 }
 
@@ -619,18 +637,29 @@ function resultsHtml(){
   const filters = `<div class="filters">${chip('Nouveautés','nw','1','new')}${Object.entries(MOUNT).map(([v,l])=>chip(l,'mount',v)).join('')}${chip('IP44+','ip','1')}${DESIGNS.slice(0,5).map(d=>chip(d,'design',d)).join('')}${anyF?'<button class="chip x" type="button" data-k="reset">Réinitialiser</button>':''}</div>`;
   const conf = r.q ? TOOLS.filter(t=>t.rx.test(r.q)).slice(0,1).map(t=>`<div class="conf"><div class="t"><b>Configurateur conseillé :</b> ${esc(t.name)} <span style="color:var(--ink-2)">· ${esc(t.why)}</span></div><a class="btn small" href="${t.url}" target="_blank" rel="noopener">Ouvrir</a></div>`).join('') : '';
   let groups;
-  if(r.groups) groups = r.groups.map(g=>{ const sr=searchFallback(g.q,{...F, ...(g.F||{})},24); return {label:g.label, items:sr.items, note:sr.note, q:g.q}; });
-  else { const sr=searchFallback(r.q||'',F,60); groups=[{label:sr.note?`Résultats ${sr.note}`:'', items:sr.items, q:r.q}]; }
+  if(r.groups) groups = r.groups.map(g=>{ const sr=searchFallback(g.q,{...F, ...(g.F||{})},24); return {label:g.label, items:sr.items, note:[g.note,sr.note].filter(Boolean).join(' · '), q:g.q}; });
+  else { const sr=searchFallback(r.q||'',F,60); groups=[{label:sr.note?`Rien ne correspond exactement — résultats proches ${sr.note}`:'', items:sr.items, q:r.q, hint:sr.note?`Pas d'article « ${esc(r.q)} » tel quel dans la base. Vérifie aussi : ${catalogueLinks(r.q)} — ou demande à l'assistant.`:''}]; }
   const total = groups.reduce((a,g)=>a+g.items.length,0);
-  const body = total ? groups.map(g=>`<section class="group">${g.label?`<h2>${esc(g.label)} <small>${g.items.length} article${g.items.length>1?'s':''}${g.note?' · '+esc(g.note):''}</small></h2>`:''}${g.items.length?`<div class="cards">${g.items.map(cardHtml).join('')}</div>`:`<div class="empty" style="padding:10px 6px">Rien dans le catalogue pour « ${esc(g.q)} ». ${catalogueLinks(g.q)}</div>`}</section>`).join('')
+  const body = total ? groups.map(g=>`<section class="group">${g.label?`<h2>${esc(g.label)} <small>${g.items.length} article${g.items.length>1?'s':''}${g.note?' · '+esc(g.note):''}</small></h2>`:''}${g.hint?`<div style="font-size:13px;color:var(--ink-2);margin:-4px 0 10px">${g.hint}</div>`:''}${g.items.length?((g.compact||(r.groups&&g.items.length<=2))?`<div class="cards rows">${g.items.map(rowHtml).join('')}</div>`:`<div class="cards">${g.items.map(cardHtml).join('')}</div>`):`<div class="empty" style="padding:10px 6px">Rien dans le catalogue pour « ${esc(g.q)} ». ${catalogueLinks(g.q)}</div>`}</section>`).join('')
+    : COMPETITORS.test(r.q||'') ? `<div class="empty"><h2>Produit concurrent : « ${esc(r.q)} »</h2>Pas dans le catalogue Feller / Schneider — normal. L'assistant trouve l'<b>équivalent</b> avec N° ELDAS et un argument factuel face à ${esc((r.q.match(COMPETITORS)||[''])[0])}.<div style="margin-top:12px"><button class="btn primary" type="button" id="askequiv">Trouver l'équivalent Feller / Schneider</button></div></div>`
     : `<div class="empty"><h2>Aucun article ne correspond</h2>Essaie moins de mots ou retire un filtre. Sinon, vérifie directement dans les catalogues : ${catalogueLinks(r.q||r.title||'')}<br><small style="color:var(--faint)">Astuce : tape un N° ELDAS, un N° Feller ou un EAN pour tomber directement sur l'article.</small><div style="margin-top:12px"><button class="btn primary" type="button" id="askthis">Demander à l'assistant</button></div></div>`;
   // pièces détachées et accessoires les plus fréquents parmi les résultats affichés
   const accCount={}; groups.forEach(g=>g.items.slice(0,24).forEach(it=>(it.acc||[]).forEach(a=>{ if(!a[0]||a[0]===it.f) return; accCount[a[0]]=(accCount[a[0]]||0)+1; })));
   const accItems=Object.entries(accCount).sort((a,b)=>b[1]-a[1]).map(([f])=>byF[f]).filter(Boolean).filter(it=>!groups.some(g=>g.items.includes(it))).slice(0,8);
   const accHtml = accItems.length ? `<section class="group acc"><h2>Pièces détachées et accessoires à prévoir <small>kits frontaux, cadres, boîtes, peignes… liés aux articles ci-dessus</small></h2><div class="cards">${accItems.map(cardHtml).join('')}</div></section>` : '';
-  return `<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig" title="L'assistant compose une offre type avec quantités, accessoires et options, prête à ajouter">Offre type par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':'Accueil'}</button>`}</div>${filters}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}${r.brief?' · clique un produit pour sa fiche, « Ajouter » pour la liste, ou laisse l\'assistant composer une offre type avec quantités':''}</div>${body}${total?accHtml:''}`;
+  return `<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig" title="L'assistant compose une offre type avec quantités, accessoires et options, prête à ajouter">Offre type par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':'Accueil'}</button>`}</div>${filters}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}${r.brief?' · touche un produit pour sa fiche':''}</div>${body}${total?accHtml:''}`;
 }
 
+function rowHtml(it){
+  const inList=list.find(x=>x.f===it.f);
+  return `<article class="card row ${it.nw?'is-new':''}" data-f="${esc(it.f)}">
+    <div class="pic" data-open="${esc(it.f)}" title="Voir la fiche"><img src="${esc(it.img)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"></div>
+    <div class="body"><div class="desc" data-open="${esc(it.f)}" style="cursor:pointer">${esc(it.d)}</div>
+      <div class="meta"><span class="e num"><small>ELDAS</small>${it.e?esc(it.e):'—'}</span><span>${it.src==='sonepar'?`grossiste${it.av?' · '+esc(it.av.replace(/, selon fournisseur/,'')):''}`:`N° Feller ${esc(it.f)}`}</span>${it.nw?`<span class="tag">Nouveau ${esc(it.nw)}</span>`:''}${it.soon?'<span class="tag soon">Pas encore disponible</span>':it.buy?'':'<span class="tag">Non commandable</span>'}${it.fu?`<button type="button" class="tag fu" data-fu="${esc(it.fu)}" style="cursor:pointer;border:0">Remplacé par ${esc(it.fu)} →</button>`:''}</div>
+      ${swatchesHtml(it)}</div>
+    <div class="act"><button class="btn primary small add" type="button">${view.pick?'Choisir':inList?'Encore':'Ajouter'}</button><button class="btn small more-btn" type="button" aria-expanded="false" data-open="${esc(it.f)}">Fiche</button></div>
+  </article>`;
+}
 function cardHtml(it){
   const inList=list.find(x=>x.f===it.f);
   return `<article class="card ${it.nw?'is-new':''}" data-f="${esc(it.f)}">${it.nw?`<span class="k">Nouveau ${esc(it.nw)}</span>`:''}
@@ -641,12 +670,20 @@ function cardHtml(it){
       <div class="f num">${it.src==='sonepar'?`Schneider · grossiste${it.av?' · '+esc(it.av.replace(/, selon fournisseur/,''))  :''}`:`N° Feller ${esc(it.f)}`}</div>
       ${swatchesHtml(it)}
       <div class="tags">${it._dsg?`<span class="tag">${esc(it._dsg)}</span>`:''}${it.m?`<span class="tag">${MOUNT[it.m]}</span>`:''}${it.ip?`<span class="tag">${esc(it.ip)}</span>`:''}${it.soon?'<span class="tag soon">Pas encore disponible</span>':it.buy?'<span class="tag ok">Disponible</span>':'<span class="tag">Non commandable</span>'}${it.fu?`<button type="button" class="tag fu" data-fu="${esc(it.fu)}" style="cursor:pointer;border:0">Remplacé par ${esc(it.fu)} → voir</button>`:''}</div>
-      <div class="act"><button class="btn primary small add" type="button">${view.pick?'Choisir':inList?'Ajouter encore':'Ajouter'}</button><button class="btn small more-btn" type="button" aria-expanded="false">Détails${(it.acc&&it.acc.length)?` · ${it.acc.length} acc.`:''}</button></div>
+      <div class="act"><button class="btn primary small add" type="button">${view.pick?'Choisir':inList?'Ajouter encore':'Ajouter'}</button><button class="btn small more-btn" type="button" aria-expanded="false">Détails${(it.parts&&it.parts.length)?` · ${it.parts.length} pièces`:''}${(it.acc&&it.acc.length)?` · ${it.acc.length} acc.`:''}</button></div>
     </div></article>`;
 }
 function swatchesHtml(it){
   if(!it.vars||it.vars.length<2) return '';
   return `<div class="sw">${it.vars.map(v=>{ const c=colorOf(v[3])||{name:v[3].split(' ').slice(-1)[0],hex:'#ddd'}; const cur=v[0]===it.f; return `<button type="button" class="swatch" data-f="${esc(v[0])}" aria-pressed="${cur}" title="${esc(c.name)} · ELDAS ${esc(v[1]||'—')}" style="background:${c.hex}"></button>`; }).join('')}<span class="swl">${esc((colorOf(it.d)||{}).name||'')}</span></div>`;
+}
+function partItem(pt){ if(!pt) return null; return byF[pt[0]]||{f:pt[0],e:pt[1],d:pt[3],img:pt[5]||PIC(pt[0]),buy:true,part:true}; }
+function findPart(f){ for(const it of DB){ const pt=(it.parts||[]).find(x=>x[0]===f); if(pt) return pt; } return null; }
+function partsHtml(it, compact=false){
+  if(!it.parts||!it.parts.length) return '';
+  const rows=it.parts.map(pt=>`<div><img src="${esc(pt[5]||PIC(pt[0]))}" alt="" loading="lazy" onerror="this.style.visibility='hidden'" style="width:34px;height:34px;object-fit:contain;border-radius:8px;background:#fff;flex:none"><span class="d" ${byF[pt[0]]?`data-open="${esc(pt[0])}" style="cursor:pointer"`:''}>${esc(pt[3])}</span><span class="num" style="color:var(--ink-2)">${pt[2]>1?pt[2]+'× · ':''}${esc(pt[1]||pt[0])}</span><button class="btn small add-ref" type="button" data-f="${esc(pt[0])}" data-q="${pt[2]||1}" title="Ajouter cette pièce">+</button></div>`).join('');
+  const n=it.parts.reduce((a,x)=>a+(x[2]||1),0);
+  return `<h4>Composition · pièces détachées <small style="font-weight:400;color:var(--ink-3)">${it.parts.length} référence${it.parts.length>1?'s':''}, ${n} pièce${n>1?'s':''}</small></h4><div class="accs parts">${rows}</div><div style="margin-top:6px"><button class="btn small" type="button" data-parts="${esc(it.f)}">Ajouter toutes les pièces détachées</button>${compact?'':' <span style="font-size:12.5px;color:var(--ink-3)">Pour remplacer une seule pièce ou commander en détaché au lieu du set complet.</span>'}</div>`;
 }
 function openSheet(f){
   const it=byF[f]; if(!it) return;
@@ -667,6 +704,7 @@ function openSheet(f){
       <div class="tags">${it.nw?`<span class="tag new">Nouveau ${esc(it.nw)}</span>`:''}${it.soon?'<span class="tag soon">Pas encore disponible</span>':it.buy?'<span class="tag ok">Disponible</span>':'<span class="tag">Non commandable</span>'}${it.fu?`<button type="button" class="tag fu" data-fu="${esc(it.fu)}" style="cursor:pointer;border:0">Remplacé par ${esc(it.fu)} → voir</button>`:''}</div>
       ${swatchesHtml(it)}
       ${kv.length?`<div class="kv">${kv.slice(0,8).map(([k,v])=>`<div><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join('')}</div>`:''}
+      ${partsHtml(it)}
       ${accs?`<h4>Accessoires et pièces à prévoir</h4><div class="accs">${accs}</div>`:''}
       ${spec?`<details><summary style="cursor:pointer;color:var(--muted);font-size:13.5px">Toutes les caractéristiques (${(it.tech||[]).length})</summary><div class="spec">${spec}</div></details>`:''}
       <div class="links"><a href="${docsUrl(it)}" target="_blank" rel="noopener">${it.src==='sonepar'?'Fiche grossiste ↗':'Fiche produit, brochures, plans cotés ↗'}</a>${it.src!=='sonepar'?`<a href="https://www.sonepar.ch/fr/search?q=${encodeURIComponent(it.e||it.f)}" target="_blank" rel="noopener">Prix et stock grossiste ↗</a>`:''}</div>
@@ -677,7 +715,7 @@ function openSheet(f){
 function specHtml(it){
   const rows=(it.tech||[]).filter(x=>!/^(false|true)$/.test(x[1]) || /Compatible/.test(x[0])).map(x=>`<div><span>${esc(x[0])}</span><span>${esc(x[1]==='true'?'Oui':x[1]==='false'?'Non':x[1])}${x[2]?' '+esc(x[2]):''}</span></div>`).join('');
   const accs=(it.acc||[]).map(a=>`<div><span class="d">${esc(a[2])}</span><span class="num" style="color:var(--ink-2)">${esc(a[1]||'')}</span><button class="btn small add-ref" type="button" data-f="${esc(a[0])}">+</button></div>`).join('');
-  return `<div class="more">${rows?`<div class="spec">${rows}</div>`:'<span style="color:var(--ink-3)">Pas de fiche technique détaillée.</span>'}${accs?`<h4>Accessoires et compléments</h4><div class="accs">${accs}</div>`:''}<div style="margin-top:8px"><a class="btn link" href="${docsUrl(it)}" target="_blank" rel="noopener">Fiche produit, brochures, plans cotés ↗</a></div></div>`;
+  return `<div class="more">${rows?`<div class="spec">${rows}</div>`:'<span style="color:var(--ink-3)">Pas de fiche technique détaillée.</span>'}${partsHtml(it,true)}${accs?`<h4>Accessoires et compléments</h4><div class="accs">${accs}</div>`:''}<div style="margin-top:8px"><a class="btn link" href="${docsUrl(it)}" target="_blank" rel="noopener">Fiche produit, brochures, plans cotés ↗</a></div></div>`;
 }
 
 function catalogueLinks(q){ const e=encodeURIComponent((q||'').replace(/\b(ENC|AP)\b/g,'').trim()); return `<a href="https://online-katalog.feller.ch/fr/products?search=${e}" target="_blank" rel="noopener">Catalogue Feller ↗</a> · <a href="https://www.se.com/ch/fr/search/?q=${e}" target="_blank" rel="noopener">Schneider Electric CH ↗</a>`; }
@@ -746,6 +784,7 @@ document.addEventListener('click',e=>{
   const opt=e.target.closest('.opt'); if(opt){ pickOpt(opt.dataset.v); return; }
   const crumb=e.target.closest('.crumbs button'); if(crumb){ const s=+crumb.dataset.step; if(s<0){ view.step=0; } else view.step=s; render(); return; }
   if(e.target.id==='wnext'){ nextStep(); return; }
+  if(e.target.id==='wback'){ if(view.step>0){ view.step--; render(); } else go({name:'home'}); return; }
   if(e.target.id==='wskip'){ const step=visibleSteps(FLOWS[view.flow],view.answers)[view.step]; view.answers[step.key]=step.multi?[]:''; nextStep(); return; }
   if(e.target.id==='pickback'){ go(view.pick.comp); return; }
   if(e.target.id==='back'){ if(view.from==='wizard'&&view.wiz){ go(view.wiz); } else go({name:'home'}); return; }
@@ -757,10 +796,12 @@ document.addEventListener('click',e=>{
   if(e.target.id==='caskai'){ const c=view; const shellTxt=shellLines(c).map(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; return ref?`${l.label} (${ref.f}, ELDAS ${ref.e})`:l.label; }).join(' ; '); const lines=shellTxt+' ; '+COMPONENTS.map(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return null; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; return `${qty}× ${cp.label}${ref?` (${ref.f}, ELDAS ${ref.e})`:''}`; }).filter(Boolean).join(' ; '); openChat(); sendChat(`Vérifie ce tableau ${c.fam} ${c.rows} rangées ${MOUNT[c.mount]||''} : ${lines}. Dis-moi en 5 lignes max ce qui manque ou ce qui est surdimensionné, et 1 ou 2 options à proposer. Pas de questions.`, `Vérification du tableau ${c.fam} ${c.rows} rangées`); return; }
   if(e.target.id==='askconfig'){ openChat(); sendChat(view.brief, 'Offre type : '+(view.title||'')); return; }
   if(e.target.id==='askthis'){ openChat(); sendChat(view.q); return; }
+  if(e.target.id==='askequiv'){ openChat(); sendChat(`Équivalent Feller / Schneider de « ${view.q} » : référence avec N° ELDAS, accessoires à prévoir, et un argument factuel face au concurrent.`, 'Équivalent de « '+view.q+' »'); return; }
   const chipb=e.target.closest('.filters .chip'); if(chipb){ const k=chipb.dataset.k, v=chipb.dataset.v; if(k==='reset') F={design:'',mount:'',ip:false,nw:false}; else if(k==='ip'||k==='nw') F[k]=!F[k]; else F[k]=F[k]===v?'':v; render(); return; }
   const add=e.target.closest('.add'); if(add){ const it=byF[add.closest('.card').dataset.f]; if(!it) return; if(view.pick){ const {k,comp}=view.pick; view=comp; composerPick(k,it); return; } addToList(it,add); return; }
-  const ref=e.target.closest('.add-ref'); if(ref){ const it=byF[ref.dataset.f]; if(it) addToList(it,ref); else toast('Référence hors base'); return; }
-  const mb=e.target.closest('.more-btn'); if(mb){ const card=mb.closest('.card'); const open=mb.getAttribute('aria-expanded')==='true'; card.querySelector('.more')?.remove(); if(!open) card.insertAdjacentHTML('beforeend',specHtml(byF[card.dataset.f])); mb.setAttribute('aria-expanded',String(!open)); mb.textContent=open?('Détails'+((byF[card.dataset.f].acc||[]).length?` · ${byF[card.dataset.f].acc.length} acc.`:'')):'Masquer'; return; }
+  const ref=e.target.closest('.add-ref'); if(ref){ const it=byF[ref.dataset.f]||partItem(findPart(ref.dataset.f)); if(it) addToList(it,ref,Math.max(1,+ref.dataset.q||1)); else toast('Référence hors base'); return; }
+  const pb=e.target.closest('[data-parts]'); if(pb){ const it=byF[pb.dataset.parts]; let n=0; (it&&it.parts||[]).forEach(pt=>{ addToList(partItem(pt),null,pt[2]||1,true); n++; }); renderList(); toast(`${n} référence${n>1?'s':''} en pièces détachées ajoutée${n>1?'s':''}`, {label:'Voir la liste', fn:openList}); return; }
+  const mb=e.target.closest('.more-btn'); if(mb&&!mb.closest('.card.row')){ const card=mb.closest('.card'); const open=mb.getAttribute('aria-expanded')==='true'; card.querySelector('.more')?.remove(); if(!open) card.insertAdjacentHTML('beforeend',specHtml(byF[card.dataset.f])); mb.setAttribute('aria-expanded',String(!open)); mb.textContent=open?('Détails'+((byF[card.dataset.f].parts||[]).length?` · ${byF[card.dataset.f].parts.length} pièces`:'')+((byF[card.dataset.f].acc||[]).length?` · ${byF[card.dataset.f].acc.length} acc.`:'')):'Masquer'; return; }
   const fu=e.target.closest('[data-fu]'); if(fu){ const it=byF[fu.dataset.fu]; $('q').value=fu.dataset.fu; F={design:'',mount:'',ip:false,nw:false}; go({name:'results', q:fu.dataset.fu, title:it?`Remplaçant : ${it.d}`:`Remplaçant ${fu.dataset.fu}`}); return; }
   const sw=e.target.closest('.swatch'); if(sw){ const card=sw.closest('.card'); const it=byF[sw.dataset.f]; if(it&&card){ card.outerHTML=cardHtml(it); } return; }
   const op=e.target.closest('[data-open]'); if(op){ openSheet(op.dataset.open); return; }
@@ -797,15 +838,23 @@ function finishFlow(){
     if(villa) groups.push({label:'Wallbox '+(cable?'câble attaché':'prise T2'), q:cable?'Wallbox 11kW câble':'Wallbox prise T2'});
     else if(dc) groups.push({label:'Borne DC rapide', q:'EVlink Pro CCS2'});
     else { groups.push({label:'Borne Master (1 par groupe)', q:'EVlink Pro AC 22kW Master'}); if(many) groups.push({label:'Bornes Extender (places suivantes)', q:cable?'EVlink Pro AC 22kW câble 5m Extender':'EVlink Pro AC 22kW Extender'}); else groups.push({label:'Variante '+(cable?'câble attaché':'prise T2'), q:cable?'EVlink Pro AC 22kW câble 5m':'EVlink Pro AC 22kW FI'}); }
-    if(a.lm==='dynamique') groups.push({label:'Gestion de charge dynamique', q:villa?'Peak Controller':'Exten.dyn'});
-    if(a.lm==='statique') groups.push({label:'Gestion de charge statique', q:'gestion de charge statique'});
+    const big=/7|plus/.test(a.places||''), huge=/plus/.test(a.places||'');
+    if(a.lm==='dynamique'){
+      if(villa) groups.push({label:'Gestion de charge dynamique · module Peak Controller', q:'Peak Controller', note:'compatible Wallbox Schneider Charge : pince de mesure en tête, la borne baisse quand la maison consomme'});
+      else groups.push({label:'Gestion de charge dynamique · régulateur EV Charging Expert', q:huge?'Régulateur de charge Evlink 250 stations':big?'Régulateur de charge Evlink 15 stations':'Régulateur de charge Evlink 5 stations', note:'compatible EVlink Pro AC et Pro DC · réseau Ethernet entre bornes + compteur en tête (PowerTag / PM) à prévoir'});
+    }
+    if(a.lm==='statique'){ if(big) groups.push({label:'Gestion de charge statique · système', q:'gestion de charge statique', note:'au-delà d\'un groupe Master + Extenders'}); else groups[0].note='répartition statique incluse : la Master pilote les Extenders en Ethernet, sans compteur'; }
     if(a.bill==='RFID'||a.bill==='backend OCPP') groups.push({label:'Accès et facturation', q:'Carte RFID EVlink'});
     if(a.ctx==='Public') groups.push({label:'Connectivité 4G', q:'modem EVlink'});
-    if(!villa) groups.push({label:'Montage', q:'pied de support EVlink'});
+    if(a.mount==='pied'){ groups.push({label:'Support sur pied', q:villa?'pied de support EVlink':(many?'pied de support EVlink 2 stations':'pied de support EVlink 1 station'), note:villa?'le pied EVlink Pro AC convient aussi à une Wallbox : vérifier la plaque d\'adaptation':''}); groups.push({label:'Kit de montage au sol', q:many?'kit de montage EVlink 2 points au sol':'kit de montage EVlink 1 point au sol'}); if(many) groups.push({label:'Kit 2e station sur le même pied', q:'kit de montage EVlink deuxième station'}); }
+    else if(!villa) groups.push({label:'Montage mural', q:'kit de montage EVlink mural'});
+    groups.push({label:'Support mural pour le câble', q:'Support mural EVlink câble'}); groups.push({label:'Antivol du câble (option)', q:'Protection antivol EVlink câble'});
+    if(dc) groups.push({label:'Porte-câbles et poteau DC', q:'Porte-câbles EVlink Pro'});
+    if(!villa) groups.push({label:'Boîte de raccordement IP66 (arrivée câble)', q:'Boîte de raccordement EVlink'});
     if(villa) groups.push({label:'Câble de recharge en plus (option)', q:'câble de charge EVlink type 2'});
     groups.push({label:'Protection au tableau (par borne)', q:dc?'interrupteur differentiel iID 63A 30mA 4L':p22?'Clario iC40 32A 3LN':'Clario iC40 16A (C) 3LN'});
     const title=`Bornes · ${label('ctx')||''}${villa?'':' · '+(label('places')||'')+' places'} · ${villa?'Wallbox 11 kW':(label('type')||'')}`.replace(/\s+/g,' ');
-    const brief=`Projet bornes de recharge. Contexte : ${label('ctx')||'à préciser'} ; places : ${villa?'1-2':(label('places')||'à préciser')} ; type : ${villa?'Wallbox 11 kW':(label('type')||'à préciser')} ; raccordement véhicule : ${label('cable')||'à préciser'} ; gestion de charge : ${label('lm')||'aucune'} ; accès/facturation : ${label('bill')||'libre'}. Donne l'architecture en 4 lignes, la liste de matériel (bornes EVlink/Wallbox du catalogue, protections, mesure) avec N° ELDAS, les points à vérifier, 2 upsells max. Ne me repose pas ces questions.`;
+    const brief=`Projet bornes de recharge. Contexte : ${label('ctx')||'à préciser'} ; places : ${villa?'1-2':(label('places')||'à préciser')} ; type : ${villa?'Wallbox 11 kW':(label('type')||'à préciser')} ; raccordement véhicule : ${label('cable')||'à préciser'} ; gestion de charge : ${label('lm')||'aucune'} ; fixation : ${label('mount')||'au mur'} ; accès/facturation : ${label('bill')||'libre'}. Vérifie la compatibilité de la gestion de charge avec la borne choisie (Peak Controller = Wallbox Schneider Charge ; EV Charging Expert = EVlink Pro). Donne l'architecture en 4 lignes, la liste de matériel (bornes EVlink/Wallbox du catalogue, protections, mesure) avec N° ELDAS, les points à vérifier, 2 upsells max. Ne me repose pas ces questions.`;
     remember(title, {name:'results', title, groups, brief, from:'wizard', wiz});
     go({name:'results', title, groups, brief, from:'wizard', wiz}); return;
   }
@@ -824,9 +873,9 @@ function finishFlow(){
     remember(`Tableau ${comp.fam} ${comp.rows} rangées`, comp); go(comp); return;
   } else {
     const ctx={design:a.design||'', mount:a.mount||'', smart:a.smart||'', layout:a.layout||''};
-    if(view.flow==='exterieur') ctx.design='NEVO';
+    if(view.flow==='exterieur'){ ctx.design='NEVO'; F.ip=true; }
     const fns=(a.fn&&a.fn.length)?a.fn:['interrupteur','prise'];
-    fns.forEach(fn=>groups.push({label:FN_LABEL[fn], q:FN_QUERY[fn](ctx)}));
+    fns.forEach(fn=>groups.push({label:FN_LABEL[fn], q:FN_QUERY[fn](ctx)+(view.flow==='exterieur'?' IP55':''), note:view.flow==='exterieur'?'IP44 et plus : NEVO IP55 avec couvercle pour l\'extérieur':''}));
     title=[ctx.smart, ctx.design, MOUNT[ctx.mount]].filter(Boolean).join(' · ')||flow.title;
     brief=`${flow.title} : ligne ${ctx.design||'au choix'}, montage ${MOUNT[ctx.mount]||'à préciser'}${ctx.smart?`, niveau connecté ${ctx.smart}`:''}, fonctions : ${fns.map(f=>FN_LABEL[f]).join(', ')}. Compose une offre type pour une pièce (quantités réalistes : par ex. 1 interrupteur 3/1, 3 prises 3×T13, accessoires inclus) avec propose_list, et 2 à 3 upsells. Ne me repose pas ces questions.`;
   }
@@ -847,12 +896,12 @@ function renderList(){
   $('listbar').hidden=!list.length; $('listbartxt').textContent=`${tot} pièce${tot>1?'s':''} · ${list.length} référence${list.length>1?'s':''}`;
   $('badge').textContent=tot; $('n').textContent = list.length ? `${tot} pièce${tot>1?'s':''}` : '';
   $('aside-empty').style.display = list.length?'none':'block';
-  $('items').innerHTML = list.map((x,i)=>`<div class="item"><img src="${esc(x.img||PIC(x.f))}" alt="" data-open="${esc(x.f)}" style="cursor:pointer" onerror="this.style.visibility='hidden'"><div><div class="d" data-open="${esc(x.f)}" style="cursor:pointer">${esc(x.d)}</div><div class="e num">ELDAS ${esc(x.e||'—')} · ${esc(x.f)}</div></div><input class="q num" type="number" min="1" step="1" value="${x.q}" data-i="${i}" aria-label="Quantité"><button class="x" type="button" data-i="${i}" aria-label="Retirer">×</button></div>`).join('');
+  $('items').innerHTML = list.map((x,i)=>`<div class="item"><img src="${esc(x.img||PIC(x.f))}" alt="" data-open="${esc(x.f)}" style="cursor:pointer" onerror="this.style.visibility='hidden'"><div><div class="d" data-open="${esc(x.f)}" style="cursor:pointer">${esc(x.d)}</div><div class="e num">ELDAS ${esc(x.e||'—')} · ${esc(x.f)}${(byF[x.f]&&byF[x.f].parts&&byF[x.f].parts.length)?` · <button type="button" class="explode" data-i="${i}" style="border:0;background:none;color:var(--pine);cursor:pointer;font:inherit;font-size:12px;padding:0;text-decoration:underline dotted">en pièces détachées</button>`:''}</div></div><input class="q num" type="number" min="1" step="1" value="${x.q}" data-i="${i}" aria-label="Quantité"><button class="x" type="button" data-i="${i}" aria-label="Retirer">×</button></div>`).join('');
   $('c_name').value=client.name; $('c_notes').value=client.notes;
 }
 function saveList(){ store.set('offre.items',list); renderList(); }
 $('items').addEventListener('input',e=>{ const i=e.target.dataset.i; if(e.target.classList.contains('q')){ list[i].q=Math.max(1,parseInt(e.target.value)||1); store.set('offre.items',list); const tot=list.reduce((a,x)=>a+x.q,0); $('badge').textContent=tot; $('n').textContent=`${tot} pièce${tot>1?'s':''}`; }});
-$('items').addEventListener('click',e=>{ const b=e.target.closest('.x'); if(!b) return; list.splice(+b.dataset.i,1); saveList(); });
+$('items').addEventListener('click',e=>{ const ex=e.target.closest('.explode'); if(ex){ const i=+ex.dataset.i, x=list[i], it=byF[x.f]; if(!it||!it.parts) return; const q=x.q; list.splice(i,1); it.parts.forEach(pt=>{ addToList(partItem(pt),null,(pt[2]||1)*q,true); }); saveList(); toast('Set remplacé par ses pièces détachées'); return; } const b=e.target.closest('.x'); if(!b) return; list.splice(+b.dataset.i,1); saveList(); });
 ['c_name','c_notes'].forEach(id=>$(id).addEventListener('input',()=>{ client={name:$('c_name').value,notes:$('c_notes').value}; store.set('offre.client',client); }));
 $('clear').onclick=()=>{ if(!list.length||confirm('Vider la liste de matériel ?')){ list=[]; saveList(); } };
 function openList(){ $('drawer').hidden=false; $('scrim').hidden=false; }

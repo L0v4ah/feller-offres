@@ -29,6 +29,7 @@ function search(q, limit = 15) {
   return out.slice(0, limit).map(it => it[1]).map(it => ({
     fellerNr: it.f, eNo: it.e || null, description: it.d, montage: it.m || null, nouveaute: it.nw || null,
     disponible: !!it.buy, remplacePar: it.fu || null,
+    piecesDetachees: (it.parts || []).slice(0, 8).map(x => `${x[2] > 1 ? x[2] + '× ' : ''}${x[3]} (${x[0]}, ELDAS ${x[1] || '—'})`).join('; ') || undefined,
     caracteristiques: (it.tech || []).filter(x => /montage|IP|Tension|Courant|raccordement|Compatible|Profondeur minimale/i.test(x[0]) && !/false/.test(x[1])).map(x => `${x[0]}: ${x[1]}${x[2] ? ' ' + x[2] : ''}`).join('; ').slice(0, 300),
     fiche: it.url || `https://online-katalog.feller.ch/fr/product?fnr=${encodeURIComponent(it.f)}`
   }));
@@ -64,6 +65,7 @@ PHOTO (si le message contient une image) :
 - Si tu n'es pas sûr de l'identification, dis-le en une ligne et propose les 2 hypothèses les plus probables.
 
 REMPLACEMENT :
+- Pièces détachées : la recherche renvoie piecesDetachees (composition d'un set complet ou d'une combinaison : intérieur/mécanisme, kit frontal, cadre de recouvrement, plaque de fixation, suppléments de montage, avec quantités). Quand Nicola demande une pièce détachée, une touche, un cadre ou « en détaché », cite ces pièces avec leur N° Feller et ELDAS, et propose-les dans propose_list avec les quantités de la composition.
 - Pour une référence ancienne ou plus disponible, utilise le champ remplacePar renvoyé par la recherche ; sinon cherche la même fonction dans la ligne de design actuelle (EDIZIOdue → EDIZIO.liv SNAPFIX si le client veut moderniser). Réponds « Remplaçant : … · ELDAS … » puis les accessoires à prévoir (kit frontal, cadre) si la ligne change.
 
 CONCURRENCE (le client utilise Hager, ABB, Legrand, Siemens, Zaptec, easee, Wallbox…) :
@@ -81,6 +83,7 @@ MÉTHODE DE VENTE (configurateur conversationnel) :
 BORNES DE RECHARGE (projet e-mobilité) :
 - Les bornes sont dans le catalogue (source grossiste) : « Station de charge Wallbox 11kW câble / 22kW prise T2 » (villa, Wi-Fi + app), « Station de charge EVlink Pro AC 22kW Master / Extender / câble 5m / FI type A1 ou B1 / Exten.dyn. » (collectif, entreprise ; 1 Master pilote jusqu'à 7 Extender ; Exten.dyn. = gestion dynamique), « EVlink Pro 2×CCS2 » (DC rapide), « Peak Controller » (gestion de charge villa), « Système gestion de charge EVlink ≤15 / ≤50 stations », « Carte RFID EVlink », « Modem EVlink » (4G), « Pied de support / Kit de montage EVlink Pro AC ». Cherche avec ces mots. Pour la configuration fine (couleurs, options, offre projet), renvoie aussi vers https://www.se.com/ch/fr/work/products/tools/product-configurators/ .
 - Cadrage avec ask_user en 2 séries de 3 questions maximum : (a) contexte : villa / PPE-immeuble / entreprise-flotte / public ; nombre de places aujourd'hui et à terme ; puissance disponible au raccordement (A) ou à préciser. (b) technique : AC (11/22 kW) ou DC (charge rapide) ; câble attaché ou prise T2 ; connectivité (hors ligne, Wi-Fi, LAN, 4G) ; gestion de charge : aucune / statique / dynamique (mesure en tête d'installation) ; facturation et accès : libre, RFID, backend OCPP.
+- Compatibilité gestion de charge (ne jamais mélanger) : Wallbox Schneider Charge (villa) → gestion dynamique avec le module « Peak Controller » (pince de mesure en tête d'installation) ; EVlink Pro AC → répartition statique incluse dans la borne Master qui pilote ses Extenders en Ethernet, gestion dynamique multi-bornes avec le « Régulateur de charge EVlink » (EcoStruxure EV Charging Expert 5 / 15 / 50 / 250 stations) + compteur en tête (PowerTag / PM) ; EVlink Pro DC se pilote aussi par EV Charging Expert. Le « régulateur anti-tripping 3P » concerne l'ancienne EVlink Home, pas la Wallbox actuelle. Fixation : au mur (kit de montage mural) ou sur pied (pied de support 1 ou 2 stations + kit de montage au sol, kit 2e station) ; accessoires câble : support mural pour câble, protection antivol, porte-câbles, boîte de raccordement IP66.
 - Puis livre : architecture recommandée en 4-6 lignes, liste de matériel catalogue (disjoncteur par borne, différentiel type A-EV ou B selon la borne, compteur/mesure pour gestion dynamique, coffret, câblage à prévoir), points à vérifier (puissance de raccordement, OIBT/NIBT, avis d'installation au GRD, câble de données vers l'armoire pour la gestion dynamique), et 2 upsells max (ex. préparation des places futures : tubes et réserve de modules ; borne connectée pour facturation locataires).`;
 
 const TOOLS = [{

@@ -8,7 +8,7 @@ Production : https://feller-offres.vercel.app (dépôt GitHub `L0v4ah/feller-off
 - `api/chat.js` — fonction serverless Vercel : l'assistant (Claude API) avec outil de recherche dans le catalogue.
 - `api/_data/catalogue.json` — même catalogue, lu par la fonction serveur.
 - `vercel.json` — configuration (inclusion du catalogue dans la fonction, cache de data.js).
-- `build_data.py` — reconstruit `data.js` et `api/_data/catalogue.json` à partir de `data/feller-catalogue-fr.json` (+ `data/feller-details-fr.json` si présent).
+- `build_data.py` — reconstruit `data.js` et `api/_data/catalogue.json` à partir de `data/feller-catalogue-fr.json` + `data/feller-details-fr.json` (fiches techniques, accessoires) + `data/feller-vars-fr.json` (variantes de couleur) + `data/feller-dis-fr.json` (composition / pièces détachées) + `data/ev-sonepar.json` (bornes EVlink, source Sonepar).
 
 ## Variables d'environnement Vercel (Settings → Environment Variables)
 - `ANTHROPIC_API_KEY` — clé API Anthropic (console.anthropic.com).
@@ -22,7 +22,7 @@ Après ajout d'une variable : Deployments → Redeploy.
 3. Commit `data.js` et `api/_data/catalogue.json`.
 
 ## Limites
-- Catalogue Feller + distribution Schneider CH (Resi9, PrismaSeT, Pragma, Mureva, Clario). Bornes EVlink, TGBT et onduleurs hors base : renvoi vers les configurateurs Schneider.
+- Catalogue Feller + distribution Schneider CH (Resi9, PrismaSeT, Pragma, Mureva, Clario) + bornes EVlink / Wallbox (E-No Sonepar). TGBT et onduleurs hors base : renvoi vers les configurateurs Schneider.
 - Pas de prix ni de stock grossiste.
 - Liste de matériel en localStorage (par navigateur). Code d'accès : protège l'assistant (vérifié côté serveur) ; la recherche elle-même reste accessible sans code à qui connaît l'URL.
 - Dictée : Chrome, Edge, Safari (pas Firefox).
