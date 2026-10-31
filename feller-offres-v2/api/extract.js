@@ -16,6 +16,9 @@ Lecture d'un plan :
 Lecture d'un cahier des charges :
 - Relève les quantités écrites, pièce par pièce si le texte le permet, sinon par zone ou « Général ».
 - Repère la marque / ligne de design demandée (EDIZIOdue, EDIZIO.liv, STANDARDdue, ELEMENT, NEVO, « ou équivalent »), la couleur, encastré/apparent, le niveau connecté (KNX, Wiser, Matter, classique), le type de bâtiment, les exigences IP (extérieur, humide), la marque concurrente citée (Hager, Gira…).
+- Si le document cite des numéros d'article (Feller 3401.1.FMI.61, Schneider A9…, Hager, Legrand, N° ELDAS 9 chiffres…), recopie-les EXACTEMENT dans ref (et la marque dans brand) sur la ligne concernée : l'offre doit reprendre les mêmes références que la soumission.
+- Si le devis est découpé en positions / chapitres (ex. « 232.1 Appareillage », « Pos. 4.2 Tableau »), reporte le numéro et le titre dans section de la pièce ou du lot, pour que l'offre suive la même structure.
+- Un poussoir de sonnette, une sonnette, un carillon = kind sonnette (pas poussoir).
 - Mets dans questions les points flous à clarifier avec l'architecte (maximum 6, courts).
 
 Règles :
@@ -41,12 +44,14 @@ const TOOL = {
       } },
       rooms: { type: 'array', items: { type: 'object', required: ['name', 'items'], properties: {
         name: { type: 'string' },
+        section: { type: 'string', description: 'position ou chapitre du devis (ex. 232.1 Appareillage) si le document en a' },
         items: { type: 'array', items: { type: 'object', required: ['kind', 'qty'], properties: {
-          kind: { type: 'string', enum: KINDS }, qty: { type: 'integer' }, detail: { type: 'string' }, confidence: { type: 'string', enum: ['haute', 'moyenne', 'basse'] } } } },
+          kind: { type: 'string', enum: KINDS }, qty: { type: 'integer' }, detail: { type: 'string' }, confidence: { type: 'string', enum: ['haute', 'moyenne', 'basse'] },
+          ref: { type: 'string', description: 'numéro d\'article cité tel quel dans le document, sinon vide' }, brand: { type: 'string', description: 'marque de la référence citée (Feller, Schneider, Hager…)' } } } },
         combos: { type: 'array', items: { type: 'object', required: ['layout', 'parts'], properties: {
           layout: { type: 'string', enum: ['2x1', '1x2', '3x1', '1x3', '2x2'] }, parts: { type: 'array', items: { type: 'string', enum: KINDS } }, qty: { type: 'integer' }, detail: { type: 'string' } } } }
       } } },
-      other: { type: 'array', items: { type: 'object', required: ['kind', 'qty'], properties: { kind: { type: 'string', enum: OTHER }, qty: { type: 'integer' }, detail: { type: 'string' }, room: { type: 'string' } } } },
+      other: { type: 'array', items: { type: 'object', required: ['kind', 'qty'], properties: { kind: { type: 'string', enum: OTHER }, qty: { type: 'integer' }, detail: { type: 'string' }, room: { type: 'string' }, section: { type: 'string' }, ref: { type: 'string' }, brand: { type: 'string' } } } },
       questions: { type: 'array', items: { type: 'string' } }
     }
   }

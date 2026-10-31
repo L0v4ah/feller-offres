@@ -292,6 +292,9 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 .client{display:grid;gap:8px;margin-bottom:14px}
 .client input,.client textarea{width:100%;border:1px solid var(--line-2);border-radius:14px;padding:9px 12px;background:var(--float)}
 .client textarea{resize:vertical;min-height:40px}
+.crow .lbl{margin-top:6px;width:100%;max-width:520px;border:1px dashed var(--line-2);border-radius:10px;padding:6px 10px;background:var(--float);font:inherit;font-size:13px}.crow .lbl:focus{border-style:solid;outline:none;border-color:var(--pine)}
+.prow2 .refok{color:#2e9e5b}.prow2 .refdiff{color:#b8641b}.csec .sec{display:inline-block;background:var(--well);border-radius:8px;padding:1px 8px;font-size:12px;color:var(--ink-2);margin-right:4px}
+.lot{margin-top:6px}.lothead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0 4px;border-bottom:2px solid var(--line-2)}.lothead .lotname{border:0;background:none;font:inherit;font-weight:700;font-size:14px;color:var(--text);padding:0;cursor:pointer;text-align:left;text-decoration:underline dotted var(--line-2);text-underline-offset:3px}.lothead small{color:var(--ink-3);font-size:12px}.lothead .lotact{margin-left:auto;display:flex;gap:4px}.lothead .lotact .btn.small{padding:3px 8px;font-size:12px;height:auto}.item.off{opacity:.5}.item .note{color:var(--pine);cursor:pointer;font-style:italic}.item .addnote{border:0;background:none;color:var(--faint);font:inherit;font-size:12px;padding:0;cursor:pointer;text-align:left;margin-top:2px}.item .addnote:hover{color:var(--pine)}
 .item{display:grid;grid-template-columns:48px minmax(0,1fr) 64px 28px;gap:10px;align-items:center;border-bottom:1px solid var(--line);padding:9px 0}
 .item img{width:48px;height:48px;object-fit:contain;border-radius:12px;border:1px solid var(--line)}
 .item .d{font-size:13.5px;line-height:1.3}
@@ -305,6 +308,8 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 .tools h3{font-size:13px;font-weight:600;color:var(--faint);margin:0 0 6px}
 .tools a{display:block;font-size:13.5px;padding:5px 0;text-decoration:none;color:var(--text)}
 .tools a span{color:var(--faint);font-size:12.5px;display:block}
+.toast .tick,.toast .cross{font-style:normal;font-weight:700;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex:none}.toast .tick{background:#2e9e5b;color:#fff}.toast .cross{background:#d9463e;color:#fff}.toast.err{background:#4a1f1c}
+.prog{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}.prog li{display:flex;gap:12px;align-items:flex-start}.prog li i{flex:none;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;font-size:14px;background:var(--well);color:var(--ink-3)}.prog li.done i{background:#2e9e5b;color:#fff}.prog li.err i{background:#d9463e;color:#fff}.prog li.run i{border:3px solid var(--line);border-top-color:var(--pine);background:transparent;animation:spin 0.9s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.prog li div{display:flex;flex-direction:column;gap:2px}.prog li b{font-weight:600}.prog li.wait b{color:var(--ink-3);font-weight:500}.prog li span{font-size:13px;color:var(--ink-3)}.prog li .elapsed{font-variant-numeric:tabular-nums;color:var(--pine);font-weight:600}
 .toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:var(--on-ink);padding:10px 18px;border-radius:999px;font-size:14px;z-index:85;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-pop);max-width:min(92vw,560px);white-space:nowrap}
 .toast span{overflow:hidden;text-overflow:ellipsis}
 .toast button{flex:none}
@@ -333,10 +338,11 @@ body:has(#drawer:not([hidden])) .toast{bottom:auto;top:14px}
 .cqty output{font-size:18px;font-weight:600}.cqty small{grid-column:1/-1;color:var(--faint);font-size:12px}
 @media (max-width:700px){.crow{grid-template-columns:1fr}.cqty{justify-items:start;grid-template-columns:36px 44px 36px}}
 /* ---------- print ---------- */
+#pdfm{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:95;display:flex;align-items:flex-end;justify-content:center;padding:0}#pdfm[hidden]{display:none}#pdfm .pdfbox{background:var(--float);border-radius:22px 22px 0 0;width:min(100%,760px);max-height:92vh;overflow:auto;padding:16px 18px 24px;box-shadow:var(--shadow-pop)}@media(min-width:701px){#pdfm{align-items:center;padding:20px}#pdfm .pdfbox{border-radius:22px}}#pdfm .pdfhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}#pdfm .pdfhead b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#pdfm .pdfact{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}#pdfm .pdfact .btn{flex:1 1 150px;justify-content:center;text-align:center}#pdfm .pdfprev{width:100%;height:60vh;border:1px solid var(--line);border-radius:12px;margin-top:12px;background:#fff}
 #print{display:none}
 @media print{
   body{background:#fff!important;background-image:none!important;color:#000}
-  .bar,.stage,#gate,#drawer,#scrim,#lb,.toast{display:none!important}
+  .bar,.stage,#gate,#drawer,#scrim,#lb,.toast,#pdfm{display:none!important}
   #print{display:block;padding:0;font-size:12px;font-family:var(--font)}
   #print h1{font-size:20px;margin:0 0 2px}
   #print .sub{color:#555;margin-bottom:18px}
@@ -556,7 +562,9 @@ const FLOWS = {
     {key:'system', q:'PrismaSeT XS ou XL ?', s:'XS = petit tableau de 1 à 6 rangées (18 ou 24 UM). XL = coffret mural à équiper, 1 à 3 champs.', opts:[{v:'XS',t:'PrismaSeT XS, petit tableau',s:'Jusqu\'à 6 rangées · porte pleine, transparente ou sans',img:'SE-822100049',rec:'Tertiaire courant'},{v:'IP44',t:'PrismaSeT XL, avec porte IP44',s:'Locaux techniques, humidité',img:'ABWRS103'},{v:'IP30',t:'PrismaSeT XL, sans porte IP30',s:'Local sec, accès fréquent',img:'ABWRS103L04'}], when:a=>a.fam==='PrismaSeT'},
     {key:'perrow', q:'Largeur des rangées ?', opts:[{v:'24',t:'24 modules',s:'550 mm de large',rec:'Standard'},{v:'18',t:'18 modules',s:'426 mm de large, gaine étroite'}], compact:true, when:a=>a.fam==='PrismaSeT'&&a.system==='XS'},
     {key:'door', q:'Quelle porte ?', opts:[{v:'P',t:'Porte pleine',rec:'Standard'},{v:'T',t:'Porte transparente',s:'Lecture des appareils sans ouvrir'},{v:'S',t:'Sans porte',s:'Local technique fermé'}], compact:true, when:a=>a.fam==='PrismaSeT'&&a.system==='XS'},
-    {key:'logement', q:'Quel logement ?', s:'Ça fixe le nombre de circuits de base (prises et lumière). Tu ajustes ensuite.', opts:[{v:'studio',t:'Studio / 2 pièces',s:'4 circuits'},{v:'appart',t:'Appartement 3-4 pièces',s:'6 circuits',rec:'Le cas courant'},{v:'grand',t:'5 pièces et plus',s:'8 circuits'},{v:'villa',t:'Villa',s:'10 circuits'}], compact:true},
+    {key:'logement', q:'Quel logement ?', s:'Ça propose un nombre de circuits de base ; tu précises l\'éclairage et les prises juste après.', opts:[{v:'studio',t:'Studio / 2 pièces',s:'1 éclairage + 2 prises'},{v:'appart',t:'Appartement 3-4 pièces',s:'2 éclairage + 4 prises',rec:'Le cas courant'},{v:'grand',t:'5 pièces et plus',s:'2 éclairage + 6 prises'},{v:'villa',t:'Villa',s:'3 éclairage + 8 prises'}], compact:true},
+    {key:'ecl', q:'Combien de circuits d\'éclairage ?', s:'Un circuit par zone (RDC, étage, extérieur…). FI/LS 13 A 1 module par circuit. Tu nommes les circuits dans le composeur.', opts:[{v:'1',t:'1 circuit',s:'Studio'},{v:'2',t:'2 circuits',s:'Appartement',rec:'Le cas courant'},{v:'3',t:'3 circuits',s:'Grand appartement, villa'},{v:'4',t:'4 circuits et plus',s:'Villa sur 2 niveaux + extérieur'}], compact:true},
+    {key:'prises', q:'Combien de circuits de prises ?', s:'13 A pour séjour et chambres, 16 A pour cuisine et pièces humides. Les équipements suivants s\'ajoutent à part.', opts:[{v:'2',t:'2 circuits',s:'Studio'},{v:'4',t:'4 circuits',s:'Appartement 3-4 pièces',rec:'Le cas courant'},{v:'6',t:'6 circuits',s:'5 pièces et plus'},{v:'8',t:'8 circuits',s:'Villa'}], compact:true},
     {key:'equip', q:'Quels équipements à alimenter ?', s:'Chaque équipement ajoute son circuit, au bon ampérage.', multi:true, opts:[{v:'cuisiniere',t:'Cuisinière / four',s:'16 A triphasé'},{v:'lavelinge',t:'Lave-linge / sèche-linge',s:'16 A'},{v:'lavevaisselle',t:'Lave-vaisselle',s:'13 A'},{v:'boiler',t:'Boiler',s:'13 A triphasé + contacteur tarif'},{v:'pac',t:'Pompe à chaleur',s:'20 A triphasé'},{v:'borne',t:'Borne de recharge 11 kW',s:'16 A triphasé'},{v:'exterieur',t:'Extérieur / jardin',s:'16 A, différentiel'},{v:'stores',t:'Stores / volets',s:'13 A'}], compact:true},
     {key:'options', q:'Options à proposer ?', s:'Ce sont les plus-values faciles à argumenter.', multi:true, opts:[{v:'spd',t:'Protection surtension',s:'Parafoudre type 2 : protège PAC, électronique, borne',rec:'Recommandé'},{v:'media',t:'Zone multimédia',s:'Routeur, fibre, switch dans le tableau'},{v:'reserve',t:'Réserve 20 %',s:'Une rangée de plus pour l\'avenir'},{v:'tl',t:'Télérupteurs',s:'Lumières sur poussoirs'}], compact:true},
     {key:'perrow', q:'Modules par rangée ?', opts:[{v:'13',t:'13 modules',rec:'Standard CX'},{v:'18',t:'18 modules',s:'Plus de réserve'}], compact:true, when:a=>a.system==='CX'},
@@ -778,7 +786,10 @@ function showGate(msg){ $('gate').hidden=false; $('gateerr').textContent=msg||''
 if(!accessCode) showGate('');
 $('gateform').onsubmit=e=>{ e.preventDefault(); const c=$('gatecode').value.trim(); if(!c) return; accessCode=c; store.set('offre.code',c); $('gate').hidden=true; };
 
-function toast(msg, action){ document.querySelectorAll('.toast').forEach(t=>t.remove()); const t=document.createElement('div'); t.className='toast'; t.innerHTML=`<span>${esc(msg)}</span>${action?`<button type="button">${esc(action.label)}</button>`:''}`; if(action) t.querySelector('button').onclick=()=>{action.fn(); t.remove();}; document.body.appendChild(t); setTimeout(()=>t.remove(),2600); }
+function toast(msg, action, type){ document.querySelectorAll('.toast').forEach(t=>t.remove()); const t=document.createElement('div'); t.className='toast'+(type?' '+type:''); t.innerHTML=`${type==='ok'?'<i class="tick">✓</i>':type==='err'?'<i class="cross">✕</i>':''}<span>${esc(msg)}</span>${action?`<button type="button">${esc(action.label)}</button>`:''}`; if(action) t.querySelector('button').onclick=()=>{action.fn(); t.remove();}; document.body.appendChild(t); setTimeout(()=>t.remove(),type==='err'?4200:2600); }
+// Progression lisible : chaque étape avec ✓ (fait), anneau (en cours), ✕ (erreur) ; le temps écoulé se met à jour seul.
+function progressHtml(steps, startedAt){ return `<ol class="prog">${steps.map(st=>`<li class="${st.st||'wait'}"><i>${st.st==='done'?'✓':st.st==='err'?'✕':st.st==='run'?'':'·'}</i><div><b>${esc(st.t)}</b>${st.s?`<span>${esc(st.s)}</span>`:''}${st.st==='run'&&startedAt?`<span class="elapsed" data-start="${startedAt}">0 s</span>`:''}</div></li>`).join('')}</ol>`; }
+setInterval(()=>{ document.querySelectorAll('.elapsed[data-start]').forEach(el=>{ const sec=Math.round((Date.now()-(+el.dataset.start))/1000); el.textContent=sec+' s'+(el.dataset.hint?' · '+el.dataset.hint:''); }); },1000);
 
 /* =============== vues =============== */
 let lastRendered=null, forceTop=false;
@@ -791,15 +802,31 @@ function render(scroll){
   else if(view.name==='results') v.innerHTML=resultsHtml();
   else if(view.name==='composer') v.innerHTML=composerHtml();
   else if(view.name==='import') v.innerHTML=importHtml();
+  else if(view.name==='photo') v.innerHTML=photoHtml();
   else if(view.name==='project') v.innerHTML=projectHtml();
   lastRendered=view.name;
   const mode=scroll||(same?'keep':'top');
   if(mode==='keep') window.scrollTo(0,y); else window.scrollTo({top:0});
+  persistNav();
 }
-function go(nv){ view=nv; forceTop=true; render('top'); }
+// Navigation : pile de vues + historique du navigateur. Le bouton « retour » du téléphone revient à l'écran précédent (sans quitter l'app ni perdre les données),
+// et la vue en cours est mémorisée : après un rechargement ou un changement d'app, on reprend exactement là où on était.
+let hist=[];
+function persistNav(){ try{ const v={...view}; if(v.busy){ v.busy=false; v.error='Lecture interrompue (page rechargée) : relance le fichier.'; } sessionStorage.setItem('offre.nav', JSON.stringify({view:v, hist:hist.slice(-12)})); localStorage.setItem('offre.nav', JSON.stringify({view:v, hist:hist.slice(-12), t:Date.now()})); }catch(e){} }
+function go(nv, opt){ opt=opt||{}; if(!opt.replace && view && !(view.name==='home'&&nv.name==='home')) { hist.push(view); if(hist.length>40) hist.shift(); } view=nv; forceTop=true; render('top'); if(!opt.replace){ try{ history.pushState({app:1,n:hist.length},''); }catch(e){} } }
+function goBack(){ if(hist.length){ view=hist.pop(); if(view.busy){ view.busy=false; } forceTop=true; render('top'); } else { view={name:'home'}; forceTop=true; render('top'); } }
+window.addEventListener('popstate',()=>{
+  // Priorité aux panneaux ouverts (liste, assistant sur mobile, fiche, zoom) : le retour les ferme d'abord.
+  if(!$('lb').hidden||!$('pm').hidden||!$('drawer').hidden||($('pdfm')&&!$('pdfm').hidden)||(chatOpen&&window.innerWidth<=1000)){ $('lb').hidden=true; $('pm').hidden=true; if($('pdfm')) $('pdfm').hidden=true; closeList(); if(window.innerWidth<=1000) closeChat(); try{ history.pushState({app:1,n:hist.length},''); }catch(e){} return; }
+  if(hist.length){ goBack(); try{ history.pushState({app:1,n:hist.length},''); }catch(e){} }
+  else if(view.name!=='home'){ view={name:'home'}; forceTop=true; render('top'); try{ history.pushState({app:1,n:0},''); }catch(e){} }
+  // sinon : on est à l'accueil et la pile est vide → le navigateur quitte réellement la page.
+});
+try{ history.replaceState({app:1,root:1},''); history.pushState({app:1,n:0},''); }catch(e){}
 
 // Sections de l'accueil : parcours guidés, préréglages et familles de produits. Ordre et masquage personnalisables (bouton « Organiser »).
 const SECTIONS = [
+  {id:'photo', t:'Photo express', s:'Concurrent, pièce à remplacer, tableau, étiquette → variante Feller / Schneider', imgq:['Combinaison ENC EDIZIOdue 3/1P+T13 blanc','Disjoncteur différentiel Clario iC40 2P 230V C 13A'], k:'Bêta', open:()=>go({name:'photo'})},
   {id:'import', t:'Plan, photo ou cahier des charges', s:'Relevé automatique pièce par pièce → liste de matériel', imgq:['Plaque de fixation grd.I-I','Combinaison ENC EDIZIOdue 3/1P+3×T13 blanc'], k:'Bêta', open:()=>go({name:'import'})},
   {id:'appareillage', flow:'appareillage', t:'Appareillage', s:'Interrupteurs, prises, USB, variateurs', imgs:['7563.GMI.A.61','87303.GMI.A.61']},
   {id:'tableau', flow:'tableau', t:'Tableau & protection', s:'Resi9, PrismaSeT, Clario iC40 — composeur par usage', imgs:['R9H10937B','A9D67410']},
@@ -1010,24 +1037,27 @@ function catalogueLinks(q){ const e=encodeURIComponent((q||'').replace(/\b(ENC|A
 /* =============== composeur de tableau =============== */
 const UM_PER_ROW = {Resi9:12, PrismaSeT:24, Mureva:12};
 const COMPONENTS = [
-  {g:'Circuits prises et lumière', k:'fils13', label:'Circuit 13 A avec différentiel (FI/LS 1 module)', s:'Prises, lumière, lave-vaisselle, stores', q:'Clario iC40 13A 0.03A 1UM', um:1, def:4, nw:true},
-  {g:'Circuits prises et lumière', k:'fils16', label:'Circuit 16 A avec différentiel (FI/LS 1 module)', s:'Cuisine, salle de bain, lave-linge, extérieur', q:'Clario iC40 16A 0.03A 1UM', um:1, def:2, nw:true},
-  {g:'Circuits prises et lumière', k:'ls13', label:'Circuit 13 A simple (sans différentiel)', s:'Lumière protégée par un FI de groupe', q:'Clario iC40 13A (C) 1LN', um:1, def:0},
-  {g:'Gros consommateurs triphasés', k:'ls16_3', label:'Circuit 16 A triphasé', s:'Cuisinière, four, borne 11 kW', q:'Clario iC40 16A (C) 3LN', um:3, def:0},
-  {g:'Gros consommateurs triphasés', k:'ls13_3', label:'Circuit 13 A triphasé', s:'Boiler', q:'Clario iC40 13A (C) 3LN', um:3, def:0},
-  {g:'Gros consommateurs triphasés', k:'ls20_3', label:'Circuit 20 A triphasé', s:'Pompe à chaleur, sèche-linge puissant', q:'Clario iC40 20A (C) 3LN', um:3, def:0},
-  {g:'Gros consommateurs triphasés', k:'fi40', label:'Différentiel de groupe 40 A, 30 mA', s:'Protège les circuits triphasés ci-dessus', q:'interrupteur differentiel iID 40A 30mA', um:4, def:0},
-  {g:'Gros consommateurs triphasés', k:'fi63', label:'Différentiel de groupe 63 A, 30 mA', s:'Si plus de 40 A en tête', q:'interrupteur differentiel iID 63A 30mA 4L', um:4, def:0},
-  {g:'Commande', k:'ict', label:'Contacteur 25 A (tarif nuit, boiler)', s:'', q:'contacteur iCT 25A 2F', um:1, def:0},
-  {g:'Commande', k:'tl', label:'Télérupteur 16 A', s:'Lumières sur poussoirs', q:'telerupteur TL', um:1, def:0},
+  {g:'Éclairage', k:'ecl13', label:'Circuit éclairage 13 A avec différentiel (FI/LS 1 module)', s:'Un circuit par zone : RDC, étage, extérieur…', q:'Clario iC40 13A 0.03A 1UM', um:1, def:2, nw:true, comb:'1LN', ph:'Éclairage RDC, Éclairage étage'},
+  {g:'Éclairage', k:'ls13', label:'Circuit éclairage 13 A simple (disjoncteur seul)', s:'Lumière protégée par un FI de groupe', q:'Clario iC40 13A (C) 1LN', um:1, def:0, comb:'1LN', ph:'Éclairage cave, Éclairage garage'},
+  {g:'Éclairage', k:'ls10', label:'Circuit éclairage 10 A simple (disjoncteur seul)', s:'Petits circuits lumière, LED', q:'Clario iC40 10A (C) 1LN', um:1, def:0, comb:'1LN', ph:'Éclairage couloir'},
+  {g:'Prises', k:'fils13', label:'Circuit prises 13 A avec différentiel (FI/LS 1 module)', s:'Séjour, chambres, bureau, lave-vaisselle, stores', q:'Clario iC40 13A 0.03A 1UM', um:1, def:2, nw:true, comb:'1LN', ph:'Prises séjour, Prises chambres'},
+  {g:'Prises', k:'fils16', label:'Circuit prises 16 A avec différentiel (FI/LS 1 module)', s:'Cuisine, salle de bain, lave-linge, extérieur', q:'Clario iC40 16A 0.03A 1UM', um:1, def:2, nw:true, comb:'1LN', ph:'Prises cuisine, Lave-linge'},
+  {g:'Gros consommateurs triphasés', k:'ls16_3', label:'Circuit 16 A triphasé', s:'Cuisinière, four, borne 11 kW', q:'Clario iC40 16A (C) 3LN', um:3, def:0, comb:'3LN', ph:'Cuisinière'},
+  {g:'Gros consommateurs triphasés', k:'ls13_3', label:'Circuit 13 A triphasé', s:'Boiler', q:'Clario iC40 13A (C) 3LN', um:3, def:0, comb:'3LN', ph:'Boiler'},
+  {g:'Gros consommateurs triphasés', k:'ls20_3', label:'Circuit 20 A triphasé', s:'Pompe à chaleur, sèche-linge puissant', q:'Clario iC40 20A (C) 3LN', um:3, def:0, comb:'3LN', ph:'Pompe à chaleur'},
+  {g:'Gros consommateurs triphasés', k:'fi40', label:'Différentiel de groupe 40 A, 30 mA', s:'Protège les circuits triphasés ci-dessus', q:'interrupteur differentiel iID 40A 30mA', um:4, def:0, comb:'FI'},
+  {g:'Gros consommateurs triphasés', k:'fi63', label:'Différentiel de groupe 63 A, 30 mA', s:'Si plus de 40 A en tête', q:'interrupteur differentiel iID 63A 30mA 4L', um:4, def:0, comb:'FI'},
+  {g:'Commande', k:'ict', label:'Contacteur 25 A (tarif nuit, boiler)', s:'', q:'contacteur iCT 25A 2F', um:1, def:0, ph:'Boiler tarif nuit'},
+  {g:'Commande', k:'tl', label:'Télérupteur 16 A', s:'Lumières sur poussoirs', q:'telerupteur TL', um:1, def:0, ph:'Couloir, Escalier'},
   {g:'Commande', k:'min', label:'Minuterie', s:'Escalier, ventilation', q:'minuterie', um:1, def:0},
   {g:'Options et finitions', k:'spd', label:'Protection surtension (parafoudre type 2)', s:'Protège PAC, électronique, borne', q:'protection surtension', um:2, def:0, up:true},
   {g:'Options et finitions', k:'media', label:'Zone multimédia (plaque perforée + rail)', s:'Routeur, fibre, switch : compte 1 rangée', q:'Plaque perforée Resi9 appareils média', um:12, def:0, up:true},
 ];
+const UM_HELP='UM = unité modulaire : la largeur d\'un module sur le rail DIN (18 mm). 1LN = 1 UM, 3LN = 3 UM, différentiel 4 pôles = 4 UM. Une rangée Resi9 = 12 UM, PrismaSeT = 24 UM (ou 18).';
 // Peignes (barres collectrices) calculés par rangée : 1LN pour les FI/LS 1 module, 3LN pour les circuits triphasés, « alim. gauche » quand un FI de groupe alimente la rangée.
 function combLines(c){
   const perRow=c.perRow||UM_PER_ROW[c.fam]||12, q=k=>c.qty[k]??(COMPONENTS.find(x=>x.k===k)||{}).def??0;
-  const um1=q('fils13')+q('fils16')+q('ls13'), um3=3*(q('ls16_3')+q('ls13_3')+q('ls20_3')), fi=q('fi40')+q('fi63');
+  const sum=t=>COMPONENTS.filter(x=>x.comb===t).reduce((a,x)=>a+q(x.k),0); const um1=sum('1LN'), um3=3*sum('3LN'), fi=sum('FI');
   const rows1=Math.ceil(um1/perRow), rows3=Math.ceil((um3+(fi?4*fi:0))/perRow);
   const len=perRow>=24?'24':perRow>=18?'24':'12'; const L=[];
   if(rows1) L.push({k:'comb1', label:`Peigne 1LN ${len} UM — rangées de FI/LS 1 module`, s:`${um1} modules 1LN → ${rows1} rangée${rows1>1?'s':''}${perRow===18?' · peigne 24 UM à couper':''}`, q:`barre collectrice Clario iC40 1LN ${len} UM`, qty:rows1});
@@ -1058,8 +1088,8 @@ function composerHtml(){
   let used=0; const groups={};
   COMPONENTS.forEach(cp=>{ const qty=c.qty[cp.k]??cp.def; const ref=byF[c.refs[cp.k]] || searchFallback(cp.q,{},3).items[0]; const um=cp.k==='media'?cp.um:(ref? umOf(ref,cp.um):cp.um); used+=qty*um; (groups[cp.g]=groups[cp.g]||[]).push({cp,qty,ref,um}); });
   const free=cap-used; const pct=Math.min(100,Math.round(used/cap*100));
-  const circuits=(c.qty.fils13??0)+(c.qty.fils16??0)+(c.qty.ls13??0)+(c.qty.ls16_3??0)+(c.qty.ls13_3??0)+(c.qty.ls20_3??0);
-  const rowHtml=({cp,qty,ref,um})=>`<div class="crow ${qty?'':'off'}"><div class="cinfo"><b>${esc(cp.label)}${cp.nw?' <span class="tag new" style="background:var(--tomato);color:#fff;margin-left:6px">Nouveau 2026</span>':''}</b>${cp.s?`<span>${esc(cp.s)}</span>`:''}${ref?`<div class="cref"><img src="${esc(ref.img)}" alt="" onerror="this.style.visibility='hidden'"><span>${esc(ref.d)}</span><em class="num">ELDAS ${esc(ref.e||'—')}</em><button class="btn link small" type="button" data-change="${esc(cp.k)}" data-q="${esc(cp.q)}">Changer</button></div>`:`<div class="cref"><span style="color:var(--faint)">Pas de référence trouvée · ${catalogueLinks(cp.q)}</span></div>`}</div><div class="cqty"><button type="button" class="st" data-k="${cp.k}" data-d="-1" aria-label="Moins">−</button><output class="num">${qty}</output><button type="button" class="st" data-k="${cp.k}" data-d="1" aria-label="Plus">+</button><small>${qty*um} UM</small></div></div>`;
+  const circuits=COMPONENTS.filter(x=>x.comb==='1LN'||x.comb==='3LN').reduce((a,x)=>a+(c.qty[x.k]??x.def),0);
+  const rowHtml=({cp,qty,ref,um})=>`<div class="crow ${qty?'':'off'}"><div class="cinfo"><b>${esc(cp.label)}${cp.nw?' <span class="tag new" style="background:var(--tomato);color:#fff;margin-left:6px">Nouveau 2026</span>':''}</b>${cp.s?`<span>${esc(cp.s)}</span>`:''}${ref?`<div class="cref"><img src="${esc(ref.img)}" alt="" onerror="this.style.visibility='hidden'"><span>${esc(ref.d)}</span><em class="num">ELDAS ${esc(ref.e||'—')}</em><button class="btn link small" type="button" data-change="${esc(cp.k)}" data-q="${esc(cp.q)}">Changer</button></div>`:`<div class="cref"><span style="color:var(--faint)">Pas de référence trouvée · ${catalogueLinks(cp.q)}</span></div>`}</div>${qty&&cp.ph?`<input class="lbl" data-k="${cp.k}" placeholder="Désignations : ${esc(cp.ph)}" value="${esc(((c.labels||{})[cp.k])||'')}" aria-label="Désignations des circuits">`:''}</div><div class="cqty"><button type="button" class="st" data-k="${cp.k}" data-d="-1" aria-label="Moins">−</button><output class="num">${qty}</output><button type="button" class="st" data-k="${cp.k}" data-d="1" aria-label="Plus">+</button><small title="${esc(UM_HELP)}">${qty*um} UM</small></div></div>`;
   const sections=Object.entries(groups).map(([g,rows])=>`<h2 class="csec">${esc(g)} <small>${rows.reduce((a,r)=>a+r.qty*r.um,0)} UM</small></h2>${rows.map(rowHtml).join('')}`).join('');
   return `<div class="wiz">
     <div class="crumbs"><button type="button" id="cback">Tableau & protection</button><span class="sep">›</span><span style="color:var(--text)">Composer le tableau</span></div>
@@ -1067,6 +1097,7 @@ function composerHtml(){
     <p class="sub">${circuits} circuits · ${used} modules utilisés sur ${cap} · ${used>cap?`<b style="color:var(--tomato)">ça ne rentre pas : ajoute une rangée ou retire ${used-cap} UM</b>`:free<cap*0.2?`réserve faible (${free} UM) : une rangée de plus est prudent`:`${free} UM de réserve pour l'avenir`}</p>
     <div class="gauge ${used>cap?'over':free<cap*0.2?'tight':''}"><div class="bar"><i style="width:${pct}%"></i></div>
       <div class="rowsel">Rangées <button type="button" class="st" data-rows="-1">−</button><output class="num">${c.rows||3}</output><button type="button" class="st" data-rows="1">+</button> · <span>${perRow} UM / rangée</span> <button type="button" class="btn link small" id="perrow">changer</button></div></div>
+    <p class="hint" style="margin:-2px 0 10px"><b>UM</b> = unité modulaire, la largeur d'un module sur le rail (18 mm) : 1LN = 1 UM, 3LN = 3 UM, FI 4 pôles = 4 UM, une rangée ${esc(c.fam)} = ${perRow} UM.</p>
     <div class="rowsel" style="margin:-4px 0 10px">Tableaux identiques <button type="button" class="st" data-mult="-1">−</button><output class="num">×${c.mult||1}</output><button type="button" class="st" data-mult="1">+</button> <span style="color:var(--ink-3)">· toutes les quantités seront multipliées à l'ajout</span></div>
     <h2 class="csec">Coffret et porte</h2>
     ${shells.map(l=>l.ref?`<div class="crow coffret"><div class="cinfo"><b>${esc(l.label)}</b><div class="cref"><img src="${esc(l.ref.img)}" alt="" onerror="this.style.visibility='hidden'"><span>${esc(l.ref.d)}</span><em class="num">ELDAS ${esc(l.ref.e||'—')}</em><button class="btn link small" type="button" data-change="${esc(l.k)}" data-q="${esc(l.q)}">Changer</button></div></div></div>`:`<div class="crow coffret"><div class="cinfo"><b>${esc(l.label)}</b><div class="cref"><span style="color:var(--faint)">Pas trouvé pour « ${esc(l.q)} » · ${catalogueLinks(l.q)}</span></div></div></div>`).join('')}
@@ -1079,6 +1110,21 @@ function composerHtml(){
 function umOf(ref, dflt){ const m=(ref.d||'').match(/(\d+)\s*UM\b/i); if(m) return +m[1]; if(/\b3LN\b|\b3L\+N\b|\b3P\b/.test(ref.d)) return 3; if(/\b4L\b|\b4P\b/.test(ref.d)) return 4; if(/\b1LN\b|\b1L\+N\b|\b2P\b|\b1P\b/.test(ref.d)) return 1; return dflt; }
 function composerPick(k, it){ view.refs[k]=it.f; view.name='composer'; render(); }
 
+
+/* =============== photo express (bêta) =============== */
+const PHOTO_MODES=[
+  {k:'concurrent', t:'Produit concurrent', s:'Hager, Legrand, Gira… → l\'équivalent Feller / Schneider', ico:'⇄', p:'Photo d\'un produit concurrent. Réponds TRÈS court, sans questions : 1) « C\'est : » marque, gamme, fonction en une ligne ; 2) « Équivalent : » la référence Feller ou Schneider la plus proche trouvée avec search_catalogue (désignation + N° ELDAS) ; 3) « Pourquoi nous : » un seul argument factuel. Puis propose la ou les références avec propose_list (quantité 1, accessoires indispensables seulement).'},
+  {k:'remplacement', t:'Pièce à remplacer', s:'Ancien interrupteur, prise, appareil abîmé → remplaçant actuel', ico:'↻', p:'Photo d\'un appareil existant à remplacer. Réponds TRÈS court, sans questions : 1) « C\'est : » ce que tu reconnais (marque, ligne, fonction, couleur) ; 2) « Remplaçant : » la référence actuelle Feller ou Schneider la plus directe (même encombrement, même fonction) avec N° ELDAS, et la version moderne si différente ; 3) « À vérifier : » une ligne (boîte, profondeur, câblage). Propose avec propose_list.'},
+  {k:'tableau', t:'Tableau existant', s:'Photo du tableau → relevé des appareils et équivalent Resi9 / Clario', ico:'▤', p:'Photo d\'un tableau électrique existant. Relève les appareils visibles par rangée (disjoncteurs, FI, FI/LS, contacteurs, parafoudre…) avec calibres si lisibles. Réponds court, sans questions : « Relevé : » en 4 lignes max, « Proposition : » coffret Resi9 équivalent (rangées) et appareils Clario iC40 / iID correspondants avec N° ELDAS, « Gain : » une phrase (ex. FI/LS 1 module = place gagnée). Propose avec propose_list (quantités).'},
+  {k:'etiquette', t:'Étiquette / plaque', s:'Référence, code-barres, plaque signalétique → l\'article', ico:'⌗', p:'Photo d\'une étiquette, d\'un emballage, d\'un code ou d\'une plaque signalétique. Lis la référence (N° Feller, N° ELDAS, EAN, référence Schneider). Réponds court : l\'article trouvé avec search_catalogue (désignation, N° ELDAS, disponibilité, remplaçant si plus disponible). Propose avec propose_list.'},
+  {k:'piece', t:'Pièce à équiper', s:'Photo d\'une pièce brute ou rénovée → proposition d\'appareillage', ico:'⌂', p:'Photo d\'une pièce (chantier ou rénovation). Déduis la pièce et une configuration réaliste (interrupteurs, prises, stores, USB, détecteur) en EDIZIOdue blanc encastré sauf indication contraire. Réponds court : « Pièce : », « Proposition : » quantités, puis propose_list avec N° ELDAS, et 2 upsells (USB-C, Wiser, détecteur).'},
+];
+function photoHtml(){ return `<div class="wiz"><div class="crumbs"><button type="button" data-home="1">Accueil</button><span class="sep">›</span><span>Photo express</span> <span class="beta">bêta</span></div>
+  <h1>Que montre ta photo ?</h1><p class="sub">Une photo, un choix : la réponse arrive en quelques secondes avec la variante Feller / Schneider et les N° ELDAS, prête à ajouter.</p>
+  <input type="file" id="pxfile" accept="image/*" capture="environment" hidden>
+  <div class="opts">${PHOTO_MODES.map(m=>`<button class="opt" type="button" data-px="${m.k}"><div class="pic ico"><span style="font-size:42px;color:var(--pine)">${m.ico}</span></div><div class="txt"><b>${esc(m.t)}</b><span>${esc(m.s)}</span></div></button>`).join('')}
+  <button class="opt" type="button" data-goimport="1"><div class="pic ico"><span style="font-size:42px;color:var(--pine)">▦</span></div><div class="txt"><b>Plan ou cahier des charges</b><span>Relevé complet pièce par pièce</span></div></button></div></div>`; }
+let pxMode=null;
 /* =============== import plan / photo / cahier des charges (bêta) =============== */
 const PK = {
   interrupteur:{l:'Interrupteur (3/1)', tok:'3/1', q:c=>c.smart==='Wiser'?`interrupteur Wiser ${c.design}`:c.smart==='KNX'?`poussoir KNX ${c.design}`:c.smart==='Matter'?`Matter ${c.design}`:/liv|NEVO|ELEMENT/.test(c.design)?`interrupteur à poussoir 3/1 ${c.design}`:`interrupteur 3/1 ${c.design}`, want:/3\/1|Wiser|KNX|Matter/, avoid:/6\/1|rotatif|cl[ée]|store|sonnerie|1\/3\+/},
@@ -1130,33 +1176,42 @@ async function fileToImages(file, maxPages=4){
 }
 async function shrinkTo(file,max){ const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(file); }); const sc=Math.min(1,max/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=Math.round(img.width*sc); c.height=Math.round(img.height*sc); const g=c.getContext('2d'); g.fillStyle='#fff'; g.fillRect(0,0,c.width,c.height); g.drawImage(img,0,0,c.width,c.height); return c.toDataURL('image/jpeg',0.82); }
 const loaded={}; function loadScript(src,glob){ if(window[glob]) return Promise.resolve(window[glob]); if(loaded[src]) return loaded[src]; return loaded[src]=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=src; s.onload=()=>res(window[glob]); s.onerror=()=>rej(new Error('chargement '+src)); document.head.appendChild(s); }); }
+let lastImport=null;
 async function runImport(files, note, label){
   if(!accessCode){ showGate(''); return; }
-  go({name:'import', busy:true, step:'Lecture du fichier…', label});
+  lastImport={files, note, label};
+  const steps=[{t:'Lecture du fichier', st:'run', s:label||''},{t:'Analyse : pièces, symboles, combinaisons', st:'wait', s:'20 à 60 s selon le document'},{t:'Correspondance avec le catalogue', st:'wait'}];
+  go({name:'import', busy:true, steps, startedAt:Date.now(), label}, {replace: view.name==='import'&&!!view.busy});
+  const iv=view; const setStep=(i,st,extra)=>{ steps[i].st=st; if(extra) steps[i].s=extra; iv.startedAt=Date.now(); if(view===iv) render('keep'); };
   try{
-    let images=[], text='';
-    for(const f of files){ const r=await fileToImages(f); if(Array.isArray(r)) images.push(...r); else { images.push(...r.imgs); if(r.text) text+=`\n\n=== ${f.name} ===\n`+r.text; } }
+    let images=[], text='', pages=0;
+    for(const f of files){ const r=await fileToImages(f); if(Array.isArray(r)) images.push(...r); else { images.push(...r.imgs); pages+=r.pages||0; if(r.text) text+=`\n\n=== ${f.name} ===\n`+r.text; } }
     images=images.slice(0,5);
-    view.step = images.length ? `Analyse ${images.length>1?'des '+images.length+' pages':'du plan'} : symboles, pièces, combinaisons… (30–60 s)` : 'Analyse du cahier des charges… (20–40 s)'; render('keep');
+    setStep(0,'done', images.length?`${images.length} image${images.length>1?'s':''}${pages?' · '+pages+' page'+(pages>1?'s':''):''}`:`texte lu (${Math.round(text.length/1000)} k caractères)`); setStep(1,'run');
     const r=await fetch('/api/extract',{method:'POST',headers:{'content-type':'application/json','x-access-code':accessCode},body:JSON.stringify({images, text, note, name:label})});
     const j=await r.json().catch(()=>({error:'Réponse illisible ('+r.status+')'}));
     if(r.status===401){ accessCode=''; store.set('offre.code',''); showGate("Code d'accès incorrect."); return; }
     if(!r.ok||!j.project) throw new Error((j.error||'Erreur')+(j.detail?' — '+j.detail:''));
     const p=j.project; const h=p.hints||{};
+    const nR=(p.rooms||[]).length, nI=(p.rooms||[]).reduce((a,r)=>a+(r.items||[]).reduce((x,i)=>x+(+i.qty||0),0)+(r.combos||[]).reduce((x,c)=>x+(+c.qty||1),0),0);
+    setStep(1,'done',`${nR} pièce${nR>1?'s':''} · ${nI} appareils`); setStep(2,'run');
     const ctx={design:DESIGNS.slice(0,5).find(d=>norm(h.design||'').includes(norm(d)))||'EDIZIOdue', color:COLOR_OPTS.find(c=>norm(h.color||'').includes(norm(c)))||'blanc', mount:h.mount||'ENC', smart:(h.smart&&h.smart!=='classique')?h.smart:''};
     (p.rooms||[]).forEach(rm=>{ rm.items=(rm.items||[]).filter(x=>x.qty>0); rm.combos=(rm.combos||[]).map(c=>({...c, qty:c.qty||1})); });
-    const v={name:'project', proj:p, ctx, label, usage:j.usage}; remember('Projet : '+(label||'import'), v); go(v);
-  }catch(e){ view.busy=false; view.error=String(e.message||e); render('keep'); }
+    const v={name:'project', proj:p, ctx, label, usage:j.usage}; const gs=projectGroups(v); const miss=gs.filter(g=>!g.pick).length;
+    setStep(2,'done',`${gs.length-miss} référence${gs.length-miss>1?'s':''} trouvée${gs.length-miss>1?'s':''}${miss?' · '+miss+' à choisir à la main':''}`);
+    await new Promise(r=>setTimeout(r,350));
+    remember('Projet : '+(label||'import'), v); iv.busy=false; if(view===iv) { go(v, {replace:true}); toast('Relevé terminé', null, 'ok'); } else toast('Relevé terminé', {label:'Voir', fn:()=>go(v)}, 'ok');
+  }catch(e){ const i=steps.findIndex(x=>x.st==='run'); if(i>=0) steps[i].st='err'; iv.busy=false; iv.error=String(e.message||e); if(view===iv) render('keep'); toast('La lecture a échoué', null, 'err'); }
 }
 function importHtml(){
   const v=view;
   return `<div class="wiz"><div class="crumbs"><button type="button" data-home="1">Accueil</button><span class="sep">›</span><span>Import projet</span> <span class="beta">bêta</span></div>
   <h1>Plan, photo ou cahier des charges</h1>
   <p class="sub">Je lis le document, je relève le matériel pièce par pièce (combinaisons et grandeurs de boîte comprises), puis tu choisis la ligne, la couleur et le niveau connecté : la liste se construit seule.</p>
-  ${v.busy?`<div class="crow"><div class="cinfo"><b>${esc(v.step||'')}</b><span>${esc(v.label||'')}</span><div class="bar" style="margin-top:10px"><i class="indet"></i></div></div></div>`:`
+  ${v.busy?`<div class="crow"><div class="cinfo" style="width:100%"><b>${esc(v.label||'Lecture en cours')}</b>${progressHtml(v.steps||[], v.startedAt)}<p class="hint" style="margin:12px 0 0">Tu peux revenir en arrière : le relevé continue et t'attend dans « Reprendre ».</p></div></div>`:`
   <label class="drop" id="drop"><input type="file" id="impfile" multiple accept="image/*,.pdf,.docx,.txt" hidden><b>Choisir ou glisser un fichier</b><span>Plan PDF ou photo · cahier des charges PDF / Word · photo de chantier · jusqu'à 5 pages lues</span></label>
   <textarea id="impnote" rows="2" placeholder="Précision facultative : « villa, EDIZIO.liv noir, Wiser », « seulement l'étage »…" style="width:100%;margin-top:10px;border:1px solid var(--line-2);border-radius:14px;padding:10px 12px;background:var(--float);font:inherit"></textarea>
-  ${v.error?`<p style="color:var(--tomato);margin:10px 0 0">${esc(v.error)}</p>`:''}
+  ${v.error?`<div class="crow" style="margin-top:10px"><div class="cinfo" style="width:100%">${progressHtml((v.steps||[]).length?v.steps:[{t:'Lecture',st:'err'}])}<p style="color:var(--tomato);margin:8px 0 0">${esc(v.error)}</p>${lastImport?`<div class="actions" style="margin-top:8px"><button class="btn primary small" type="button" id="impretry">Réessayer avec le même fichier</button></div>`:''}</div></div>`:''}
   <div class="actions"><span class="hint">Pas de fichier sous la main ? Essaie :</span><button class="btn small" type="button" data-sample="plan">Plan d'appartement (exemple)</button><button class="btn small" type="button" data-sample="cdc">Cahier des charges (exemple)</button></div>`}
   </div>`;
 }
@@ -1164,7 +1219,7 @@ function projectHtml(){
   const v=view, p=v.proj, c=v.ctx; const rooms=p.rooms||[];
   const sel=(k,opts,lbl)=>`<div class="psel"><small>${lbl}</small><div class="chips">${opts.map(([val,t])=>`<button class="chip" type="button" data-pctx="${k}" data-v="${esc(val)}" aria-pressed="${(c[k]||'')===val}">${esc(t)}</button>`).join('')}</div></div>`;
   const tot=rooms.reduce((a,r)=>a+r.items.reduce((s,x)=>s+(+x.qty||0),0)+r.combos.reduce((s,x)=>s+(+x.qty||0),0),0);
-  const row=(ri,ii,x)=>{ const pk=pkOf(x.kind); return `<div class="prow2 ${x.confidence==='basse'?'low':''}"><span class="n">${esc(pk.l)}${x.detail?`<small>${esc(x.detail)}</small>`:''}</span><span class="g">grd. I</span><span class="cqty"><button type="button" class="st" data-pr="${ri}" data-pi="${ii}" data-d="-1">−</button><output class="num">${x.qty}</output><button type="button" class="st" data-pr="${ri}" data-pi="${ii}" data-d="1">+</button></span></div>`; };
+  const row=(ri,ii,x)=>{ const pk=pkOf(x.kind); const ex=x.ref?refLookup(x.ref):null; return `<div class="prow2 ${x.confidence==='basse'?'low':''}"><span class="n">${esc(pk.l)}${x.detail?`<small>${esc(x.detail)}</small>`:''}${x.ref?`<small class="${ex?'refok':'refdiff'}">${ex?'✓ réf. soumission '+esc(x.ref)+' reprise telle quelle':'⚠ réf. '+esc((x.brand?x.brand+' ':'')+x.ref)+' hors base → équivalent proposé'}</small>`:''}</span><span class="g">grd. I</span><span class="cqty"><button type="button" class="st" data-pr="${ri}" data-pi="${ii}" data-d="-1">−</button><output class="num">${x.qty}</output><button type="button" class="st" data-pr="${ri}" data-pi="${ii}" data-d="1">+</button></span></div>`; };
   const crow=(ri,ci,cb)=>`<div class="prow2"><span class="n">Combinaison ${esc(cb.layout.replace('x','×'))} : ${cb.parts.map(k=>esc(pkOf(k).l)).join(' + ')}${cb.detail?`<small>${esc(cb.detail)}</small>`:''}</span><span class="g">${esc(gradeOf(cb))}</span><span class="cqty"><button type="button" class="st" data-pr="${ri}" data-pc="${ci}" data-d="-1">−</button><output class="num">${cb.qty}</output><button type="button" class="st" data-pr="${ri}" data-pc="${ci}" data-d="1">+</button></span></div>`;
   const others=(p.other||[]);
   return `<div class="wiz">
@@ -1172,19 +1227,24 @@ function projectHtml(){
     <h1>${esc(p.building?p.building[0].toUpperCase()+p.building.slice(1):'Projet')} · ${rooms.length} pièce${rooms.length>1?'s':''} · ${tot} appareils</h1>
     <p class="sub">${esc(p.summary||'')}${p.hints&&p.hints.competitor?` · Concurrent cité : ${esc(p.hints.competitor)}`:''}</p>
     <div class="pconf">${sel('design',DESIGNS.slice(0,5).map(d=>[d,d]),'Ligne')}${sel('color',COLOR_OPTS.map(x=>[x,x]),'Couleur')}${sel('mount',[['ENC','Encastré'],['AP','Apparent']],'Montage')}${sel('smart',[['','Classique'],['Wiser','Wiser'],['KNX','KNX'],['Matter','Matter']],'Niveau')}</div>
-    ${rooms.map((r,ri)=>`<section class="proom"><h2 class="csec">${esc(r.name)} <small>${r.items.reduce((s,x)=>s+(+x.qty||0),0)+r.combos.reduce((s,x)=>s+(+x.qty||0),0)} appareils</small></h2>${r.combos.map((cb,ci)=>crow(ri,ci,cb)).join('')}${r.items.map((x,ii)=>row(ri,ii,x)).join('')}</section>`).join('')}
+    ${rooms.map((r,ri)=>`<section class="proom"><h2 class="csec">${r.section?`<span class="sec">${esc(r.section)}</span> `:''}${esc(r.name)} <small>${r.items.reduce((s,x)=>s+(+x.qty||0),0)+r.combos.reduce((s,x)=>s+(+x.qty||0),0)} appareils</small></h2>${r.combos.map((cb,ci)=>crow(ri,ci,cb)).join('')}${r.items.map((x,ii)=>row(ri,ii,x)).join('')}</section>`).join('')}
     ${others.length?`<section class="proom"><h2 class="csec">Autres lots relevés</h2>${others.map(o=>`<div class="prow2"><span class="n">${esc(OTHER_LBL[o.kind]||o.kind)} ×${o.qty}${o.detail?`<small>${esc(o.detail)}${o.room?' · '+esc(o.room):''}</small>`:''}</span><span class="g"></span><span>${o.kind==='tableau'?'<button class="btn small" type="button" data-pflow="tableau">Composer</button>':o.kind==='borne_recharge'?'<button class="btn small" type="button" data-pflow="bornes">Configurer</button>':o.kind==='parafoudre'?'<button class="btn small" type="button" data-pflow="surtension">Configurer</button>':o.kind==='onduleur'?'<button class="btn small" type="button" data-pflow="asi">Configurer</button>':'<small style="color:var(--ink-3)">hors catalogue</small>'}</span></div>`).join('')}</section>`:''}
     ${(p.questions||[]).length?`<details class="tips" open><summary>Points à clarifier (${p.questions.length})</summary><ul>${p.questions.map(q=>`<li>${esc(q)}</li>`).join('')}</ul></details>`:''}
     <div class="actions"><button class="btn primary" type="button" id="pbuild">Voir la liste de matériel</button><button class="btn" type="button" id="paddall">Tout ajouter à la liste</button><span class="hint">Vérifie les quantités : relevé automatique en bêta.</span></div>
   </div>`;
 }
+const refLookup = ref => { if(!ref) return null; const r=String(ref).trim(); if(byF[r]) return byF[r]; const m=r.replace(/[\s.]/g,''); if(/^\d{9}$/.test(m)&&window.__byE[m]) return window.__byE[m]; const up=r.toUpperCase(); return DB.find(x=>x.f.toUpperCase()===up)||DB.find(x=>x.f.toUpperCase().replace(/[.\s]/g,'')===up.replace(/[.\s]/g,''))||null; };
 function projectGroups(v){
   const c=v.ctx, agg={}, gs=[];
-  (v.proj.rooms||[]).forEach(r=>{ r.items.forEach(x=>{ if(!x.qty||x.kind==='autre') return; const k=PK[x.kind]&&PK[x.kind].alias?PK[x.kind].alias:x.kind; (agg[k]=agg[k]||{q:0,rooms:[]}); agg[k].q+=+x.qty; agg[k].rooms.push(r.name); }); r.combos.forEach(cb=>{ if(!cb.qty) return; const key='combo:'+cb.layout+':'+cb.parts.join('+'); (agg[key]=agg[key]||{q:0,rooms:[],cb}); agg[key].q+=+cb.qty; agg[key].rooms.push(r.name); }); });
-  Object.entries(agg).forEach(([k,a])=>{
-    if(k.startsWith('combo:')){ const q=comboQuery(a.cb,c); const toks=a.cb.parts.map(p=>pkOf(p).tok).filter(Boolean); const want=new RegExp(toks.map(t=>t.replace('x','[x×]').replace('/','\\/')).map(t=>'(?=.*'+t+')').join(''),'i'); gs.push({label:`Combinaison ${a.cb.layout.replace('x','×')} : ${a.cb.parts.map(p=>pkOf(p).l).join(' + ')} · ${gradeOf(a.cb)}`, q, qty:a.q, note:[...new Set(a.rooms)].join(', '), pick:pickBest(q,c,want,/1×2|horizont/i.test(a.cb.layout)?null:/horizont/i)}); return; }
-    const pk=pkOf(k); if(!pk.q) return; const q=(pk.q({...c, design:c.design})+' '+(k==='prise_ext'||k==='interrupteur_ext'?'':(c.mount||''))).replace(/\s+/g,' ').trim();
-    gs.push({label:pk.l, q, qty:a.q, note:[...new Set(a.rooms)].join(', '), pick:pickBest(q,c,pk.want,pk.avoid)});
+  (v.proj.rooms||[]).forEach(r=>{ const sec=r.section||''; r.items.forEach(x=>{ if(!x.qty||x.kind==='autre') return; const k=PK[x.kind]&&PK[x.kind].alias?PK[x.kind].alias:x.kind; const key=(sec?sec+'|':'')+(x.ref?'ref:'+x.ref+'|':'')+k; (agg[key]=agg[key]||{q:0,rooms:[],k,sec,ref:x.ref||'',brand:x.brand||''}); agg[key].q+=+x.qty; agg[key].rooms.push(r.name); }); r.combos.forEach(cb=>{ if(!cb.qty) return; const key=(sec?sec+'|':'')+'combo:'+cb.layout+':'+cb.parts.join('+'); (agg[key]=agg[key]||{q:0,rooms:[],cb,sec}); agg[key].q+=+cb.qty; agg[key].rooms.push(r.name); }); });
+  Object.values(agg).forEach(a=>{
+    const pre=a.sec?a.sec+' · ':'';
+    if(a.cb){ const q=comboQuery(a.cb,c); const toks=a.cb.parts.map(p=>pkOf(p).tok).filter(Boolean); const want=new RegExp(toks.map(t=>t.replace('x','[x×]').replace('/','\\/')).map(t=>'(?=.*'+t+')').join(''),'i'); gs.push({label:`${pre}Combinaison ${a.cb.layout.replace('x','×')} : ${a.cb.parts.map(p=>pkOf(p).l).join(' + ')} · ${gradeOf(a.cb)}`, q, qty:a.q, note:[...new Set(a.rooms)].join(', '), section:a.sec, pick:pickBest(q,c,want,/1×2|horizont/i.test(a.cb.layout)?null:/horizont/i)}); return; }
+    const pk=pkOf(a.k); if(!pk.q) return; const q=(pk.q({...c, design:c.design})+' '+(a.k==='prise_ext'||a.k==='interrupteur_ext'?'':(c.mount||''))).replace(/\s+/g,' ').trim();
+    const rooms=[...new Set(a.rooms)].join(', ');
+    if(a.ref){ const exact=refLookup(a.ref); if(exact){ gs.push({label:`${pre}${pk.l} — réf. ${a.ref} citée dans la soumission`, q:exact.f, qty:a.q, note:rooms+' · même référence que la soumission ✓', section:a.sec, pick:exact, exact:true}); return; }
+      const pick=pickBest(q,c,pk.want,pk.avoid); gs.push({label:`${pre}${pk.l} — équivalent de ${a.brand?a.brand+' ':''}${a.ref}`, q, qty:a.q, note:rooms+` · ⚠ écart : la soumission demande ${a.brand?a.brand+' ':''}${a.ref}, référence inconnue dans notre base → équivalent proposé, à confirmer`, section:a.sec, pick, diff:true}); return; }
+    gs.push({label:pre+pk.l, q, qty:a.q, note:rooms, section:a.sec, pick:pickBest(q,c,pk.want,pk.avoid)});
   });
   return gs;
 }
@@ -1193,13 +1253,15 @@ function projectGroups(v){
 $('home').onclick=()=>{ $('q').value=''; go({name:'home'}); };
 document.addEventListener('click',e=>{
   if(e.target.closest('[data-home]')){ go({name:'home'}); return; }
+  const pxb=e.target.closest('[data-px]'); if(pxb){ pxMode=PHOTO_MODES.find(m=>m.k===pxb.dataset.px); $('pxfile').click(); return; }
   if(e.target.closest('[data-goimport]')){ go({name:'import'}); return; }
-  const smp=e.target.closest('[data-sample]'); if(smp){ const f=smp.dataset.sample==='plan'?['samples/plan-appartement.jpg','Plan appartement (exemple)','image/jpeg']:['samples/cahier-des-charges.pdf','Cahier des charges (exemple)','application/pdf']; fetch(f[0]).then(r=>r.blob()).then(b=>runImport([new File([b],f[0].split('/').pop(),{type:f[2]})], $('impnote')?$('impnote').value:'', f[1])).catch(()=>toast('Exemple introuvable')); return; }
+  if(e.target.id==='impretry'&&lastImport){ runImport(lastImport.files, lastImport.note, lastImport.label); return; }
+  const smp=e.target.closest('[data-sample]'); if(smp){ const f=smp.dataset.sample==='plan'?['samples/plan-appartement.jpg','Plan appartement (exemple)','image/jpeg']:['samples/cahier-des-charges.pdf','Cahier des charges (exemple)','application/pdf']; fetch(f[0]).then(r=>r.blob()).then(b=>runImport([new File([b],f[0].split('/').pop(),{type:f[2]})], $('impnote')?$('impnote').value:'', f[1])).catch(()=>toast('Exemple introuvable', null, 'err')); return; }
   const pc=e.target.closest('[data-pctx]'); if(pc&&view.name==='project'){ view.ctx[pc.dataset.pctx]=pc.dataset.v; render('keep'); return; }
   const pst=e.target.closest('.st[data-pr]'); if(pst&&view.name==='project'){ const r=view.proj.rooms[+pst.dataset.pr]; const o=pst.dataset.pc!==undefined?r.combos[+pst.dataset.pc]:r.items[+pst.dataset.pi]; o.qty=Math.max(0,(+o.qty||0)+(+pst.dataset.d)); render('keep'); return; }
   const pf=e.target.closest('[data-pflow]'); if(pf){ startFlow(pf.dataset.pflow); return; }
-  if(e.target.id==='pbuild'){ const gs=projectGroups(view).map(g=>({label:g.label, q:g.q, qty:g.qty, note:g.note, pickF:g.pick&&g.pick.f})); const v={name:'results', title:'Liste du projet · '+(view.label||''), groups:gs, from:'project', proj:view, brief:`Projet importé (${view.label||''}) : ${gs.map(g=>g.qty+'× '+g.label).join(' ; ')}. Ligne ${view.ctx.design}, ${view.ctx.color}, ${view.ctx.mount}, ${view.ctx.smart||'classique'}. Vérifie la cohérence, propose les accessoires manquants (cadres, boîtes) et 2 upsells. Ne me repose pas ces questions.`}; go(v); return; }
-  if(e.target.id==='paddall'){ let n=0, miss=0; projectGroups(view).forEach(g=>{ if(g.pick){ addToList(g.pick,null,g.qty,true); n++; } else miss++; }); renderList(); toast(`${n} références ajoutées${miss?' · '+miss+' sans correspondance':''}`,{label:'Voir la liste',fn:openList}); return; }
+  if(e.target.id==='pbuild'){ const gs=projectGroups(view).map(g=>({label:g.label, q:g.q, qty:g.qty, note:g.note, pickF:g.pick&&g.pick.f, compact:!!g.exact})); const v={name:'results', title:'Liste du projet · '+(view.label||''), groups:gs, from:'project', proj:view, brief:`Projet importé (${view.label||''}) : ${gs.map(g=>g.qty+'× '+g.label).join(' ; ')}. Ligne ${view.ctx.design}, ${view.ctx.color}, ${view.ctx.mount}, ${view.ctx.smart||'classique'}. Vérifie la cohérence, propose les accessoires manquants (cadres, boîtes) et 2 upsells. Ne me repose pas ces questions.`}; go(v); return; }
+  if(e.target.id==='paddall'){ let n=0, miss=0; projectGroups(view).forEach(g=>{ if(g.pick){ addToList(g.pick,null,g.qty,true,(g.section?g.section+' · ':'')+'Projet : '+(view.label||''),g.note&&g.note.includes('⚠')?'Écart soumission : '+g.note.split('⚠ écart : ')[1]:''); n++; } else miss++; }); renderList(); toast(`${n} références ajoutées${miss?' · '+miss+' sans correspondance':''}`,{label:'Voir la liste',fn:openList}, miss?undefined:'ok'); return; }
   const ob=e.target.closest('.ob'); if(ob){ e.stopPropagation(); const id=ob.dataset.sec||ob.dataset.hide; const secs=orderedSections().map(x=>x.id); if(ob.dataset.hide){ homePrefs.hidden=[...new Set([...(homePrefs.hidden||[]), id])]; } else { const vis=secs.filter(x=>!(homePrefs.hidden||[]).includes(x)); const i=vis.indexOf(id), j=i+(+ob.dataset.move); if(j<0||j>=vis.length) return; [vis[i],vis[j]]=[vis[j],vis[i]]; homePrefs.order=[...vis, ...secs.filter(x=>!vis.includes(x))]; } saveHome(); render('keep'); return; }
   const sh=e.target.closest('[data-show]'); if(sh){ homePrefs.hidden=(homePrefs.hidden||[]).filter(x=>x!==sh.dataset.show); saveHome(); render('keep'); return; }
   if(e.target.id==='orghome'){ organizing=!organizing; render('keep'); return; }
@@ -1216,14 +1278,14 @@ document.addEventListener('click',e=>{
   const st=e.target.closest('.st'); if(st&&view.name==='composer'){ if(st.dataset.rows){ view.rows=Math.max(1,Math.min(8,(view.rows||3)+(+st.dataset.rows))); } else if(st.dataset.mult){ view.mult=Math.max(1,Math.min(200,(view.mult||1)+(+st.dataset.mult))); } else { const k=st.dataset.k; const cp=COMPONENTS.find(c=>c.k===k); const cur=view.qty[k]??(cp?cp.def:(combLines(view).find(l=>l.k===k)||{}).qty??0); view.qty[k]=Math.max(0,cur+(+st.dataset.d)); } render(); return; }
   if(e.target.id==='perrow'){ const v=prompt('Modules par rangée (12, 18 ou 24) :', view.perRow||UM_PER_ROW[view.fam]||12); const n=parseInt(v); if(n>0){ view.perRow=n; render(); } return; }
   const ch=e.target.closest('[data-change]'); if(ch&&view.name==='composer'){ const comp={...view}; go({name:'results', q:ch.dataset.q, title:'Choisir : '+ch.dataset.q, pick:{k:ch.dataset.change, comp}}); return; }
-  if(e.target.id==='caddall'){ const c=view, M=c.mult||1; let n=0; shellLines(c).forEach(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; if(ref){ addToList(ref,null,M,true); n++; } }); if(c.qty.media){ const rail=searchFallback('Rail DIN Resi9 appareils média',{},1).items[0]; if(rail){ addToList(rail,null,M,true); n++; } } COMPONENTS.forEach(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; if(ref){ addToList(ref,null,qty*M,true); n++; } }); combLines(c).forEach(l=>{ if(!l.qty) return; const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; if(ref){ addToList(ref,null,l.qty*M,true); n++; } }); renderList(); toast(`${n} références ajoutées${M>1?' · ×'+M+' tableaux':''}`,{label:'Voir la liste',fn:openList}); return; }
-  if(e.target.id==='caskai'){ const c=view; const shellTxt=shellLines(c).map(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; return ref?`${l.label} (${ref.f}, ELDAS ${ref.e})`:l.label; }).join(' ; '); const lines=shellTxt+' ; '+COMPONENTS.map(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return null; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; return `${qty}× ${cp.label}${ref?` (${ref.f}, ELDAS ${ref.e})`:''}`; }).filter(Boolean).join(' ; ')+' ; peignes : '+combLines(c).filter(l=>l.qty).map(l=>`${l.qty}× ${l.label}`).join(' ; ')+((c.mult||1)>1?` ; ${c.mult} tableaux identiques`:''); openChat(); sendChat(`Vérifie ce tableau ${c.fam} ${c.rows} rangées ${MOUNT[c.mount]||''} : ${lines}. Dis-moi en 5 lignes max ce qui manque ou ce qui est surdimensionné, et 1 ou 2 options à proposer. Pas de questions.`, `Vérification du tableau ${c.fam} ${c.rows} rangées`); return; }
+  if(e.target.id==='caddall'){ const c=view, M=c.mult||1; let lot=`Tableau ${c.fam} ${c.rows||3} rangées${c.install==='CREUSE'?' paroi creuse':c.mount==='AP'?' apparent':' encastré'}`; let k2=2; const base=lot; while(list.some(x=>x.lot===lot)) lot=`${base} (${k2++})`; let n=0; shellLines(c).forEach(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; if(ref){ addToList(ref,null,M,true,lot); n++; } }); if(c.qty.media){ const rail=searchFallback('Rail DIN Resi9 appareils média',{},1).items[0]; if(rail){ addToList(rail,null,M,true,lot); n++; } } COMPONENTS.forEach(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; if(ref){ addToList(ref,null,qty*M,true,lot,((c.labels||{})[cp.k]||'').trim()); n++; } }); combLines(c).forEach(l=>{ if(!l.qty) return; const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; if(ref){ addToList(ref,null,l.qty*M,true,lot); n++; } }); renderList(); toast(`${n} références ajoutées${M>1?' · ×'+M+' tableaux':''}`,{label:'Voir la liste',fn:openList},'ok'); return; }
+  if(e.target.id==='caskai'){ const c=view; const shellTxt=shellLines(c).map(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; return ref?`${l.label} (${ref.f}, ELDAS ${ref.e})`:l.label; }).join(' ; '); const lines=shellTxt+' ; '+COMPONENTS.map(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return null; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; return `${qty}× ${cp.label}${((c.labels||{})[cp.k])?' ['+c.labels[cp.k]+']':''}${ref?` (${ref.f}, ELDAS ${ref.e})`:''}`; }).filter(Boolean).join(' ; ')+' ; peignes : '+combLines(c).filter(l=>l.qty).map(l=>`${l.qty}× ${l.label}`).join(' ; ')+((c.mult||1)>1?` ; ${c.mult} tableaux identiques`:''); openChat(); sendChat(`Vérifie ce tableau ${c.fam} ${c.rows} rangées ${MOUNT[c.mount]||''} : ${lines}. Dis-moi en 5 lignes max ce qui manque ou ce qui est surdimensionné, et 1 ou 2 options à proposer. Pas de questions.`, `Vérification du tableau ${c.fam} ${c.rows} rangées`); return; }
   if(e.target.id==='askconfig'){ openChat(); sendChat(view.brief, 'Offre type : '+(view.title||'')); return; }
   if(e.target.id==='askthis'){ openChat(); sendChat(view.q); return; }
   if(e.target.id==='askequiv'){ openChat(); sendChat(`Équivalent Feller / Schneider de « ${view.q} » : référence avec N° ELDAS, accessoires à prévoir, et un argument factuel face au concurrent.`, 'Équivalent de « '+view.q+' »'); return; }
   const chipb=e.target.closest('.filters .chip'); if(chipb){ const k=chipb.dataset.k, v=chipb.dataset.v; if(k==='reset') F={design:'',mount:'',ip:false,nw:false}; else if(k==='ip'||k==='nw') F[k]=!F[k]; else F[k]=F[k]===v?'':v; render(); return; }
-  const add=e.target.closest('.add'); if(add){ const it=byF[add.closest('.card').dataset.f]; if(!it) return; if(view.pick){ const {k,comp}=view.pick; view=comp; composerPick(k,it); return; } addToList(it,add,Math.max(1,+add.dataset.q||1)); return; }
-  const ref=e.target.closest('.add-ref'); if(ref){ const it=byF[ref.dataset.f]||partItem(findPart(ref.dataset.f)); if(it) addToList(it,ref,Math.max(1,+ref.dataset.q||1)); else toast('Référence hors base'); return; }
+  const add=e.target.closest('.add'); if(add){ const it=byF[add.closest('.card').dataset.f]; if(!it) return; if(view.pick){ const {k,comp}=view.pick; if(hist.length&&hist[hist.length-1].name==='composer') hist.pop(); view=comp; composerPick(k,it); return; } addToList(it,add,Math.max(1,+add.dataset.q||1)); return; }
+  const ref=e.target.closest('.add-ref'); if(ref){ const it=byF[ref.dataset.f]||partItem(findPart(ref.dataset.f)); if(it) addToList(it,ref,Math.max(1,+ref.dataset.q||1)); else toast('Référence hors base', null, 'err'); return; }
   const pb=e.target.closest('[data-parts]'); if(pb){ const it=byF[pb.dataset.parts]; let n=0; (it&&it.parts||[]).forEach(pt=>{ addToList(partItem(pt),null,pt[2]||1,true); n++; }); renderList(); toast(`${n} référence${n>1?'s':''} en pièces détachées ajoutée${n>1?'s':''}`, {label:'Voir la liste', fn:openList}); return; }
   const mb=e.target.closest('.more-btn'); if(mb&&!mb.closest('.card.row')){ const card=mb.closest('.card'); const open=mb.getAttribute('aria-expanded')==='true'; card.querySelector('.more')?.remove(); if(!open) card.insertAdjacentHTML('beforeend',specHtml(byF[card.dataset.f])); mb.setAttribute('aria-expanded',String(!open)); mb.textContent=open?('Détails'+((byF[card.dataset.f].parts||[]).length?` · ${byF[card.dataset.f].parts.length} pièces`:'')+((byF[card.dataset.f].acc||[]).length?` · ${byF[card.dataset.f].acc.length} acc.`:'')):'Masquer'; return; }
   const fu=e.target.closest('[data-fu]'); if(fu){ const it=byF[fu.dataset.fu]; $('q').value=fu.dataset.fu; F={design:'',mount:'',ip:false,nw:false}; go({name:'results', q:fu.dataset.fu, title:it?`Remplaçant : ${it.d}`:`Remplaçant ${fu.dataset.fu}`}); return; }
@@ -1237,7 +1299,7 @@ document.addEventListener('click',e=>{
   const z=e.target.closest('[data-zoom]'); if(z){ const it=byF[z.dataset.zoom]; $('lb').innerHTML=`<img src="${esc(it.img)}" alt=""><div class="cap">${esc(it.d)} · ELDAS ${esc(it.e||'—')}</div>`; $('lb').hidden=false; return; }
   if(e.target.closest('#lb')){ $('lb').hidden=true; return; }
 });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ $('lb').hidden=true; $('pm').hidden=true; closeList(); if(window.innerWidth<=1000) closeChat(); } });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ $('lb').hidden=true; $('pm').hidden=true; if($('pdfm')) $('pdfm').hidden=true; closeList(); if(window.innerWidth<=1000) closeChat(); } });
 
 function startFlow(flow){
   if(flow==='nouveautes'){ F={design:'',mount:'',ip:false,nw:true}; go({name:'results', title:'Nouveautés 2025–2026', q:''}); return; }
@@ -1306,15 +1368,17 @@ function finishFlow(){
   F={design:'',mount:'',ip:false,nw:false};
   let groups=[], title='', brief='';
   if(view.flow==='tableau'){
-    const eq=a.equip||[], op=a.options||[]; const base={studio:[3,1],appart:[4,2],grand:[6,2],villa:[7,3]}[a.logement||'appart'];
-    const qty={fils13:base[0]+(eq.includes('lavevaisselle')?1:0)+(eq.includes('stores')?1:0), fils16:base[1]+(eq.includes('lavelinge')?1:0)+(eq.includes('exterieur')?1:0),
+    const eq=a.equip||[], op=a.options||[]; const base={studio:[1,2],appart:[2,4],grand:[2,6],villa:[3,8]}[a.logement||'appart'];
+    const ecl=parseInt(a.ecl)||base[0], pr=parseInt(a.prises)||base[1]; const p16=Math.max(1,Math.round(pr*0.4)), p13=Math.max(1,pr-p16);
+    const qty={ecl13:ecl, fils13:p13+(eq.includes('lavevaisselle')?1:0)+(eq.includes('stores')?1:0), fils16:p16+(eq.includes('lavelinge')?1:0)+(eq.includes('exterieur')?1:0),
       ls16_3:(eq.includes('cuisiniere')?1:0)+(eq.includes('borne')?1:0), ls13_3:eq.includes('boiler')?1:0, ls20_3:eq.includes('pac')?1:0, ict:eq.includes('boiler')?1:0,
       fi40:(eq.includes('cuisiniere')||eq.includes('boiler')||eq.includes('pac')||eq.includes('borne'))?1:0, spd:op.includes('spd')?1:0, tl:op.includes('tl')?2:0, media:op.includes('media')?1:0, peigne:1};
     let system=a.system||'KV'; if(op.includes('media')&&a.install==='AP'&&a.fam==='Resi9'&&system==='KV') system='KVM';
     const perRow=system==='CX'?parseInt(a.perrow)||13:(a.fam==='PrismaSeT'?(system==='XS'?(parseInt(a.perrow)||24):24):12);
-    const umTotal=qty.fils13+qty.fils16+qty.ls16_3*3+qty.ls13_3*3+qty.ls20_3*3+qty.ict+qty.fi40*4+qty.spd*2+qty.tl+qty.media*12;
+    const umTotal=COMPONENTS.reduce((t,cp)=>t+(qty[cp.k]||0)*cp.um,0);
     const rows=Math.min(a.fam==='PrismaSeT'&&system==='XS'?6:4,Math.max(1,Math.ceil(umTotal*(op.includes('reserve')?1.45:1.2)/perRow)));
-    const comp={name:'composer', fam:a.fam||'Resi9', install:a.install||'ENC', system, door:a.door??'P', rows, perRow, mount:a.install==='AP'?'AP':'ENC', qty, refs:{}, wiz, why:{logement:a.logement, eq, op}};
+    const labels={}; if(ecl>=2) labels.ecl13=['Éclairage RDC','Éclairage étage','Éclairage extérieur','Éclairage sous-sol'].slice(0,ecl).join(', '); if(eq.includes('cuisiniere')) labels.ls16_3='Cuisinière'+(eq.includes('borne')?', Borne de recharge':''); else if(eq.includes('borne')) labels.ls16_3='Borne de recharge'; if(eq.includes('boiler')){ labels.ls13_3='Boiler'; labels.ict='Boiler tarif nuit'; } if(eq.includes('pac')) labels.ls20_3='Pompe à chaleur';
+    const comp={name:'composer', fam:a.fam||'Resi9', install:a.install||'ENC', system, door:a.door??'P', rows, perRow, mount:a.install==='AP'?'AP':'ENC', qty, labels, refs:{}, wiz, why:{logement:a.logement, eq, op}};
     remember(`Tableau ${comp.fam} ${comp.rows} rangées`, comp); go(comp); return;
   } else {
     const ctx={design:a.design||'', mount:a.mount||'', smart:a.smart||'', layout:a.layout||''};
@@ -1331,11 +1395,12 @@ function remember(label, v){ recent=[{label, view:v}, ...recent.filter(r=>r.labe
 
 /* =============== recherche barre =============== */
 let timer;
-$('q').addEventListener('input',()=>{ clearTimeout(timer); timer=setTimeout(()=>{ const q=$('q').value.trim(); if(!q){ if(view.name==='results'&&!view.groups&&!view.title) go({name:'home'}); return; } F={design:'',mount:'',ip:false,nw:false}; go({name:'results', q}); },140); });
+$('q').addEventListener('input',()=>{ clearTimeout(timer); timer=setTimeout(()=>{ const q=$('q').value.trim(); if(!q){ if(view.name==='results'&&!view.groups&&!view.title) go({name:'home'}); return; } F={design:'',mount:'',ip:false,nw:false}; go({name:'results', q}, {replace: view.name==='results'&&!view.groups&&!view.pick}); },140); });
 $('q').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); const q=$('q').value.trim(); if(!q) return; if(/\?|^(est|quel|quelle|comment|pourquoi|peut|combien|y a|propose|je veux|il me faut|client)/i.test(q) || q.split(' ').length>6){ openChat(); sendChat(q); $('q').value=''; } } });
 
+document.addEventListener('input',e=>{ if(e.target.classList&&e.target.classList.contains('lbl')&&view.name==='composer'){ view.labels=view.labels||{}; view.labels[e.target.dataset.k]=e.target.value; persistNav(); } });
 document.addEventListener('keydown',e=>{ if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('tile')&&!organizing){ e.preventDefault(); openSection(e.target.dataset.sec); } });
-document.addEventListener('change',e=>{ if(e.target.id==='impfile'&&e.target.files.length){ const fs=[...e.target.files]; runImport(fs, $('impnote')?$('impnote').value:'', fs.map(f=>f.name).join(', ')); } });
+document.addEventListener('change',async e=>{ if(e.target.id==='pxfile'&&e.target.files.length&&pxMode){ const f=e.target.files[0]; toast('Photo envoyée, analyse en cours', null, 'ok'); pendingImage=await shrinkImage(f); openChat(); sendChat(pxMode.p, '📷 '+pxMode.t); e.target.value=''; return; } if(e.target.id==='impfile'&&e.target.files.length){ const fs=[...e.target.files]; runImport(fs, $('impnote')?$('impnote').value:'', fs.map(f=>f.name).join(', ')); } });
 document.addEventListener('dragover',e=>{ const d=e.target.closest&&e.target.closest('#drop'); if(d){ e.preventDefault(); d.classList.add('over'); } });
 document.addEventListener('drop',e=>{ const d=e.target.closest&&e.target.closest('#drop'); if(d){ e.preventDefault(); const fs=[...e.dataTransfer.files]; if(fs.length) runImport(fs, $('impnote')?$('impnote').value:'', fs.map(f=>f.name).join(', ')); } });
 document.addEventListener('dragstart',e=>{ const t=e.target.closest&&e.target.closest('.tile.org'); if(!t) return; e.dataTransfer.setData('text/plain', t.dataset.sec); e.dataTransfer.effectAllowed='move'; });
@@ -1343,7 +1408,11 @@ document.addEventListener('dragover',e=>{ const t=e.target.closest&&e.target.clo
 document.addEventListener('dragleave',e=>{ const t=e.target.closest&&e.target.closest('.tile.org'); if(t) t.classList.remove('over'); });
 document.addEventListener('drop',e=>{ const t=e.target.closest&&e.target.closest('.tile.org'); if(!t) return; e.preventDefault(); const from=e.dataTransfer.getData('text/plain'), to=t.dataset.sec; if(!from||from===to) return; const secs=orderedSections().map(x=>x.id); const i=secs.indexOf(from), j=secs.indexOf(to); secs.splice(i,1); secs.splice(j,0,from); homePrefs.order=secs; saveHome(); render('keep'); });
 /* =============== liste =============== */
-function addToList(it,btn,qty=1,silent=false){ const ex=list.find(x=>x.f===it.f); if(ex) ex.q+=qty; else list.push({f:it.f,e:it.e,d:it.d,q:qty,img:it.img}); store.set('offre.items',list); if(silent) return; renderList(); if(btn){ btn.textContent='Ajouté ✓'; setTimeout(()=>btn.textContent='Ajouter encore',900);} toast(`${it.d.slice(0,40)}… ajouté`, {label:'Voir la liste', fn:openList}); }
+// Lots : chaque article appartient à un lot (« Tableau Resi9 4 rangées », « Bornes · PPE », « Projet : plan »…). Un lot se renomme, se multiplie (×N) ou se retire d'un coup.
+let curLot='';
+const lotOfView = () => view.name==='composer' ? `Tableau ${view.fam} ${view.rows||3} rangées` : view.name==='results' && view.title ? view.title.replace(/^Choisir : .*/,'') : view.name==='project' ? 'Projet : '+(view.label||'') : '';
+function addToList(it,btn,qty=1,silent=false,lot,note){ lot=lot||curLot||lotOfView()||'Divers'; const ex=list.find(x=>x.f===it.f&&(x.lot||'Divers')===lot); if(ex){ ex.q+=qty; if(note&&!(ex.note||'').includes(note)) ex.note=[ex.note,note].filter(Boolean).join(' · '); } else list.push({f:it.f,e:it.e,d:it.d,q:qty,img:it.img,lot,note:note||''}); store.set('offre.items',list); if(silent) return; renderList(); if(btn){ btn.textContent='Ajouté ✓'; setTimeout(()=>btn.textContent='Ajouter encore',900);} toast(`${it.d.slice(0,40)}… ajouté`, {label:'Voir la liste', fn:openList}, 'ok'); }
+function lotsOf(){ const m=new Map(); list.forEach(x=>{ const l=x.lot||'Divers'; if(!m.has(l)) m.set(l,[]); m.get(l).push(x); }); return [...m.entries()].map(([lot,items])=>({lot,items})); }
 function renderList(){
   const tot=list.reduce((a,x)=>a+x.q,0);
   $('listbar').hidden=!list.length; $('listbartxt').textContent=`${tot} pièce${tot>1?'s':''} · ${list.length} référence${list.length>1?'s':''}`;
@@ -1351,12 +1420,19 @@ function renderList(){
   $('aside-empty').style.display = list.length?'none':'block';
   const hasP=DB.some(x=>x.p); const pt=$('priceToggle'); if(pt){ pt.textContent=showPrice?'Prix : affichés':'Prix bruts'; pt.setAttribute('aria-pressed',String(showPrice)); pt.title=hasP?'Afficher ou masquer les prix bruts (hors TVA, sans remise)':'Pas encore de prix dans la base — ils s\'afficheront ici dès qu\'une source est connectée'; }
   const tot$=list.reduce((a,x)=>{ const pv=priceOf(x); return pv==null?a:a+pv*x.q; },0), miss=list.filter(x=>priceOf(x)==null).length;
-  $('items').innerHTML = list.map((x,i)=>`<div class="item"><img src="${esc(x.img||PIC(x.f))}" alt="" data-open="${esc(x.f)}" style="cursor:pointer" onerror="this.style.visibility='hidden'"><div><div class="d" data-open="${esc(x.f)}" style="cursor:pointer">${esc(x.d)}</div><div class="e num">ELDAS ${esc(x.e||'—')} · ${esc(x.f)}${showPrice&&hasP?` · <b>${priceOf(x)==null?'prix n/d':chf(priceOf(x)*x.q)}</b>`:''}${(byF[x.f]&&byF[x.f].parts&&byF[x.f].parts.length)?` · <button type="button" class="explode" data-i="${i}" style="border:0;background:none;color:var(--pine);cursor:pointer;font:inherit;font-size:12px;padding:0;text-decoration:underline dotted">en pièces détachées</button>`:''}</div></div><input class="q num" type="number" min="1" step="1" value="${x.q}" data-i="${i}" aria-label="Quantité"><button class="x" type="button" data-i="${i}" aria-label="Retirer">×</button></div>`).join('')+(showPrice&&hasP&&list.length?`<div class="item" style="justify-content:flex-end;font-weight:600">Total brut ${chf(tot$)}${miss?` <small style="font-weight:400;color:var(--ink-3)">· ${miss} réf. sans prix</small>`:''}<small style="font-weight:400;color:var(--ink-3)"> · hors TVA, sans remise</small></div>`:'');
+  const itemHtml=(x,i)=>`<div class="item ${x.q?'':'off'}"><img src="${esc(x.img||PIC(x.f))}" alt="" data-open="${esc(x.f)}" style="cursor:pointer" onerror="this.style.visibility='hidden'"><div><div class="d" data-open="${esc(x.f)}" style="cursor:pointer" title="Voir la fiche">${esc(x.d)}</div><div class="e num">ELDAS ${esc(x.e||'—')} · ${esc(x.f)}${showPrice&&hasP?` · <b>${priceOf(x)==null?'prix n/d':chf(priceOf(x)*x.q)}</b>`:''}${(byF[x.f]&&byF[x.f].parts&&byF[x.f].parts.length)?` · <button type="button" class="explode" data-i="${i}" style="border:0;background:none;color:var(--pine);cursor:pointer;font:inherit;font-size:12px;padding:0;text-decoration:underline dotted">en pièces détachées</button>`:''}</div>${x.note?`<div class="e note" data-note="${i}" title="Modifier la désignation">${esc(x.note)}</div>`:`<button type="button" class="addnote" data-note="${i}">+ désignation</button>`}</div><input class="q num" type="number" min="0" step="1" value="${x.q}" data-i="${i}" aria-label="Quantité"><button class="x" type="button" data-i="${i}" aria-label="Retirer">×</button></div>`;
+  $('items').innerHTML = lotsOf().map(({lot,items})=>`<section class="lot" data-lot="${esc(lot)}"><header class="lothead"><button type="button" class="lotname" data-rename="${esc(lot)}" title="Renommer le lot">${esc(lot)}</button><small>${items.reduce((a,x)=>a+x.q,0)} pièces · ${items.length} réf.${showPrice&&hasP?' · '+chf(items.reduce((a,x)=>{ const pv=priceOf(x); return pv==null?a:a+pv*x.q; },0)):''}</small><span class="lotact"><button type="button" class="btn small" data-mult="${esc(lot)}" title="Multiplier toutes les quantités du lot (ex. 4 tableaux identiques)">×N</button><button type="button" class="btn small" data-dup="${esc(lot)}" title="Copier ce lot (pour le modifier à part)">Copier</button><button type="button" class="btn small" data-dellot="${esc(lot)}" title="Retirer tout le lot">Retirer</button></span></header>${items.map(x=>itemHtml(x,list.indexOf(x))).join('')}</section>`).join('')+(showPrice&&hasP&&list.length?`<div class="item" style="justify-content:flex-end;font-weight:600">Total brut ${chf(tot$)}${miss?` <small style="font-weight:400;color:var(--ink-3)">· ${miss} réf. sans prix</small>`:''}<small style="font-weight:400;color:var(--ink-3)"> · hors TVA, sans remise</small></div>`:'');
   $('c_name').value=client.name; $('c_notes').value=client.notes;
 }
 function saveList(){ store.set('offre.items',list); renderList(); }
-$('items').addEventListener('input',e=>{ const i=e.target.dataset.i; if(e.target.classList.contains('q')){ list[i].q=Math.max(1,parseInt(e.target.value)||1); store.set('offre.items',list); const tot=list.reduce((a,x)=>a+x.q,0); $('badge').textContent=tot; $('n').textContent=`${tot} pièce${tot>1?'s':''}`; }});
-$('items').addEventListener('click',e=>{ const ex=e.target.closest('.explode'); if(ex){ const i=+ex.dataset.i, x=list[i], it=byF[x.f]; if(!it||!it.parts) return; const q=x.q; list.splice(i,1); it.parts.forEach(pt=>{ addToList(partItem(pt),null,(pt[2]||1)*q,true); }); saveList(); toast('Set remplacé par ses pièces détachées'); return; } const b=e.target.closest('.x'); if(!b) return; list.splice(+b.dataset.i,1); saveList(); });
+$('items').addEventListener('input',e=>{ const i=e.target.dataset.i; if(e.target.classList.contains('q')){ list[i].q=Math.max(0,parseInt(e.target.value)||0); store.set('offre.items',list); const tot=list.reduce((a,x)=>a+x.q,0); $('badge').textContent=tot; $('n').textContent=`${tot} pièce${tot>1?'s':''}`; }});
+$('items').addEventListener('click',e=>{
+  const rn=e.target.closest('[data-rename]'); if(rn){ const old=rn.dataset.rename; const nv=prompt('Nom du lot :', old); if(nv&&nv.trim()&&nv.trim()!==old){ list.forEach(x=>{ if((x.lot||'Divers')===old) x.lot=nv.trim(); }); saveList(); } return; }
+  const ml=e.target.closest('[data-mult]'); if(ml){ const lot=ml.dataset.mult; const v=prompt(`Multiplier le lot « ${lot} » par :`, '2'); const n=parseInt(v); if(n>0&&n!==1){ list.forEach(x=>{ if((x.lot||'Divers')===lot) x.q=x.q*n; }); saveList(); toast(`Lot ×${n} : quantités multipliées`, null, 'ok'); } return; }
+  const dp=e.target.closest('[data-dup]'); if(dp){ const lot=dp.dataset.dup; let n=2; while(list.some(x=>x.lot===`${lot} (${n})`)) n++; const copy=list.filter(x=>(x.lot||'Divers')===lot).map(x=>({...x, lot:`${lot} (${n})`})); list.push(...copy); saveList(); toast(`Lot copié : « ${lot} (${n}) »`, null, 'ok'); return; }
+  const dl=e.target.closest('[data-dellot]'); if(dl){ const lot=dl.dataset.dellot; if(confirm(`Retirer tout le lot « ${lot} » ?`)){ list=list.filter(x=>(x.lot||'Divers')!==lot); saveList(); } return; }
+  const nt=e.target.closest('[data-note]'); if(nt){ const i=+nt.dataset.note; const v=prompt('Désignation / repère (ex. « Éclairage RDC, Prises cuisine ») :', list[i].note||''); if(v!==null){ list[i].note=v.trim(); saveList(); } return; }
+  const ex=e.target.closest('.explode'); if(ex){ const i=+ex.dataset.i, x=list[i], it=byF[x.f]; if(!it||!it.parts) return; const q=x.q; list.splice(i,1); it.parts.forEach(pt=>{ addToList(partItem(pt),null,(pt[2]||1)*q,true,x.lot,x.note); }); saveList(); toast('Set remplacé par ses pièces détachées'); return; } const b=e.target.closest('.x'); if(!b) return; list.splice(+b.dataset.i,1); saveList(); });
 ['c_name','c_notes'].forEach(id=>$(id).addEventListener('input',()=>{ client={name:$('c_name').value,notes:$('c_notes').value}; store.set('offre.client',client); }));
 $('priceToggle').onclick=()=>{ showPrice=!showPrice; store.set('offre.price',showPrice); renderList(); if(showPrice&&!DB.some(x=>x.p)) toast('Pas encore de prix dans la base : la colonne apparaîtra dès qu\'une source de prix est connectée'); };
 $('clear').onclick=()=>{ if(!list.length||confirm('Vider la liste de matériel ?')){ list=[]; saveList(); } };
@@ -1364,18 +1440,74 @@ function openList(){ $('drawer').hidden=false; $('scrim').hidden=false; }
 function closeList(){ $('drawer').hidden=true; $('scrim').hidden=true; }
 $('openlist').onclick=openList; $('closelist').onclick=closeList; $('scrim').onclick=closeList; $('lb-open').onclick=openList; $('lb-pdf').onclick=()=>$('pdf').click();
 $('tools').innerHTML='<h3>Configurateurs et outils</h3>'+TOOLS.map(t=>`<a href="${t.url}" target="_blank" rel="noopener">${esc(t.name)}<span>${esc(t.why)}</span></a>`).join('');
-$('mail').onclick=()=>{ if(!list.length){ toast('La liste est vide'); return; } const body=[`Bonjour,`,'',`Voici la liste de matériel${client.name?' pour '+client.name:''} :`,'',...list.map(x=>`${x.q} × ${x.d} (ELDAS ${x.e||'—'}, N° Feller ${x.f})${showPrice&&priceOf(x)!=null?' – '+chf(priceOf(x)*x.q):''}`),'',showPrice?'Total brut hors TVA, sans remise : '+chf(list.reduce((a,x)=>{ const pv=priceOf(x); return pv==null?a:a+pv*x.q; },0)):'',client.notes||'','Meilleures salutations','Nicola Strummiello'].join('\n'); location.href=`mailto:?subject=${encodeURIComponent('Liste de matériel'+(client.name?' – '+client.name:''))}&body=${encodeURIComponent(body)}`; };
-$('copy').onclick=async()=>{ const txt=[`Liste de matériel${client.name?' – '+client.name:''}`,'',...list.map(x=>`${x.q} × ${x.d}  (ELDAS ${x.e||'—'}, N° Feller ${x.f})${showPrice&&priceOf(x)!=null?'  '+chf(priceOf(x)*x.q):''}`),'',showPrice?'Total brut hors TVA, sans remise : '+chf(list.reduce((a,x)=>{ const pv=priceOf(x); return pv==null?a:a+pv*x.q; },0)):'',client.notes].join('\n'); try{ await navigator.clipboard.writeText(txt); toast('Liste copiée'); }catch(e){ prompt('Copie manuelle :',txt); } };
-$('pdf').onclick=()=>{
-  if(!list.length){ toast('La liste est vide'); return; }
+$('mail').onclick=()=>{ if(!list.length){ toast('La liste est vide', null, 'err'); return; } location.href=`mailto:?subject=${encodeURIComponent('Liste de matériel'+(client.name?' – '+client.name:''))}&body=${encodeURIComponent('Bonjour,\n\n'+listText()+'\n\nMeilleures salutations\nNicola Strummiello')}`; };
+$('copy').onclick=async()=>{ const txt=listText(); try{ await navigator.clipboard.writeText(txt); toast('Liste copiée', null, 'ok'); }catch(e){ prompt('Copie manuelle :',txt); } };
+// ---- Export : PDF réel (jsPDF) avec aperçu et partage WhatsApp / Messages / Mail (Web Share), impression en secours ----
+const lotTotal = items => items.reduce((a,x)=>{ const pv=priceOf(x); return pv==null?a:a+pv*x.q; },0);
+function listText(){ const L=[`Liste de matériel${client.name?' – '+client.name:''}`, new Date().toLocaleDateString('fr-CH'), '']; lotsOf().forEach(({lot,items})=>{ if(lotsOf().length>1||lot!=='Divers') L.push(`— ${lot}`); items.forEach(x=>L.push(`${x.q} × ${x.d}${x.note?' ['+x.note+']':''}  (ELDAS ${x.e||'—'}, N° ${x.f})${showPrice&&priceOf(x)!=null?'  '+chf(priceOf(x)*x.q):''}`)); L.push(''); }); if(showPrice) L.push('Total brut hors TVA, sans remise : '+chf(lotTotal(list))); if(client.notes) L.push('', client.notes); return L.join('\n'); }
+async function imgData(url){ if(!url) return null; try{ const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),4000); const r=await fetch('/api/img?u='+encodeURIComponent(url),{signal:ctrl.signal}); clearTimeout(t); if(!r.ok) return null; const b=await r.blob(); const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(b); }); const c=document.createElement('canvas'); const m=Math.min(1,160/Math.max(img.width,img.height)); c.width=Math.max(1,Math.round(img.width*m)); c.height=Math.max(1,Math.round(img.height*m)); const g=c.getContext('2d'); g.fillStyle='#fff'; g.fillRect(0,0,c.width,c.height); g.drawImage(img,0,0,c.width,c.height); return c.toDataURL('image/jpeg',0.8); }catch(e){ return null; } }
+let pdfCache=null;
+async function buildPdf(onStep){
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js','jspdf'); await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js','jspdfAutoTableLoaded');
+  onStep&&onStep(1);
+  const imgs={}; await Promise.all([...new Set(list.map(x=>x.f))].map(async f=>{ const x=list.find(y=>y.f===f); imgs[f]=await imgData(x.img||PIC(f)); }));
+  onStep&&onStep(2);
+  const { jsPDF } = window.jspdf; const doc=new jsPDF({unit:'mm',format:'a4'}); const W=doc.internal.pageSize.getWidth();
+  const d=new Date().toLocaleDateString('fr-CH',{day:'2-digit',month:'long',year:'numeric'});
+  doc.setFont('helvetica','bold'); doc.setFontSize(17); doc.text(`Liste de matériel${client.name?' – '+client.name:''}`,14,18);
+  doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(90); doc.text(`${d} · ${list.reduce((a,x)=>a+x.q,0)} pièces · ${list.length} références · Feller / Schneider Electric Suisse`,14,24); doc.setTextColor(0);
+  let y=30; const lots=lotsOf(); const head=[['','Qté','Désignation','N° ELDAS','N° Feller / SE'].concat(showPrice?['Prix brut','Total']:[])];
+  lots.forEach(({lot,items})=>{
+    if(lots.length>1||lot!=='Divers'){ doc.setFont('helvetica','bold'); doc.setFontSize(11.5); doc.text(lot,14,y+4); doc.setFont('helvetica','normal'); y+=7; }
+    const body=items.map(x=>[{content:'',f:x.f}, String(x.q), x.d+(x.note?'\n'+x.note:''), x.e||'—', x.f].concat(showPrice?[priceOf(x)==null?'n/d':chf(priceOf(x)), priceOf(x)==null?'—':chf(priceOf(x)*x.q)]:[]));
+    if(showPrice&&lots.length>1) body.push(['','', {content:'Sous-total '+lot, styles:{fontStyle:'bold'}}, '', '', '', {content:chf(lotTotal(items)), styles:{fontStyle:'bold'}}]);
+    doc.autoTable({ startY:y, head, body, theme:'grid', styles:{fontSize:8.5,cellPadding:2,valign:'middle',lineColor:[200,200,200],lineWidth:0.2,textColor:[20,20,20]}, headStyles:{fillColor:[29,74,56],textColor:255,fontStyle:'bold'}, columnStyles:{0:{cellWidth:14,minCellHeight:14},1:{cellWidth:10,halign:'center'},3:{cellWidth:22,fontStyle:'bold'},4:{cellWidth:30}}, margin:{left:14,right:14},
+      didDrawCell:data=>{ if(data.section==='body'&&data.column.index===0&&data.cell.raw&&data.cell.raw.f){ const im=imgs[data.cell.raw.f]; if(im){ try{ doc.addImage(im,'JPEG',data.cell.x+1.5,data.cell.y+1.5,11,11); }catch(e){} } } },
+      didParseCell:data=>{ if(data.section==='body'&&data.column.index===2&&typeof data.cell.raw==='string'&&data.cell.raw.includes('\n')){ data.cell.styles.fontSize=8.5; } } });
+    y=doc.lastAutoTable.finalY+8; if(y>250){ doc.addPage(); y=18; }
+  });
+  if(showPrice){ doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.text(`Total brut (hors TVA, sans remise) : ${chf(lotTotal(list))}`, W-14, y, {align:'right'}); y+=8; doc.setFont('helvetica','normal'); }
+  if(client.notes){ doc.setFontSize(9.5); const lines=doc.splitTextToSize(client.notes, W-28); if(y+lines.length*5>280){ doc.addPage(); y=18; } doc.text(lines,14,y); y+=lines.length*5+4; }
+  const n=doc.getNumberOfPages(); for(let i=1;i<=n;i++){ doc.setPage(i); doc.setFontSize(8); doc.setTextColor(110); doc.text('N° ELDAS = commande chez tout grossiste électro suisse · fiches et brochures : online-katalog.feller.ch', 14, 290); doc.text(`Nicola Strummiello · Feller AG · page ${i} / ${n}`, W-14, 290, {align:'right'}); }
+  const blob=doc.output('blob'); const name=`Liste-materiel${client.name?'-'+client.name.replace(/[^\w\-]+/g,'_'):''}-${new Date().toISOString().slice(0,10)}.pdf`;
+  onStep&&onStep(3);
+  return {blob, name, url:URL.createObjectURL(blob)};
+}
+function pdfModal(html){ let m=$('pdfm'); if(!m){ m=document.createElement('div'); m.id='pdfm'; m.setAttribute('role','dialog'); document.body.appendChild(m); } m.hidden=false; m.innerHTML=`<div class="pdfbox">${html}</div>`; }
+async function exportPdf(){
+  if(!list.length){ toast('La liste est vide', null, 'err'); return; }
+  const steps=[{t:'Préparation du document',st:'run'},{t:'Photos produits',st:'wait'},{t:'Mise en page',st:'wait'}]; const t0=Date.now();
+  pdfModal(`<div class="pdfhead"><b>Export PDF</b><button class="btn small" type="button" id="pdfclose">Fermer</button></div>${progressHtml(steps,t0)}`);
+  try{
+    const r=await buildPdf(i=>{ steps.forEach((st,k)=>st.st=k<i?'done':k===i?'run':'wait'); if(!$('pdfm').hidden) $('pdfm').querySelector('.prog').outerHTML=progressHtml(steps,Date.now()); });
+    pdfCache=r; const canShare=!!(navigator.canShare&&navigator.canShare({files:[new File([r.blob],r.name,{type:'application/pdf'})]}));
+    const mobile=window.innerWidth<=1000;
+    pdfModal(`<div class="pdfhead"><b>${esc(r.name)}</b><button class="btn small" type="button" id="pdfclose">Fermer</button></div>
+      <div class="pdfact"><button class="btn primary" type="button" id="pdfshare">${canShare?'Partager… (WhatsApp, Messages, Mail)':'Ouvrir le PDF'}</button><a class="btn" href="${r.url}" download="${esc(r.name)}" id="pdfdl">Télécharger</a><button class="btn" type="button" id="pdfopen">Aperçu</button><button class="btn" type="button" id="pdfmail">E-mail (texte)</button><button class="btn" type="button" id="pdfwa">WhatsApp (texte)</button><button class="btn" type="button" id="pdfprint">Imprimer</button></div>
+      <p class="hint" style="margin:8px 0 0">${canShare?'« Partager » envoie le fichier PDF directement dans WhatsApp, Messages ou Mail.':'Sur ce navigateur, le partage de fichier n\'est pas disponible : télécharge le PDF puis joins-le, ou envoie le texte par WhatsApp / e-mail.'}</p>
+      ${mobile?'':`<iframe class="pdfprev" src="${r.url}#toolbar=0" title="Aperçu"></iframe>`}`);
+    toast('PDF prêt', null, 'ok');
+  }catch(e){ steps.forEach(st=>{ if(st.st==='run') st.st='err'; }); pdfModal(`<div class="pdfhead"><b>Export PDF</b><button class="btn small" type="button" id="pdfclose">Fermer</button></div>${progressHtml(steps)}<p style="color:var(--tomato)">${esc(String(e.message||e))}</p><div class="pdfact"><button class="btn" type="button" id="pdfprint">Imprimer / enregistrer en PDF (secours)</button><button class="btn" type="button" id="pdfretry">Réessayer</button></div>`); toast('Export impossible', null, 'err'); }
+}
+async function sharePdf(){ const r=pdfCache; if(!r) return; const file=new File([r.blob],r.name,{type:'application/pdf'}); const title=`Liste de matériel${client.name?' – '+client.name:''}`; if(navigator.canShare&&navigator.canShare({files:[file]})){ try{ await navigator.share({files:[file], title, text:title}); toast('Partagé', null, 'ok'); }catch(e){ if(e.name!=='AbortError') toast('Partage annulé', null, 'err'); } } else window.open(r.url,'_blank'); }
+function printList(){
   const d=new Date().toLocaleDateString('fr-CH',{day:'2-digit',month:'long',year:'numeric'});
   $('print').innerHTML=`<h1>Liste de matériel${client.name?' – '+esc(client.name):''}</h1><div class="sub">${d} · ${list.reduce((a,x)=>a+x.q,0)} pièces · références Feller / Schneider Electric Suisse</div>
-    <table><thead><tr><th></th><th>Qté</th><th>Désignation</th><th>N° ELDAS</th><th>N° Feller</th>${showPrice?'<th>Prix brut</th><th>Total</th>':''}<th>Documentation</th></tr></thead><tbody>
-    ${list.map(x=>{const it=byF[x.f]||x; const sp=(it.tech||[]).filter(t=>/IP|Tension|Courant|montage|raccordement/i.test(t[0])).map(t=>`${t[1]}${t[2]?' '+t[2]:''}`).join(' · '); return `<tr><td class="i"><img src="${esc(x.img||'')}" alt=""></td><td class="q num">${x.q}</td><td>${esc(x.d)}${sp?`<div class="sp">${esc(sp)}</div>`:''}</td><td class="e num">${esc(x.e||'—')}</td><td class="num">${esc(x.f)}</td>${showPrice?`<td class="num">${priceOf(x)==null?'n/d':chf(priceOf(x))}</td><td class="num">${priceOf(x)==null?'—':chf(priceOf(x)*x.q)}</td>`:''}<td class="doc"><a href="${docsUrl(it)}">Fiche &amp; brochures</a></td></tr>`}).join('')}
-    ${showPrice?`<tr><td colspan="5" style="text-align:right;font-weight:600">Total brut (hors TVA, sans remise)</td><td></td><td class="num" style="font-weight:600">${chf(list.reduce((a,x)=>{ const pv=priceOf(x); return pv==null?a:a+pv*x.q; },0))}</td><td></td></tr>`:''}
-    </tbody></table>${client.notes?`<div class="notes">${esc(client.notes)}</div>`:''}<div class="foot">Les numéros ELDAS permettent la commande chez tout grossiste électro suisse. Fiches techniques et brochures : online-katalog.feller.ch</div>`;
+    ${lotsOf().map(({lot,items})=>`${lotsOf().length>1||lot!=='Divers'?`<h2 style="font-size:14px;margin:14px 0 4px">${esc(lot)}</h2>`:''}<table><thead><tr><th></th><th>Qté</th><th>Désignation</th><th>N° ELDAS</th><th>N° Feller</th>${showPrice?'<th>Prix brut</th><th>Total</th>':''}<th>Documentation</th></tr></thead><tbody>
+    ${items.map(x=>{const it=byF[x.f]||x; return `<tr><td class="i"><img src="${esc(x.img||'')}" alt=""></td><td class="q num">${x.q}</td><td>${esc(x.d)}${x.note?`<div class="sp">${esc(x.note)}</div>`:''}</td><td class="e num">${esc(x.e||'—')}</td><td class="num">${esc(x.f)}</td>${showPrice?`<td class="num">${priceOf(x)==null?'n/d':chf(priceOf(x))}</td><td class="num">${priceOf(x)==null?'—':chf(priceOf(x)*x.q)}</td>`:''}<td class="doc"><a href="${docsUrl(it)}">Fiche &amp; brochures</a></td></tr>`}).join('')}</tbody></table>`).join('')}
+    ${showPrice?`<div style="text-align:right;font-weight:600;margin-top:8px">Total brut (hors TVA, sans remise) : ${chf(lotTotal(list))}</div>`:''}${client.notes?`<div class="notes">${esc(client.notes)}</div>`:''}<div class="foot">Les numéros ELDAS permettent la commande chez tout grossiste électro suisse. Fiches techniques et brochures : online-katalog.feller.ch</div>`;
   window.print();
-};
+}
+$('pdf').onclick=exportPdf;
+document.addEventListener('click',e=>{
+  if(e.target.id==='pdfclose'||e.target.id==='pdfm'){ $('pdfm').hidden=true; return; }
+  if(e.target.id==='pdfshare'){ sharePdf(); return; }
+  if(e.target.id==='pdfopen'&&pdfCache){ window.open(pdfCache.url,'_blank'); return; }
+  if(e.target.id==='pdfprint'){ printList(); return; }
+  if(e.target.id==='pdfretry'){ exportPdf(); return; }
+  if(e.target.id==='pdfmail'){ location.href=`mailto:?subject=${encodeURIComponent('Liste de matériel'+(client.name?' – '+client.name:''))}&body=${encodeURIComponent('Bonjour,\n\n'+listText()+'\n\nMeilleures salutations\nNicola Strummiello')}`; return; }
+  if(e.target.id==='pdfwa'){ const t=listText(); if(navigator.share&&window.innerWidth<=1000){ navigator.share({text:t}).catch(()=>{}); } else window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank'); return; }
+});
 
 /* =============== assistant =============== */
 const STARTERS=[
@@ -1390,7 +1522,10 @@ const STARTERS=[
 function openChat(){ chatOpen=true; $('stage').classList.add('chat-open'); renderChat(); setTimeout(()=>$('cin').focus(),50); }
 function closeChat(){ chatOpen=false; $('stage').classList.remove('chat-open'); }
 $('openchat').onclick=()=>chatOpen?closeChat():openChat(); $('chatclose').onclick=closeChat;
-$('chatreset').onclick=()=>{ chat=[]; chatMeta=[]; renderChat(); };
+$('chatreset').onclick=()=>{ chat=[]; chatMeta=[]; renderChat(); persistChat(); };
+// L'échange avec l'assistant survit à un rechargement (photos remplacées par leur mention, 24 derniers messages).
+function persistChat(){ try{ const c=chat.slice(-24).map(m=>Array.isArray(m.content)?{role:m.role,content:'[photo envoyée] '+((m.content.find(x=>x.type==='text')||{}).text||'')}:m); sessionStorage.setItem('offre.chat', JSON.stringify({chat:c, meta:chatMeta.slice(-24)})); }catch(e){} }
+try{ const sc=JSON.parse(sessionStorage.getItem('offre.chat')||'null'); if(sc&&Array.isArray(sc.chat)&&sc.chat.length){ chat=sc.chat; chatMeta=sc.meta||[]; } }catch(e){}
 function renderChat(state){
   const th=$('thread');
   if(!chat.length && !state){ th.innerHTML=`<div class="msg a">Dis-moi le besoin du client. Je pose deux ou trois questions à choix, puis je te donne la configuration avec les N° ELDAS et des options à proposer.</div><div class="starters">${STARTERS.map(s=>`<button type="button" data-starter="${esc(s.t)}"><b>${esc(s.b)}</b>${esc(s.t)}</button>`).join('')}</div>`; return; }
@@ -1401,7 +1536,7 @@ function renderChat(state){
     const qs=(meta.questions&&meta.questions.length&&i===chat.length-1)?questionsHtml(meta.questions):'';
     const pr=meta.proposal?proposalHtml(meta.proposal,i):'';
     return `${m.content&&!(meta.proposal&&/^Proposition :/.test(m.content))?`<div class="msg a">${md(m.content)}${refs?`<div class="refs">${refs}</div>`:''}</div>`:''}${pr}${qs}`;
-  }).join('') + (state==='loading'?`<div class="msg think">L'assistant cherche dans le catalogue<span class="dot"></span></div>`: state?`<div class="msg a" style="color:var(--danger)">${esc(state)}</div>`:'');
+  }).join('') + (state==='loading'?`<div class="msg think">${progressHtml([{t:'Envoyé',st:'done'},{t:chatHasImage?'Analyse de la photo et recherche dans le catalogue':'Recherche dans le catalogue et rédaction',st:'run',s:'en général 10 à 30 s'}], chatStartedAt)}</div>`: state?`<div class="msg a" style="color:var(--danger)">${progressHtml([{t:'Pas de réponse',st:'err',s:state}])}${lastSend?`<div class="actions" style="margin-top:8px"><button class="btn small" type="button" id="cretry">Réessayer</button></div>`:''}</div>`:'');
   th.scrollTop=th.scrollHeight;
 }
 function proposalHtml(pr,i){
@@ -1412,12 +1547,13 @@ function questionsHtml(qs){
   return `<div class="qs" id="qs">${qs.map((q,qi)=>`<div class="q">${esc(q.q)}</div><div class="o" data-qi="${qi}" data-multi="${q.multi?1:0}">${q.options.map(o=>`<button type="button" data-o="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</div>`).join('')}<div class="qsendrow"><button class="btn primary small" type="button" id="qsend" disabled>Envoyer les réponses</button><small>ou écris librement ci-dessous</small></div></div>`;
 }
 $('thread').addEventListener('click',e=>{
+  if(e.target.id==='cretry'&&lastSend){ pendingImage=lastSend.image||null; sendChat(lastSend.text, lastSend.display); return; }
   const st=e.target.closest('[data-starter]'); if(st){ if(st.dataset.starter.startsWith('📐')){ closeChat(); go({name:'import'}); return; } if(st.dataset.starter.startsWith('📷')){ $('cfile').click(); return; } sendChat(st.dataset.starter); return; }
   const ob=e.target.closest('.qs .o button'); if(ob){ const grp=ob.parentElement; if(grp.dataset.multi==='1'){ ob.setAttribute('aria-pressed',String(ob.getAttribute('aria-pressed')!=='true')); } else { grp.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false')); ob.setAttribute('aria-pressed','true'); } $('qsend').disabled=!$('qs').querySelector('[aria-pressed="true"]'); return; }
-  const pa=e.target.closest('.padd'); if(pa){ const box=pa.closest('.prop'); let n=0; box.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{ const it=byF[cb.dataset.f]; if(it){ addToList(it,null,+cb.dataset.q||1,true); n++; } }); renderList(); toast(`${n} références ajoutées`,{label:'Voir la liste',fn:openList}); pa.textContent='Ajouté ✓'; return; }
+  const pa=e.target.closest('.padd'); if(pa){ const box=pa.closest('.prop'); const prt=((chatMeta[+box.dataset.i]||{}).proposal||{}).title||'Assistant'; let n=0; box.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{ const it=byF[cb.dataset.f]; if(it){ addToList(it,null,+cb.dataset.q||1,true,prt); n++; } }); renderList(); toast(`${n} références ajoutées`,{label:'Voir la liste',fn:openList},'ok'); pa.textContent='Ajouté ✓'; return; }
   if(e.target.id==='qsend'){ const meta=chatMeta[chatMeta.length-1]; const ans=meta.questions.map((q,qi)=>{ const sel=[...$('qs').querySelectorAll(`.o[data-qi="${qi}"] button[aria-pressed="true"]`)].map(b=>b.dataset.o.replace(/\s*\(recommandé\)\s*/i,'')); return sel.length?`${q.q} ${sel.join(', ')}`:null; }).filter(Boolean).join(' · '); if(ans) sendChat(ans); return; }
 });
-let pendingImage=null;
+let pendingImage=null, lastSend=null, chatStartedAt=0, chatHasImage=false;
 $('cphoto').onclick=()=>$('cfile').click();
 $('cfile').addEventListener('change',async e=>{ const f=e.target.files[0]; if(!f) return; const data=await shrinkImage(f); pendingImage=data; $('cphoto').style.background='var(--butter)'; toast('Photo prête : décris ce que tu veux (équivalent, remplaçant, identification) puis Envoyer'); $('cin').focus(); e.target.value=''; });
 async function shrinkImage(file){ const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(file); }); const max=1280; const sc=Math.min(1,max/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=Math.round(img.width*sc); c.height=Math.round(img.height*sc); c.getContext('2d').drawImage(img,0,0,c.width,c.height); return c.toDataURL('image/jpeg',0.82).split(',')[1]; }
@@ -1425,6 +1561,7 @@ async function sendChat(text, display){
   text=(text||'').trim(); if(!text && !pendingImage) return; if(!text) text='Identifie ce produit et propose l\'équivalent Feller / Schneider avec N° ELDAS.';
   if(!accessCode){ showGate(''); return; }
   if(!chatOpen) openChat();
+  lastSend={text, display, image:pendingImage}; chatStartedAt=Date.now(); chatHasImage=!!pendingImage;
   const content = pendingImage ? [{type:'image',source:{type:'base64',media_type:'image/jpeg',data:pendingImage}},{type:'text',text}] : text;
   chat.push({role:'user',content}); chatMeta.push({display: display || (pendingImage?'📷 '+text:null)}); pendingImage=null; $('cphoto').style.background=''; renderChat('loading'); $('cin').value=''; $('csend').disabled=true;
   try{
@@ -1433,7 +1570,7 @@ async function sendChat(text, display){
     if(r.status===401){ chat.pop(); chatMeta.pop(); accessCode=''; store.set('offre.code',''); renderChat(); showGate("Code d'accès incorrect."); return; }
     if(!r.ok){ chat.pop(); chatMeta.pop(); renderChat(`${j.error||'Assistant indisponible.'}${j.detail?' — '+j.detail:''}`); return; }
     chat.push({role:'assistant',content:j.answer||(j.proposal?`Proposition : ${j.proposal.title}`:'')}); chatMeta.push({refs:j.refs||[],searches:j.searches||[],questions:j.questions||[],proposal:j.proposal||null});
-    renderChat();
+    renderChat(); persistChat(); toast('Réponse reçue', null, 'ok');
   }catch(e){ chat.pop(); chatMeta.pop(); renderChat("Pas de connexion à l'assistant."); }
   finally{ $('csend').disabled=false; }
 }
@@ -1460,6 +1597,8 @@ wireMic($('cmic'),(t,done)=>{ $('cin').value=t; if(done) sendChat(t); });
 /* =============== thème & init =============== */
 $('theme').onclick=()=>{ const r=document.documentElement; const cur=r.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); r.dataset.theme = cur==='dark'?'light':'dark'; store.set('offre.theme',r.dataset.theme); };
 const th=store.get('offre.theme',null); if(th) document.documentElement.dataset.theme=th;
+// Reprise : on revient exactement où on était (vue + pile de retour), sauf si la sauvegarde date de plus de 12 h.
+(function restoreNav(){ try{ const raw=sessionStorage.getItem('offre.nav')||localStorage.getItem('offre.nav'); if(!raw) return; const s=JSON.parse(raw); if(!s||!s.view||!s.view.name) return; if(s.t&&Date.now()-s.t>12*3600e3&&!sessionStorage.getItem('offre.nav')) return; if(s.view.name==='home'&&!(s.hist||[]).length) return; hist=(s.hist||[]).filter(v=>v&&v.name); view=s.view; if(view.name==='results'&&view.q&&!view.groups) $('q').value=view.q; if(view.name!=='home') toast('Reprise là où tu t\'étais arrêté', {label:'Accueil', fn:()=>{ hist=[]; go({name:'home'},{replace:true}); }}); }catch(e){} })();
 renderList(); render();
 if(window.innerWidth>1000 && accessCode) { /* panneau fermé par défaut : la recherche d'abord */ }
 </script>
