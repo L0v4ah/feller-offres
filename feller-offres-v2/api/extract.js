@@ -1,0 +1,84 @@
+// Lecture de plan / photo / cahier des charges → relevé structuré par pièce (bêta).
+// Le mapping vers les références Feller / Schneider se fait côté client (catalogue + choix de ligne, couleur, montage, niveau connecté).
+const KINDS = ['interrupteur', 'va_et_vient', 'inverseur', 'poussoir', 'variateur', 'store', 'prise_t13', 'prise_t13_2', 'prise_t13_3', 'prise_t23', 'prise_usb', 'prise_rj45', 'prise_tv', 'prise_ext', 'interrupteur_ext', 'detecteur_mouvement', 'detecteur_presence', 'thermostat', 'sonnette', 'interphone', 'boite_derivation', 'sortie_cable', 'autre'];
+const OTHER = ['tableau', 'borne_recharge', 'luminaire', 'parafoudre', 'detecteur_fumee', 'ventilation', 'pac', 'photovoltaique', 'onduleur', 'reseau', 'autre'];
+
+const SYSTEM = `Tu es un électricien chef de projet suisse qui fait le relevé de matériel d'appareillage pour une offre Feller / Schneider.
+On te donne un plan électrique (photo ou PDF), une photo de chantier, ou un cahier des charges / descriptif d'architecte (CFC 232, 233...).
+Ton travail : relever TOUT le matériel d'appareillage, pièce par pièce, et le rendre avec l'outil extract_project. Tu ne réponds qu'avec l'outil.
+
+Lecture d'un plan :
+- Utilise la légende si elle existe ; sinon les symboles usuels suisses (SN / SIA) : interrupteur = cercle avec un trait, deux traits = schéma 3 (va-et-vient), cercle avec flèche ou « P » = poussoir, variateur = interrupteur avec flèche ou « D », prise = demi-cercle ou rectangle avec traits, le chiffre ou les traits indiquent le nombre de prises (2, 3), « T23 » / « 16A » = prise T23, « USB », « RJ45 » / « EDV », « TV » / « R-TV », « ST » / flèches haut-bas = store, « PIR » / « BM » = détecteur de mouvement, « PM » = détecteur de présence, « Th » = thermostat, cloche = sonnette.
+- Compte chaque symbole. Des symboles dessinés au même endroit (collés, alignés, dans un même cadre) = une COMBINAISON : donne-la dans combos avec la disposition (2x1 vertical, 1x2 horizontal, 3x1, 1x3, 2x2) et ses éléments. Ne les compte alors pas une deuxième fois dans items.
+- Nomme les pièces comme sur le plan (Séjour, Cuisine, Chambre 1, SdB, Hall, Réduit…). Si un élément est hors pièce identifiable, pièce « Divers ».
+- Les luminaires, tableaux, bornes, ventilations, détecteurs de fumée vont dans other.
+
+Lecture d'un cahier des charges :
+- Relève les quantités écrites, pièce par pièce si le texte le permet, sinon par zone ou « Général ».
+- Repère la marque / ligne de design demandée (EDIZIOdue, EDIZIO.liv, STANDARDdue, ELEMENT, NEVO, « ou équivalent »), la couleur, encastré/apparent, le niveau connecté (KNX, Wiser, Matter, classique), le type de bâtiment, les exigences IP (extérieur, humide), la marque concurrente citée (Hager, Gira…).
+- Mets dans questions les points flous à clarifier avec l'architecte (maximum 6, courts).
+
+Règles :
+- qty = nombre d'appareils (une prise triple = 1 appareil prise_t13_3).
+- Si tu n'es pas sûr d'un symbole, mets confidence « basse » et explique dans detail. N'invente pas de pièces.
+- summary : 2 phrases maximum sur ce que tu as lu (type de document, nombre de pièces, ce qui manque).`;
+
+const TOOL = {
+  name: 'extract_project',
+  description: "Relevé structuré du matériel d'appareillage par pièce.",
+  input_schema: {
+    type: 'object', required: ['summary', 'rooms'],
+    properties: {
+      doc_type: { type: 'string', enum: ['plan', 'photo_chantier', 'cahier_des_charges', 'liste', 'autre'] },
+      summary: { type: 'string' },
+      building: { type: 'string', description: 'villa, appartement, PPE, bureau, commerce, école…' },
+      hints: { type: 'object', properties: {
+        design: { type: 'string', description: 'EDIZIOdue, EDIZIO.liv, STANDARDdue, ELEMENT, NEVO ou vide' },
+        color: { type: 'string', description: 'blanc, noir, gris clair, gris foncé, crema, aluminium… ou vide' },
+        mount: { type: 'string', enum: ['ENC', 'AP', ''] },
+        smart: { type: 'string', enum: ['classique', 'Wiser', 'KNX', 'Matter', ''] },
+        competitor: { type: 'string' }
+      } },
+      rooms: { type: 'array', items: { type: 'object', required: ['name', 'items'], properties: {
+        name: { type: 'string' },
+        items: { type: 'array', items: { type: 'object', required: ['kind', 'qty'], properties: {
+          kind: { type: 'string', enum: KINDS }, qty: { type: 'integer' }, detail: { type: 'string' }, confidence: { type: 'string', enum: ['haute', 'moyenne', 'basse'] } } } },
+        combos: { type: 'array', items: { type: 'object', required: ['layout', 'parts'], properties: {
+          layout: { type: 'string', enum: ['2x1', '1x2', '3x1', '1x3', '2x2'] }, parts: { type: 'array', items: { type: 'string', enum: KINDS } }, qty: { type: 'integer' }, detail: { type: 'string' } } } }
+      } } },
+      other: { type: 'array', items: { type: 'object', required: ['kind', 'qty'], properties: { kind: { type: 'string', enum: OTHER }, qty: { type: 'integer' }, detail: { type: 'string' }, room: { type: 'string' } } } },
+      questions: { type: 'array', items: { type: 'string' } }
+    }
+  }
+};
+
+module.exports = async (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  if (req.method !== 'POST') return res.status(405).json({ error: 'POST uniquement' });
+  const code = req.headers['x-access-code'] || '';
+  if (!process.env.ACCESS_CODE || code !== process.env.ACCESS_CODE) return res.status(401).json({ error: "Code d'accès incorrect" });
+  if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: 'ANTHROPIC_API_KEY manquante sur Vercel' });
+  const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+  const images = (Array.isArray(body.images) ? body.images : []).slice(0, 5).filter(s => typeof s === 'string' && s.startsWith('data:image/'));
+  const text = typeof body.text === 'string' ? body.text.slice(0, 80000) : '';
+  const note = typeof body.note === 'string' ? body.note.slice(0, 1000) : '';
+  if (!images.length && !text.trim()) return res.status(400).json({ error: 'Aucun contenu à lire (image ou texte).' });
+  const content = [];
+  images.forEach((src, i) => { const m = /^data:(image\/[a-z]+);base64,(.+)$/.exec(src); if (m) { content.push({ type: 'text', text: `Page / image ${i + 1}${body.name ? ' de « ' + String(body.name).slice(0, 80) + ' »' : ''} :` }); content.push({ type: 'image', source: { type: 'base64', media_type: m[1], data: m[2] } }); } });
+  if (text.trim()) content.push({ type: 'text', text: `Texte du document${body.name ? ' « ' + String(body.name).slice(0, 80) + ' »' : ''} :\n\n${text}` });
+  content.push({ type: 'text', text: `Fais le relevé complet avec extract_project.${note ? ' Indication de Nicola : ' + note : ''}` });
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({ model: process.env.PLAN_MODEL || process.env.MODEL || 'claude-sonnet-5-5', max_tokens: 8000, system: SYSTEM, tools: [TOOL], tool_choice: { type: 'tool', name: 'extract_project' }, messages: [{ role: 'user', content }] })
+    });
+    if (!r.ok) { const t = await r.text(); return res.status(502).json({ error: 'Erreur API modèle', detail: ('API ' + r.status + ' ' + t).slice(0, 300) }); }
+    const data = await r.json();
+    const tu = (data.content || []).find(c => c.type === 'tool_use');
+    if (!tu) return res.status(502).json({ error: 'Lecture impossible', detail: 'pas de relevé renvoyé' });
+    return res.status(200).json({ project: tu.input, usage: data.usage, stop: data.stop_reason });
+  } catch (e) {
+    return res.status(502).json({ error: 'Erreur API modèle', detail: String(e.message).slice(0, 300) });
+  }
+};

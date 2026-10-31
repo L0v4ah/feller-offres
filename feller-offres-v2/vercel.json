@@ -4,6 +4,10 @@
       "includeFiles": "api/_data/catalogue.json.gz",
       "maxDuration": 60,
       "memory": 1024
+    },
+    "api/extract.js": {
+      "maxDuration": 60,
+      "memory": 1024
     }
   },
   "headers": [

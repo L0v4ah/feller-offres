@@ -6,6 +6,8 @@ Production : https://feller-offres.vercel.app (dépôt GitHub `L0v4ah/feller-off
 - `index.html` — l'application : recherche vocale/texte, filtres (nouveautés, encastré/apparent/REG, IP44+, ligne de design), fiches techniques, liste de matériel, export PDF, liens configurateurs, assistant IA.
 - `data.js` — catalogue embarqué côté client, allégé (généré par `build_data.py`) ; `tech.json` — fiches techniques et accessoires, chargé en arrière-plan.
 - `api/chat.js` — fonction serverless Vercel : l'assistant (Claude API) avec outil de recherche dans le catalogue.
+- `api/extract.js` — lecture de plan / photo / cahier des charges (bêta) : relevé structuré par pièce (outil extract_project) ; le choix des références se fait côté client. Variable facultative `PLAN_MODEL`.
+- `samples/` — exemples (plan d'appartement, cahier des charges PDF) pour tester l'import.
 - `api/_data/catalogue.json.gz` — même catalogue (complet, gzip), lu par la fonction serveur.
 - `vercel.json` — configuration (inclusion du catalogue dans la fonction, cache de data.js).
 - `build_data.py` — reconstruit `data.js` et `api/_data/catalogue.json` à partir de `data/feller-catalogue-fr.json` + `data/feller-details-fr.json` (fiches techniques, accessoires) + `data/feller-vars-fr.json` (variantes de couleur) + `data/feller-dis-fr.json` (composition / pièces détachées) + `data/ev-sonepar.json` (bornes EVlink, source Sonepar).

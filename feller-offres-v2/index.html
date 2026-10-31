@@ -165,6 +165,22 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 .card .act{display:flex;gap:6px;margin-top:auto;padding-top:6px}
 .card .act .btn{flex:1}
 .card .act .btn.primary{background:var(--pine);border-color:var(--pine);color:var(--on-pine)}
+.beta{display:inline-block;background:var(--butter,#f2c94c);color:#3b3000;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;vertical-align:middle;letter-spacing:.02em}
+.tile .k.kb{background:var(--butter,#f2c94c);color:#3b3000}
+.drop{display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;text-align:center;border:2px dashed var(--line-2);border-radius:18px;padding:34px 16px;background:var(--float);cursor:pointer}
+.drop.over{border-color:var(--pine);background:var(--accent-soft)}
+.drop span{color:var(--muted);font-size:13.5px}
+.bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden}.bar .indet{display:block;height:100%;width:35%;background:var(--pine);border-radius:99px;animation:indet 1.4s ease-in-out infinite}@keyframes indet{0%{margin-left:-35%}100%{margin-left:100%}}
+.pconf{display:grid;gap:10px;margin:6px 0 16px;padding:12px 14px;background:var(--float);border:1px solid var(--rim);border-radius:16px}
+.psel small{display:block;color:var(--ink-3);font-size:12px;margin-bottom:4px}
+.psel .chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.proom{margin-bottom:6px}
+.prow2{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:9px 12px;background:var(--glass-2);border:1px solid var(--rim);border-radius:14px;margin-bottom:6px}
+.prow2 .n small{display:block;color:var(--ink-3);font-size:12px}
+.prow2 .g{font-size:12px;color:var(--ink-3);white-space:nowrap}
+.prow2.low{border-color:var(--butter,#f2c94c)}
+@media (max-width:600px){.prow2{grid-template-columns:1fr auto}.prow2 .g{display:none}}
 .tips{margin:0 0 12px;padding:10px 14px;background:var(--float);border:1px solid var(--line-2);border-radius:14px;font-size:13.5px}
 .tips summary{cursor:pointer;font-weight:600;color:var(--pine)}
 .tips ul{margin:8px 0 0;padding-left:18px;color:var(--ink-2)}
@@ -222,7 +238,7 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 #chat{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));height:calc(100dvh - var(--bar));display:flex;flex-direction:column;min-width:0;padding:0 clamp(16px,1.6vw,28px) 16px 0}
 #chat>.panel{display:flex;flex-direction:column;height:100%;background:var(--glass-3);backdrop-filter:blur(16px);border:1px solid var(--rim);border-radius:var(--r-card);box-shadow:var(--shadow-pop);overflow:hidden}
 .stage:not(.chat-open) #chat{display:none}
-@media (max-width:1000px){ .stage.chat-open #chat{position:fixed;inset:0;top:0;height:100vh;z-index:60;padding:0} .stage.chat-open #chat>.panel{border-radius:0;border:0} }
+@media (max-width:1000px){ .stage.chat-open #chat{position:fixed;inset:0;top:0;height:100vh;height:100dvh;z-index:60;padding:0} .stage.chat-open #chat>.panel{border-radius:0;border:0} }
 #chat .head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
 #chat .head b{font-weight:600}
 #chat .head small{color:var(--faint);font-size:12.5px;display:block}
@@ -242,8 +258,8 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 .qs .o{display:flex;flex-wrap:wrap;gap:6px}
 .qs .o button{border:1px solid var(--line-2);background:var(--solid);border-radius:999px;padding:7px 13px;font-size:13.5px}
 .qs .o button[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--on-ink)}
-.qs .send{margin-top:14px;display:flex;gap:8px;align-items:center}
-.qs .send small{color:var(--faint)}
+.qs .qsendrow{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.qs .qsendrow small{color:var(--faint)}
 .msg.think{color:var(--faint);font-size:13.5px}
 .prop{align-self:stretch;background:var(--float);border:1px solid var(--rim);border-radius:var(--r-tile);padding:12px 14px;box-shadow:var(--shadow)}
 .prop .ph b{display:block;font-weight:600;font-size:15px}.prop .ph small{color:var(--faint);font-size:12.5px}
@@ -263,7 +279,7 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 #chat .in{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line);align-items:flex-end;padding-bottom:max(10px,env(safe-area-inset-bottom))}
 #chat textarea{flex:1;border:1px solid var(--line-2);border-radius:18px;padding:10px 14px;background:var(--float);resize:none;max-height:120px;font-size:14.5px;line-height:1.4}
 #chat textarea:focus{outline:none;border-color:var(--ink)}
-#chat .send{height:40px;border-radius:999px;background:var(--ink);color:var(--on-ink);border:0;padding:0 16px;font-weight:500}
+#chat #csend{height:40px;border-radius:999px;background:var(--ink);color:var(--on-ink);border:0;padding:0 16px;font-weight:500}
 
 /* ---------- list drawer ---------- */
 #scrim{position:fixed;inset:0;background:rgba(23,25,26,.35);backdrop-filter:blur(4px);z-index:65}
@@ -774,6 +790,8 @@ function render(scroll){
   else if(view.name==='wizard') v.innerHTML=wizardHtml();
   else if(view.name==='results') v.innerHTML=resultsHtml();
   else if(view.name==='composer') v.innerHTML=composerHtml();
+  else if(view.name==='import') v.innerHTML=importHtml();
+  else if(view.name==='project') v.innerHTML=projectHtml();
   lastRendered=view.name;
   const mode=scroll||(same?'keep':'top');
   if(mode==='keep') window.scrollTo(0,y); else window.scrollTo({top:0});
@@ -782,13 +800,14 @@ function go(nv){ view=nv; forceTop=true; render('top'); }
 
 // Sections de l'accueil : parcours guidés, préréglages et familles de produits. Ordre et masquage personnalisables (bouton « Organiser »).
 const SECTIONS = [
+  {id:'import', t:'Plan, photo ou cahier des charges', s:'Relevé automatique pièce par pièce → liste de matériel', imgq:['Plaque de fixation grd.I-I','Combinaison ENC EDIZIOdue 3/1P+3×T13 blanc'], k:'Bêta', open:()=>go({name:'import'})},
   {id:'appareillage', flow:'appareillage', t:'Appareillage', s:'Interrupteurs, prises, USB, variateurs', imgs:['7563.GMI.A.61','87303.GMI.A.61']},
   {id:'tableau', flow:'tableau', t:'Tableau & protection', s:'Resi9, PrismaSeT, Clario iC40 — composeur par usage', imgs:['R9H10937B','A9D67410']},
   {id:'xs', t:'Petit tableau PrismaSeT XS', s:'1 à 6 rangées, 18 ou 24 UM, porte au choix', imgs:['SE-822100049','SE-822000019'], preset:{flow:'tableau', answers:{fam:'PrismaSeT', install:'AP', system:'XS'}}},
   {id:'bornes', flow:'bornes', t:'Bornes de recharge', s:'Wallbox, Charge Pro, EVlink Pro AC et DC, gestion de charge', imgs:['SE-834020819','SE-834001909']},
   {id:'smart', flow:'smart', t:'Smart home', s:'Wiser, KNX, Matter', imgs:['3401.1.W.GMI.A.61','4708-1-C.GMI.A.L.P.61']},
   {id:'exterieur', flow:'exterieur', t:'Extérieur & humide', s:'NEVO, IP44 et plus', imgs:['3402.2.NAP.Q.A.61','13431']},
-  {id:'tgbt', flow:'tgbt', t:'TGBT & armoires', s:'Courant de tête, enveloppe PrismaSeT XL/G/P, parafoudre, mesure', imgs:['SE-834010149','SE-550810216']},
+  {id:'tgbt', flow:'tgbt', k:'Bêta', t:'TGBT & armoires', s:'Courant de tête, enveloppe PrismaSeT XL/G/P, parafoudre, mesure', imgs:['SE-834010149','SE-550810216']},
   {id:'tgbt_all', t:'TGBT — tout voir', s:'Armoires, NSX, NG125, sectionneurs, barres, mesure', imgs:['PRJ-PRISMAG','SE-834010309'], q:'TGBT armoire', groups:[
     {label:'Armoires de sol PrismaSeT XL (12 rangées, 1 à 3 champs)', q:'Armoire de sol PrismaSeT XL'},
     {label:'Coffrets muraux PrismaSeT XL', q:'Coffret mural PrismaSeT XL'},
@@ -800,7 +819,7 @@ const SECTIONS = [
     {label:'Parafoudre type 1+2 (arrivée)', q:'iPRD1 type 1+2'},
     {label:'Répartition : barres collectrices Prisma', q:'Barre collectrice kit modulaire Prisma'},
     {label:'Mesure : PowerTag, compteurs, Panel Server', q:'PowerTag F 3PN'}]},
-  {id:'protection', flow:'protection', t:'Disjoncteur & différentiel', s:'Le bon Clario iC40 par circuit, type A/F/B, peigne', imgs:['A9D67410','SE-531033410']},
+  {id:'protection', flow:'protection', k:'Bêta', t:'Disjoncteur & différentiel', s:'Le bon Clario iC40 par circuit, type A/F/B, peigne', imgs:['A9D67410','SE-531033410']},
   {id:'protection_all', t:'Protection — tout voir', s:'Clario iC40, Acti9 iC60, iID, type B-EV, NG125', imgs:['A9P54716','SE-531012310'], groups:[
     {label:'FI/LS 1 module Clario iC40 (13 / 16 / 20 A, 30 mA)', q:'Clario iC40 1UM 0.03A'},
     {label:'Disjoncteurs 1LN Clario iC40', q:'Clario iC40 (C) 1LN'},
@@ -818,7 +837,7 @@ const SECTIONS = [
     {label:'Relais et interfaces', q:'relais iRTC'},
     {label:'Compteurs d\'énergie iEM (MID)', q:'Compteur d\'énergie iEM3'},
     {label:'PowerTag sans fil + Panel Server', q:'PowerTag'}]},
-  {id:'surtension', flow:'surtension', t:'Protection surtension', s:'Type 1+2, type 2, compact Resi9, type 3 — avec déconnexion', imgs:['SE-808000507','SE-808000207']},
+  {id:'surtension', flow:'surtension', k:'Bêta', t:'Protection surtension', s:'Type 1+2, type 2, compact Resi9, type 3 — avec déconnexion', imgs:['SE-808000507','SE-808000207']},
   {id:'surtension_all', t:'Surtension — tout voir', s:'iPRD compact Resi9, iPRD 40r, type 1+2, Quick', imgs:['SE-808000027','A9L16617'], groups:[
     {label:'Parafoudre compact Resi9 iPRD (type 2+3, 1 module)', q:'parasurtension Resi9 iPRD compact'},
     {label:'iPRD 40r type 2+3 (tableau)', q:'parasurtension iPRD 40r'},
@@ -833,7 +852,7 @@ const SECTIONS = [
     {label:'Borniers et répartiteurs', q:'bornier Resi9'},
     {label:'Rails DIN et plaques', q:'Rail DIN Resi9'},
     {label:'Obturateurs', q:'obturateur Resi9'}]},
-  {id:'asi', flow:'asi', t:'Onduleur / ASI', s:'Quoi protéger, puissance, autonomie → Easy UPS, APC, 3S, Galaxy', imgs:['SE-960954018','SE-960960138']},
+  {id:'asi', flow:'asi', k:'Bêta', t:'Onduleur / ASI', s:'Quoi protéger, puissance, autonomie → Easy UPS, APC, 3S, Galaxy', imgs:['SE-960954018','SE-960960138']},
   {id:'asi_all', t:'ASI — tout voir', s:'Easy UPS BVS / SMVS / On-Line, APC, 3S, batteries, cartes', imgs:['SE-960953718','SE-960998018'], groups:[
     {label:'Easy UPS 1 kVA et moins', q:'ASI Easy UPS 1KVA'},
     {label:'Easy UPS 1,5 à 3 kVA', q:'ASI Easy UPS 2000VA'},
@@ -858,7 +877,7 @@ function orderedSections(){ const ord=homePrefs.order||[]; const byId=Object.fro
 function saveHome(){ store.set('offre.home', homePrefs); }
 function homeHtml(){
   const secs=orderedSections(); const hidden=new Set(homePrefs.hidden||[]);
-  const tile=(t,i,arr)=>`<div class="tile ${organizing?'org':''}" role="button" tabindex="0" data-sec="${t.id}" draggable="${organizing}">${t.k?`<span class="k">${t.k}</span>`:''}
+  const tile=(t,i,arr)=>`<div class="tile ${organizing?'org':''}" role="button" tabindex="0" data-sec="${t.id}" draggable="${organizing}">${t.k?`<span class="k ${t.k==='Bêta'?'kb':''}">${t.k}</span>`:''}
       ${organizing?`<span class="orgbar"><button type="button" class="ob" data-move="-1" data-sec="${t.id}" title="Monter" ${i===0?'disabled':''}>▲</button><button type="button" class="ob" data-move="1" data-sec="${t.id}" title="Descendre" ${i===arr.length-1?'disabled':''}>▼</button><button type="button" class="ob" data-hide="${t.id}" title="Masquer">Masquer</button></span>`:''}
       <div class="pic multi">${(t.imgs||t.imgq||[]).map(i=>{ const src=t.imgs?PIC(i):((searchFallback(i,{},1).items[0]||{}).img||''); return `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`; }).join('')}</div>
       <div class="txt"><b>${esc(t.t)}</b><span>${esc(t.s)}</span></div></div>`;
@@ -873,6 +892,7 @@ function homeHtml(){
 }
 function openSection(id){
   const t=SECTIONS.find(x=>x.id===id); if(!t) return;
+  if(t.open){ t.open(); return; }
   if(t.flow){ startFlow(t.flow); return; }
   if(t.preset){ const fl=FLOWS[t.preset.flow]; const answers={...t.preset.answers}; const steps=visibleSteps(fl,answers); const step=Math.max(0, steps.findIndex(st=>answers[st.key]===undefined)); go({name:'wizard', flow:t.preset.flow, step, answers}); return; }
   if(t.groups){ F={design:'',mount:'',ip:false,nw:false}; const v={name:'results', title:t.t, groups:t.groups.map(g=>({...g})), q:t.q||'', from:'section'}; remember(t.t, v); go(v); }
@@ -901,7 +921,7 @@ function resultsHtml(){
   const filters = `<div class="filters">${chip('Nouveautés','nw','1','new')}${Object.entries(MOUNT).map(([v,l])=>chip(l,'mount',v)).join('')}${chip('IP44+','ip','1')}${DESIGNS.slice(0,5).map(d=>chip(d,'design',d)).join('')}${anyF?'<button class="chip x" type="button" data-k="reset">Réinitialiser</button>':''}</div>`;
   const conf = r.q ? TOOLS.filter(t=>t.rx.test(r.q)).slice(0,1).map(t=>`<div class="conf"><div class="t"><b>Configurateur conseillé :</b> ${esc(t.name)} <span style="color:var(--ink-2)">· ${esc(t.why)}</span></div><a class="btn small" href="${t.url}" target="_blank" rel="noopener">Ouvrir</a></div>`).join('') : '';
   let groups;
-  if(r.groups) groups = r.groups.map(g=>{ const sr=searchFallback(g.q,{...F, ...(g.F||{})},24); return {label:g.label, items:sr.items.map(it=>g.qty>1?Object.assign(Object.create(it),{_gq:g.qty}):it), note:[g.qty>1?'quantité conseillée : '+g.qty:'' ,g.note,sr.note].filter(Boolean).join(' · '), q:g.q, qty:g.qty}; });
+  if(r.groups) groups = r.groups.map(g=>{ const sr=searchFallback(g.q,{...F, ...(g.F||{})},24); const its=g.pickF&&byF[g.pickF]?[byF[g.pickF],...sr.items.filter(x=>x.f!==g.pickF)]:sr.items; return {label:g.label, items:its.map(it=>g.qty>1?Object.assign(Object.create(it),{_gq:g.qty}):it), note:[g.qty>1?'quantité conseillée : '+g.qty:'' ,g.note,sr.note].filter(Boolean).join(' · '), q:g.q, qty:g.qty}; });
   else { const sr=searchFallback(r.q||'',F,60); groups=[{label:sr.note?`Rien ne correspond exactement — résultats proches ${sr.note}`:'', items:sr.items, q:r.q, hint:sr.note?`Pas d'article « ${esc(r.q)} » tel quel dans la base. Vérifie aussi : ${catalogueLinks(r.q)} — ou demande à l'assistant.`:''}]; }
   const total = groups.reduce((a,g)=>a+g.items.length,0);
   const body = total ? groups.map(g=>`<section class="group">${g.label?`<h2>${esc(g.label)} <small>${g.items.length} article${g.items.length>1?'s':''}${g.note?' · '+esc(g.note):''}</small></h2>`:''}${g.hint?`<div style="font-size:13px;color:var(--ink-2);margin:-4px 0 10px">${g.hint}</div>`:''}${g.items.length?((g.compact||(r.groups&&g.items.length<=2))?`<div class="cards rows">${g.items.map(rowHtml).join('')}</div>`:`<div class="cards">${g.items.map(cardHtml).join('')}</div>`):`<div class="empty" style="padding:10px 6px">Rien dans le catalogue pour « ${esc(g.q)} ». ${catalogueLinks(g.q)}</div>`}</section>`).join('')
@@ -912,7 +932,7 @@ function resultsHtml(){
   const accItems=Object.entries(accCount).sort((a,b)=>b[1]-a[1]).map(([f])=>byF[f]).filter(Boolean).filter(it=>!groups.some(g=>g.items.includes(it))).slice(0,8);
   const accHtml = accItems.length ? `<section class="group acc"><h2>Pièces détachées et accessoires à prévoir <small>kits frontaux, cadres, boîtes, peignes… liés aux articles ci-dessus</small></h2><div class="cards">${accItems.map(cardHtml).join('')}</div></section>` : '';
   const tipsHtml = r.tips&&r.tips.length ? `<details class="tips"><summary>À savoir pour conseiller (${r.tips.length})</summary><ul>${r.tips.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></details>` : '';
-  return `${tipsHtml}<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig" title="L'assistant compose une offre type avec quantités, accessoires et options, prête à ajouter">Offre type par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':'Accueil'}</button>`}</div>${filters}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}${r.brief?' · touche un produit pour sa fiche':''}</div>${body}${total?accHtml:''}`;
+  return `${tipsHtml}<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig" title="L'assistant compose une offre type avec quantités, accessoires et options, prête à ajouter">Offre type par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':r.from==='project'?'Retour au relevé':'Accueil'}</button>`}</div>${filters}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}${r.brief?' · touche un produit pour sa fiche':''}</div>${body}${total?accHtml:''}`;
 }
 
 function rowHtml(it){
@@ -1059,9 +1079,127 @@ function composerHtml(){
 function umOf(ref, dflt){ const m=(ref.d||'').match(/(\d+)\s*UM\b/i); if(m) return +m[1]; if(/\b3LN\b|\b3L\+N\b|\b3P\b/.test(ref.d)) return 3; if(/\b4L\b|\b4P\b/.test(ref.d)) return 4; if(/\b1LN\b|\b1L\+N\b|\b2P\b|\b1P\b/.test(ref.d)) return 1; return dflt; }
 function composerPick(k, it){ view.refs[k]=it.f; view.name='composer'; render(); }
 
+/* =============== import plan / photo / cahier des charges (bêta) =============== */
+const PK = {
+  interrupteur:{l:'Interrupteur (3/1)', tok:'3/1', q:c=>c.smart==='Wiser'?`interrupteur Wiser ${c.design}`:c.smart==='KNX'?`poussoir KNX ${c.design}`:c.smart==='Matter'?`Matter ${c.design}`:/liv|NEVO|ELEMENT/.test(c.design)?`interrupteur à poussoir 3/1 ${c.design}`:`interrupteur 3/1 ${c.design}`, want:/3\/1|Wiser|KNX|Matter/, avoid:/6\/1|rotatif|cl[ée]|store|sonnerie|1\/3\+/},
+  va_et_vient:{l:'Va-et-vient (schéma 3)', tok:'3/1', alias:'interrupteur'},
+  inverseur:{l:'Inverseur (schéma 6)', tok:'6/1', q:c=>`interrupteur 6/1 ${c.design}`, want:/6\/1/},
+  poussoir:{l:'Poussoir (télérupteur)', tok:'1/1', q:c=>c.smart==='KNX'?`poussoir KNX ${c.design}`:`interrupteur à poussoir 1/1 ${c.design}`, want:/poussoir|1\/1/, avoid:/sonnerie|store|Matter|KNX|RF/},
+  variateur:{l:'Variateur', tok:'variateur', q:c=>c.smart==='KNX'?`variateur KNX`:c.smart==='Wiser'?`variateur Wiser ${c.design}`:`variateur universel ${c.design}`, want:/variateur/i},
+  store:{l:'Poussoir de store', tok:'store', q:c=>c.smart==='Wiser'?`store Wiser ${c.design}`:c.smart==='KNX'?`poussoir KNX ${c.design}`:`stores ${c.design}`, want:/store/i, avoid:/2 canaux|4T|Matter/},
+  prise_t13:{l:'Prise T13', tok:'T13', q:c=>`prise T13 ${c.design}`, want:/\bT13\b/, avoid:/[23]\s?×\s?T13|USB|\bFI\b|lumineux|1×S|3×S/},
+  prise_t13_2:{l:'Prise double T13', tok:'2xT13', q:c=>`prise 2×T13 ${c.design}`, want:/2\s?×\s?T13/, avoid:/USB|lumineux|×S\b/},
+  prise_t13_3:{l:'Prise triple T13', tok:'3xT13', q:c=>`prise 3×T13 ${c.design}`, want:/3\s?×\s?T13/, avoid:/USB|lumineux|×S\b/},
+  prise_t23:{l:'Prise T23 (16 A)', tok:'T23', q:c=>`prise T23 ${c.design}`, want:/T23/, avoid:/\bFI\b|[23]\s?×/},
+  prise_usb:{l:'Prise USB', tok:'USB', q:c=>`prise USB ${c.design}`, want:/USB/},
+  prise_rj45:{l:'Prise réseau RJ45', tok:'RJ45', q:c=>`prise RJ45 ${c.design}`, want:/RJ45/, avoid:/^Kit/},
+  prise_tv:{l:'Prise TV / radio', tok:'TV', q:c=>`prise TV ${c.design}`, want:/TV/},
+  prise_ext:{l:'Prise extérieure IP55', q:c=>`prise T13 NEVO AP IP55`, want:/IP55/, avoid:/lumineux/},
+  interrupteur_ext:{l:'Interrupteur extérieur IP55', q:c=>`interrupteur 3/1 NEVO AP`, want:/3\/1/},
+  detecteur_mouvement:{l:'Détecteur de mouvement', q:c=>c.smart==='KNX'?`détecteur KNX ${c.design}`:`detecteur mouvement ${c.design}`, want:/mouvement|KNX/},
+  detecteur_presence:{l:'Détecteur de présence', q:c=>`détecteur de présence ${c.smart==='KNX'?'KNX':''}`, want:/présence/},
+  thermostat:{l:'Thermostat', q:c=>c.smart==='Wiser'?`capteur température Wiser ${c.design}`:c.smart==='KNX'?`thermostat KNX ${c.design}`:`thermostat ${c.design}`, want:/thermostat|température/i},
+  sonnette:{l:'Poussoir de sonnerie', q:c=>`poussoir de sonnerie ${c.design}`, want:/sonnerie/},
+  interphone:{l:'Interphone', q:c=>`interphone`, want:/interphone/i},
+  boite_derivation:{l:'Boîte de dérivation', q:c=>`boîte de dérivation`, want:/dérivation/},
+  sortie_cable:{l:'Sortie de câble', q:c=>`sortie de câble ${c.design}`, want:/sortie/},
+  autre:{l:'Autre (à préciser)'},
+};
+const OTHER_LBL={tableau:'Tableau électrique', borne_recharge:'Borne de recharge', luminaire:'Luminaires', parafoudre:'Parafoudre', detecteur_fumee:'Détecteurs de fumée', ventilation:'Ventilation', pac:'Pompe à chaleur', photovoltaique:'Photovoltaïque', onduleur:'Onduleur', reseau:'Réseau / baie', autre:'Autre'};
+const COLOR_OPTS=['blanc','noir','gris clair','gris foncé','crema','aluminium'];
+const pkOf = k => { const p=PK[k]||PK.autre; return p.alias?{...PK[p.alias],...p,q:PK[p.alias].q,want:PK[p.alias].want,avoid:PK[p.alias].avoid}:p; };
+const COLOR_CODE={blanc:'61',noir:'60','gris clair':'65','gris foncé':'67',crema:'35',aluminium:'0C'};
+function pickBest(q, ctx, want, avoid){
+  const items=searchFallback(q,{},80).items; if(!items.length) return null;
+  const sc=it=>{ let s=0; const d=it.d+' '+it.f; if(want&&want.test(d)) s+=6; if(avoid&&avoid.test(d)) s-=8; if(/^(Kit|Cadre|Plaque|Couvercle|Intérieur|Insert|Contact|Feuill|Disque|Calotte|Touche|Bascule)/i.test(it.d)) s-=6; if(/shutter|LED|lum\.|lumineux|\b[13]×S\b|étiqu/i.test(it.d)) s-=1.5; if(ctx.mount==='ENC'&&/\.(FMI|GMI|QMI)\b/.test(it.f)) s+=3; if(ctx.mount==='AP'&&/\bAP\b|NAP/.test(d)) s+=3; if(ctx.mount==='ENC'&&/\bAP\b/.test(it.d)) s-=3; if(ctx.design&&it.d.includes(ctx.design)) s+=3; if(!ctx.smart&&/KNX|Matter|Wiser|\bRF\b/.test(d)) s-=5; if(it.buy===false) s-=4; if(/\.61(\.|$)/.test(it.f)) s+=.5; s-=it.d.length/200; return s; };
+  let best=items.map(it=>[sc(it),it]).sort((a,b)=>b[0]-a[0])[0][1];
+  const code=COLOR_CODE[ctx.color||'blanc']; if(code&&best.vars){ const v=best.vars.find(x=>new RegExp('\\.'+code+'(\\.|$)').test(x[0])); if(v&&byF[v[0]]) best=byF[v[0]]; }
+  return best;
+}
+function comboQuery(cb, ctx){ const toks=cb.parts.map(k=>pkOf(k).tok||'').filter(Boolean); return `combinaison ${ctx.design} ${ctx.mount} ${toks.join(' ')} ${/1x/.test(cb.layout)?'horizontale':''}`.replace(/\s+/g,' ').trim(); }
+const gradeOf = cb => ({ '2x1':'grd. I-I vertical', '1x2':'grd. I-I horizontal', '3x1':'grd. I-I-I vertical', '1x3':'grd. I-I-I horizontal', '2x2':'2×2 (I-I / I-I)' }[cb.layout]||cb.layout);
+async function fileToImages(file, maxPages=4){
+  if(/^image\//.test(file.type)){ return [await shrinkTo(file,1800)]; }
+  if(/pdf$/i.test(file.type)||/\.pdf$/i.test(file.name)){ const pdfjs=await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js','pdfjsLib'); pdfjs.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const pdf=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise; let text=''; for(let i=1;i<=Math.min(pdf.numPages,40);i++){ const pg=await pdf.getPage(i); const tc=await pg.getTextContent(); text+=tc.items.map(x=>x.str).join(' ')+'\n'; }
+    const imgs=[]; const textual=text.replace(/\s+/g,' ').length>1500; const n=textual?0:Math.min(pdf.numPages,maxPages);
+    for(let i=1;i<=n;i++){ const pg=await pdf.getPage(i); const v1=pg.getViewport({scale:1}); const sc=Math.min(3,1800/Math.max(v1.width,v1.height)); const vp=pg.getViewport({scale:sc}); const c=document.createElement('canvas'); c.width=vp.width; c.height=vp.height; await pg.render({canvasContext:c.getContext('2d'),viewport:vp}).promise; imgs.push(c.toDataURL('image/jpeg',0.8)); }
+    return {imgs, text:textual?text:'', pages:pdf.numPages}; }
+  if(/\.docx$/i.test(file.name)){ const mm=await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js','mammoth'); const r=await mm.extractRawText({arrayBuffer:await file.arrayBuffer()}); return {imgs:[], text:r.value}; }
+  return {imgs:[], text:await file.text()};
+}
+async function shrinkTo(file,max){ const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(file); }); const sc=Math.min(1,max/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=Math.round(img.width*sc); c.height=Math.round(img.height*sc); const g=c.getContext('2d'); g.fillStyle='#fff'; g.fillRect(0,0,c.width,c.height); g.drawImage(img,0,0,c.width,c.height); return c.toDataURL('image/jpeg',0.82); }
+const loaded={}; function loadScript(src,glob){ if(window[glob]) return Promise.resolve(window[glob]); if(loaded[src]) return loaded[src]; return loaded[src]=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=src; s.onload=()=>res(window[glob]); s.onerror=()=>rej(new Error('chargement '+src)); document.head.appendChild(s); }); }
+async function runImport(files, note, label){
+  if(!accessCode){ showGate(''); return; }
+  go({name:'import', busy:true, step:'Lecture du fichier…', label});
+  try{
+    let images=[], text='';
+    for(const f of files){ const r=await fileToImages(f); if(Array.isArray(r)) images.push(...r); else { images.push(...r.imgs); if(r.text) text+=`\n\n=== ${f.name} ===\n`+r.text; } }
+    images=images.slice(0,5);
+    view.step = images.length ? `Analyse ${images.length>1?'des '+images.length+' pages':'du plan'} : symboles, pièces, combinaisons… (30–60 s)` : 'Analyse du cahier des charges… (20–40 s)'; render('keep');
+    const r=await fetch('/api/extract',{method:'POST',headers:{'content-type':'application/json','x-access-code':accessCode},body:JSON.stringify({images, text, note, name:label})});
+    const j=await r.json().catch(()=>({error:'Réponse illisible ('+r.status+')'}));
+    if(r.status===401){ accessCode=''; store.set('offre.code',''); showGate("Code d'accès incorrect."); return; }
+    if(!r.ok||!j.project) throw new Error((j.error||'Erreur')+(j.detail?' — '+j.detail:''));
+    const p=j.project; const h=p.hints||{};
+    const ctx={design:DESIGNS.slice(0,5).find(d=>norm(h.design||'').includes(norm(d)))||'EDIZIOdue', color:COLOR_OPTS.find(c=>norm(h.color||'').includes(norm(c)))||'blanc', mount:h.mount||'ENC', smart:(h.smart&&h.smart!=='classique')?h.smart:''};
+    (p.rooms||[]).forEach(rm=>{ rm.items=(rm.items||[]).filter(x=>x.qty>0); rm.combos=(rm.combos||[]).map(c=>({...c, qty:c.qty||1})); });
+    const v={name:'project', proj:p, ctx, label, usage:j.usage}; remember('Projet : '+(label||'import'), v); go(v);
+  }catch(e){ view.busy=false; view.error=String(e.message||e); render('keep'); }
+}
+function importHtml(){
+  const v=view;
+  return `<div class="wiz"><div class="crumbs"><button type="button" data-home="1">Accueil</button><span class="sep">›</span><span>Import projet</span> <span class="beta">bêta</span></div>
+  <h1>Plan, photo ou cahier des charges</h1>
+  <p class="sub">Je lis le document, je relève le matériel pièce par pièce (combinaisons et grandeurs de boîte comprises), puis tu choisis la ligne, la couleur et le niveau connecté : la liste se construit seule.</p>
+  ${v.busy?`<div class="crow"><div class="cinfo"><b>${esc(v.step||'')}</b><span>${esc(v.label||'')}</span><div class="bar" style="margin-top:10px"><i class="indet"></i></div></div></div>`:`
+  <label class="drop" id="drop"><input type="file" id="impfile" multiple accept="image/*,.pdf,.docx,.txt" hidden><b>Choisir ou glisser un fichier</b><span>Plan PDF ou photo · cahier des charges PDF / Word · photo de chantier · jusqu'à 5 pages lues</span></label>
+  <textarea id="impnote" rows="2" placeholder="Précision facultative : « villa, EDIZIO.liv noir, Wiser », « seulement l'étage »…" style="width:100%;margin-top:10px;border:1px solid var(--line-2);border-radius:14px;padding:10px 12px;background:var(--float);font:inherit"></textarea>
+  ${v.error?`<p style="color:var(--tomato);margin:10px 0 0">${esc(v.error)}</p>`:''}
+  <div class="actions"><span class="hint">Pas de fichier sous la main ? Essaie :</span><button class="btn small" type="button" data-sample="plan">Plan d'appartement (exemple)</button><button class="btn small" type="button" data-sample="cdc">Cahier des charges (exemple)</button></div>`}
+  </div>`;
+}
+function projectHtml(){
+  const v=view, p=v.proj, c=v.ctx; const rooms=p.rooms||[];
+  const sel=(k,opts,lbl)=>`<div class="psel"><small>${lbl}</small><div class="chips">${opts.map(([val,t])=>`<button class="chip" type="button" data-pctx="${k}" data-v="${esc(val)}" aria-pressed="${(c[k]||'')===val}">${esc(t)}</button>`).join('')}</div></div>`;
+  const tot=rooms.reduce((a,r)=>a+r.items.reduce((s,x)=>s+(+x.qty||0),0)+r.combos.reduce((s,x)=>s+(+x.qty||0),0),0);
+  const row=(ri,ii,x)=>{ const pk=pkOf(x.kind); return `<div class="prow2 ${x.confidence==='basse'?'low':''}"><span class="n">${esc(pk.l)}${x.detail?`<small>${esc(x.detail)}</small>`:''}</span><span class="g">grd. I</span><span class="cqty"><button type="button" class="st" data-pr="${ri}" data-pi="${ii}" data-d="-1">−</button><output class="num">${x.qty}</output><button type="button" class="st" data-pr="${ri}" data-pi="${ii}" data-d="1">+</button></span></div>`; };
+  const crow=(ri,ci,cb)=>`<div class="prow2"><span class="n">Combinaison ${esc(cb.layout.replace('x','×'))} : ${cb.parts.map(k=>esc(pkOf(k).l)).join(' + ')}${cb.detail?`<small>${esc(cb.detail)}</small>`:''}</span><span class="g">${esc(gradeOf(cb))}</span><span class="cqty"><button type="button" class="st" data-pr="${ri}" data-pc="${ci}" data-d="-1">−</button><output class="num">${cb.qty}</output><button type="button" class="st" data-pr="${ri}" data-pc="${ci}" data-d="1">+</button></span></div>`;
+  const others=(p.other||[]);
+  return `<div class="wiz">
+    <div class="crumbs"><button type="button" data-home="1">Accueil</button><span class="sep">›</span><button type="button" data-goimport="1">Import projet</button><span class="sep">›</span><span>${esc(v.label||'Projet')}</span> <span class="beta">bêta</span></div>
+    <h1>${esc(p.building?p.building[0].toUpperCase()+p.building.slice(1):'Projet')} · ${rooms.length} pièce${rooms.length>1?'s':''} · ${tot} appareils</h1>
+    <p class="sub">${esc(p.summary||'')}${p.hints&&p.hints.competitor?` · Concurrent cité : ${esc(p.hints.competitor)}`:''}</p>
+    <div class="pconf">${sel('design',DESIGNS.slice(0,5).map(d=>[d,d]),'Ligne')}${sel('color',COLOR_OPTS.map(x=>[x,x]),'Couleur')}${sel('mount',[['ENC','Encastré'],['AP','Apparent']],'Montage')}${sel('smart',[['','Classique'],['Wiser','Wiser'],['KNX','KNX'],['Matter','Matter']],'Niveau')}</div>
+    ${rooms.map((r,ri)=>`<section class="proom"><h2 class="csec">${esc(r.name)} <small>${r.items.reduce((s,x)=>s+(+x.qty||0),0)+r.combos.reduce((s,x)=>s+(+x.qty||0),0)} appareils</small></h2>${r.combos.map((cb,ci)=>crow(ri,ci,cb)).join('')}${r.items.map((x,ii)=>row(ri,ii,x)).join('')}</section>`).join('')}
+    ${others.length?`<section class="proom"><h2 class="csec">Autres lots relevés</h2>${others.map(o=>`<div class="prow2"><span class="n">${esc(OTHER_LBL[o.kind]||o.kind)} ×${o.qty}${o.detail?`<small>${esc(o.detail)}${o.room?' · '+esc(o.room):''}</small>`:''}</span><span class="g"></span><span>${o.kind==='tableau'?'<button class="btn small" type="button" data-pflow="tableau">Composer</button>':o.kind==='borne_recharge'?'<button class="btn small" type="button" data-pflow="bornes">Configurer</button>':o.kind==='parafoudre'?'<button class="btn small" type="button" data-pflow="surtension">Configurer</button>':o.kind==='onduleur'?'<button class="btn small" type="button" data-pflow="asi">Configurer</button>':'<small style="color:var(--ink-3)">hors catalogue</small>'}</span></div>`).join('')}</section>`:''}
+    ${(p.questions||[]).length?`<details class="tips" open><summary>Points à clarifier (${p.questions.length})</summary><ul>${p.questions.map(q=>`<li>${esc(q)}</li>`).join('')}</ul></details>`:''}
+    <div class="actions"><button class="btn primary" type="button" id="pbuild">Voir la liste de matériel</button><button class="btn" type="button" id="paddall">Tout ajouter à la liste</button><span class="hint">Vérifie les quantités : relevé automatique en bêta.</span></div>
+  </div>`;
+}
+function projectGroups(v){
+  const c=v.ctx, agg={}, gs=[];
+  (v.proj.rooms||[]).forEach(r=>{ r.items.forEach(x=>{ if(!x.qty||x.kind==='autre') return; const k=PK[x.kind]&&PK[x.kind].alias?PK[x.kind].alias:x.kind; (agg[k]=agg[k]||{q:0,rooms:[]}); agg[k].q+=+x.qty; agg[k].rooms.push(r.name); }); r.combos.forEach(cb=>{ if(!cb.qty) return; const key='combo:'+cb.layout+':'+cb.parts.join('+'); (agg[key]=agg[key]||{q:0,rooms:[],cb}); agg[key].q+=+cb.qty; agg[key].rooms.push(r.name); }); });
+  Object.entries(agg).forEach(([k,a])=>{
+    if(k.startsWith('combo:')){ const q=comboQuery(a.cb,c); const toks=a.cb.parts.map(p=>pkOf(p).tok).filter(Boolean); const want=new RegExp(toks.map(t=>t.replace('x','[x×]').replace('/','\\/')).map(t=>'(?=.*'+t+')').join(''),'i'); gs.push({label:`Combinaison ${a.cb.layout.replace('x','×')} : ${a.cb.parts.map(p=>pkOf(p).l).join(' + ')} · ${gradeOf(a.cb)}`, q, qty:a.q, note:[...new Set(a.rooms)].join(', '), pick:pickBest(q,c,want,/1×2|horizont/i.test(a.cb.layout)?null:/horizont/i)}); return; }
+    const pk=pkOf(k); if(!pk.q) return; const q=(pk.q({...c, design:c.design})+' '+(k==='prise_ext'||k==='interrupteur_ext'?'':(c.mount||''))).replace(/\s+/g,' ').trim();
+    gs.push({label:pk.l, q, qty:a.q, note:[...new Set(a.rooms)].join(', '), pick:pickBest(q,c,pk.want,pk.avoid)});
+  });
+  return gs;
+}
+
 /* =============== navigation & événements =============== */
 $('home').onclick=()=>{ $('q').value=''; go({name:'home'}); };
 document.addEventListener('click',e=>{
+  if(e.target.closest('[data-home]')){ go({name:'home'}); return; }
+  if(e.target.closest('[data-goimport]')){ go({name:'import'}); return; }
+  const smp=e.target.closest('[data-sample]'); if(smp){ const f=smp.dataset.sample==='plan'?['samples/plan-appartement.jpg','Plan appartement (exemple)','image/jpeg']:['samples/cahier-des-charges.pdf','Cahier des charges (exemple)','application/pdf']; fetch(f[0]).then(r=>r.blob()).then(b=>runImport([new File([b],f[0].split('/').pop(),{type:f[2]})], $('impnote')?$('impnote').value:'', f[1])).catch(()=>toast('Exemple introuvable')); return; }
+  const pc=e.target.closest('[data-pctx]'); if(pc&&view.name==='project'){ view.ctx[pc.dataset.pctx]=pc.dataset.v; render('keep'); return; }
+  const pst=e.target.closest('.st[data-pr]'); if(pst&&view.name==='project'){ const r=view.proj.rooms[+pst.dataset.pr]; const o=pst.dataset.pc!==undefined?r.combos[+pst.dataset.pc]:r.items[+pst.dataset.pi]; o.qty=Math.max(0,(+o.qty||0)+(+pst.dataset.d)); render('keep'); return; }
+  const pf=e.target.closest('[data-pflow]'); if(pf){ startFlow(pf.dataset.pflow); return; }
+  if(e.target.id==='pbuild'){ const gs=projectGroups(view).map(g=>({label:g.label, q:g.q, qty:g.qty, note:g.note, pickF:g.pick&&g.pick.f})); const v={name:'results', title:'Liste du projet · '+(view.label||''), groups:gs, from:'project', proj:view, brief:`Projet importé (${view.label||''}) : ${gs.map(g=>g.qty+'× '+g.label).join(' ; ')}. Ligne ${view.ctx.design}, ${view.ctx.color}, ${view.ctx.mount}, ${view.ctx.smart||'classique'}. Vérifie la cohérence, propose les accessoires manquants (cadres, boîtes) et 2 upsells. Ne me repose pas ces questions.`}; go(v); return; }
+  if(e.target.id==='paddall'){ let n=0, miss=0; projectGroups(view).forEach(g=>{ if(g.pick){ addToList(g.pick,null,g.qty,true); n++; } else miss++; }); renderList(); toast(`${n} références ajoutées${miss?' · '+miss+' sans correspondance':''}`,{label:'Voir la liste',fn:openList}); return; }
   const ob=e.target.closest('.ob'); if(ob){ e.stopPropagation(); const id=ob.dataset.sec||ob.dataset.hide; const secs=orderedSections().map(x=>x.id); if(ob.dataset.hide){ homePrefs.hidden=[...new Set([...(homePrefs.hidden||[]), id])]; } else { const vis=secs.filter(x=>!(homePrefs.hidden||[]).includes(x)); const i=vis.indexOf(id), j=i+(+ob.dataset.move); if(j<0||j>=vis.length) return; [vis[i],vis[j]]=[vis[j],vis[i]]; homePrefs.order=[...vis, ...secs.filter(x=>!vis.includes(x))]; } saveHome(); render('keep'); return; }
   const sh=e.target.closest('[data-show]'); if(sh){ homePrefs.hidden=(homePrefs.hidden||[]).filter(x=>x!==sh.dataset.show); saveHome(); render('keep'); return; }
   if(e.target.id==='orghome'){ organizing=!organizing; render('keep'); return; }
@@ -1073,7 +1211,7 @@ document.addEventListener('click',e=>{
   if(e.target.id==='wback'){ if(view.step>0){ view.step--; render('top'); } else go({name:'home'}); return; }
   if(e.target.id==='wskip'){ const step=visibleSteps(FLOWS[view.flow],view.answers)[view.step]; view.answers[step.key]=step.multi?[]:''; nextStep(); return; }
   if(e.target.id==='pickback'){ go(view.pick.comp); return; }
-  if(e.target.id==='back'){ if(view.from==='wizard'&&view.wiz){ go(view.wiz); } else go({name:'home'}); return; }
+  if(e.target.id==='back'){ if(view.from==='wizard'&&view.wiz){ go(view.wiz); } else if(view.from==='project'&&view.proj){ go(view.proj); } else go({name:'home'}); return; }
   if(e.target.id==='cback'){ go(view.wiz||{name:'home'}); return; }
   const st=e.target.closest('.st'); if(st&&view.name==='composer'){ if(st.dataset.rows){ view.rows=Math.max(1,Math.min(8,(view.rows||3)+(+st.dataset.rows))); } else if(st.dataset.mult){ view.mult=Math.max(1,Math.min(200,(view.mult||1)+(+st.dataset.mult))); } else { const k=st.dataset.k; const cp=COMPONENTS.find(c=>c.k===k); const cur=view.qty[k]??(cp?cp.def:(combLines(view).find(l=>l.k===k)||{}).qty??0); view.qty[k]=Math.max(0,cur+(+st.dataset.d)); } render(); return; }
   if(e.target.id==='perrow'){ const v=prompt('Modules par rangée (12, 18 ou 24) :', view.perRow||UM_PER_ROW[view.fam]||12); const n=parseInt(v); if(n>0){ view.perRow=n; render(); } return; }
@@ -1197,6 +1335,9 @@ $('q').addEventListener('input',()=>{ clearTimeout(timer); timer=setTimeout(()=>
 $('q').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); const q=$('q').value.trim(); if(!q) return; if(/\?|^(est|quel|quelle|comment|pourquoi|peut|combien|y a|propose|je veux|il me faut|client)/i.test(q) || q.split(' ').length>6){ openChat(); sendChat(q); $('q').value=''; } } });
 
 document.addEventListener('keydown',e=>{ if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('tile')&&!organizing){ e.preventDefault(); openSection(e.target.dataset.sec); } });
+document.addEventListener('change',e=>{ if(e.target.id==='impfile'&&e.target.files.length){ const fs=[...e.target.files]; runImport(fs, $('impnote')?$('impnote').value:'', fs.map(f=>f.name).join(', ')); } });
+document.addEventListener('dragover',e=>{ const d=e.target.closest&&e.target.closest('#drop'); if(d){ e.preventDefault(); d.classList.add('over'); } });
+document.addEventListener('drop',e=>{ const d=e.target.closest&&e.target.closest('#drop'); if(d){ e.preventDefault(); const fs=[...e.dataTransfer.files]; if(fs.length) runImport(fs, $('impnote')?$('impnote').value:'', fs.map(f=>f.name).join(', ')); } });
 document.addEventListener('dragstart',e=>{ const t=e.target.closest&&e.target.closest('.tile.org'); if(!t) return; e.dataTransfer.setData('text/plain', t.dataset.sec); e.dataTransfer.effectAllowed='move'; });
 document.addEventListener('dragover',e=>{ const t=e.target.closest&&e.target.closest('.tile.org'); if(t){ e.preventDefault(); t.classList.add('over'); } });
 document.addEventListener('dragleave',e=>{ const t=e.target.closest&&e.target.closest('.tile.org'); if(t) t.classList.remove('over'); });
@@ -1238,6 +1379,7 @@ $('pdf').onclick=()=>{
 
 /* =============== assistant =============== */
 const STARTERS=[
+  {b:'Plan ou cahier des charges · bêta', t:'📐 Importer un plan, une photo de plan ou un cahier des charges'},
   {b:'Configuration d\'une pièce', t:'Rénovation appartement, le client veut du connecté sans bus'},
   {b:'Compatibilité', t:'Le thermostat Matter est-il compatible Philips Hue ?'},
   {b:'Projet bornes', t:'Projet 6 bornes de recharge pour une PPE'},
@@ -1267,10 +1409,10 @@ function proposalHtml(pr,i){
   return `<div class="prop" data-i="${i}"><div class="ph"><b>${esc(pr.title)}</b><small>${pr.items.reduce((a,x)=>a+x.q,0)} pièces · coche ce que tu gardes</small></div>${pr.summary?`<p>${md(pr.summary)}</p>`:''}${pr.items.map(x=>row(x,false)).join('')}${pr.upsells&&pr.upsells.length?`<div class="pu">Options à proposer</div>${pr.upsells.map(x=>row(x,true)).join('')}`:''}<div class="pa"><button class="btn primary small padd" type="button">Ajouter la sélection à la liste</button></div></div>`;
 }
 function questionsHtml(qs){
-  return `<div class="qs" id="qs">${qs.map((q,qi)=>`<div class="q">${esc(q.q)}</div><div class="o" data-qi="${qi}" data-multi="${q.multi?1:0}">${q.options.map(o=>`<button type="button" data-o="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</div>`).join('')}<div class="send"><button class="btn primary small" type="button" id="qsend" disabled>Envoyer les réponses</button><small>ou écris librement ci-dessous</small></div></div>`;
+  return `<div class="qs" id="qs">${qs.map((q,qi)=>`<div class="q">${esc(q.q)}</div><div class="o" data-qi="${qi}" data-multi="${q.multi?1:0}">${q.options.map(o=>`<button type="button" data-o="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</div>`).join('')}<div class="qsendrow"><button class="btn primary small" type="button" id="qsend" disabled>Envoyer les réponses</button><small>ou écris librement ci-dessous</small></div></div>`;
 }
 $('thread').addEventListener('click',e=>{
-  const st=e.target.closest('[data-starter]'); if(st){ if(st.dataset.starter.startsWith('📷')){ $('cfile').click(); return; } sendChat(st.dataset.starter); return; }
+  const st=e.target.closest('[data-starter]'); if(st){ if(st.dataset.starter.startsWith('📐')){ closeChat(); go({name:'import'}); return; } if(st.dataset.starter.startsWith('📷')){ $('cfile').click(); return; } sendChat(st.dataset.starter); return; }
   const ob=e.target.closest('.qs .o button'); if(ob){ const grp=ob.parentElement; if(grp.dataset.multi==='1'){ ob.setAttribute('aria-pressed',String(ob.getAttribute('aria-pressed')!=='true')); } else { grp.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false')); ob.setAttribute('aria-pressed','true'); } $('qsend').disabled=!$('qs').querySelector('[aria-pressed="true"]'); return; }
   const pa=e.target.closest('.padd'); if(pa){ const box=pa.closest('.prop'); let n=0; box.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{ const it=byF[cb.dataset.f]; if(it){ addToList(it,null,+cb.dataset.q||1,true); n++; } }); renderList(); toast(`${n} références ajoutées`,{label:'Voir la liste',fn:openList}); pa.textContent='Ajouté ✓'; return; }
   if(e.target.id==='qsend'){ const meta=chatMeta[chatMeta.length-1]; const ans=meta.questions.map((q,qi)=>{ const sel=[...$('qs').querySelectorAll(`.o[data-qi="${qi}"] button[aria-pressed="true"]`)].map(b=>b.dataset.o.replace(/\s*\(recommandé\)\s*/i,'')); return sel.length?`${q.q} ${sel.join(', ')}`:null; }).filter(Boolean).join(' · '); if(ans) sendChat(ans); return; }
