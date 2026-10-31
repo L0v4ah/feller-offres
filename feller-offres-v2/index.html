@@ -89,6 +89,11 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 .tile .txt{padding:14px 18px 18px}
 .tile .txt b{display:block;font-weight:600;font-size:17px;letter-spacing:-.01em}
 .tile .txt span{color:var(--muted);font-size:13.5px}
+.tile.org{cursor:grab;outline:2px dashed var(--line-2);outline-offset:-2px}
+.tile.org.over{outline:2px solid var(--pine)}
+.tile .orgbar{position:absolute;top:10px;right:10px;z-index:2;display:flex;gap:4px}
+.tile .orgbar .ob{border:1px solid var(--line-2);background:var(--float);border-radius:999px;padding:4px 9px;font:inherit;font-size:12px;cursor:pointer}
+.tile .orgbar .ob[disabled]{opacity:.35;cursor:default}
 .tile .k{position:absolute;top:18px;left:18px;background:var(--tomato);color:var(--on-tomato);font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:999px;z-index:1}
 .recent{margin-top:28px}
 .recent h2{font-size:13px;font-weight:600;color:var(--faint);margin:0 0 8px;text-transform:none}
@@ -396,7 +401,7 @@ const DB = (window.FELLER_DATA && window.FELLER_DATA.items) || [];
 const EXPORTED = window.FELLER_DATA && window.FELLER_DATA.exportedAt;
 const DESIGNS = ['EDIZIOdue','EDIZIO.liv','STANDARDdue','NEVO','ELEMENT','SNAPFIX','FLF'];
 const MOUNT = {ENC:'Encastré',AP:'Apparent',REG:'Tableau / REG'};
-const PIC = f => (window.__byF && window.__byF[f] && window.__byF[f].img) || ('https://mam.feller.ch/pict/'+f);
+const PIC = f => { const B=window.__byF||{}; if(B[f]&&B[f].img) return B[f].img; const m=/^(?:E:|SE-)(\d{9})$/.exec(f||''); if(m&&window.__byE&&window.__byE[m[1]]&&window.__byE[m[1]].img) return window.__byE[m[1]].img; return 'https://mam.feller.ch/pict/'+f; };
 const norm = s => (s||'').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[×x]/g,'x').replace(/\s+/g,' ').trim();
 const SYN = [
   [/\bwi[- ]?fi\b/g,'wifi'],[/\b4g\b/g,'4g'],
@@ -410,23 +415,23 @@ const SYN = [
   [/\btriphase(e|es)?\b/g,'3ln'],[/\bmonophase(e|es)?\b/g,'1ln'],[/\b3p\b/g,'3ln'],[/\b4p\b/g,'4l'],[/\b1p\+?n\b/g,'1ln'],[/\b[cb](\d{1,2})\b/g,'$1a'],
   [/\bparafoudre\b/g,'surtension'],[/\bexterieur(e|s)?\b/g,'nevo'],[/\bhumide(s)?\b/g,'nevo'],[/\b(\d) postes?\b/g,'$1'],[/\bcouleur\b/g,''],
   [/\bdisjoncteur fi\b|\bfi ls\b|\bdisjoncteur de protection a courant de defaut\b/g,'disjoncteur differentiel'],[/\bfi\b/g,'differentiel'],
-  [/\bschemas? ?(\d)\b/g,'$1/1'],[/\brecharge\b/g,'charge'],[/\bonduleurs?\b/g,'asi'],[/\bups\b/g,'asi'],[/\bbarre collectrice\b|\bpeignes?\b/g,'barre collectrice'],[/\bmate?\b/g,''],[/\bsonnette\b/g,'sonnerie'],[/\bbrillant\b/g,''],
+  [/\bschemas? ?(\d)\b/g,'$1/1'],[/\brecharge\b/g,'charge'],[/\bonduleurs?\b/g,'asi'],[/\bups\b/g,'asi'],[/\bmate?\b/g,''],[/\bsonnette\b/g,'sonnerie'],[/\bbrillant\b/g,''],
   [/\b(\d{2,3}) modules?\b/g,(m,n)=>n>=12?`${Math.ceil(n/12)} rangees`:m],[/\btableau (de )?(distribution|appartement|divisionnaire)\b/g,'coffret'],
 ];
 const COMPETITORS=/\b(hager|legrand|abb|siemens|busch[- ]?jaeger|gira|jung|berker|niko|bticino|eaton|zaptec|easee|keba|alfen|webasto|mennekes|go-?e|juice|wallbe|weidm[uü]ller|phoenix|theben|finder|eltako|dehn|obo|hensel|spelsberg|gewiss|striebel)\b/i;
 const prep = q => { let s=norm(q); for(const [a,b] of SYN) s=s.replace(a,b); return s; };
-DB.forEach(it=>{ it._s = norm([it.d,it.t,it.f,it.e,it.ean,it.m].join(' ')).replace(/\bwi-fi\b/g,'wifi'); if(/\b4P\b/.test(it.d)) it._s+=' 4l'; if(/\b4L\b/.test(it.d)) it._s+=' 4p'; if(/\b3P\b/.test(it.d)) it._s+=' 3ln'; if(/\b3LN\b/.test(it.d)) it._s+=' 3p'; if(/\b2P\b/.test(it.d)) it._s+=' 1ln'; if(/a\.gestion c/i.test(it.d)) it._s+=' enrouleur'; if(/s\.gestion c/i.test(it.d)) it._s+=' sansenrouleur'; if(/a\.porte tr\b/i.test(it.d)) it._s+=' transparente'; it._dsg = DESIGNS.find(x=>norm(it.d).includes(norm(x))) || '';
+DB.forEach(it=>{ it._s = norm([it.d,it.t,it.f,it.e,it.ean,it.m].join(' ')).replace(/\bwi-fi\b/g,'wifi'); if(/\b4P\b/.test(it.d)) it._s+=' 4l'; if(/\b4L\b/.test(it.d)) it._s+=' 4p'; if(/\b3P\b/.test(it.d)) it._s+=' 3ln'; if(/\b3LN\b/.test(it.d)) it._s+=' 3p'; if(/\b2P\b/.test(it.d)) it._s+=' 1ln'; if(/a\.gestion c/i.test(it.d)) it._s+=' enrouleur'; if(/s\.gestion c/i.test(it.d)) it._s+=' sansenrouleur'; if(/a\.porte tr\b/i.test(it.d)) it._s+=' transparente'; if(/barre collectrice/i.test(it.d)) it._s+=' peigne'; else if(/\bpeigne/i.test(it.d)) it._s+=' barre collectrice'; it._dsg = DESIGNS.find(x=>norm(it.d).includes(norm(x))) || '';
   if(!it.m){ const d=' '+it.d+' '; it.m = / ENC /.test(d) ? 'ENC' : / AP /.test(d) ? 'AP' : /\.REG\b|\bREG\b|\bUM\b|rail DIN/.test(it.d+' '+it.f) ? 'REG' : ''; } });
-const byF = Object.fromEntries(DB.map(it=>[it.f,it])); window.__byF=byF;
+const byF = Object.fromEntries(DB.map(it=>[it.f,it])); window.__byF=byF; window.__byE=Object.fromEntries(DB.filter(it=>it.e&&!it._variantOf).map(it=>[it.e,it]));
 // fiches techniques + accessoires chargés en arrière-plan (tech.json) pour garder data.js léger
 let techReady=false; const techWaiters=[];
-(function loadTech(){ if(!(window.FELLER_DATA||{}).techFile) { techReady=true; return; } const url='tech.json?v=202610310259'; const go=()=>fetch(url).then(r=>r.json()).then(T=>{ for(const [f,t] of Object.entries(T)){ const it=byF[f]; if(!it) continue; Object.assign(it,t); } DB.forEach(it=>{ if(it._variantOf&&byF[it._variantOf]){ const b=byF[it._variantOf]; if(b.tech) it.tech=b.tech; if(b.acc) it.acc=b.acc; if(b.dim) it.dim=b.dim; } }); techReady=true; techWaiters.splice(0).forEach(fn=>fn()); if(view&&view.name==='results') render(); }).catch(()=>{ techReady=true; }); if('requestIdleCallback' in window) requestIdleCallback(go,{timeout:3000}); else setTimeout(go,800); })();
+(function loadTech(){ if(!(window.FELLER_DATA||{}).techFile) { techReady=true; return; } const url='tech.json?v=202610310259'; const go=()=>fetch(url).then(r=>r.json()).then(T=>{ for(const [f,t] of Object.entries(T)){ const it=byF[f]; if(!it) continue; Object.assign(it,t); } DB.forEach(it=>{ if(it._variantOf&&byF[it._variantOf]){ const b=byF[it._variantOf]; if(b.tech) it.tech=b.tech; if(b.acc) it.acc=b.acc; if(b.dim) it.dim=b.dim; } }); techReady=true; techWaiters.splice(0).forEach(fn=>fn()); document.querySelectorAll('.card[data-f] .more-btn:not(.row .more-btn)').forEach(mb=>{ const it=byF[mb.closest('.card').dataset.f]; if(it&&mb.getAttribute('aria-expanded')!=='true') mb.textContent='Détails'+((it.parts||[]).length?` · ${it.parts.length} pièces`:'')+((it.acc||[]).length?` · ${it.acc.length} acc.`:''); }); }).catch(()=>{ techReady=true; }); if('requestIdleCallback' in window) requestIdleCallback(go,{timeout:3000}); else setTimeout(go,800); })();
 function whenTech(fn){ if(techReady) fn(); else techWaiters.push(fn); }
 const COLORS = [['gris clair','#cfd2d3'],['gris foncé','#6d7073'],['verre noir','#111'],['verre blanc','#f4f4f4'],['noir','#1b1b1b'],['blanc','#ffffff'],['coffee','#5a3b2b'],['crema','#efe4cc'],['aluminium','#b8bcc0'],['orange','#e8731d'],['rouge','#c8431f'],['laiton','#c9a349'],['acier','#9ea4a8'],['anthrazit','#3a3d40'],['graphite','#4a4d50'],['chrome','#c0c4c8'],['ardoise','#55606a'],['umbra','#5c4a3a'],['arctic','#eaf1f3'],['pearl','#e9e5dd'],['hazel','#8b6d4b'],['stone','#9a948a'],['moca','#6f5646'],['marbre','#ece9e4'],['indigo','#2d3a6b'],['champagne','#d9c8a5'],['nickel','#8e8e8e'],['chêne','#b3885a'],['fibrociment','#b7b7b2']];
 function colorOf(d){ const n=norm(d); for(const [name,hex] of COLORS){ if(n.includes(norm(name))) return {name,hex}; } return null; }
 // variantes couleur (champ vars : [fellerNr, eNo, code, description, ean, dispo]) → articles virtuels ajoutables
 DB.slice().forEach(it=>{ if(!it.vars) return; it.vars.forEach(v=>{ if(v[0]===it.f||byF[v[0]]) return; const c=colorOf(v[3]); const nit={...it, f:v[0], e:v[1], c:v[2], d:v[3], ean:v[4], buy:v[5]!==false, img:'https://mam.feller.ch/pict/'+v[0], vars:it.vars, _variantOf:it.f, nw:it.nw, p:undefined, url:undefined, parts:undefined}; nit._s=norm([nit.d,nit.t,nit.f,nit.e,nit.ean,nit.m].join(' ')); nit._dsg=it._dsg; byF[v[0]]=nit; DB.push(nit); }); });
-const NEW_COUNT = DB.filter(x=>x.nw).length;
+const NEW_COUNT = DB.filter(x=>x.nw&&!x._variantOf).length;
 
 const STOP = new Set(['il','me','faut','je','veux','voudrais','cherche','besoin','un','une','des','du','de','d','le','la','les','l','pour','avec','et','a','au','aux','en','sur','dans','chez','ce','cet','cette','ces','mon','ma','mes','son','sa','ses','client','villa','maison','appartement','immeuble','ppe','chantier','piece','pieces','chambre','cuisine','salon','salle','bain','garage','cave','bureau','quel','quelle','quels','quelles','est','sont','ou','que','qui','svp','merci','tu','as','avez','vous','on','nous','type','modele','reference','ref','article','produit','feller','schneider','se']);
 function search(q, F={}, limit=60){
@@ -616,33 +621,113 @@ $('gateform').onsubmit=e=>{ e.preventDefault(); const c=$('gatecode').value.trim
 function toast(msg, action){ document.querySelectorAll('.toast').forEach(t=>t.remove()); const t=document.createElement('div'); t.className='toast'; t.innerHTML=`<span>${esc(msg)}</span>${action?`<button type="button">${esc(action.label)}</button>`:''}`; if(action) t.querySelector('button').onclick=()=>{action.fn(); t.remove();}; document.body.appendChild(t); setTimeout(()=>t.remove(),2600); }
 
 /* =============== vues =============== */
-function render(){
-  const v=$('view');
+let lastRendered=null, forceTop=false;
+// render(scroll) : 'keep' (défaut quand on reste sur la même vue : + / − du composeur, filtres, choix multiples) garde la position ; 'top' pour une nouvelle vue ou une nouvelle étape.
+function render(scroll){
+  const v=$('view'); const same=lastRendered===view.name && !forceTop; forceTop=false;
+  const y=window.scrollY;
   if(view.name==='home') v.innerHTML=homeHtml();
   else if(view.name==='wizard') v.innerHTML=wizardHtml();
   else if(view.name==='results') v.innerHTML=resultsHtml();
   else if(view.name==='composer') v.innerHTML=composerHtml();
-  window.scrollTo({top:0});
+  lastRendered=view.name;
+  const mode=scroll||(same?'keep':'top');
+  if(mode==='keep') window.scrollTo(0,y); else window.scrollTo({top:0});
 }
-function go(nv){ view=nv; render(); }
+function go(nv){ view=nv; forceTop=true; render('top'); }
 
+// Sections de l'accueil : parcours guidés, préréglages et familles de produits. Ordre et masquage personnalisables (bouton « Organiser »).
+const SECTIONS = [
+  {id:'appareillage', flow:'appareillage', t:'Appareillage', s:'Interrupteurs, prises, USB, variateurs', imgs:['7563.GMI.A.61','87303.GMI.A.61']},
+  {id:'tableau', flow:'tableau', t:'Tableau & protection', s:'Resi9, PrismaSeT, Clario iC40 — composeur par usage', imgs:['R9H10937B','A9D67410']},
+  {id:'xs', t:'Petit tableau PrismaSeT XS', s:'1 à 6 rangées, 18 ou 24 UM, porte au choix', imgs:['SE-822100049','SE-822000019'], preset:{flow:'tableau', answers:{fam:'PrismaSeT', install:'AP', system:'XS'}}},
+  {id:'bornes', flow:'bornes', t:'Bornes de recharge', s:'Wallbox, Charge Pro, EVlink Pro AC et DC, gestion de charge', imgs:['SE-834020819','SE-834001909']},
+  {id:'smart', flow:'smart', t:'Smart home', s:'Wiser, KNX, Matter', imgs:['3401.1.W.GMI.A.61','4708-1-C.GMI.A.L.P.61']},
+  {id:'exterieur', flow:'exterieur', t:'Extérieur & humide', s:'NEVO, IP44 et plus', imgs:['3402.2.NAP.Q.A.61','13431']},
+  {id:'tgbt', t:'TGBT & armoires', s:'PrismaSeT XL de sol, NSX, NG125, parafoudre type 1+2, mesure', imgs:['SE-834010149','SE-550810216'], q:'TGBT armoire', groups:[
+    {label:'Armoires de sol PrismaSeT XL (12 rangées, 1 à 3 champs)', q:'Armoire de sol PrismaSeT XL'},
+    {label:'Coffrets muraux PrismaSeT XL', q:'Coffret mural PrismaSeT XL'},
+    {label:'Montants et kits modulaires', q:'Montant plaque de montage DIN rangées'},
+    {label:'Disjoncteurs de tête ComPacT NSX', q:'disjoncteur ComPacT NSX 3P'},
+    {label:'Interrupteurs-sectionneurs NSX', q:'Sectionneur de charge ComPacT NSX'},
+    {label:'Disjoncteurs NG125 (63–125 A)', q:'disjoncteur NG125N 4P'},
+    {label:'Différentiels 63 A et plus', q:'interrupteur différentiel iID 63A 4L'},
+    {label:'Parafoudre type 1+2 (arrivée)', q:'iPRD1 type 1+2'},
+    {label:'Répartition : barres collectrices Prisma', q:'Barre collectrice kit modulaire Prisma'},
+    {label:'Mesure : PowerTag, compteurs, Panel Server', q:'PowerTag F 3PN'}]},
+  {id:'protection', t:'Disjoncteurs & différentiels', s:'Clario iC40, Acti9 iC60, iID, type B-EV, NG125', imgs:['A9D67410','SE-531033410'], groups:[
+    {label:'FI/LS 1 module Clario iC40 (13 / 16 / 20 A, 30 mA)', q:'Clario iC40 1UM 0.03A'},
+    {label:'Disjoncteurs 1LN Clario iC40', q:'Clario iC40 (C) 1LN'},
+    {label:'Disjoncteurs 3LN Clario iC40', q:'Clario iC40 (C) 3LN'},
+    {label:'FI/LS 3LN 30 mA', q:'Clario 3LN 30mA'},
+    {label:'Interrupteurs différentiels iID 40 / 63 A', q:'interrupteur différentiel iID 30mA 4L'},
+    {label:'Différentiels type B-EV (bornes sans détection DC)', q:'différentiel type B-EV'},
+    {label:'Acti9 iC60N (industriel, 10 kA)', q:'Disjoncteur iC60N C'},
+    {label:'NG125 (63–125 A)', q:'disjoncteur NG125N'}]},
+  {id:'commande', t:'Commande & mesure', s:'Contacteurs, télérupteurs, minuteries, horloges, compteurs', imgq:['contacteur iCT 25A 2F','Compteur d\'énergie iEM3100'], groups:[
+    {label:'Contacteurs iCT (tarif, boiler, chauffage)', q:'contacteur iCT 25A'},
+    {label:'Télérupteurs TL', q:'telerupteur TL 16A'},
+    {label:'Minuteries', q:'minuterie 16A'},
+    {label:'Interrupteurs horaires', q:'interrupteur horaire'},
+    {label:'Relais et interfaces', q:'relais iRTC'},
+    {label:'Compteurs d\'énergie iEM (MID)', q:'Compteur d\'énergie iEM3'},
+    {label:'PowerTag sans fil + Panel Server', q:'PowerTag'}]},
+  {id:'surtension', t:'Protection surtension', s:'iPRD compact Resi9, iPRD 40r, type 1+2, Quick', imgs:['SE-808000507','SE-808000207'], groups:[
+    {label:'Parafoudre compact Resi9 iPRD (type 2+3, 1 module)', q:'parasurtension Resi9 iPRD compact'},
+    {label:'iPRD 40r type 2+3 (tableau)', q:'parasurtension iPRD 40r'},
+    {label:'Type 1+2 (arrivée, paratonnerre)', q:'iPRD1 type 1+2'},
+    {label:'Modules de rechange', q:'module enfichable iPRD'},
+    {label:'Protection Quick', q:'Protection de surtension SE Quick'}]},
+  {id:'accessoires', t:'Peignes, borniers, rails', s:'Peignes Clario 1LN / 3LN, capuchons, borniers, rails DIN, obturateurs', imgs:['SE-805992610','SE-804998360'], groups:[
+    {label:'Peignes Clario iC40 1LN', q:'barre collectrice Clario iC40 1LN'},
+    {label:'Peignes Clario iC40 3LN', q:'barre collectrice Clario iC40 3LN'},
+    {label:'Peignes « alim. gauche » (FI de groupe)', q:'barre collectrice Clario alim.gauche'},
+    {label:'Capuchons pour peignes coupés', q:'capuchon Clario iC40 peigne'},
+    {label:'Borniers et répartiteurs', q:'bornier Resi9'},
+    {label:'Rails DIN et plaques', q:'Rail DIN Resi9'},
+    {label:'Obturateurs', q:'obturateur Resi9'}]},
+  {id:'asi', t:'Onduleurs / ASI', s:'Easy UPS : protection des serveurs, chaudières, alarmes', imgs:['SE-960000028','SE-960001858'], groups:[
+    {label:'Easy UPS 1 kVA et moins', q:'ASI Easy UPS 1KVA'},
+    {label:'Easy UPS 1,5 à 3 kVA', q:'ASI Easy UPS 2000VA'},
+    {label:'Easy UPS On-Line (serveurs)', q:'ASI Easy UPS On-Line'},
+    {label:'Batteries et accessoires', q:'Module batterie ASI Easy UPS'}]},
+  {id:'knxse', t:'KNX Schneider SpaceLogic', s:'Détecteurs, actionneurs, variateurs, capteurs KNX', imgs:['SE-205400108','SE-405442268'], groups:[
+    {label:'Détecteurs de présence KNX', q:'Détecteur de présence KNX'},
+    {label:'Actionneurs de commutation KNX', q:'actionneur KNX commutation'},
+    {label:'Variateurs KNX', q:'Variateur KNX SpaceLogic'},
+    {label:'Capteurs (qualité d\'air, luminosité, température)', q:'capteur KNX'},
+    {label:'Alimentations et coupleurs', q:'alimentation KNX'}]},
+  {id:'industrie', t:'Industriel', s:'TeSys, démarreurs, Altivar, Harmony', imgq:['contacteur TeSys LC1 25A','Poussoir INC avec capuchon Harmony'], groups:[
+    {label:'Contacteurs TeSys LC1', q:'contacteur TeSys LC1'},
+    {label:'Démarreurs-moteurs GV2', q:'démarreur moteur GV2'},
+    {label:'Variateurs Altivar', q:'convertisseur Altivar'},
+    {label:'Boutons et voyants Harmony', q:'bouton Harmony'},
+    {label:'Relais Zelio', q:'Zelio Relay'}]},
+  {id:'nouveautes', flow:'nouveautes', t:'Nouveautés 2025–2026', s:'Feller 4, Wiser, Clario, NEVO SNAPFIX, Charge Pro', imgs:['3400.D.T3.GMI.A.61','A9DSC3613'], k:'Nouveau'},
+];
+let homePrefs = store.get('offre.home', {order:[], hidden:[]}); let organizing=false;
+function orderedSections(){ const ord=homePrefs.order||[]; const byId=Object.fromEntries(SECTIONS.map(x=>[x.id,x])); const out=ord.map(id=>byId[id]).filter(Boolean); SECTIONS.forEach(x=>{ if(!out.includes(x)) out.push(x); }); return out; }
+function saveHome(){ store.set('offre.home', homePrefs); }
 function homeHtml(){
-  const tiles=[
-    {flow:'appareillage', t:'Appareillage', s:'Interrupteurs, prises, USB, variateurs', imgs:['7563.GMI.A.61','87303.GMI.A.61']},
-    {flow:'smart', t:'Smart home', s:'Wiser, KNX, Matter', imgs:['3401.1.W.GMI.A.61','4708-1-C.GMI.A.L.P.61']},
-    {flow:'tableau', t:'Tableau & protection', s:'Resi9, PrismaSeT, Clario iC40', imgs:['R9H10937B','A9D67410']},
-    {flow:'exterieur', t:'Extérieur & humide', s:'NEVO, IP44 et plus', imgs:['3402.2.NAP.Q.A.61','13431']},
-    {flow:'bornes', t:'Bornes de recharge', s:'Wallbox, EVlink Pro AC et DC, gestion de charge', imgs:['SE-834020819','SE-834000289']},
-    {flow:'nouveautes', t:'Nouveautés 2025–2026', s:`${NEW_COUNT} articles : Feller 4, Wiser, Clario, NEVO SNAPFIX`, imgs:['3400.D.T3.GMI.A.61','A9DSC3613'], k:'Nouveau'},
-  ];
+  const secs=orderedSections(); const hidden=new Set(homePrefs.hidden||[]);
+  const tile=(t,i,arr)=>`<button class="tile ${organizing?'org':''}" type="button" data-sec="${t.id}" draggable="${organizing}">${t.k?`<span class="k">${t.k}</span>`:''}
+      ${organizing?`<span class="orgbar"><button type="button" class="ob" data-move="-1" data-sec="${t.id}" title="Monter" ${i===0?'disabled':''}>▲</button><button type="button" class="ob" data-move="1" data-sec="${t.id}" title="Descendre" ${i===arr.length-1?'disabled':''}>▼</button><button type="button" class="ob" data-hide="${t.id}" title="Masquer">Masquer</button></span>`:''}
+      <div class="pic multi">${(t.imgs||t.imgq||[]).map(i=>{ const src=t.imgs?PIC(i):((searchFallback(i,{},1).items[0]||{}).img||''); return `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`; }).join('')}</div>
+      <div class="txt"><b>${esc(t.t)}</b><span>${esc(t.s)}</span></div></button>`;
+  const shown=secs.filter(t=>!hidden.has(t.id)), hid=secs.filter(t=>hidden.has(t.id));
   return `<div class="home">
-    <h1>Que veux-tu proposer ?</h1>
-    <p class="lead">Choisis un parcours : deux ou trois choix en images et tu as les références avec N° ELDAS. Ou tape une référence, un produit ou une question dans la barre en haut.</p>
-    <div class="tiles">${tiles.map(t=>`<button class="tile" type="button" data-flow="${t.flow}">${t.k?`<span class="k">${t.k}</span>`:''}
-      <div class="pic ${t.imgs&&t.imgs.length>1?'multi':''}">${t.imgs?t.imgs.map(i=>`<img src="${PIC(i)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`).join(''):`<span style="font-size:48px">${t.ico}</span>`}</div>
-      <div class="txt"><b>${t.t}</b><span>${esc(t.s)}</span></div></button>`).join('')}</div>
-    ${recent.length?`<div class="recent"><h2>Reprendre</h2><div class="chips">${recent.map((r,i)=>`<button class="chip" type="button" data-recent="${i}">${esc(r.label)}</button>`).join('')}</div></div>`:''}
+    <div class="res-head"><h1>Que veux-tu proposer ?</h1><button class="btn small" type="button" id="orghome">${organizing?'Terminé':'Organiser'}</button></div>
+    <p class="lead">${organizing?'Déplace les tuiles (▲ ▼ ou glisser-déposer), masque celles que tu n\'utilises pas. L\'ordre est mémorisé sur cet appareil.':'Choisis un parcours : deux ou trois choix en images et tu as les références avec N° ELDAS. Ou tape une référence, un produit ou une question dans la barre en haut.'}</p>
+    <div class="tiles">${shown.map(tile).join('')}</div>
+    ${organizing&&hid.length?`<div class="recent"><h2>Masquées</h2><div class="chips">${hid.map(t=>`<button class="chip" type="button" data-show="${t.id}">+ ${esc(t.t)}</button>`).join('')}</div></div>`:''}
+    ${!organizing&&recent.length?`<div class="recent"><h2>Reprendre</h2><div class="chips">${recent.map((r,i)=>`<button class="chip" type="button" data-recent="${i}">${esc(r.label)}</button>`).join('')}</div></div>`:''}
   </div>`;
+}
+function openSection(id){
+  const t=SECTIONS.find(x=>x.id===id); if(!t) return;
+  if(t.flow){ startFlow(t.flow); return; }
+  if(t.preset){ const fl=FLOWS[t.preset.flow]; const answers={...t.preset.answers}; const steps=visibleSteps(fl,answers); const step=Math.max(0, steps.findIndex(st=>answers[st.key]===undefined)); go({name:'wizard', flow:t.preset.flow, step, answers}); return; }
+  if(t.groups){ F={design:'',mount:'',ip:false,nw:false}; const v={name:'results', title:t.t, groups:t.groups.map(g=>({...g})), q:t.q||'', from:'section'}; remember(t.t, v); go(v); }
 }
 
 function visibleSteps(flow,a){ return flow.steps.filter(st=>!st.when||st.when(a)); }
@@ -657,7 +742,7 @@ function wizardHtml(){
     <div class="opts ${step.compact?'compact':''}">${step.opts.map(o=>`<button class="opt" type="button" data-v="${esc(o.v)}" aria-pressed="${isSel(o.v)}">
       <div class="pic ${o.img?'':'ico'}">${o.img?`<img src="${PIC(o.img)}" alt="" loading="lazy" onerror="this.parentElement.classList.add('ico');this.remove()">`:''}</div>
       <div class="txt"><b>${esc(o.t)}</b>${o.s?`<span>${esc(o.s)}</span>`:''}${o.rec?`<i class="rec">Recommandé · ${esc(o.rec)}</i>`:''}</div></button>`).join('')}</div>
-    <div class="actions"><button class="btn" id="wback" type="button">← Retour</button>${step.multi?`<button class="btn primary" id="wnext" type="button" ${(sel||[]).length?'':'disabled'}>Continuer</button>`:''}<button class="btn" id="wskip" type="button">Passer</button><span class="hint">${flow.assistant?'À la fin, l\'assistant structure le projet et chiffre la distribution.':'À la fin : les références, puis l\'assistant pour une configuration complète si tu veux.'}</span></div>
+    <div class="actions"><button class="btn" id="wback" type="button">← Retour</button>${step.multi?`<button class="btn primary" id="wnext" type="button">${(sel||[]).length?'Continuer':'Continuer sans option'}</button>`:''}<button class="btn" id="wskip" type="button">Passer</button><span class="hint">${flow.assistant?'À la fin, l\'assistant structure le projet et chiffre la distribution.':'À la fin : les références, puis l\'assistant pour une configuration complète si tu veux.'}</span></div>
   </div>`;
 }
 
@@ -827,12 +912,15 @@ function composerPick(k, it){ view.refs[k]=it.f; view.name='composer'; render();
 /* =============== navigation & événements =============== */
 $('home').onclick=()=>{ $('q').value=''; go({name:'home'}); };
 document.addEventListener('click',e=>{
-  const tile=e.target.closest('.tile'); if(tile){ startFlow(tile.dataset.flow); return; }
+  const ob=e.target.closest('.ob'); if(ob){ e.stopPropagation(); const id=ob.dataset.sec||ob.dataset.hide; const secs=orderedSections().map(x=>x.id); if(ob.dataset.hide){ homePrefs.hidden=[...new Set([...(homePrefs.hidden||[]), id])]; } else { const vis=secs.filter(x=>!(homePrefs.hidden||[]).includes(x)); const i=vis.indexOf(id), j=i+(+ob.dataset.move); if(j<0||j>=vis.length) return; [vis[i],vis[j]]=[vis[j],vis[i]]; homePrefs.order=[...vis, ...secs.filter(x=>!vis.includes(x))]; } saveHome(); render('keep'); return; }
+  const sh=e.target.closest('[data-show]'); if(sh){ homePrefs.hidden=(homePrefs.hidden||[]).filter(x=>x!==sh.dataset.show); saveHome(); render('keep'); return; }
+  if(e.target.id==='orghome'){ organizing=!organizing; render('keep'); return; }
+  const tile=e.target.closest('.tile'); if(tile){ if(organizing) return; openSection(tile.dataset.sec); return; }
   const rc=e.target.closest('[data-recent]'); if(rc){ const r=recent[+rc.dataset.recent]; if(r) go(r.view); return; }
   const opt=e.target.closest('.opt'); if(opt){ pickOpt(opt.dataset.v); return; }
-  const crumb=e.target.closest('.crumbs button'); if(crumb){ const s=+crumb.dataset.step; if(s<0){ view.step=0; } else view.step=s; render(); return; }
+  const crumb=e.target.closest('.crumbs button'); if(crumb&&view.name==='wizard'&&crumb.dataset.step!==undefined){ const s=+crumb.dataset.step; if(s<0){ view.step=0; } else view.step=s; render('top'); return; }
   if(e.target.id==='wnext'){ nextStep(); return; }
-  if(e.target.id==='wback'){ if(view.step>0){ view.step--; render(); } else go({name:'home'}); return; }
+  if(e.target.id==='wback'){ if(view.step>0){ view.step--; render('top'); } else go({name:'home'}); return; }
   if(e.target.id==='wskip'){ const step=visibleSteps(FLOWS[view.flow],view.answers)[view.step]; view.answers[step.key]=step.multi?[]:''; nextStep(); return; }
   if(e.target.id==='pickback'){ go(view.pick.comp); return; }
   if(e.target.id==='back'){ if(view.from==='wizard'&&view.wiz){ go(view.wiz); } else go({name:'home'}); return; }
@@ -869,12 +957,12 @@ function startFlow(flow){
 }
 function pickOpt(v){
   const step=visibleSteps(FLOWS[view.flow],view.answers)[view.step];
-  if(step.multi){ const cur=view.answers[step.key]||[]; view.answers[step.key]= cur.includes(v)? cur.filter(x=>x!==v) : [...cur,v]; render(); }
+  if(step.multi){ const cur=view.answers[step.key]||[]; view.answers[step.key]= cur.includes(v)? cur.filter(x=>x!==v) : [...cur,v]; render('keep'); }
   else { view.answers[step.key]=v; nextStep(); }
 }
 function nextStep(){
   const steps=visibleSteps(FLOWS[view.flow],view.answers);
-  if(view.step < steps.length-1){ view.step++; render(); return; }
+  if(view.step < steps.length-1){ view.step++; render('top'); return; }
   finishFlow();
 }
 function finishFlow(){
@@ -954,6 +1042,10 @@ let timer;
 $('q').addEventListener('input',()=>{ clearTimeout(timer); timer=setTimeout(()=>{ const q=$('q').value.trim(); if(!q){ if(view.name==='results'&&!view.groups&&!view.title) go({name:'home'}); return; } F={design:'',mount:'',ip:false,nw:false}; go({name:'results', q}); },140); });
 $('q').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); const q=$('q').value.trim(); if(!q) return; if(/\?|^(est|quel|quelle|comment|pourquoi|peut|combien|y a|propose|je veux|il me faut|client)/i.test(q) || q.split(' ').length>6){ openChat(); sendChat(q); $('q').value=''; } } });
 
+document.addEventListener('dragstart',e=>{ const t=e.target.closest&&e.target.closest('.tile.org'); if(!t) return; e.dataTransfer.setData('text/plain', t.dataset.sec); e.dataTransfer.effectAllowed='move'; });
+document.addEventListener('dragover',e=>{ const t=e.target.closest&&e.target.closest('.tile.org'); if(t){ e.preventDefault(); t.classList.add('over'); } });
+document.addEventListener('dragleave',e=>{ const t=e.target.closest&&e.target.closest('.tile.org'); if(t) t.classList.remove('over'); });
+document.addEventListener('drop',e=>{ const t=e.target.closest&&e.target.closest('.tile.org'); if(!t) return; e.preventDefault(); const from=e.dataTransfer.getData('text/plain'), to=t.dataset.sec; if(!from||from===to) return; const secs=orderedSections().map(x=>x.id); const i=secs.indexOf(from), j=secs.indexOf(to); secs.splice(i,1); secs.splice(j,0,from); homePrefs.order=secs; saveHome(); render('keep'); });
 /* =============== liste =============== */
 function addToList(it,btn,qty=1,silent=false){ const ex=list.find(x=>x.f===it.f); if(ex) ex.q+=qty; else list.push({f:it.f,e:it.e,d:it.d,q:qty,img:it.img}); store.set('offre.items',list); if(silent) return; renderList(); if(btn){ btn.textContent='Ajouté ✓'; setTimeout(()=>btn.textContent='Ajouter encore',900);} toast(`${it.d.slice(0,40)}… ajouté`, {label:'Voir la liste', fn:openList}); }
 function renderList(){
@@ -963,7 +1055,7 @@ function renderList(){
   $('aside-empty').style.display = list.length?'none':'block';
   const hasP=DB.some(x=>x.p); const pt=$('priceToggle'); if(pt){ pt.textContent=showPrice?'Prix : affichés':'Prix bruts'; pt.setAttribute('aria-pressed',String(showPrice)); pt.title=hasP?'Afficher ou masquer les prix bruts (hors TVA, sans remise)':'Pas encore de prix dans la base — ils s\'afficheront ici dès qu\'une source est connectée'; }
   const tot$=list.reduce((a,x)=>{ const pv=priceOf(x); return pv==null?a:a+pv*x.q; },0), miss=list.filter(x=>priceOf(x)==null).length;
-  $('items').innerHTML = list.map((x,i)=>`<div class="item"><img src="${esc(x.img||PIC(x.f))}" alt="" data-open="${esc(x.f)}" style="cursor:pointer" onerror="this.style.visibility='hidden'"><div><div class="d" data-open="${esc(x.f)}" style="cursor:pointer">${esc(x.d)}</div><div class="e num">ELDAS ${esc(x.e||'—')} · ${esc(x.f)}${showPrice?` · <b>${priceOf(x)==null?'prix n/d':chf(priceOf(x)*x.q)}</b>`:''}${(byF[x.f]&&byF[x.f].parts&&byF[x.f].parts.length)?` · <button type="button" class="explode" data-i="${i}" style="border:0;background:none;color:var(--pine);cursor:pointer;font:inherit;font-size:12px;padding:0;text-decoration:underline dotted">en pièces détachées</button>`:''}</div></div><input class="q num" type="number" min="1" step="1" value="${x.q}" data-i="${i}" aria-label="Quantité"><button class="x" type="button" data-i="${i}" aria-label="Retirer">×</button></div>`).join('')+(showPrice&&list.length?`<div class="item" style="justify-content:flex-end;font-weight:600">Total brut ${chf(tot$)}${miss?` <small style="font-weight:400;color:var(--ink-3)">· ${miss} réf. sans prix</small>`:''}<small style="font-weight:400;color:var(--ink-3)"> · hors TVA, sans remise</small></div>`:'');
+  $('items').innerHTML = list.map((x,i)=>`<div class="item"><img src="${esc(x.img||PIC(x.f))}" alt="" data-open="${esc(x.f)}" style="cursor:pointer" onerror="this.style.visibility='hidden'"><div><div class="d" data-open="${esc(x.f)}" style="cursor:pointer">${esc(x.d)}</div><div class="e num">ELDAS ${esc(x.e||'—')} · ${esc(x.f)}${showPrice&&hasP?` · <b>${priceOf(x)==null?'prix n/d':chf(priceOf(x)*x.q)}</b>`:''}${(byF[x.f]&&byF[x.f].parts&&byF[x.f].parts.length)?` · <button type="button" class="explode" data-i="${i}" style="border:0;background:none;color:var(--pine);cursor:pointer;font:inherit;font-size:12px;padding:0;text-decoration:underline dotted">en pièces détachées</button>`:''}</div></div><input class="q num" type="number" min="1" step="1" value="${x.q}" data-i="${i}" aria-label="Quantité"><button class="x" type="button" data-i="${i}" aria-label="Retirer">×</button></div>`).join('')+(showPrice&&hasP&&list.length?`<div class="item" style="justify-content:flex-end;font-weight:600">Total brut ${chf(tot$)}${miss?` <small style="font-weight:400;color:var(--ink-3)">· ${miss} réf. sans prix</small>`:''}<small style="font-weight:400;color:var(--ink-3)"> · hors TVA, sans remise</small></div>`:'');
   $('c_name').value=client.name; $('c_notes').value=client.notes;
 }
 function saveList(){ store.set('offre.items',list); renderList(); }
