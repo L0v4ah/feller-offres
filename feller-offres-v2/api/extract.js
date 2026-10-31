@@ -67,15 +67,25 @@ module.exports = async (req, res) => {
   images.forEach((src, i) => { const m = /^data:(image\/[a-z]+);base64,(.+)$/.exec(src); if (m) { content.push({ type: 'text', text: `Page / image ${i + 1}${body.name ? ' de « ' + String(body.name).slice(0, 80) + ' »' : ''} :` }); content.push({ type: 'image', source: { type: 'base64', media_type: m[1], data: m[2] } }); } });
   if (text.trim()) content.push({ type: 'text', text: `Texte du document${body.name ? ' « ' + String(body.name).slice(0, 80) + ' »' : ''} :\n\n${text}` });
   content.push({ type: 'text', text: `Fais le relevé complet avec extract_project.${note ? ' Indication de Nicola : ' + note : ''}` });
-  try {
+  const call = async (msgs) => {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: process.env.PLAN_MODEL || process.env.MODEL || 'claude-sonnet-5-5', max_tokens: 8000, system: SYSTEM, tools: [TOOL], tool_choice: { type: 'tool', name: 'extract_project' }, messages: [{ role: 'user', content }] })
+      body: JSON.stringify({ model: process.env.PLAN_MODEL || process.env.MODEL || 'claude-sonnet-5-5', max_tokens: 8000, system: SYSTEM, tools: [TOOL], tool_choice: { type: 'auto' }, messages: msgs })
     });
-    if (!r.ok) { const t = await r.text(); return res.status(502).json({ error: 'Erreur API modèle', detail: ('API ' + r.status + ' ' + t).slice(0, 300) }); }
-    const data = await r.json();
-    const tu = (data.content || []).find(c => c.type === 'tool_use');
+    if (!r.ok) { const t = await r.text(); throw new Error(('API ' + r.status + ' ' + t).slice(0, 300)); }
+    return r.json();
+  };
+  try {
+    const msgs = [{ role: 'user', content }];
+    let data = await call(msgs);
+    let tu = (data.content || []).find(c => c.type === 'tool_use');
+    if (!tu) {
+      msgs.push({ role: 'assistant', content: data.content && data.content.length ? data.content : [{ type: 'text', text: '…' }] });
+      msgs.push({ role: 'user', content: 'Rends maintenant le relevé complet avec l\'outil extract_project, sans texte.' });
+      data = await call(msgs); tu = (data.content || []).find(c => c.type === 'tool_use');
+    }
+    if (!tu) { const txt = (data.content || []).filter(c => c.type === 'text').map(c => c.text).join('\n'); const m = txt.match(/\{[\s\S]*\}/); if (m) { try { tu = { input: JSON.parse(m[0]) }; } catch (e) {} } }
     if (!tu) return res.status(502).json({ error: 'Lecture impossible', detail: 'pas de relevé renvoyé' });
     return res.status(200).json({ project: tu.input, usage: data.usage, stop: data.stop_reason });
   } catch (e) {
