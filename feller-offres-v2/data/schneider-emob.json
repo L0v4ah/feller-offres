@@ -5,19 +5,22 @@
    "f": "EVH5A22N2S",
    "g": "Schneider Charge",
    "d": "Schneider Charge (Wallbox) — borne villa prise T2S à volets, 1P/3P, 7,4 / 11 / 22 kW, 32 A, filtre DC 6 mA intégré, OCPP 1.6J, Wi-Fi + app (eSetup / Wiser)",
-   "note": "Villa : prise T2S = le client utilise son câble ; iMNx, DSO et TIC raccordables ; anti-tripping par Peak Controller (courant porteur, max. 6 appareils / 200 m)."
+   "note": "Villa : prise T2S = le client utilise son câble ; iMNx, DSO et TIC raccordables ; anti-tripping par Peak Controller (courant porteur, max. 6 appareils / 200 m).",
+   "e": "834020829"
   },
   {
    "f": "EVH5A11N2C5",
    "g": "Schneider Charge",
    "d": "Schneider Charge (Wallbox) — borne villa câble attaché 5 m T2, triphasé 11 kW, 16 A, filtre DC 6 mA",
-   "note": "Protection amont : disjoncteur 20 A courbe C + différentiel 30 mA type A-SI (ou type B) + iMNx."
+   "note": "Protection amont : disjoncteur 20 A courbe C + différentiel 30 mA type A-SI (ou type B) + iMNx.",
+   "e": "834020809"
   },
   {
    "f": "EVH5A11N2C7",
    "g": "Schneider Charge",
    "d": "Schneider Charge (Wallbox) — borne villa câble attaché 7 m T2, triphasé 11 kW, 16 A, filtre DC 6 mA",
-   "note": "Protection amont : 20 A C + 30 mA type A-SI + iMNx."
+   "note": "Protection amont : 20 A C + 30 mA type A-SI + iMNx.",
+   "e": "834020819"
   },
   {
    "f": "EVH5A07N2C5",
@@ -47,13 +50,15 @@
    "f": "EVA2HPC3",
    "g": "Anti-tripping",
    "d": "Peak Controller triphasé 16–50 A (EVA2HPC3) — anti-déclenchement Schneider Charge / Charge Pro, 3 pinces, réglages 16/20/25/32/40/50 A",
-   "note": "Le cas suisse courant : villa triphasée 25–40 A. Courant porteur, pas de câble bus."
+   "note": "Le cas suisse courant : villa triphasée 25–40 A. Courant porteur, pas de câble bus.",
+   "e": "834320839"
   },
   {
    "f": "EVA5GH",
    "g": "Accessoires AC",
    "d": "Support de câble EV (EVA5GH) pour Schneider Charge / Charge Pro — ranger le câble attaché ou le câble du client",
-   "note": ""
+   "note": "",
+   "e": "834100029"
   },
   {
    "f": "EVP1CNS32322",
@@ -65,13 +70,15 @@
    "f": "EVP1CNL32322",
    "g": "Câbles",
    "d": "Câble de recharge EVlink T2–T2, triphasé 32 A (jusqu'à 22 kW), 7 m, mode 3, IP44",
-   "note": ""
+   "note": "",
+   "e": "119100596"
   },
   {
    "f": "EVP1CNX32322",
    "g": "Câbles",
    "d": "Câble de recharge EVlink T2–T2, triphasé 32 A (jusqu'à 22 kW), 10 m, mode 3, IP44",
-   "note": ""
+   "note": "",
+   "e": "119400496"
   },
   {
    "f": "EVP1CNS32122",
@@ -83,13 +90,15 @@
    "f": "EVB4S22N40",
    "g": "Schneider Charge Pro",
    "d": "Schneider Charge Pro — borne noire prise T2S, 1P/3P 7,4 / 11 / 22 kW, 32 A, RDC-DD 6 mA, Ethernet 2 ports + Wi-Fi, OCPP 1.6J, RFID/NFC, sans MID, sans 4G",
-   "note": "Variantes : M = compteur MID intégré, G = modem 4G intégré, MG = MID + 4G. Pilotable par Peak Controller (1–6 bornes), Resi9 Energy Meter ou EV Charging Expert."
+   "note": "Variantes : M = compteur MID intégré, G = modem 4G intégré, MG = MID + 4G. Pilotable par Peak Controller (1–6 bornes), Resi9 Energy Meter ou EV Charging Expert.",
+   "e": "834001909"
   },
   {
    "f": "EVB4S22N40M",
    "g": "Schneider Charge Pro",
    "d": "Schneider Charge Pro — prise T2S, 7,4 / 11 / 22 kW, compteur MID intégré (refacturation au kWh), RDC-DD 6 mA, Ethernet + Wi-Fi, OCPP 1.6J",
-   "note": "PPE : le MID permet la refacturation certifiée aux locataires via le backend OCPP."
+   "note": "PPE : le MID permet la refacturation certifiée aux locataires via le backend OCPP.",
+   "e": "834001919"
   },
   {
    "f": "EVB4S22N40G",
@@ -101,19 +110,22 @@
    "f": "EVB4S22N40MG",
    "g": "Schneider Charge Pro",
    "d": "Schneider Charge Pro — prise T2S, 7,4 / 11 / 22 kW, compteur MID + modem 4G intégrés, RDC-DD 6 mA, OCPP 1.6J",
-   "note": "La version complète PPE : MID + 4G."
+   "note": "La version complète PPE : MID + 4G.",
+   "e": "834001929"
   },
   {
    "f": "EVB4S22NC0",
    "g": "Schneider Charge Pro",
    "d": "Schneider Charge Pro — câble attaché 7 m T2, 7,4 / 11 / 22 kW, RDC-DD 6 mA, Ethernet + Wi-Fi, OCPP 1.6J, sans MID",
-   "note": "Variantes NC0M (MID), NC0G (4G), NC0MG (MID + 4G)."
+   "note": "Variantes NC0M (MID), NC0G (4G), NC0MG (MID + 4G).",
+   "e": "834001939"
   },
   {
    "f": "EVB4S22NC0M",
    "g": "Schneider Charge Pro",
    "d": "Schneider Charge Pro — câble attaché 7 m T2, 7,4 / 11 / 22 kW, compteur MID intégré, RDC-DD 6 mA, OCPP 1.6J",
-   "note": ""
+   "note": "",
+   "e": "834001949"
   },
   {
    "f": "EVB4S22NC0G",
@@ -125,25 +137,29 @@
    "f": "EVB4S22NC0MG",
    "g": "Schneider Charge Pro",
    "d": "Schneider Charge Pro — câble attaché 7 m T2, 7,4 / 11 / 22 kW, compteur MID + modem 4G intégrés, RDC-DD 6 mA, OCPP 1.6J",
-   "note": ""
+   "note": "",
+   "e": "834001959"
   },
   {
    "f": "EVA2PBS1",
    "g": "Schneider Charge Pro",
    "d": "Pied / poteau de montage pour 1 Schneider Charge Pro (EVA2PBS1)",
-   "note": "Places sans mur. Pour 2 bornes dos à dos : EVA2PBS2 ; plaque de conversion 1 → 2 bornes : EVA2PCS2."
+   "note": "Places sans mur. Pour 2 bornes dos à dos : EVA2PBS2 ; plaque de conversion 1 → 2 bornes : EVA2PCS2.",
+   "e": "834100059"
   },
   {
    "f": "EVA2PBS2",
    "g": "Schneider Charge Pro",
    "d": "Pied / poteau de montage pour 2 Schneider Charge Pro dos à dos (EVA2PBS2)",
-   "note": ""
+   "note": "",
+   "e": "834100069"
   },
   {
    "f": "EVA2PCS2",
    "g": "Schneider Charge Pro",
    "d": "Plaque de conversion pied 1 borne → 2 bornes Schneider Charge Pro (EVA2PCS2)",
-   "note": "Pour ajouter une 2e Charge Pro sur un pied EVA2PBS1 existant."
+   "note": "Pour ajouter une 2e Charge Pro sur un pied EVA2PBS1 existant.",
+   "e": "834100079"
   },
   {
    "f": "EVA2M8",
@@ -191,49 +207,57 @@
    "f": "EVB3S22N4",
    "g": "EVlink Pro AC",
    "d": "EVlink Pro AC — prise T2S, triphasé 22 kW, 32 A, RDC-DD 6 mA, MNx intégré, OCPP 1.6J, RFID/NFC, Ethernet 2 ports (daisy chain)",
-   "note": "Sans différentiel intégré : FI 30 mA type A-SI (ou B) au tableau. Versions : N4A = + RCD A-SI 30 mA intégré ; N4B = RCD type B-EV intégré ; N40M = compteur MID ; N4E = + prise domestique ; NC0 = câble attaché 5 m."
+   "note": "Sans différentiel intégré : FI 30 mA type A-SI (ou B) au tableau. Versions : N4A = + RCD A-SI 30 mA intégré ; N4B = RCD type B-EV intégré ; N40M = compteur MID ; N4E = + prise domestique ; NC0 = câble attaché 5 m.",
+   "e": "834000289"
   },
   {
    "f": "EVB3S22N4A",
    "g": "EVlink Pro AC",
    "d": "EVlink Pro AC — prise T2S, 22 kW, différentiel type A-SI 30 mA + RDC-DD 6 mA intégrés, MNx, OCPP 1.6J",
-   "note": "Au tableau : disjoncteur 40 A C seul (le FI est dans la borne). Température max. 40 °C avec RCD A-SI intégré."
+   "note": "Au tableau : disjoncteur 40 A C seul (le FI est dans la borne). Température max. 40 °C avec RCD A-SI intégré.",
+   "e": "834000759"
   },
   {
    "f": "EVB3S22N4B",
    "g": "EVlink Pro AC",
    "d": "EVlink Pro AC — prise T2S, 22 kW, différentiel type B-EV intégré, MNx, OCPP 1.6J",
-   "note": "Type B intégré : pour les pays / installations qui exigent le type B (HD 60364-7-722). Disjoncteur 40 A C au tableau."
+   "note": "Type B intégré : pour les pays / installations qui exigent le type B (HD 60364-7-722). Disjoncteur 40 A C au tableau.",
+   "e": "834000719"
   },
   {
    "f": "EVB3S22NC0",
    "g": "EVlink Pro AC",
    "d": "EVlink Pro AC — câble attaché 5 m T2, 22 kW, RDC-DD 6 mA, MNx, OCPP 1.6J",
-   "note": "NCA = + RCD A-SI intégré, NCB = RCD type B intégré, NC0M = MID."
+   "note": "NCA = + RCD A-SI intégré, NCB = RCD type B intégré, NC0M = MID.",
+   "e": "834000299"
   },
   {
    "f": "EVB3S22NCA",
    "g": "EVlink Pro AC",
    "d": "EVlink Pro AC — câble attaché 5 m T2, 22 kW, différentiel type A-SI 30 mA intégré, MNx, OCPP 1.6J",
-   "note": ""
+   "note": "",
+   "e": "834000779"
   },
   {
    "f": "EVB3S22NCB",
    "g": "EVlink Pro AC",
    "d": "EVlink Pro AC — câble attaché 5 m T2, 22 kW, différentiel type B-EV intégré, MNx, OCPP 1.6J",
-   "note": ""
+   "note": "",
+   "e": "834000739"
   },
   {
    "f": "EVB3S22N40M",
    "g": "EVlink Pro AC",
    "d": "EVlink Pro AC — prise T2S, 22 kW, compteur MID intégré (classe 1 / B), RDC-DD 6 mA, OCPP 1.6J",
-   "note": "MID = refacturation certifiée. Sans MNx ni RCD intégré."
+   "note": "MID = refacturation certifiée. Sans MNx ni RCD intégré.",
+   "e": "834000709"
   },
   {
    "f": "EVB3S22NC0M",
    "g": "EVlink Pro AC",
    "d": "EVlink Pro AC — câble attaché 5 m T2, 22 kW, compteur MID intégré, RDC-DD 6 mA, OCPP 1.6J",
-   "note": ""
+   "note": "",
+   "e": "834000729"
   },
   {
    "f": "EVB3S22N40MR",
@@ -263,55 +287,64 @@
    "f": "EVA1MS",
    "g": "EVlink Pro AC",
    "d": "Modem 4G intégré à antennes internes pour EVlink Pro AC (EVA1MS) — jusqu'à 10 bornes en daisy chain",
-   "note": "Au-delà de 10 bornes ou avec EV Charging Expert : modem externe EVP3MM + antenne EVP2MX. Version antenne externe pour kit Metal : EVA1MM."
+   "note": "Au-delà de 10 bornes ou avec EV Charging Expert : modem externe EVP3MM + antenne EVP2MX. Version antenne externe pour kit Metal : EVA1MM.",
+   "e": "834000199"
   },
   {
    "f": "EVA1MM",
    "g": "EVlink Pro AC",
    "d": "Modem 4G intégré avec antenne externe pour EVlink Pro AC Metal (EVA1MM)",
-   "note": ""
+   "note": "",
+   "e": "834000189"
   },
   {
    "f": "EVP3MM",
    "g": "Gestion de charge",
    "d": "Modem 4G externe (EVP3MM) pour infrastructure de plus de 10 EVlink Pro AC et/ou EcoStruxure EV Charging Expert",
-   "note": "Antenne EVP2MX à ajouter."
+   "note": "Antenne EVP2MX à ajouter.",
+   "e": "405996748"
   },
   {
    "f": "EVP2MX",
    "g": "Gestion de charge",
    "d": "Antenne pour modem externe EVP3MM (EVP2MX)",
-   "note": ""
+   "note": "",
+   "e": "405996738"
   },
   {
    "f": "EVP1BNS",
    "g": "Accessoires AC",
    "d": "Lot de 10 badges RFID vierges (EVP1BNS) — 1 administrateur + 9 utilisateurs, étiquettes adhésives",
-   "note": "Pour Charge Pro, EVlink Pro AC et DC."
+   "note": "Pour Charge Pro, EVlink Pro AC et DC.",
+   "e": "834000459"
   },
   {
    "f": "EVA1PBS1",
    "g": "EVlink Pro AC",
    "d": "Pied de montage pour 1 EVlink Pro AC (EVA1PBS1) — H 1300 × L 285 × P 229 mm",
-   "note": "2 bornes dos à dos : EVA1PBS2 ; plaque de conversion 1 → 2 : EVA1PCS2."
+   "note": "2 bornes dos à dos : EVA1PBS2 ; plaque de conversion 1 → 2 : EVA1PCS2.",
+   "e": "834930109"
   },
   {
    "f": "EVA1PBS2",
    "g": "EVlink Pro AC",
    "d": "Pied de montage pour 2 EVlink Pro AC dos à dos (EVA1PBS2) — H 1300 × L 285 × P 384 mm",
-   "note": ""
+   "note": "",
+   "e": "834930209"
   },
   {
    "f": "EVA1PCS2",
    "g": "EVlink Pro AC",
    "d": "Plaque de conversion pied 1 borne → 2 bornes EVlink Pro AC (EVA1PCS2)",
-   "note": ""
+   "note": "",
+   "e": "834930199"
   },
   {
    "f": "EVA1PLS1",
    "g": "EVlink Pro AC",
    "d": "Verrou de câble permanent pour EVlink Pro AC (EVA1PLS1) — garde le câble attaché en permanence à la borne à prise",
-   "note": ""
+   "note": "",
+   "e": "834100019"
   },
   {
    "f": "EVA1M8",
@@ -329,25 +362,29 @@
    "f": "EVA1RWKS1",
    "g": "EVlink Pro AC Metal",
    "d": "Kit métallique EVlink Pro AC Metal — mural, 1 point de charge (EVA1RWKS1), enveloppe IP3X, montage 50–70 min",
-   "note": "La borne EVlink Pro AC se monte dans le kit ; protections dans un coffret Mureva 13960M (12 modules) si nécessaire."
+   "note": "La borne EVlink Pro AC se monte dans le kit ; protections dans un coffret Mureva 13960M (12 modules) si nécessaire.",
+   "e": "834900019"
   },
   {
    "f": "EVA1RFKS1",
    "g": "EVlink Pro AC Metal",
    "d": "Kit métallique EVlink Pro AC Metal — sur pied, 1 point de charge (EVA1RFKS1), ≈ 40 kg",
-   "note": ""
+   "note": "",
+   "e": "834900009"
   },
   {
    "f": "EVA1RFKS2",
    "g": "EVlink Pro AC Metal",
    "d": "Kit métallique EVlink Pro AC Metal — sur pied, 2 points de charge (EVA1RFKS2), ≈ 61 kg, montage 90–110 min",
-   "note": "Coffret PanelSeT EVA1RFKES pour une arrivée jusqu'à 35 mm²."
+   "note": "Coffret PanelSeT EVA1RFKES pour une arrivée jusqu'à 35 mm².",
+   "e": "834900029"
   },
   {
    "f": "EVA1RFKES",
    "g": "EVlink Pro AC Metal",
    "d": "Coffret PanelSeT IP66 270×360×180 mm (EVA1RFKES) pour la base du kit EVlink Pro AC Metal 2 points — arrivée 25/35 mm², 2 rails DIN, presse-étoupes",
-   "note": ""
+   "note": "",
+   "e": "834990419"
   },
   {
    "f": "EVA1FWHS12",
@@ -407,7 +444,8 @@
    "f": "EVD1S60TBB",
    "g": "EVlink Pro DC 60",
    "d": "EVlink Pro DC 60 kW — 2× CCS2 (60 kW ou 2× 30 kW), câbles 3,5 m avec gestion de câbles, écran 7\", 4G + Wi-Fi + Ethernet, OCPP 1.6J, ISO 15118, compteur DC classe B, MCB + RCD + SPD intégrés, IP55, 131 kg",
-   "note": "Courant nominal 97 A (max 107 A) : protection Acti9 iC120 4P 125 A C + Vigi iC120 4P 30 mA A-SI. Mural ou sur pied EVP1DB3LG (740 mm) / EVP1DB4LG (1 m)."
+   "note": "Courant nominal 97 A (max 107 A) : protection Acti9 iC120 4P 125 A C + Vigi iC120 4P 30 mA A-SI. Mural ou sur pied EVP1DB3LG (740 mm) / EVP1DB4LG (1 m).",
+   "e": "834320809"
   },
   {
    "f": "EVD1S60THB",
@@ -419,31 +457,36 @@
    "f": "EVD1S60TBBC5",
    "g": "EVlink Pro DC 60",
    "d": "EVlink Pro DC 60 kW — 2× CCS2, câbles 5 m sans gestion de câbles, 100 kg",
-   "note": "Gestion de câbles ajoutable : accessoire EVA1D60S01."
+   "note": "Gestion de câbles ajoutable : accessoire EVA1D60S01.",
+   "e": "834320819"
   },
   {
    "f": "EVD1S60TBBC7",
    "g": "EVlink Pro DC 60",
    "d": "EVlink Pro DC 60 kW — 2× CCS2, câbles 7 m sans gestion de câbles, 108 kg",
-   "note": ""
+   "note": "",
+   "e": "834320829"
   },
   {
    "f": "EVP1DB3LG",
    "g": "EVlink Pro DC 60",
    "d": "Pied 740 mm pour EVlink Pro DC 60 CCS2+CCS2 (EVP1DB3LG) — 341 × 454 mm, 11 kg",
-   "note": "1 m : EVP1DB4LG. Pour CCS2+CHAdeMO : EVP1DB5LG (740) / EVP1DB6LG (1 m)."
+   "note": "1 m : EVP1DB4LG. Pour CCS2+CHAdeMO : EVP1DB5LG (740) / EVP1DB6LG (1 m).",
+   "e": "834100039"
   },
   {
    "f": "EVP1DB4LG",
    "g": "EVlink Pro DC 60",
    "d": "Pied 1000 mm pour EVlink Pro DC 60 CCS2+CCS2 (EVP1DB4LG) — 13 kg",
-   "note": ""
+   "note": "",
+   "e": "834100049"
   },
   {
    "f": "EVA1D60S01",
    "g": "EVlink Pro DC 60",
    "d": "Accessoire de gestion de câbles pour EVlink Pro DC 60 versions C5 (EVA1D60S01)",
-   "note": ""
+   "note": "",
+   "e": "834100009"
   },
   {
    "f": "EVD2S60TBB",
@@ -557,7 +600,8 @@
    "f": "HMIBX1A0NEVB100SCP",
    "g": "Gestion de charge",
    "d": "EcoStruxure EV Charging Expert (HMIBX1A0NEVB100SCP) — gestion de charge statique / dynamique jusqu'à 250 bornes, 20 zones sur 4 niveaux, badges VIP, intégration PV, API BEMS, OCPP 1.6J, Harmony BX1 (Linux), 12–24 V DC, 2× Ethernet, IP20",
-   "note": "Une seule référence, toutes fonctions. Compatible Schneider Charge Pro, EVlink Pro AC, EVlink Pro DC, StarCharge Fast. À prévoir autour : alimentation 24 V DC, switch Ethernet (Modicon), compteur en tête communicant (iEM3155 Modbus, PM5320, PowerTag via Panel Server, NSX/MTZ via IFE/EIFE), modem 4G EVP3MM si pas de réseau. Délestage recalculé toutes les 15 min (favorise les derniers arrivés)."
+   "note": "Une seule référence, toutes fonctions. Compatible Schneider Charge Pro, EVlink Pro AC, EVlink Pro DC, StarCharge Fast. À prévoir autour : alimentation 24 V DC, switch Ethernet (Modicon), compteur en tête communicant (iEM3155 Modbus, PM5320, PowerTag via Panel Server, NSX/MTZ via IFE/EIFE), modem 4G EVP3MM si pas de réseau. Délestage recalculé toutes les 15 min (favorise les derniers arrivés).",
+   "e": "834320739"
   },
   {
    "f": "EVLMSEDB2EDS",
@@ -629,7 +673,8 @@
    "f": "PAS600",
    "g": "Mesure",
    "d": "EcoStruxure Panel Server PAS600 — passerelle IoT (PowerTag sans fil → Modbus TCP), 2× Ethernet, RS485, 72 mm",
-   "note": "Remonte les PowerTag (jusqu'à 63 A… 630 A) vers l'EV Charging Expert."
+   "note": "Remonte les PowerTag (jusqu'à 63 A… 630 A) vers l'EV Charging Expert.",
+   "e": "560318405"
   },
   {
    "f": "LV434002",

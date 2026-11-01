@@ -10,7 +10,7 @@ Ton travail : relever TOUT le matériel d'appareillage, pièce par pièce, et le
 Lecture d'un plan :
 - Utilise la légende si elle existe ; sinon les symboles usuels suisses (SN / SIA) : interrupteur = cercle avec un trait, deux traits = schéma 3 (va-et-vient), cercle avec flèche ou « P » = poussoir, variateur = interrupteur avec flèche ou « D », prise = demi-cercle ou rectangle avec traits, le chiffre ou les traits indiquent le nombre de prises (2, 3), « T23 » / « 16A » = prise T23, « USB », « RJ45 » / « EDV », « TV » / « R-TV », « ST » / flèches haut-bas = store, « PIR » / « BM » = détecteur de mouvement, « PM » = détecteur de présence, « Th » = thermostat, cloche = sonnette.
 - Compte chaque symbole. Des symboles dessinés au même endroit (collés, alignés, dans un même cadre) = une COMBINAISON : donne-la dans combos avec la disposition (2x1 vertical, 1x2 horizontal, 3x1, 1x3, 2x2) et ses éléments. Ne les compte alors pas une deuxième fois dans items.
-- Nomme les pièces comme sur le plan (Séjour, Cuisine, Chambre 1, SdB, Hall, Réduit…). Si un élément est hors pièce identifiable, pièce « Divers ».
+- Nomme les pièces comme sur le plan (Séjour, Cuisine, Chambre 1, SdB, Hall, Réduit…), une entrée par pièce, dans l'ordre du plan. Si un élément est hors pièce identifiable, pièce « Divers ». Si le document impose une ligne ou une couleur pour une pièce précise (ex. « séjour en EDIZIO.liv noir »), mets-la dans design / color de la pièce.
 - Les luminaires, tableaux, bornes, ventilations, détecteurs de fumée vont dans other.
 
 Lecture d'un cahier des charges :
@@ -45,6 +45,8 @@ const TOOL = {
       rooms: { type: 'array', items: { type: 'object', required: ['name', 'items'], properties: {
         name: { type: 'string' },
         section: { type: 'string', description: 'position ou chapitre du devis (ex. 232.1 Appareillage) si le document en a' },
+        design: { type: 'string', description: 'ligne imposée pour CETTE pièce si le document la précise (ex. EDIZIO.liv au séjour), sinon vide' },
+        color: { type: 'string', description: 'couleur imposée pour CETTE pièce si précisée, sinon vide' },
         items: { type: 'array', items: { type: 'object', required: ['kind', 'qty'], properties: {
           kind: { type: 'string', enum: KINDS }, qty: { type: 'integer' }, detail: { type: 'string' }, confidence: { type: 'string', enum: ['haute', 'moyenne', 'basse'] },
           ref: { type: 'string', description: 'numéro d\'article cité tel quel dans le document, sinon vide' }, brand: { type: 'string', description: 'marque de la référence citée (Feller, Schneider, Hager…)' } } } },
@@ -67,11 +69,12 @@ module.exports = async (req, res) => {
   const images = (Array.isArray(body.images) ? body.images : []).slice(0, 20).filter(s => typeof s === 'string' && s.startsWith('data:image/'));
   const text = typeof body.text === 'string' ? body.text.slice(0, 200000) : '';
   const note = typeof body.note === 'string' ? body.note.slice(0, 1000) : '';
+  const learned = typeof body.learned === 'string' ? body.learned.slice(0, 3000) : '';
   if (!images.length && !text.trim()) return res.status(400).json({ error: 'Aucun contenu à lire (image ou texte).' });
   const content = [];
   images.forEach((src, i) => { const m = /^data:(image\/[a-z]+);base64,(.+)$/.exec(src); if (m) { content.push({ type: 'text', text: `Page / image ${i + 1}${body.name ? ' de « ' + String(body.name).slice(0, 80) + ' »' : ''} :` }); content.push({ type: 'image', source: { type: 'base64', media_type: m[1], data: m[2] } }); } });
   if (text.trim()) content.push({ type: 'text', text: `Texte du document${body.name ? ' « ' + String(body.name).slice(0, 80) + ' »' : ''} :\n\n${text}` });
-  content.push({ type: 'text', text: `Fais le relevé complet avec extract_project.${note ? ' Indication de Nicola : ' + note : ''}` });
+  content.push({ type: 'text', text: `Fais le relevé complet avec extract_project.${note ? ' Indication de Nicola : ' + note : ''}${learned ? '\n\nHabitudes apprises sur les projets précédents de Nicola (à appliquer si le document ne dit pas autre chose) :\n' + learned : ''}` });
   const call = async (msgs) => {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',

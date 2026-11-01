@@ -30,7 +30,7 @@ function search(q, limit = 15) {
   out.sort((a, b) => b[0] - a[0]);
   return out.slice(0, limit).map(it => it[1]).map(it => ({
     fellerNr: it.f, eNo: it.e || null, description: it.d, montage: it.m || null, nouveaute: it.nw || null,
-    disponible: !!it.buy, remplacePar: it.fu || null, source: it.src === 'se' ? 'Catalogue Schneider 2026 (réf. fabricant, N° ELDAS grossiste à confirmer)' : it.src === 'projet' ? 'Schneider sur projet' : it.src === 'sonepar' ? 'Sonepar (Schneider CH)' : 'Feller', note: it.note || undefined, prixBrut: it.p || undefined,
+    disponible: !!it.buy, remplacePar: it.fu || null, source: it.src === 'se' ? (it.e ? 'Catalogue Schneider 2026, N° ELDAS Sonepar vérifié' : 'Catalogue Schneider 2026 (réf. fabricant, N° ELDAS grossiste à confirmer)') : it.src === 'projet' ? 'Schneider sur projet' : it.src === 'sonepar' ? 'Sonepar (Schneider CH)' : 'Feller', note: it.note || undefined, prixBrut: it.p || undefined,
     piecesDetachees: (it.parts || []).slice(0, 8).map(x => `${x[2] > 1 ? x[2] + '× ' : ''}${x[3]} (${x[0]}, ELDAS ${x[1] || '—'})`).join('; ') || undefined,
     caracteristiques: (it.tech || []).filter(x => /montage|IP|Tension|Courant|raccordement|Compatible|Profondeur minimale/i.test(x[0]) && !/false/.test(x[1])).map(x => `${x[0]}: ${x[1]}${x[2] ? ' ' + x[2] : ''}`).join('; ').slice(0, 300),
     fiche: it.url || `https://online-katalog.feller.ch/fr/product?fnr=${encodeURIComponent(it.f)}`
