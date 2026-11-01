@@ -61,3 +61,10 @@ Le champ `p` (CHF) est affiché quand il existe (bouton « Prix bruts » dans la
 - Catalogue Schneider « EV charging & Storage 2026 » lu intégralement : 106 références (bornes, variantes MID/4G, pieds, modules ISO 15118, pièces détachées, Peak Controller, Resi9 Energy Meter, EV Charging Expert, modems, compteurs, protections DC) dans `emob.js` + `api/_data/emob.json` (source `se`, N° ELDAS grossiste à confirmer).
 - Parcours bornes : références exactes, choix du Peak Controller selon le raccordement, Resi9 Energy Meter / EV Charging Expert + périphérie, iMNX, protections par puissance DC, pièces détachées à proposer (qty 0).
 - Section « Bornes — tout voir, accessoires, pièces détachées » ; assistant mis à jour (bloc BORNES complet). Doc : `docs/emobilite-schneider-2026.md`.
+
+## v13e (01.11.2026) — audit UX, premières optimisations
+- Accueil en 5 groupes repliables (Lecture automatique · Appareillage · Tableaux & protection · E-mobilité · Énergie & industrie), sous-tuiles ordonnables dans leur groupe.
+- Résultats : une carte par produit (couleurs via pastilles) au lieu d'une carte par couleur, sauf si la recherche nomme une couleur.
+- Liste : taux de remplissage par tableau (UM utilisés / capacité, réserve 20 %), ⚠ tableau plein, bouton « passer au coffret supérieur », bouton « + zone multimédia ».
+- Fiche : lien « Fiche Schneider se.com (photos, docs, CAD) » pour les articles grossiste ; placeholder « photo non disponible » cliquable.
+- Cibles tactiles agrandies (boutons, +/−, pastilles, ×) sur écran tactile.
