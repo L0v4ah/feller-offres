@@ -68,3 +68,7 @@ Le champ `p` (CHF) est affiché quand il existe (bouton « Prix bruts » dans la
 - Liste : taux de remplissage par tableau (UM utilisés / capacité, réserve 20 %), ⚠ tableau plein, bouton « passer au coffret supérieur », bouton « + zone multimédia ».
 - Fiche : lien « Fiche Schneider se.com (photos, docs, CAD) » pour les articles grossiste ; placeholder « photo non disponible » cliquable.
 - Cibles tactiles agrandies (boutons, +/−, pastilles, ×) sur écran tactile.
+
+## v13f (01.11.2026)
+- « Pack conseillé » en tête des résultats de chaque parcours (bornes, protection, ASI, parafoudres, TGBT, appareillage, relevé de plan) : 1 référence recommandée par besoin avec quantité, options décochées, bouton « Ajouter le pack » ; détail et alternatives repliés.
+- Photos : secours automatique via /api/img si le site d'origine bloque l'affichage (download.se.com ajouté au proxy).
