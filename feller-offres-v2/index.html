@@ -342,6 +342,8 @@ body:has(#drawer:not([hidden])) .toast{bottom:auto;top:14px}
 .offers .osearch{width:100%;min-height:44px;border-radius:12px;border:1px solid var(--line-2);padding:0 14px;font:inherit;margin:4px 0 12px;background:var(--float)}
 .ocard{background:var(--glass-2);border:1px solid var(--rim);border-radius:var(--r-tile);padding:12px 14px;margin-bottom:10px}.ocard.cur{border-color:var(--pine)}.otop{display:flex;justify-content:space-between;gap:10px;align-items:center}.otop b{font-size:16px}.ometa{font-size:13px;color:var(--muted);margin:4px 0 8px}.oact{display:flex;flex-wrap:wrap;gap:8px}.oact label.btn{cursor:pointer}
 .ost{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--well);white-space:nowrap}.ost.sent{background:#e6eefc;color:#2a4f9c}.ost.won{background:#e3f2e7;color:#1f6b3a}.ost.lost{background:#f6e3e0;color:#9c3a2a}
+.ostrip{background:var(--glass-2);border:1px solid var(--rim);border-radius:var(--r-tile);padding:10px 12px;margin:4px 0 16px;box-shadow:var(--shadow)}.oshead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.oshead b{font-size:16px}.oshead span{font-size:12.5px;color:var(--muted);flex:1}.oschips{display:flex;gap:8px;overflow-x:auto;margin-top:8px;padding-bottom:2px;scrollbar-width:none}.oschips::-webkit-scrollbar{display:none}
+.ochip{flex:0 0 auto;min-height:52px;max-width:240px;text-align:left;border:1px solid var(--line-2);background:var(--float);border-radius:12px;padding:6px 12px;font:inherit;cursor:pointer;display:flex;flex-direction:column;gap:2px}.ochip b{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ochip span{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ochip.cur{border-color:var(--pine);box-shadow:0 0 0 1px var(--pine)}.ochip.empty{font-size:13px;color:var(--muted);cursor:default;justify-content:center}
 .gmini{position:fixed;left:50%;transform:translate(-50%,-140%);top:72px;z-index:25;display:flex;align-items:center;gap:10px;padding:6px 8px 6px 14px;border-radius:999px;background:var(--glass-3);border:1px solid var(--rim);backdrop-filter:blur(16px);box-shadow:var(--shadow);font-size:13.5px;max-width:calc(100vw - 24px);transition:transform .25s var(--ease),opacity .2s;opacity:0;pointer-events:none}.gmini.show{transform:translate(-50%,0);opacity:1;pointer-events:auto}.gmini .gbar{width:90px;height:6px;flex:0 0 90px}.gmini span,.gmini b{white-space:nowrap}.gmini span{color:var(--muted)}.gmini .gbar{background:var(--well);border-radius:99px;overflow:hidden;position:relative}.gmini .gbar i{display:block;height:100%;background:var(--pine);border-radius:99px}.gmini.tight .gbar i{background:var(--butter)}.gmini.over .gbar i{background:var(--tomato)}.gmini .gbar em{position:absolute;top:0;width:2px;height:100%;background:var(--ink-3)}.gmini.over span{color:var(--tomato)}.gmini.tight span{color:#8a6400}.gmini .btn{min-height:34px!important;padding:4px 12px}
 .umhelp{margin:0 0 12px;font-size:13.5px;color:var(--muted)}.umhelp summary{cursor:pointer;color:var(--ink-2);font-weight:600;padding:6px 0}.umhelp p{margin:4px 0 0}
 .pnav{position:sticky;top:calc(var(--bar) + 4px);z-index:15;display:flex;gap:8px;overflow-x:auto;padding:8px 2px;margin:8px 0 10px;background:var(--glass-3);backdrop-filter:blur(14px);border-radius:14px;scrollbar-width:none}.pnav::-webkit-scrollbar{display:none}.pnav .chip{flex:0 0 auto;white-space:nowrap}.pnav .chip.okc{border-color:var(--pine);color:var(--pine)}.pnav .pprog{flex:0 0 auto;align-self:center;padding:0 8px;font-size:13px;color:var(--muted)}
@@ -448,7 +450,7 @@ body:has(#drawer:not([hidden])) .toast{bottom:auto;top:14px}
 <section id="print" aria-hidden="true"></section>
 
 <script src="data.js?v=202610311043"></script>
-<script src="emob.js?v=20261101a"></script>
+<script src="emob.js?v=20261101b"></script>
 <script>
 /* =============== données =============== */
 const DB = (window.FELLER_DATA && window.FELLER_DATA.items) || [];
@@ -959,6 +961,7 @@ const FN_LABEL = Object.fromEntries(FN_OPTS.map(o=>[o.v,o.t]));
 /* =============== images : secours par le proxy =============== */
 // Si une photo fabricant / grossiste ne charge pas (blocage du site, réseau mobile, protection anti-hotlink), on la redemande une fois via /api/img (proxy Vercel avec cache) avant d'afficher « photo non disponible ».
 // Photo qui ne s'affiche pas : 1) proxy Vercel (cache 7 j, et le proxy demande au catalogue Feller la bonne photo si le nom n'existe pas) 2) photo de l'article principal (variante couleur) 3) placeholder.
+document.addEventListener('load', e=>{ const el=e.target; if(!el||el.tagName!=='IMG') return; const src=el.getAttribute('src')||''; if(/download\.se\.com|default_image/.test(src)&&el.naturalWidth>0&&el.naturalWidth<80){ const alt=IMG_ALT[el.dataset.orig||src]; if(alt&&!el.dataset.ph){ el.dataset.ph='1'; el.src=alt; } else { const pic=el.closest('.pic'); if(pic){ pic.classList.add('nopic'); el.remove(); } else el.style.visibility='hidden'; } } }, true);
 document.addEventListener('error', e=>{ const el=e.target; if(!el||el.tagName!=='IMG'||location.protocol==='file:') return; const src=el.getAttribute('src')||''; if(!/^(https?:\/\/|\/api\/img)/.test(src)) return;
   const orig=el.dataset.orig||src; if(!el.dataset.orig) el.dataset.orig=orig; const step=+(el.dataset.step||0); const alt=IMG_ALT[orig];
   const px=u=>'/api/img?u='+encodeURIComponent(u)+(/mam\.feller\.ch\/pict\//.test(u)?'&f='+encodeURIComponent(decodeURIComponent(u.split('/pict/')[1].split('?')[0])):'');
@@ -1247,7 +1250,7 @@ const SECTIONS = [
 ];
 // Groupes de l'accueil : éléments principaux → sous-tuiles. L'ordre des groupes est fixe, l'ordre et le masquage des tuiles restent personnalisables.
 const HOME_GROUPS=[
-  {id:'ia', t:'Mes offres & lecture automatique', s:'Historique, photo, PDF, plan, cahier des charges', secs:['offres','photo','import']},
+  {id:'ia', t:'Lecture automatique', s:'Photo, PDF, plan, cahier des charges', secs:['photo','import']},
   {id:'app', t:'Appareillage', s:'Interrupteurs, prises, smart home, extérieur', secs:['piece','combo','appareillage','smart','exterieur','knxse','nouveautes']},
   {id:'tab', t:'Tableaux & protection', s:'Coffrets, disjoncteurs, peignes, parafoudres, TGBT', secs:['tableau','xs','protection','protection_all','surtension','surtension_all','comptage','accessoires','commande','tgbt','tgbt_all']},
   {id:'ev', t:'E-mobilité', s:'Bornes, gestion de charge, Canalis', secs:['bornes','ev_all','canalis','canalis_all']},
@@ -1256,6 +1259,10 @@ const HOME_GROUPS=[
 let homePrefs = store.get('offre.home', {order:[], hidden:[], collapsed:[]}); let organizing=false;
 function orderedSections(){ const ord=homePrefs.order||[]; const byId=Object.fromEntries(SECTIONS.map(x=>[x.id,x])); const out=ord.map(id=>byId[id]).filter(Boolean); SECTIONS.forEach(x=>{ if(!out.includes(x)) out.push(x); }); return out; }
 function saveHome(){ store.set('offre.home', homePrefs); }
+
+function offersStripHtml(){ try{ autosaveOffer(); }catch(e){} const cur=OFFERS.find(o=>o.id===curOfferId); const rec=OFFERS.filter(o=>o.id!==curOfferId).slice(0,3); const d=t=>t?new Date(t).toLocaleDateString('fr-CH',{day:'2-digit',month:'2-digit'}):'';
+  return `<section class="ostrip"><div class="oshead"><b>Mes offres</b><span>${OFFERS.length} au total</span><button class="btn small" type="button" data-goffers="1">Historique</button><button class="btn small primary" type="button" id="hnewoffer">+ Nouvelle</button></div>
+  <div class="oschips">${cur?`<button type="button" class="ochip cur" data-oopenh="${cur.id}"><b>En cours · ${esc(cur.no)}</b><span>${esc(cur.client||'Sans client')} · ${cur.refs||0} réf.${cur.total?' · '+chf(cur.total):''}</span></button>`:`<span class="ochip empty">Aucune offre en cours : ajoute des articles, elle se crée toute seule</span>`}${rec.map(o=>`<button type="button" class="ochip" data-oopenh="${o.id}"><b>${esc(o.client||'Sans client')}</b><span>${esc(o.no)} · ${d(o.updated||o.created)} · ${OSTAT[o.status||'brouillon'][0]}</span></button>`).join('')}</div></section>`; }
 function homeHtml(){
   const secs=orderedSections(); const hidden=new Set(homePrefs.hidden||[]);
   const tile=(t,i,arr)=>`<div class="tile ${organizing?'org':''}" role="button" tabindex="0" data-sec="${t.id}" draggable="${organizing}">${t.k?`<span class="k ${t.k==='Bêta'?'kb':''}">${t.k}</span>`:''}
@@ -1264,6 +1271,7 @@ function homeHtml(){
       <div class="txt"><b>${esc(t.t)}</b><span>${esc(t.s)}</span></div></div>`;
   const shown=secs.filter(t=>!hidden.has(t.id)), hid=secs.filter(t=>hidden.has(t.id));
   return `<div class="home">
+    ${organizing?'':offersStripHtml()}
     <div class="res-head"><h1>Que veux-tu proposer ?</h1><button class="btn small" type="button" id="orghome">${organizing?'Terminé':'Organiser'}</button></div>
     <p class="lead">${organizing?'Déplace les tuiles (▲ ▼ ou glisser-déposer), masque celles que tu n\'utilises pas. L\'ordre est mémorisé sur cet appareil.':'Choisis un parcours : deux ou trois choix en images et tu as les références avec N° ELDAS. Ou tape une référence, un produit ou une question dans la barre en haut.'}</p>
     ${!organizing&&curProject?`<div class="curproj"><div><b>Projet en cours · ${esc(curProject.label||'relevé')}</b><span>${(curProject.proj.rooms||[]).length} pièces · ${(curProject.proj.other||[]).length} lots · ${(curProject.proj.other||[]).filter(o=>o.done&&list.some(x=>x.lot===o.done)).length} dans la liste</span></div><button class="btn primary small" type="button" data-goproject="1">Reprendre</button><button class="btn small" type="button" data-closeproject="1">Fermer</button></div>`:''}
@@ -1700,6 +1708,9 @@ function projectGroups(v){
 $('home').onclick=()=>{ $('q').value=''; go({name:'home'}); };
 document.addEventListener('click',e=>{
   if(e.target.closest('[data-home]')){ go({name:'home'}); return; }
+  if(e.target.closest('[data-goffers]')){ go({name:'offers'}); return; }
+  if(e.target.id==='hnewoffer'){ if(list.length&&!confirm('Commencer une nouvelle offre ? La liste actuelle reste dans « Mes offres ».')) return; newOffer(); render('keep'); toast('Nouvelle offre prête',null,'ok'); return; }
+  const oh=e.target.closest('[data-oopenh]'); if(oh){ const o=OFFERS.find(x=>x.id===oh.dataset.oopenh); if(o){ if(o.id!==curOfferId) loadOffer(o); openList(); render('keep'); } return; }
   const sp=e.target.closest('[data-setprice]'); if(sp){ const x=list[+sp.dataset.setprice]; const cur=priceOf(x); const v=prompt('Prix brut unitaire CHF (hors TVA) pour\n'+x.d, cur!=null?String(cur):''); if(v!==null){ const n=parseFloat(v.replace(/['’ ]/g,'').replace(',','.')); if(!isNaN(n)&&n>=0){ PRICES[priceKey(x.f)]=n; savePrices(); } else if(v.trim()===''){ delete PRICES[priceKey(x.f)]; savePrices(); } renderList(); } return; }
   if(view.name==='offers'){ const t=e.target;
     if(t.id==='onew'){ newOffer(); render('keep'); toast('Nouvelle offre prête : ajoute des articles',null,'ok'); return; }
