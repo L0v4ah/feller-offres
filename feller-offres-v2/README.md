@@ -37,3 +37,27 @@ Le champ `p` (CHF) est affiché quand il existe (bouton « Prix bruts » dans la
 - Pas de prix ni de stock grossiste.
 - Liste de matériel en localStorage (par navigateur). Code d'accès : protège l'assistant (vérifié côté serveur) ; la recherche elle-même reste accessible sans code à qui connaît l'URL.
 - Dictée : Chrome, Edge, Safari (pas Firefox).
+
+## v13 (31.10.2026)
+- Retour sans perte : pile de vues + historique du navigateur, reprise après rechargement (vue, liste, assistant).
+- Progression ✓ / en cours / ✕ avec temps écoulé (import, assistant, PDF) et bouton Réessayer.
+- Liste par lots : renommer, ×N, copier, retirer ; désignation par ligne ; fiche au clic.
+- PDF réel (jsPDF) avec photos via `api/img.js`, aperçu, partage WhatsApp / Messages / Mail (Web Share), impression en secours.
+- Tableau : circuits éclairage / prises demandés, groupes Éclairage et Prises, désignations par circuit, légende UM.
+- Import : références citées dans la soumission reprises telles quelles, écarts signalés, sections du devis → lots.
+
+## v13b (31.10.2026)
+- Projet en cours persistant : carte « Reprendre » à l'accueil et sur la page import, fil d'Ariane « Relevé : … » dans les parcours lancés depuis le relevé, ← Retour revient au relevé, lot marqué ✓ dans la liste.
+- Appels d'offres longs : texte de toutes les pages (150 max), pages électricité conservées en priorité (CFC 23x, appareillage…), PDF scannés jusqu'à 20 pages.
+- « Photo ou PDF express » : un PDF (offre concurrente, fiche) est lu (3 pages + texte) et envoyé à l'assistant.
+- Bornes : choix explicite DC 60 kW → EVlink Pro DC 60 (stock) ou StarCharge Fast 60 (projet) ; StarCharge 180 / 320 / 720 ; étape « Câbles ou Canalis for EV » dès 3 places avec calcul de la ligne KNA (40–160 A), boîtes de sortie KNB, couvercles, fixations, protection par ligne.
+- Nouvelle section « Canalis — gaine à barres » (KN, KBB, KS).
+
+## v13c (31.10.2026)
+- Configurateur Canalis (bêta) : usage (bornes / atelier / éclairage / puissance), questions réelles (nombre, puissance, type de borne, gestion dynamique, calibre de ligne 40–160 A tous visibles avec recommandation calculée, disposition, départs, longueur, fixation, angles) → ligne, alimentation, boîtes de sortie, couvercles, étriers, protection par ligne.
+- Règle produit : aucune option cachée — toutes les puissances / calibres sont listés, la recommandation est marquée.
+
+## v13d (31.10.2026) — e-mobilité
+- Catalogue Schneider « EV charging & Storage 2026 » lu intégralement : 106 références (bornes, variantes MID/4G, pieds, modules ISO 15118, pièces détachées, Peak Controller, Resi9 Energy Meter, EV Charging Expert, modems, compteurs, protections DC) dans `emob.js` + `api/_data/emob.json` (source `se`, N° ELDAS grossiste à confirmer).
+- Parcours bornes : références exactes, choix du Peak Controller selon le raccordement, Resi9 Energy Meter / EV Charging Expert + périphérie, iMNX, protections par puissance DC, pièces détachées à proposer (qty 0).
+- Section « Bornes — tout voir, accessoires, pièces détachées » ; assistant mis à jour (bloc BORNES complet). Doc : `docs/emobilite-schneider-2026.md`.

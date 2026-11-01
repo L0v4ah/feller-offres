@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/chat.js": {
-      "includeFiles": "api/_data/catalogue.json.gz",
+      "includeFiles": "api/_data/{catalogue.json.gz,emob.json}",
       "maxDuration": 60,
       "memory": 1024
     },
@@ -22,6 +22,15 @@
     },
     {
       "source": "/tech.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=600, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/emob.js",
       "headers": [
         {
           "key": "Cache-Control",

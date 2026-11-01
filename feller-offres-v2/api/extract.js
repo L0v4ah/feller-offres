@@ -64,8 +64,8 @@ module.exports = async (req, res) => {
   if (!process.env.ACCESS_CODE || code !== process.env.ACCESS_CODE) return res.status(401).json({ error: "Code d'accès incorrect" });
   if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: 'ANTHROPIC_API_KEY manquante sur Vercel' });
   const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-  const images = (Array.isArray(body.images) ? body.images : []).slice(0, 5).filter(s => typeof s === 'string' && s.startsWith('data:image/'));
-  const text = typeof body.text === 'string' ? body.text.slice(0, 80000) : '';
+  const images = (Array.isArray(body.images) ? body.images : []).slice(0, 20).filter(s => typeof s === 'string' && s.startsWith('data:image/'));
+  const text = typeof body.text === 'string' ? body.text.slice(0, 200000) : '';
   const note = typeof body.note === 'string' ? body.note.slice(0, 1000) : '';
   if (!images.length && !text.trim()) return res.status(400).json({ error: 'Aucun contenu à lire (image ou texte).' });
   const content = [];
@@ -76,7 +76,7 @@ module.exports = async (req, res) => {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: process.env.PLAN_MODEL || process.env.MODEL || 'claude-sonnet-5-5', max_tokens: 8000, system: SYSTEM, tools: [TOOL], tool_choice: { type: 'auto' }, messages: msgs })
+      body: JSON.stringify({ model: process.env.PLAN_MODEL || process.env.MODEL || 'claude-sonnet-5-5', max_tokens: 16000, system: SYSTEM, tools: [TOOL], tool_choice: { type: 'auto' }, messages: msgs })
     });
     if (!r.ok) { const t = await r.text(); throw new Error(('API ' + r.status + ' ' + t).slice(0, 300)); }
     return r.json();
