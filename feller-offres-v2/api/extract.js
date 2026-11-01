@@ -62,8 +62,7 @@ const TOOL = {
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST uniquement' });
-  const code = req.headers['x-access-code'] || '';
-  if (!process.env.ACCESS_CODE || code !== process.env.ACCESS_CODE) return res.status(401).json({ error: "Code d'accès incorrect" });
+  if (!(await require('./_limit')(req, res, { perMin: 6, perDay: 60 }))) return;
   if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: 'ANTHROPIC_API_KEY manquante sur Vercel' });
   const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
   const images = (Array.isArray(body.images) ? body.images : []).slice(0, 20).filter(s => typeof s === 'string' && s.startsWith('data:image/'));

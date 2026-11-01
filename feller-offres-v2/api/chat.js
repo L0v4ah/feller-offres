@@ -10,7 +10,7 @@ function loadDb() {
   const raw = fs.existsSync(gz) ? require('zlib').gunzipSync(fs.readFileSync(gz)).toString('utf8') : fs.readFileSync(pj, 'utf8');
   DB = JSON.parse(raw).items;
   try { const em = path.join(__dirname, '_data', 'emob.json'); if (fs.existsSync(em)) { const have = new Set(DB.map(x => x.f)); for (const it of JSON.parse(fs.readFileSync(em, 'utf8')).items) if (!have.has(it.f)) DB.push(it); } } catch (e) {}
-  for (const it of DB) it._s = norm([it.d, it.t, it.f, it.e, it.ean, it.m, (it.tech || []).map(x => x[1]).join(' ')].join(' '));
+  for (const it of DB) it._s = norm([it.d, it.t, it.f, it.mref, it.e, it.ean, it.m, (it.tech || []).map(x => x[1]).join(' ')].join(' '));
   return DB;
 }
 const norm = s => (s || '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[×x]/g, 'x').replace(/\s+/g, ' ').trim();
@@ -22,7 +22,7 @@ function search(q, limit = 15) {
   const out = [];
   for (const it of db) {
     let score = 0, miss = 0;
-    for (const t of toks) { if (it._s.includes(t)) score += (it.e === t || norm(it.f) === t) ? 50 : 1; else miss++; }
+    for (const t of toks) { if (it._s.includes(t)) score += (it.e === t || norm(it.f) === t || (it.mref && norm(it.mref) === t)) ? 50 : 1; else miss++; }
     if (miss > Math.floor(toks.length / 3)) continue; // tolère 1 mot sur 3 absent
     score -= miss * 2; if (it.buy) score += 1; if (it.fu) score -= 2; if (it.nw) score += 2;
     out.push([score, it]);
@@ -140,8 +140,7 @@ function withFinalNudge(messages) {
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST uniquement' });
-  const code = req.headers['x-access-code'] || '';
-  if (!process.env.ACCESS_CODE || code !== process.env.ACCESS_CODE) return res.status(401).json({ error: "Code d'accès incorrect" });
+  if (!(await require('./_limit')(req, res, { perMin: 20, perDay: 300 }))) return;
   if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: 'ANTHROPIC_API_KEY manquante sur Vercel' });
 
   const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});

@@ -450,7 +450,8 @@ body:has(#drawer:not([hidden])) .toast{bottom:auto;top:14px}
 <section id="print" aria-hidden="true"></section>
 
 <script src="data.js?v=202610311043"></script>
-<script src="emob.js?v=20261101b"></script>
+<script src="serefs.js?v=20261101a"></script>
+<script src="emob.js?v=20261101c"></script>
 <script>
 /* =============== données =============== */
 const DB = (window.FELLER_DATA && window.FELLER_DATA.items) || [];
@@ -1428,7 +1429,7 @@ const COMPONENTS = [
   {g:'Commande', k:'ict', label:'Contacteur 25 A (tarif nuit, boiler)', s:'', q:'contacteur iCT 25A 2F', um:1, def:0, ph:'Boiler tarif nuit'},
   {g:'Commande', k:'tl', label:'Télérupteur 16 A', s:'Lumières sur poussoirs', q:'telerupteur TL', um:1, def:0, ph:'Couloir, Escalier'},
   {g:'Commande', k:'min', label:'Minuterie', s:'Escalier, ventilation', q:'minuterie', um:1, def:0},
-  {g:'Options et finitions', k:'spd', label:'Protection surtension type 2+3 (Resi9 iPRD C40r)', s:'Doc Schneider 2025 : en tête de tableau et avant les bornes. 4 modules réservés (largeur à confirmer)', q:'R9L2C640', um:4, def:0, up:true},
+  {g:'Options et finitions', k:'spd', label:'Protection surtension type 2+3 (Resi9 iPRD C40r compact)', s:'Doc Schneider 2025 : en tête de tableau et avant les bornes. Compact : moitié de la place d\'un iPRD standard (2 modules au lieu de 4)', q:'R9L2C640', um:2, def:0, up:true},
   {g:'Options et finitions', k:'media', label:'Zone multimédia (plaque perforée + rail)', s:'Routeur, fibre, switch : compte 1 rangée', q:'Plaque perforée Resi9 appareils média', um:12, def:0, up:true},
 ];
 const UM_HELP='UM = unité modulaire : la largeur d\'un module sur le rail DIN (18 mm). 1LN = 1 UM, 3LN = 3 UM, différentiel 4 pôles = 4 UM. Une rangée Resi9 = 12 UM, PrismaSeT = 24 UM (ou 18).';
@@ -1438,7 +1439,7 @@ function combLines(c){
   const sum=t=>COMPONENTS.filter(x=>x.comb===t).reduce((a,x)=>a+q(x.k),0); const um1=sum('1LN'), um3=3*sum('3LN'), fi=sum('FI');
   const rows1=Math.ceil(um1/perRow), rows3=Math.ceil((um3+(fi?4*fi:0))/perRow);
   const len=perRow>=24?'24':perRow>=18?'24':'12'; const L=[];
-  if(rows1) L.push({k:'comb1', label:`Peigne 1LN ${len} UM — rangées de FI/LS 1 module`, s:`${um1} modules 1LN → ${rows1} rangée${rows1>1?'s':''}${perRow===18?' · peigne 24 UM à couper':''}`, q:`barre collectrice Clario iC40 1LN ${len} UM`, qty:rows1});
+  if(rows1) L.push({k:'comb1', label:`Peigne 1LN ${len} UM — rangées de FI/LS 1 module`, s:`${um1} modules 1LN → ${rows1} rangée${rows1>1?'s':''}${perRow===18?' · peigne 24 UM à couper':''} · variante : A9XPS712 (peigne 3 phases pas 9 mm, 63 A, 12 UM) pour répartir L1/L2/L3 sur les FI/LS 1 module`, q:`barre collectrice Clario iC40 1LN ${len} UM`, qty:rows1});
   if(rows3&&fi) L.push({k:'comb3fi', label:`Peigne 3LN ${len} UM « alim. gauche » — FI de groupe + circuits triphasés`, s:'le FI 4 modules alimente le peigne par la gauche', q:`barre collectrice Clario iC40 3LN alim.gauche ${len} UM`, qty:Math.min(rows3,fi)});
   if(rows3-(fi?Math.min(rows3,fi):0)>0) L.push({k:'comb3', label:`Peigne 3LN ${len} UM — circuits triphasés`, s:`${um3} modules 3LN`, q:`barre collectrice Clario iC40 3LN ${len}UM`, qty:rows3-(fi?Math.min(rows3,fi):0)});
   if(rows1) L.push({k:'cap1', label:'Capuchons pour peigne 1LN coupé (kit 40 pièces)', q:'capuchon peigne Clario iC40 1LN', qty:1});
