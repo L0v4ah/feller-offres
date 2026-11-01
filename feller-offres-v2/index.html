@@ -326,11 +326,18 @@ body:has(#drawer:not([hidden])) .toast{bottom:auto;top:14px}
 @media (max-width:1000px){.stage.chat-open .listbar{display:none}}
 .csec{font-size:15px;font-weight:600;margin:18px 0 8px;display:flex;align-items:baseline;gap:8px}.csec small{color:var(--faint);font-weight:400;font-size:12.5px}
 .gauge{background:var(--glass-2);border:1px solid var(--rim);border-radius:var(--r-tile);padding:14px 16px;margin:0 0 14px;box-shadow:var(--shadow)}
-.gauge .bar{height:10px;border-radius:999px;background:var(--well);overflow:hidden}
-.gauge .bar i{display:block;height:100%;background:var(--pine);border-radius:999px;transition:width .25s var(--ease)}
-.gauge.tight .bar i{background:var(--butter)}.gauge.over .bar i{background:var(--tomato)}
+.gauge .gbar{height:10px;border-radius:999px;background:var(--well);overflow:hidden}
+.gauge .gbar i{display:block;height:100%;background:var(--pine);border-radius:999px;transition:width .25s var(--ease)}
+.gauge.tight .gbar i{background:var(--butter)}.gauge.over .gbar i{background:var(--tomato)}
 .gauge .lbl{margin-top:8px;font-size:14px;color:var(--muted)}.gauge .lbl b{color:var(--text)}
 .gauge.over .lbl{color:var(--tomato)}
+.gauge.sticky{position:sticky;top:calc(var(--bar) + 6px);z-index:20;backdrop-filter:blur(16px)}.gauge .gtop{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px}.gauge .gtop b{font-size:20px}.gauge .gtop span{font-size:13.5px;color:var(--muted);font-weight:600}.gauge.tight .gtop span{color:#8a6400}.gauge.over .gtop span{color:var(--tomato)}.gauge .gbar{position:relative}.gauge .gbar em{position:absolute;top:0;width:2px;height:100%;background:var(--ink-3)}.rowsviz{display:flex;flex-direction:column;gap:3px;margin-top:8px}.rv{display:grid;grid-template-columns:24px 1fr 44px;gap:6px;align-items:center;font-size:11px;color:var(--ink-3)}.rb{height:6px;border-radius:99px;background:var(--well);overflow:hidden}.rb i{display:block;height:100%;background:var(--pine)}.gauge.over .rb i{background:var(--tomato)}.gact{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}.gact .warnmax{font-size:13px;color:var(--tomato);font-weight:600}
+.combo .cbopts{display:grid;gap:12px;margin:12px 0 16px}.combo .cbopts>div>b{font-size:14px}.combo .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;align-items:center}.combo .chip{min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line-2);background:var(--float);font:inherit;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}.combo .chip.on{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}.combo .chip .dot{width:16px;height:16px;border-radius:50%;border:1px solid rgba(0,0,0,.25);display:inline-block}.combo .hint{font-size:12px;color:var(--ink-3)}
+.cbstage{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}@media(min-width:820px){.cbstage{grid-template-columns:minmax(0,340px) 1fr;align-items:start}}
+.cbframe{display:grid;gap:6px;padding:14px;border-radius:14px;background:var(--fc);box-shadow:inset 0 0 0 1px rgba(0,0,0,.15),var(--shadow);max-width:340px;justify-self:center;width:100%}
+.cbcell{aspect-ratio:1;border-radius:8px;border:2px solid transparent;background:rgba(255,255,255,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font:inherit;font-size:12px;cursor:pointer;padding:6px;min-height:72px;position:relative}.cbcell img{max-width:72%;max-height:62%;object-fit:contain}.cbcell.empty{background:rgba(255,255,255,.55);border:2px dashed rgba(0,0,0,.25)}.cbcell.sel{border-color:var(--tomato);box-shadow:0 0 0 3px rgba(232,80,50,.25)}.cbcell em{font-size:10px;color:var(--tomato);font-style:normal}
+.cbpal .palgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;margin-top:8px}.cbpal .pal{min-height:96px;border-radius:12px;border:1px solid var(--line-2);background:var(--float);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 4px;font:inherit;font-size:13px;cursor:pointer;text-align:center}.cbpal .pal img{width:44px;height:44px;object-fit:contain}.cbpal .pal i{width:44px;height:44px}.cbpal .pal small{font-size:11px;color:var(--ink-3)}.cbpal .pal.on{border-color:var(--pine);box-shadow:0 0 0 2px var(--pine)}.cbpal .pal.na{opacity:.4}.cbpal .pal.clr{color:var(--tomato)}
+.cbbom{margin-top:18px;background:var(--glass-2);border:1px solid var(--rim);border-radius:var(--r-tile);padding:14px 16px;box-shadow:var(--shadow)}.cbbom .gtop{display:flex;gap:10px;flex-wrap:wrap;align-items:baseline;margin-bottom:8px}.cbbom .gtop span{font-size:13px;color:var(--muted)}.cbl{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);cursor:pointer}.cbl img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:8px}.cbl small{display:block;font-size:11.5px;color:var(--ink-3)}.cbl span{display:block;font-size:14px}.cbl em{font-size:12px;color:var(--muted);font-style:normal}.cbbom .warn{margin-top:8px;color:var(--tomato);font-size:13.5px}.cbadd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}.cbadd .qty{display:flex;align-items:center;gap:10px}.cbadd .st{width:44px;height:44px;border-radius:50%;border:1px solid var(--line-2);background:var(--float);font-size:20px;cursor:pointer}.cbadd .btn{margin-left:auto}
 .gauge .rowsel{margin-top:8px;display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted)}
 .crow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--glass-2);border:1px solid var(--rim);border-radius:var(--r-tile);padding:12px 16px;margin-bottom:8px;box-shadow:var(--shadow)}
 .crow.off{opacity:.6}.crow.coffret{box-shadow:0 0 0 1.5px var(--pine) inset,var(--shadow)}
@@ -460,10 +467,13 @@ const byF = Object.fromEntries(DB.map(it=>[it.f,it])); window.__byF=byF; window.
 let techReady=false; const techWaiters=[];
 (function loadTech(){ if(!(window.FELLER_DATA||{}).techFile) { techReady=true; return; } const url='tech.json?v=202610311043'; const go=()=>fetch(url).then(r=>r.json()).then(T=>{ for(const [f,t] of Object.entries(T)){ const it=byF[f]; if(!it) continue; Object.assign(it,t); } DB.forEach(it=>{ if(it._variantOf&&byF[it._variantOf]){ const b=byF[it._variantOf]; if(b.tech) it.tech=b.tech; if(b.acc) it.acc=b.acc; if(b.dim) it.dim=b.dim; } }); techReady=true; techWaiters.splice(0).forEach(fn=>fn()); document.querySelectorAll('.card[data-f] .more-btn:not(.row .more-btn)').forEach(mb=>{ const it=byF[mb.closest('.card').dataset.f]; if(it&&mb.getAttribute('aria-expanded')!=='true') mb.textContent='Détails'+((it.parts||[]).length?` · ${it.parts.length} pièces`:'')+((it.acc||[]).length?` · ${it.acc.length} acc.`:''); }); }).catch(()=>{ techReady=true; }); if('requestIdleCallback' in window) requestIdleCallback(go,{timeout:3000}); else setTimeout(go,800); })();
 function whenTech(fn){ if(techReady) fn(); else techWaiters.push(fn); }
-const COLORS = [['gris clair','#cfd2d3'],['gris foncé','#6d7073'],['verre noir','#111'],['verre blanc','#f4f4f4'],['noir','#1b1b1b'],['blanc','#ffffff'],['coffee','#5a3b2b'],['crema','#efe4cc'],['aluminium','#b8bcc0'],['orange','#e8731d'],['rouge','#c8431f'],['laiton','#c9a349'],['acier','#9ea4a8'],['anthrazit','#3a3d40'],['graphite','#4a4d50'],['chrome','#c0c4c8'],['ardoise','#55606a'],['umbra','#5c4a3a'],['arctic','#eaf1f3'],['pearl','#e9e5dd'],['hazel','#8b6d4b'],['stone','#9a948a'],['moca','#6f5646'],['marbre','#ece9e4'],['indigo','#2d3a6b'],['champagne','#d9c8a5'],['nickel','#8e8e8e'],['chêne','#b3885a'],['fibrociment','#b7b7b2']];
+const COLORS = [['gris clair','#cfd2d3'],['gris foncé','#6d7073'],['verre noir','#111'],['verre blanc','#f4f4f4'],['noir','#1b1b1b'],['blanc','#ffffff'],['coffee','#5a3b2b'],['umbra','#4a3f37'],['crema','#efe4cc'],['aluminium','#b8bcc0'],['orange','#e8731d'],['rouge','#c8431f'],['laiton','#c9a349'],['acier','#9ea4a8'],['anthrazit','#3a3d40'],['graphite','#4a4d50'],['chrome','#c0c4c8'],['ardoise','#55606a'],['umbra','#5c4a3a'],['arctic','#eaf1f3'],['pearl','#e9e5dd'],['hazel','#8b6d4b'],['stone','#9a948a'],['moca','#6f5646'],['marbre','#ece9e4'],['indigo','#2d3a6b'],['champagne','#d9c8a5'],['nickel','#8e8e8e'],['chêne','#b3885a'],['fibrociment','#b7b7b2']];
 function colorOf(d){ const n=norm(d); for(const [name,hex] of COLORS){ if(n.includes(norm(name))) return {name,hex}; } return null; }
 // variantes couleur (champ vars : [fellerNr, eNo, code, description, ean, dispo]) → articles virtuels ajoutables
-DB.slice().forEach(it=>{ if(!it.vars) return; it.vars.forEach(v=>{ if(v[0]===it.f||byF[v[0]]) return; const c=colorOf(v[3]); const nit={...it, f:v[0], e:v[1], c:v[2], d:v[3], ean:v[4], buy:v[5]!==false, img:'https://mam.feller.ch/pict/'+v[0], vars:it.vars, _variantOf:it.f, nw:it.nw, p:undefined, url:undefined, parts:undefined}; nit._s=norm([nit.d,nit.t,nit.f,nit.e,nit.ean,nit.m].join(' ')); nit._dsg=it._dsg; byF[v[0]]=nit; DB.push(nit); }); });
+const IMG_ALT={};
+// Image d'une variante couleur : Feller réutilise souvent la photo d'un article « type » (ex. 3902-1.FMI.L.P.65 → 4702-1-B.FMI.L.P.65). On reprend l'image de l'article principal en changeant le code couleur ; repli sur la photo principale si elle manque.
+function varImg(it, v){ const own='https://mam.feller.ch/pict/'+v[0]; const u=it.img||''; if(!/mam\.feller\.ch\/pict\//.test(u)||!it.c) return own; const re=new RegExp('\\.'+it.c.replace(/[.]/g,'\\.')+'(?=(\\.[0-9]{2})?$)'); const nu=re.test(u)?u.replace(re,'.'+v[2]):own; if(nu!==u) IMG_ALT[nu]=u; return nu; }
+DB.slice().forEach(it=>{ if(!it.vars) return; it.vars.forEach(v=>{ if(v[0]===it.f||byF[v[0]]) return; const c=colorOf(v[3]); const nit={...it, f:v[0], e:v[1], c:v[2], d:v[3], ean:v[4], buy:v[5]!==false, img:varImg(it,v), vars:it.vars, _variantOf:it.f, nw:it.nw, p:undefined, url:undefined, parts:undefined}; nit._s=norm([nit.d,nit.t,nit.f,nit.e,nit.ean,nit.m].join(' ')); nit._dsg=it._dsg; byF[v[0]]=nit; DB.push(nit); }); });
 const NEW_COUNT = DB.filter(x=>x.nw&&!x._variantOf).length;
 
 const STOP = new Set(['il','me','faut','je','veux','voudrais','cherche','besoin','un','une','des','du','de','d','le','la','les','l','pour','avec','et','a','au','aux','en','sur','dans','chez','ce','cet','cette','ces','mon','ma','mes','son','sa','ses','client','villa','maison','appartement','immeuble','ppe','chantier','piece','pieces','chambre','cuisine','salon','salle','bain','garage','cave','bureau','quel','quelle','quels','quelles','est','sont','ou','que','qui','svp','merci','tu','as','avez','vous','on','nous','type','modele','reference','ref','article','produit','feller','schneider','se']);
@@ -508,12 +518,13 @@ const TOOLS = [
 
 /* =============== parcours guidés =============== */
 const DESIGN_OPTS = [
-  {v:'EDIZIOdue', t:'EDIZIOdue', s:'Le classique suisse, montage à vis', img:'7563.FMI.61', rec:'Le plus courant en rénovation'},
-  {v:'EDIZIO.liv', t:'EDIZIO.liv', s:'SNAPFIX, montage rapide sans vis', img:'7563.GMI.A.61', rec:'Gain de temps à la pose'},
-  {v:'STANDARDdue', t:'STANDARDdue', s:'Économique, fonctionnel', img:'7411-3.QMI.61'},
-  {v:'ELEMENT', t:'ELEMENT', s:'Premium, aluminium', img:'3400.1.GUP.Q.A.09'},
-  {v:'NEVO', t:'NEVO', s:'Extérieur et locaux humides, IP55', img:'3402.2.NAP.Q.A.61'},
+  {v:'EDIZIO.liv', t:'EDIZIO.liv', s:'Successeur d\'EDIZIOdue · SNAPFIX (boîte ≥ 68 mm) · 6 couleurs dont umbra · prestige en matériaux véritables', img:'7563.GMI.A.61', rec:'Neuf et rénovation'},
+  {v:'EDIZIOdue', t:'EDIZIOdue', s:'Fixation à baïonnette, toutes les boîtes · 6 couleurs dont coffee', img:'7563.FMI.61', rec:'Petites boîtes, complément d\'existant'},
+  {v:'STANDARDdue', t:'STANDARDdue', s:'Économique, SNAPFIX, blanc', img:'7411-3.QMI.61'},
+  {v:'ELEMENT', t:'ELEMENT', s:'Fonte d\'aluminium noire, IP20 ou IP55, anti-vandalisme', img:'3400.1.GUP.Q.A.09'},
+  {v:'NEVO', t:'NEVO', s:'Extérieur et locaux humides, IP55 · prise IP55 fiche branchée = version W', img:'3402.2.NAP.Q.A.61'},
 ];
+const PIECE_COLORS={'EDIZIO.liv':['blanc','noir','gris clair','gris foncé','crema','umbra'],'EDIZIOdue':['blanc','noir','gris clair','gris foncé','crema','coffee'],'STANDARDdue':['blanc'],'NEVO':['blanc','noir'],'ELEMENT':['noir']};
 const MOUNT_OPTS = [
   {v:'ENC', t:'Encastré', s:'Dans la boîte d\'encastrement', img:'87303.GMI.A.61', rec:'Standard en rénovation et neuf'},
   {v:'AP', t:'Apparent', s:'En saillie, cave, garage, atelier', img:'87303.GX.54.A.61'},
@@ -545,6 +556,39 @@ const FLOWS = {
     {key:'fn', q:'Quelles fonctions ?', s:'Plusieurs choix possibles.', opts:FN_OPTS, multi:true},
     {key:'layout', q:'Disposition de la combinaison ?', s:'Lignes × colonnes. 2×1 = deux appareils l\'un sur l\'autre.', opts:[{v:'2x1',t:'2×1 vertical',s:'Interrupteur + prise',rec:'Le plus courant'},{v:'1x2',t:'1×2 horizontal'},{v:'3x1',t:'3×1 vertical'},{v:'1x3',t:'1×3 horizontal'},{v:'2x2',t:'2×2'},{v:'',t:'Toutes'}], compact:true, when:a=>(a.fn||[]).includes('combi')},
   ]},
+  piece: { title:'Pack par pièce', steps:[
+    {key:'room', q:'Quelle pièce ?', s:'Je compose le pack type de la pièce (règles Feller) : tu ajustes ensuite les quantités.', opts:[
+      {v:'sejour',t:'Séjour / pièce de vie',s:'Combinaison d\'entrée, 4 prises triples, USB, RJ45, stores',img:'7563/87303.FMI.2X1.61',rec:'Le cas courant'},
+      {v:'chambre',t:'Chambre',s:'Combinaison de porte, 2 prises de chevet, store',img:'87303.GMI.A.61'},
+      {v:'cuisine',t:'Cuisine',s:'Plafonnier + sous-meubles, plan de travail, frigo, boîtes de raccordement',img:'1900-5.FMI.61'},
+      {v:'sdb',t:'Salle de bains',s:'Lumière + ventilation, prise lavabo hors volumes',img:'7563.NUP.Q.61'},
+      {v:'exterieur',t:'Extérieur / terrasse',s:'NEVO IP55, prise utilisable fiche branchée',img:'3402.2.NAP.Q.A.61'},
+      {v:'bureau',t:'Bureau / poste de travail',s:'Prises, USB, réseau RJ45',img:'8780.CC-A.GMI.A.61'}]},
+    {key:'design', q:'Quelle ligne de design ?', opts:a=>DESIGN_OPTS.filter(o=>a.room==='exterieur'?['NEVO','ELEMENT'].includes(o.v):o.v!=='NEVO'||a.room==='sdb'), when:a=>true},
+    {key:'color', q:'Quelle couleur ?', s:'Seules les couleurs actuelles de la ligne choisie (aluminium et couleurs abandonnées au 1.4.2024 exclues).', opts:a=>(PIECE_COLORS[a.design]||['blanc']).map((c,i)=>({v:c,t:c,rec:i===0?'Standard':undefined})), compact:true, when:a=>(PIECE_COLORS[a.design]||[]).length>1},
+    {key:'mount', q:'Encastré ou apparent ?', opts:MOUNT_OPTS, when:a=>a.design!=='ELEMENT'},
+    {key:'stores', q:'Combien de stores à commander ?', opts:[{v:'0',t:'Aucun'},{v:'1',t:'1'},{v:'2',t:'2'},{v:'3',t:'3'},{v:'4',t:'4'}], compact:true, when:a=>['sejour','chambre','cuisine','bureau'].includes(a.room)},
+    {key:'nb', q:'Combien de pièces identiques ?', s:'Le pack est multiplié (ex. 3 chambres).', opts:[{v:'1',t:'1',rec:'Standard'},{v:'2',t:'2'},{v:'3',t:'3'},{v:'4',t:'4'},{v:'5',t:'5'},{v:'6',t:'6'}], compact:true},
+  ], finish:(a,label)=>{
+    const N=+a.nb||1, st=+a.stores||0, room=a.room||'sejour';
+    const ctx={design:a.design||'EDIZIO.liv', color:a.color||'blanc', mount:a.design==='ELEMENT'?'ENC':(a.mount||'ENC'), smart:''};
+    const P={
+      sejour:{items:[['va_et_vient',1,'2e accès (schéma 3)'],['prise_t13_3',4,'dont 1 meuble TV'],['prise_usb',1,'canapé'],['prise_rj45',1,'meuble TV / bureau']], combos:[{layout:'2x1',parts:['interrupteur','prise_t13_3'],qty:1,detail:'entrée'}], opts:[['variateur',1,'éclairage d\'ambiance'],['prise_tv',1,'si TV par câble'],['detecteur_presence',0,'']]},
+      chambre:{items:[['prise_t13_3',2,'chevets (chambre d\'enfant : version shutter .K)']], combos:[{layout:'2x1',parts:['interrupteur','prise_t13_3'],qty:1,detail:'porte'}], opts:[['va_et_vient',1,'au lit'],['prise_rj45',1,'bureau'],['prise_usb',1,'chevet']]},
+      cuisine:{items:[['interrupteur',2,'plafonnier + sous-meubles'],['prise_t13_3',3,'plan de travail'],['prise_t13',2,'réfrigérateur, lave-vaisselle'],['boite_derivation',2,'four, plan de cuisson (boîtes de raccordement)']], combos:[], opts:[['prise_t23',1,'appareil 16 A'],['prise_usb',1,'plan de travail']]},
+      sdb:{items:[['interrupteur',1,'lumière + ventilation, à l\'extérieur de la porte ou hors volumes'],['prise_t13_3',1,'lavabo, hors volumes, FI 30 mA amont obligatoire']], combos:[], opts:[['prise_ext',1,'proche douche / volume 2 : NEVO IP55 avec clapet']]},
+      exterieur:{items:[['prise_ext',2,'terrasse, jardin : IP55 fiche branchée (W)'],['interrupteur_ext',1,'éclairage extérieur']], combos:[], opts:[['detecteur_mouvement',1,'éclairage d\'entrée']]},
+      bureau:{items:[['interrupteur',1,''],['prise_t13_3',2,'par poste'],['prise_usb',1,''],['prise_rj45',1,'kit 4 RJ45 si 2 postes']], combos:[], opts:[['variateur',1,'']]},
+    }[room];
+    const items=P.items.map(([k,q,d])=>({kind:k,qty:q*N,detail:d})); if(st) items.push({kind:'store',qty:st*N,detail:st+' store'+(st>1?'s':'')+' par pièce'});
+    const v={proj:{rooms:[{name:label('room')||room, items, combos:P.combos.map(c=>({...c,qty:c.qty*N}))}]}, ctx};
+    const g=projectGroups(v).map(x=>({label:x.label, q:x.q, qty:x.qty, note:x.note.replace(/^[^·]*$/,'')||'', pickF:x.pick&&x.pick.f}));
+    P.items.forEach(([k,q,d],i)=>{ const gg=g.find(y=>y.label===pkOf(k).l); if(gg&&d) gg.note=d; });
+    const vo={proj:{rooms:[{name:'opt', items:P.opts.map(([k,q,d])=>({kind:k,qty:Math.max(1,q)*N,detail:d})), combos:[]}]}, ctx};
+    const go_=projectGroups(vo).map(x=>({label:x.label, q:x.q, qty:0, note:(P.opts.find(o=>pkOf(o[0]).l===x.label)||[])[2]||'', pickF:x.pick&&x.pick.f}));
+    const tips=['Poste complet : un appareil monté (1 article) suffit ; en système modulaire il faut mécanisme + set de recouvrement + cadre de la même grille.','Combinaisons : la version prémontée (…2X1, …1X2) est la plus simple à commander, souvent en blanc seulement ; sinon mécanismes BSE + 1 plaque de fixation + 1 cadre multiple de la même grille.','SNAPFIX (EDIZIO.liv, STANDARDdue, ELEMENT) : boîte d\'au moins 68 mm de diagonale ; sinon EDIZIOdue à baïonnette.','Salle de bains : EDIZIO = IP20, hors volumes 0 à 2 ; près de la douche → NEVO IP55. Prises : FI 30 mA en amont.','Extérieur : la prise NEVO « W » (suffixe .48) reste IP55 fiche branchée ; « Q » = IP55 clapet fermé seulement.','Chambre d\'enfant : prises avec obturateurs (version .K).'];
+    return {title:`Pack ${label('room')||room} · ${ctx.design} ${ctx.color}${N>1?' · ×'+N:''}`, groups:[...g,...go_], brief:`Pack type pour ${N} × ${label('room')} en ${ctx.design} ${ctx.color} ${MOUNT[ctx.mount]||''}, ${st} store(s) par pièce. Vérifie la cohérence (cadres, combinaisons, boîtes), complète les accessoires indispensables et propose 2 upsells. Ne me repose pas ces questions.`, tips};
+  } },
   smart: { title:'Smart home', steps:[
     {key:'smart', q:'Quel niveau connecté ?', s:'Wiser pour la plupart des rénovations, KNX quand il y a un intégrateur, Matter pour quelques points autonomes.', opts:SMART_OPTS},
     {key:'design', q:'Quelle ligne de design ?', opts:DESIGN_OPTS.filter(o=>o.v!=='NEVO')},
@@ -868,7 +912,7 @@ const FN_LABEL = Object.fromEntries(FN_OPTS.map(o=>[o.v,o.t]));
 
 /* =============== images : secours par le proxy =============== */
 // Si une photo fabricant / grossiste ne charge pas (blocage du site, réseau mobile, protection anti-hotlink), on la redemande une fois via /api/img (proxy Vercel avec cache) avant d'afficher « photo non disponible ».
-document.addEventListener('error', e=>{ const el=e.target; if(!el||el.tagName!=='IMG') return; const src=el.getAttribute('src')||''; if(el.dataset.px||!/^https?:\/\//.test(src)||/\/api\/img/.test(src)||location.protocol==='file:') return; el.dataset.px='1'; e.stopPropagation(); e.preventDefault(); el.src='/api/img?u='+encodeURIComponent(src); }, true);
+document.addEventListener('error', e=>{ const el=e.target; if(!el||el.tagName!=='IMG') return; const src=el.getAttribute('src')||''; if(IMG_ALT[src]&&!el.dataset.alt){ el.dataset.alt='1'; e.stopPropagation(); e.preventDefault(); el.src=IMG_ALT[src]; return; } if(el.dataset.px||!/^https?:\/\//.test(src)||/\/api\/img|mam\.feller\.ch/.test(src)||location.protocol==='file:') return; el.dataset.px='1'; e.stopPropagation(); e.preventDefault(); el.src='/api/img?u='+encodeURIComponent(src); }, true);
 /* =============== état =============== */
 const $ = id=>document.getElementById(id);
 const store = { get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)) }catch(e){} } };
@@ -904,6 +948,70 @@ setInterval(()=>{ document.querySelectorAll('.elapsed[data-start]').forEach(el=>
 /* =============== vues =============== */
 let lastRendered=null, forceTop=false;
 // render(scroll) : 'keep' (défaut quand on reste sur la même vue : + / − du composeur, filtres, choix multiples) garde la position ; 'top' pour une nouvelle vue ou une nouvelle étape.
+// ===== Composeur de combinaisons d'appareillage (EDIZIO.liv SNAPFIX / STANDARDdue SNAPFIX) =====
+// Logique Feller : 1 plaque de fixation SNAPFIX 27xx-EA + 1 élément par emplacement (.G.A / .Q.A) + 1 cadre (29xx standard ou 28xx prestige).
+// Si Feller vend la combinaison pré-assemblée (« Combinaison ENC … schéma … »), on la propose à la place (1 seul N° ELDAS).
+const CB_FUNCS=[
+  ['7563','Interrupteur','schéma 3'],['7566','Inverseur','schéma 6'],['7561','Double','1/3+3/1'],['7563.AR','Poussoir','lumière'],
+  ['40200.LED','Variateur LED','4–400 W'],['7592.AV','Stores','2 touches'],['87003','Prise T13',''],['87303','3× T13','1 emplacement'],
+  ['87023','Prise T23','16 A'],['87063','Inter + T13','1 emplacement'],['1540.CC-A','USB-C ×2','18 W'],['1180-028','RJ45 ×2','EASYNET'],
+  ['1262','Sonnerie',''],['751','Obturateur','vide']];
+const CB_GRIDS=[[1,1],[2,1],[3,1],[1,2],[1,3],[2,2],[3,2],[2,3]];
+const CB_PRESTIGE={'0A':'acier chromé poncé','0G':'acier chromé poli','0K':'laiton champagne','1G':'miroir satin','1C':'verre blanc','1E':'verre noir'};
+const CB_PRE_NUM={'1x1':'2811','2x1':'2812','1x2':'2812.H','3x1':'2813','1x3':'2813.H','4x1':'2814','1x4':'2814.H','2x2':'2822','3x2':'2832','2x3':'2823.H','3x3':'2833'};
+const CB_LINES={liv:{t:'EDIZIO.liv',comp:'G.A',frame:'GMI.A',cols:['61','60','65','67','35','56']}, std:{t:'STANDARDdue',comp:'Q.A',frame:'QMI.A',cols:['61','09']}};
+function cbState(){ const c=view; c.line=c.line||'liv'; const L=CB_LINES[c.line]; if(!L.cols.includes(c.col)) c.col=L.cols[0]; c.cols=c.cols||2; c.rows=c.rows||1; c.cells=(c.cells||[]).slice(0,c.cols*c.rows); while(c.cells.length<c.cols*c.rows) c.cells.push(''); if(c.line!=='liv') c.frame='std'; c.frame=c.frame||'std'; c.n=c.n||1; if(c.sel==null||c.sel>=c.cells.length) c.sel=c.cells.findIndex(x=>!x); if(c.sel<0) c.sel=0; return c; }
+function cbRef(code,c){ const L=CB_LINES[c.line]; return byF[`${code}.${L.comp}.${c.col}`]||null; }
+function cbBom(c){
+  const L=CB_LINES[c.line], key=`${c.cols}x${c.rows}`, mn=Math.min(c.cols,c.rows), mx=Math.max(c.cols,c.rows);
+  const filled=c.cells.map(x=>x||'751'); const out=[], miss=[];
+  if(c.line==='liv'&&c.frame==='std'&&c.cells.every(Boolean)&&c.cells.length>1){ const pre=byF[`${filled.join('/')}.GMI.A.${c.cols}X${c.rows}.${c.col}`]; if(pre) return {pre:true, lines:[{it:pre,q:1,role:'Combinaison pré-assemblée (plaque + éléments + cadre)'}], miss}; }
+  const plate=byF[`27${mn}${mx}-EA`]; plate?out.push({it:plate,q:1,role:'Plaque de fixation SNAPFIX'}):miss.push(`plaque 27${mn}${mx}-EA`);
+  const agg={}; filled.forEach(code=>{ agg[code]=(agg[code]||0)+1; });
+  Object.entries(agg).forEach(([code,q])=>{ const it=cbRef(code,c); it?out.push({it,q,role:(CB_FUNCS.find(f=>f[0]===code)||[,'Élément'])[1]}):miss.push(`${code}.${L.comp}.${c.col}`); });
+  let fr; if(c.frame==='std') fr=byF[`29${mn}${mx}.${L.frame}.${c.col}`]; else { const n=CB_PRE_NUM[key]; fr=n&&byF[`${n}.GMI.A.${c.frame}`]; }
+  fr?out.push({it:fr,q:1,role:c.frame==='std'?'Cadre de recouvrement':'Cadre prestige '+CB_PRESTIGE[c.frame]}):miss.push(c.frame==='std'?`cadre 29${mn}${mx}.${L.frame}.${c.col}`:`cadre prestige ${key} ${c.frame}`);
+  return {pre:false, lines:out, miss};
+}
+function comboHtml(){
+  const c=cbState(), L=CB_LINES[c.line], bom=cbBom(c); const fhex=c.frame==='std'?(FCODE[c.col]||[,'#eee'])[1]:(FCODE[c.frame]||[,'#ccc'])[1];
+  const chip=(attr,val,cur,label,sw)=>`<button type="button" class="chip ${val===cur?'on':''}" ${attr}="${esc(val)}" aria-pressed="${val===cur}">${sw?`<i class="dot" style="background:${sw}"></i>`:''}${esc(label)}</button>`;
+  const cell=(code,i)=>{ const it=code&&cbRef(code,c); const f=CB_FUNCS.find(x=>x[0]===code); return `<button type="button" class="cbcell ${i===c.sel?'sel':''} ${code?'':'empty'}" data-cbcell="${i}" title="Emplacement ${i+1}">${code?(it&&it.img?`<img src="${esc(it.img)}" alt="" loading="lazy">`:'')+`<span>${esc(f?f[1]:code)}</span>${it?'':'<em>pas en '+esc((FCODE[c.col]||[c.col])[0])+'</em>'}`:'<span>+ choisir</span>'}</button>`; };
+  const total=bom.lines.length; const nOk=c.cells.filter(Boolean).length;
+  return `<div class="wiz combo">
+  <div class="crumbs">${projCrumb()}<button type="button" data-home>Accueil</button><span class="sep">›</span><span style="color:var(--text)">Composer une combinaison</span></div>
+  <h1>Composer une combinaison <span class="tag kb">Bêta</span></h1>
+  <p class="lead">Choisis la gamme, la couleur et la taille, puis touche chaque emplacement pour y mettre une fonction. Les références (plaque SNAPFIX, éléments, cadre) se calculent en direct.</p>
+  <div class="cbopts">
+    <div><b>Gamme</b><div class="chips">${Object.entries(CB_LINES).map(([k,l])=>chip('data-cbline',k,c.line,l.t)).join('')}<span class="hint">EDIZIOdue : utiliser « Pack par pièce » ou la recherche (système à baïonnette, autre logique).</span></div></div>
+    <div><b>Couleur</b><div class="chips">${L.cols.map(k=>chip('data-cbcol',k,c.col,k==='09'?'noir':(FCODE[k]||[k])[0],(FCODE[k]||[,'#ddd'])[1])).join('')}</div></div>
+    ${c.line==='liv'?`<div><b>Cadre</b><div class="chips">${chip('data-cbframe','std',c.frame,'Standard (couleur)')}${Object.entries(CB_PRESTIGE).map(([k,t])=>chip('data-cbframe',k,c.frame,'prestige '+t,(FCODE[k]||[,'#ccc'])[1])).join('')}</div></div>`:''}
+    <div><b>Format</b> <small class="muted">colonnes × rangées</small><div class="chips">${CB_GRIDS.map(([a,b])=>chip('data-cbgrid',a+'x'+b,c.cols+'x'+c.rows,a+'×'+b)).join('')}</div></div>
+  </div>
+  <div class="cbstage">
+    <div class="cbframe" style="--fc:${fhex};grid-template-columns:repeat(${c.cols},1fr)">${c.cells.map(cell).join('')}</div>
+    <div class="cbpal"><b>Emplacement ${c.sel+1}</b> <small class="muted">— touche une fonction</small><div class="palgrid">${CB_FUNCS.map(([code,t,s])=>{ const it=cbRef(code,c); return `<button type="button" class="pal ${c.cells[c.sel]===code?'on':''} ${it?'':'na'}" data-cbfn="${esc(code)}" ${it?'':'title="Pas disponible dans cette couleur"'}>${it&&it.img?`<img src="${esc(it.img)}" alt="" loading="lazy">`:'<i></i>'}<span>${esc(t)}</span>${s?`<small>${esc(s)}</small>`:''}</button>`; }).join('')}${c.cells[c.sel]?'<button type="button" class="pal clr" data-cbfn="">Vider</button>':''}</div></div>
+  </div>
+  <div class="cbbom card-ish">
+    <div class="gtop"><b>${bom.pre?'1 article pré-assemblé':total+' article'+(total>1?'s':'')}</b><span>${nOk}/${c.cells.length} emplacements définis${nOk<c.cells.length?' · les vides deviennent des obturateurs':''}</span></div>
+    ${bom.lines.map(l=>`<div class="cbl" data-open="${esc(l.it.f)}"><img src="${esc(l.it.img||'')}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><div><small>${esc(l.role)}</small><span>${esc(l.it.d)}</span><em class="num">${esc(l.it.f)} · ELDAS ${esc(l.it.e||'—')}</em></div><b class="num">${l.q*c.n}×</b></div>`).join('')}
+    ${bom.miss.length?`<div class="warn">⚠ Introuvable dans le catalogue : ${bom.miss.map(esc).join(', ')} — change de couleur ou de fonction.</div>`:''}
+    <div class="cbadd"><div class="qty"><button type="button" class="st" data-cbn="-1" aria-label="moins">−</button><b class="num">${c.n}</b><button type="button" class="st" data-cbn="1" aria-label="plus">+</button></div><span class="muted">combinaison${c.n>1?'s':''} identique${c.n>1?'s':''}</span><button type="button" class="btn primary" id="cbadd" ${bom.miss.length&&!bom.lines.length?'disabled':''}>Ajouter à la liste</button></div>
+  </div></div>`;
+}
+function cbClick(e){
+  if(view.name!=='combo') return false; const c=view; const t=e.target;
+  const ln=t.closest('[data-cbline]'); if(ln){ c.line=ln.dataset.cbline; render('keep'); return true; }
+  const co=t.closest('[data-cbcol]'); if(co){ c.col=co.dataset.cbcol; render('keep'); return true; }
+  const fr=t.closest('[data-cbframe]'); if(fr){ c.frame=fr.dataset.cbframe; render('keep'); return true; }
+  const gr=t.closest('[data-cbgrid]'); if(gr){ const [a,b]=gr.dataset.cbgrid.split('x').map(Number); c.cols=a; c.rows=b; c.sel=null; render('keep'); return true; }
+  const ce=t.closest('[data-cbcell]'); if(ce){ c.sel=+ce.dataset.cbcell; render('keep'); return true; }
+  const fn=t.closest('[data-cbfn]'); if(fn){ c.cells[c.sel]=fn.dataset.cbfn; if(fn.dataset.cbfn){ const nx=c.cells.findIndex(x=>!x); if(nx>=0) c.sel=nx; } render('keep'); return true; }
+  const nn=t.closest('[data-cbn]'); if(nn){ c.n=Math.max(1,Math.min(200,(c.n||1)+(+nn.dataset.cbn))); render('keep'); return true; }
+  if(t.closest('#cbadd')){ const bom=cbBom(c); const lot=`Combinaison ${c.cols}×${c.rows} ${CB_LINES[c.line].t} ${(FCODE[c.col]||[c.col])[0]}${c.frame!=='std'?' · prestige '+CB_PRESTIGE[c.frame]:''}`; const note=c.cells.map(x=>(CB_FUNCS.find(f=>f[0]===x)||[,'obturateur'])[1]).join(' + '); bom.lines.forEach(l=>addToList(l.it,null,l.q*c.n,true,lot,note)); renderList(); toast(`${c.n} combinaison${c.n>1?'s':''} ajoutée${c.n>1?'s':''} (${bom.lines.length} réf.)`, view.origin==='project'&&curProject?{label:'Retour au relevé',fn:()=>go(curProject)}:{label:'Voir la liste',fn:openList},'ok'); return true; }
+  return false;
+}
+
 function render(scroll){
   const v=$('view'); const same=lastRendered===view.name && !forceTop; forceTop=false;
   const y=window.scrollY;
@@ -914,6 +1022,7 @@ function render(scroll){
   else if(view.name==='import') v.innerHTML=importHtml();
   else if(view.name==='photo') v.innerHTML=photoHtml();
   else if(view.name==='project') v.innerHTML=projectHtml();
+  else if(view.name==='combo') v.innerHTML=comboHtml();
   if(view.name==='project'){ curProject=view; saveProject(); }
   lastRendered=view.name;
   const mode=scroll||(same?'keep':'top');
@@ -943,6 +1052,8 @@ try{ history.replaceState({app:1,root:1},''); history.pushState({app:1,n:0},'');
 const SECTIONS = [
   {id:'photo', t:'Photo ou PDF express', s:'Photo ou PDF (offre concurrente, fiche, étiquette) → variante Feller / Schneider', imgq:['Combinaison ENC EDIZIOdue 3/1P+T13 blanc','Disjoncteur différentiel Clario iC40 2P 230V C 13A'], k:'Bêta', open:()=>go({name:'photo'})},
   {id:'import', t:'Plan, photo ou cahier des charges', s:'Relevé automatique pièce par pièce → liste de matériel', imgq:['Plaque de fixation grd.I-I','Combinaison ENC EDIZIOdue 3/1P+3×T13 blanc'], k:'Bêta', open:()=>go({name:'import'})},
+  {id:'combo', open:()=>go({name:'combo'}), k:'Bêta', t:'Composer une combinaison', s:'Plaque multiple : touche chaque emplacement, cadres prestige, références en direct', imgs:['7563/87003.GMI.A.2X1.61','2812.GMI.A.0K']},
+  {id:'piece', flow:'piece', k:'Nouveau', t:'Pack par pièce', s:'Séjour, chambre, cuisine, SdB, extérieur, bureau : le pack Feller type, en une minute', imgs:['7563/87303.FMI.2X1.61','87303.GMI.A.61']},
   {id:'appareillage', flow:'appareillage', t:'Appareillage', s:'Interrupteurs, prises, USB, variateurs', imgs:['7563.GMI.A.61','87303.GMI.A.61']},
   {id:'tableau', flow:'tableau', t:'Tableau & protection', s:'Resi9, PrismaSeT, Clario iC40 — composeur par usage', imgs:['R9H10937B','A9D67410']},
   {id:'xs', t:'Petit tableau PrismaSeT XS', s:'1 à 6 rangées, 18 ou 24 UM, porte au choix', imgs:['SE-822100049','SE-822000019'], preset:{flow:'tableau', answers:{fam:'PrismaSeT', install:'AP', system:'XS'}}},
@@ -1041,7 +1152,7 @@ const SECTIONS = [
 // Groupes de l'accueil : éléments principaux → sous-tuiles. L'ordre des groupes est fixe, l'ordre et le masquage des tuiles restent personnalisables.
 const HOME_GROUPS=[
   {id:'ia', t:'Lecture automatique', s:'Photo, PDF, plan, cahier des charges', secs:['photo','import']},
-  {id:'app', t:'Appareillage', s:'Interrupteurs, prises, smart home, extérieur', secs:['appareillage','smart','exterieur','knxse','nouveautes']},
+  {id:'app', t:'Appareillage', s:'Interrupteurs, prises, smart home, extérieur', secs:['piece','combo','appareillage','smart','exterieur','knxse','nouveautes']},
   {id:'tab', t:'Tableaux & protection', s:'Coffrets, disjoncteurs, peignes, parafoudres, TGBT', secs:['tableau','xs','protection','protection_all','surtension','surtension_all','accessoires','commande','tgbt','tgbt_all']},
   {id:'ev', t:'E-mobilité', s:'Bornes, gestion de charge, Canalis', secs:['bornes','ev_all','canalis','canalis_all']},
   {id:'nrj', t:'Énergie & industrie', s:'Onduleurs, industriel', secs:['asi','asi_all','industrie']},
@@ -1142,9 +1253,13 @@ function cardHtml(it){
       <div class="act"><button class="btn primary small add" type="button" ${it._gq?`data-q="${it._gq}"`:''}>${view.pick?'Choisir':it._gq?`Ajouter ×${it._gq}`:inList?'Ajouter encore':'Ajouter'}</button><button class="btn small more-btn" type="button" aria-expanded="false">Détails${(it.parts&&it.parts.length)?` · ${it.parts.length} pièces`:''}${(it.acc&&it.acc.length)?` · ${it.acc.length} acc.`:''}</button></div>
     </div></article>`;
 }
+// Couleurs Feller par code (suffixe du N° Feller), teintes NCS des fiches couleur : la pastille suit le code, pas le texte (les désignations abrègent : bc, no, br…).
+const FCODE={'61':['blanc','#f3f3f1'],'60':['noir','#1f1f1f'],'65':['gris clair','#c2c2c0'],'62':['gris clair NEVO','#cbcbc9'],'67':['gris foncé','#5c5c5c'],'35':['crema','#e7ddcd'],'56':['umbra','#3f3630'],'57':['coffee','#503c31'],'39':['orange (réseau spécial)','#e8731d'],'0C':['aluminium (retiré)','#b8bcc0'],'09':['noir ELEMENT','#232323'],'0G':['acier chromé poli','#d6d9dc'],'0K':['laiton champagne','#c8b083'],'1G':['miroir satin','#c9cdd1'],'0A':['acier chromé poncé','#a8acaf'],'1E':['verre noir','#121212'],'1C':['verre blanc','#f7f7f7'],'90':['graphite','#2c2c2c'],'91':['arctic','#eaf0f2'],'92':['pearl','#e4e6e1'],'95':['stone','#b4afa5'],'97':['hazel','#5f4f3f'],'99':['mocca','#4b3d34']};
+const codeOf = f => { const m=String(f||'').match(/\.(\d{2}|0[A-Z]|1[A-Z])(?:\.\d{2})?$/); return m?m[1]:null; };
+const swColor = (f, d) => { const k=codeOf(f); if(k&&FCODE[k]) return {name:FCODE[k][0], hex:FCODE[k][1]}; return colorOf(d||''); };
 function swatchesHtml(it){
   if(!it.vars||it.vars.length<2) return '';
-  return `<div class="sw">${it.vars.map(v=>{ const c=colorOf(v[3])||{name:v[3].split(' ').slice(-1)[0],hex:'#ddd'}; const cur=v[0]===it.f; return `<button type="button" class="swatch" data-f="${esc(v[0])}" aria-pressed="${cur}" title="${esc(c.name)} · ELDAS ${esc(v[1]||'—')}" style="background:${c.hex}"></button>`; }).join('')}<span class="swl">${esc((colorOf(it.d)||{}).name||'')}</span></div>`;
+  return `<div class="sw">${it.vars.map(v=>{ const c=(v[2]&&FCODE[v[2]]?{name:FCODE[v[2]][0],hex:FCODE[v[2]][1]}:null)||swColor(v[0],v[3])||{name:v[3].split(' ').slice(-1)[0],hex:'#ddd'}; const cur=v[0]===it.f; return `<button type="button" class="swatch" data-f="${esc(v[0])}" aria-pressed="${cur}" title="${esc(c.name)} · ELDAS ${esc(v[1]||'—')}" style="background:${c.hex}"></button>`; }).join('')}<span class="swl">${esc((swColor(it.f,it.d)||{}).name||'')}</span></div>`;
 }
 function partItem(pt){ if(!pt) return null; return byF[pt[0]]||{f:pt[0],e:pt[1],d:pt[3]||pt[0],img:pt[5]||PIC(pt[0]),buy:true,part:true}; }
 function findPart(f){ for(const it of DB){ const pt=(it.parts||[]).find(x=>x[0]===f); if(pt) return pt; } return null; }
@@ -1252,8 +1367,12 @@ function composerHtml(){
     <div class="crumbs">${projCrumb()}<button type="button" id="cback">Tableau & protection</button><span class="sep">›</span><span style="color:var(--text)">Composer le tableau</span></div>
     <h1>${esc(c.fam)} ${c.rows?c.rows+' rangée'+(c.rows>1?'s':''):''} · ${c.install==='CREUSE'?'paroi creuse':MOUNT[c.mount]||''}${c.system&&c.system!=='KV'?' · '+esc(c.system==='MOD'?'modulaire':c.system==='KVM'?'multimédia':c.system):''}</h1>
     <p class="sub">${circuits} circuits · ${used} modules utilisés sur ${cap} · ${used>cap?`<b style="color:var(--tomato)">ça ne rentre pas : ajoute une rangée ou retire ${used-cap} UM</b>`:free<cap*0.2?`réserve faible (${free} UM) : une rangée de plus est prudent`:`${free} UM de réserve pour l'avenir`}</p>
-    <div class="gauge ${used>cap?'over':free<cap*0.2?'tight':''}"><div class="bar"><i style="width:${pct}%"></i></div>
-      <div class="rowsel">Rangées <button type="button" class="st" data-rows="-1">−</button><output class="num">${c.rows||3}</output><button type="button" class="st" data-rows="1">+</button> · <span>${perRow} UM / rangée</span> <button type="button" class="btn link small" id="perrow">changer</button></div></div>
+    ${(()=>{ const rows=c.rows||3, st=used>cap?'over':used>Math.floor(cap*0.8)?'tight':'ok', maxRows=(c.fam==='PrismaSeT'&&c.system==='XS')?6:c.fam==='Mureva'?2:c.system==='CX'?4:(c.fam==='PrismaSeT'?9:4); const seg=[...Array(rows)].map((_,i)=>Math.max(0,Math.min(perRow,used-i*perRow))); const need=Math.ceil(used/0.8/perRow);
+      return `<div class="gauge sticky ${st==='over'?'over':st==='tight'?'tight':''}"><div class="gtop"><b class="num">${used} / ${cap} UM</b><span>${Math.round(used/cap*100)} % ${st==='over'?'· ⚠ tableau plein':st==='tight'?'· ⚠ réserve < 20 %':'· ✓ réserve 20 % respectée'}</span></div>
+        <div class="gbar"><i style="width:${pct}%"></i><em style="left:80%" title="réserve 20 %"></em></div>
+        <div class="rowsviz">${seg.map((f,i)=>`<div class="rv"><small>R${i+1}</small><div class="rb"><i style="width:${Math.round(f/perRow*100)}%"></i></div><small class="num">${f}/${perRow}</small></div>`).join('')}</div>
+        ${st!=='ok'?`<div class="gact">${rows<maxRows?`<button type="button" class="btn primary small" data-rows="${Math.min(maxRows,need)-rows||1}">${need>rows&&need<=maxRows?`Passer à ${need} rangées (réserve 20 %)`:'+ 1 rangée'}</button>`:`<span class="warnmax">${esc(c.fam)} : ${maxRows} rangées maximum dans cette version</span>${c.fam==='Resi9'?`<button type="button" class="btn small" data-switchfam="PrismaSeT">Passer en PrismaSeT XS (jusqu'à 6 × 24 UM)</button>`:''}`}<span class="hint">ou retire des appareils ci-dessous</span></div>`:''}
+        <div class="rowsel">Rangées <button type="button" class="st" data-rows="-1">−</button><output class="num">${rows}</output><button type="button" class="st" data-rows="1">+</button> · <span>${perRow} UM / rangée</span> <button type="button" class="btn link small" id="perrow">changer</button></div></div>`; })()}
     <p class="hint" style="margin:-2px 0 10px"><b>UM</b> = unité modulaire, la largeur d'un module sur le rail (18 mm) : 1LN = 1 UM, 3LN = 3 UM, FI 4 pôles = 4 UM, une rangée ${esc(c.fam)} = ${perRow} UM.</p>
     <div class="rowsel" style="margin:-4px 0 10px">Tableaux identiques <button type="button" class="st" data-mult="-1">−</button><output class="num">×${c.mult||1}</output><button type="button" class="st" data-mult="1">+</button> <span style="color:var(--ink-3)">· toutes les quantités seront multipliées à l'ajout</span></div>
     <h2 class="csec">Coffret et porte</h2>
@@ -1297,7 +1416,7 @@ const PK = {
   prise_usb:{l:'Prise USB', tok:'USB', q:c=>`prise USB ${c.design}`, want:/USB/},
   prise_rj45:{l:'Prise réseau RJ45', tok:'RJ45', q:c=>`prise RJ45 ${c.design}`, want:/RJ45/, avoid:/^Kit/},
   prise_tv:{l:'Prise TV / radio', tok:'TV', q:c=>`prise TV ${c.design}`, want:/TV/},
-  prise_ext:{l:'Prise extérieure IP55', q:c=>`prise T13 NEVO AP IP55`, want:/IP55/, avoid:/lumineux/},
+  prise_ext:{l:'Prise extérieure IP55 (fiche branchée)', q:c=>`Prise ${c.mount==='ENC'?'NUP':'NAP'} NEVO 1×T13 IP55 joint rouge`, want:/joint rouge|\.W\./, avoid:/LED|2×|Combinaison/},
   interrupteur_ext:{l:'Interrupteur extérieur IP55', q:c=>`interrupteur 3/1 NEVO AP`, want:/3\/1/},
   detecteur_mouvement:{l:'Détecteur de mouvement', q:c=>c.smart==='KNX'?`détecteur KNX ${c.design}`:`detecteur mouvement ${c.design}`, want:/mouvement|KNX/},
   detecteur_presence:{l:'Détecteur de présence', q:c=>`détecteur de présence ${c.smart==='KNX'?'KNX':''}`, want:/présence/},
@@ -1309,9 +1428,10 @@ const PK = {
   autre:{l:'Autre (à préciser)'},
 };
 const OTHER_LBL={tableau:'Tableau électrique', borne_recharge:'Borne de recharge', luminaire:'Luminaires', parafoudre:'Parafoudre', detecteur_fumee:'Détecteurs de fumée', ventilation:'Ventilation', pac:'Pompe à chaleur', photovoltaique:'Photovoltaïque', onduleur:'Onduleur', reseau:'Réseau / baie', autre:'Autre'};
-const COLOR_OPTS=['blanc','noir','gris clair','gris foncé','crema','aluminium'];
+// Couleurs actuelles (aluminium 0C, lemon, olive, berry, vanille, sand, silver retirés au 1.4.2024) ; umbra = EDIZIO.liv, coffee = EDIZIOdue.
+const COLOR_OPTS=['blanc','noir','gris clair','gris foncé','crema','umbra','coffee'];
 const pkOf = k => { const p=PK[k]||PK.autre; return p.alias?{...PK[p.alias],...p,q:PK[p.alias].q,want:PK[p.alias].want,avoid:PK[p.alias].avoid}:p; };
-const COLOR_CODE={blanc:'61',noir:'60','gris clair':'65','gris foncé':'67',crema:'35',aluminium:'0C'};
+const COLOR_CODE={blanc:'61',noir:'60','gris clair':'65','gris foncé':'67',crema:'35',umbra:'56',coffee:'57',aluminium:'0C'};
 function pickBest(q, ctx, want, avoid){
   const items=searchFallback(q,{},80).items; if(!items.length) return null;
   const sc=it=>{ let s=0; const d=it.d+' '+it.f; if(want&&want.test(d)) s+=6; if(avoid&&avoid.test(d)) s-=8; if(/^(Kit|Cadre|Plaque|Couvercle|Intérieur|Insert|Contact|Feuill|Disque|Calotte|Touche|Bascule)/i.test(it.d)) s-=6; if(/shutter|LED|lum\.|lumineux|\b[13]×S\b|étiqu/i.test(it.d)) s-=1.5; if(ctx.mount==='ENC'&&/\.(FMI|GMI|QMI)\b/.test(it.f)) s+=3; if(ctx.mount==='AP'&&/\bAP\b|NAP/.test(d)) s+=3; if(ctx.mount==='ENC'&&/\bAP\b/.test(it.d)) s-=3; if(ctx.design&&it.d.includes(ctx.design)) s+=3; if(!ctx.smart&&/KNX|Matter|Wiser|\bRF\b/.test(d)) s-=5; if(it.buy===false) s-=4; if(/\.61(\.|$)/.test(it.f)) s+=.5; s-=it.d.length/200; return s; };
@@ -1406,7 +1526,7 @@ function projectGroups(v){
   (v.proj.rooms||[]).forEach(r=>{ const sec=r.section||''; r.items.forEach(x=>{ if(!x.qty||x.kind==='autre') return; const k=PK[x.kind]&&PK[x.kind].alias?PK[x.kind].alias:x.kind; const key=(sec?sec+'|':'')+(x.ref?'ref:'+x.ref+'|':'')+k; (agg[key]=agg[key]||{q:0,rooms:[],k,sec,ref:x.ref||'',brand:x.brand||''}); agg[key].q+=+x.qty; agg[key].rooms.push(r.name); }); r.combos.forEach(cb=>{ if(!cb.qty) return; const key=(sec?sec+'|':'')+'combo:'+cb.layout+':'+cb.parts.join('+'); (agg[key]=agg[key]||{q:0,rooms:[],cb,sec}); agg[key].q+=+cb.qty; agg[key].rooms.push(r.name); }); });
   Object.values(agg).forEach(a=>{
     const pre=a.sec?a.sec+' · ':'';
-    if(a.cb){ const q=comboQuery(a.cb,c); const toks=a.cb.parts.map(p=>pkOf(p).tok).filter(Boolean); const want=new RegExp(toks.map(t=>t.replace('x','[x×]').replace('/','\\/')).map(t=>'(?=.*'+t+')').join(''),'i'); gs.push({label:`${pre}Combinaison ${a.cb.layout.replace('x','×')} : ${a.cb.parts.map(p=>pkOf(p).l).join(' + ')} · ${gradeOf(a.cb)}`, q, qty:a.q, note:[...new Set(a.rooms)].join(', '), section:a.sec, pick:pickBest(q,c,want,/1×2|horizont/i.test(a.cb.layout)?null:/horizont/i)}); return; }
+    if(a.cb){ const q=comboQuery(a.cb,c); const toks=a.cb.parts.map(p=>pkOf(p).tok).filter(Boolean); const want=new RegExp(toks.map(t=>t.replace('x','[x×]').replace('/','\\/')).map(t=>'(?=.*'+t+')').join(''),'i'); gs.push({label:`${pre}Combinaison ${a.cb.layout.replace('x','×')} : ${a.cb.parts.map(p=>pkOf(p).l).join(' + ')} · ${gradeOf(a.cb)}`, q, qty:a.q, note:[...new Set(a.rooms)].join(', '), section:a.sec, pick:pickBest(q,c,want,/^1x/i.test(a.cb.layout)?/2×1|vertical/i:/horizont|1×2|1x2/i)}); return; }
     const pk=pkOf(a.k); if(!pk.q) return; const q=(pk.q({...c, design:c.design})+' '+(a.k==='prise_ext'||a.k==='interrupteur_ext'?'':(c.mount||''))).replace(/\s+/g,' ').trim();
     const rooms=[...new Set(a.rooms)].join(', ');
     if(a.ref){ const exact=refLookup(a.ref); if(exact){ gs.push({label:`${pre}${pk.l} — réf. ${a.ref} citée dans la soumission`, q:exact.f, qty:a.q, note:rooms+' · même référence que la soumission ✓', section:a.sec, pick:exact, exact:true}); return; }
@@ -1435,6 +1555,7 @@ document.addEventListener('click',e=>{
   const sh=e.target.closest('[data-show]'); if(sh){ homePrefs.hidden=(homePrefs.hidden||[]).filter(x=>x!==sh.dataset.show); saveHome(); render('keep'); return; }
   if(e.target.id==='orghome'){ organizing=!organizing; render('keep'); return; }
   const gh=e.target.closest('.hgh'); if(gh){ const id=gh.dataset.grp; const c=new Set(homePrefs.collapsed||[]); if(c.has(id)) c.delete(id); else c.add(id); homePrefs.collapsed=[...c]; saveHome(); render('keep'); return; }
+  if(cbClick(e)) return;
   const tile=e.target.closest('.tile'); if(tile){ if(organizing) return; openSection(tile.dataset.sec); return; }
   const rc=e.target.closest('[data-recent]'); if(rc){ const r=recent[+rc.dataset.recent]; if(r) go(r.view); return; }
   const opt=e.target.closest('.opt'); if(opt){ pickOpt(opt.dataset.v); return; }
@@ -1445,7 +1566,8 @@ document.addEventListener('click',e=>{
   if(e.target.id==='pickback'){ go(view.pick.comp); return; }
   if(e.target.id==='back'){ if(view.from==='wizard'&&view.wiz){ go(view.wiz); } else if(view.from==='project'){ go(curProject||view.proj); } else goBack(); return; }
   if(e.target.id==='cback'){ go(view.wiz||{name:'home'}); return; }
-  const st=e.target.closest('.st'); if(st&&view.name==='composer'){ if(st.dataset.rows){ view.rows=Math.max(1,Math.min(8,(view.rows||3)+(+st.dataset.rows))); } else if(st.dataset.mult){ view.mult=Math.max(1,Math.min(200,(view.mult||1)+(+st.dataset.mult))); } else { const k=st.dataset.k; const cp=COMPONENTS.find(c=>c.k===k); const cur=view.qty[k]??(cp?cp.def:(combLines(view).find(l=>l.k===k)||{}).qty??0); view.qty[k]=Math.max(0,cur+(+st.dataset.d)); } render(); return; }
+  const st=e.target.closest('.st, .gact [data-rows]'); if(st&&view.name==='composer'){ if(st.dataset.rows){ view.rows=Math.max(1,Math.min(8,(view.rows||3)+(+st.dataset.rows))); } else if(st.dataset.mult){ view.mult=Math.max(1,Math.min(200,(view.mult||1)+(+st.dataset.mult))); } else { const k=st.dataset.k; const cp=COMPONENTS.find(c=>c.k===k); const cur=view.qty[k]??(cp?cp.def:(combLines(view).find(l=>l.k===k)||{}).qty??0); view.qty[k]=Math.max(0,cur+(+st.dataset.d)); } render(); return; }
+  const sf=e.target.closest('[data-switchfam]'); if(sf&&view.name==='composer'){ view.fam='PrismaSeT'; view.system='XS'; view.install='AP'; view.mount='AP'; view.perRow=24; view.door=view.door||'P'; view.rows=Math.max(1,Math.min(6,Math.ceil(COMPONENTS.reduce((t,cp)=>t+(view.qty[cp.k]??cp.def)*cp.um,0)/0.8/24))); view.refs={}; render('keep'); toast('Passé en PrismaSeT XS', null, 'ok'); return; }
   if(e.target.id==='perrow'){ const v=prompt('Modules par rangée (12, 18 ou 24) :', view.perRow||UM_PER_ROW[view.fam]||12); const n=parseInt(v); if(n>0){ view.perRow=n; render(); } return; }
   const ch=e.target.closest('[data-change]'); if(ch&&view.name==='composer'){ const comp={...view}; go({name:'results', q:ch.dataset.q, title:'Choisir : '+ch.dataset.q, pick:{k:ch.dataset.change, comp}}); return; }
   if(e.target.id==='caddall'){ const c=view, M=c.mult||1; let lot=`Tableau ${c.fam} ${c.rows||3} rangées${c.install==='CREUSE'?' paroi creuse':c.mount==='AP'?' apparent':' encastré'}`; let k2=2; const base=lot; while(list.some(x=>x.lot===lot)) lot=`${base} (${k2++})`; let n=0; shellLines(c).forEach(l=>{ const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; if(ref){ addToList(ref,null,M,true,lot); n++; } }); if(c.qty.media){ const rail=searchFallback('Rail DIN Resi9 appareils média',{},1).items[0]; if(rail){ addToList(rail,null,M,true,lot); n++; } } COMPONENTS.forEach(cp=>{ const qty=c.qty[cp.k]??cp.def; if(!qty) return; const ref=byF[c.refs[cp.k]]||searchFallback(cp.q,{},1).items[0]; if(ref){ addToList(ref,null,qty*M,true,lot,((c.labels||{})[cp.k]||'').trim()); n++; } }); combLines(c).forEach(l=>{ if(!l.qty) return; const ref=byF[c.refs[l.k]]||searchFallback(l.q,{},1).items[0]; if(ref){ addToList(ref,null,l.qty*M,true,lot); n++; } }); renderList(); if(c.origin==='project'&&curProject){ const o=(curProject.proj.other||[])[+c.oi]; if(o) o.done=lot; saveProject(); toast(`${n} références ajoutées${M>1?' · ×'+M+' tableaux':''}`,{label:'Retour au relevé',fn:()=>go(curProject)},'ok'); } else toast(`${n} références ajoutées${M>1?' · ×'+M+' tableaux':''}`,{label:'Voir la liste',fn:openList},'ok'); return; }
@@ -1638,7 +1760,7 @@ $('copy').onclick=async()=>{ const txt=listText(); try{ await navigator.clipboar
 // ---- Export : PDF réel (jsPDF) avec aperçu et partage WhatsApp / Messages / Mail (Web Share), impression en secours ----
 const lotTotal = items => items.reduce((a,x)=>{ const pv=priceOf(x); return pv==null?a:a+pv*x.q; },0);
 function listText(){ const L=[`Liste de matériel${client.name?' – '+client.name:''}`, new Date().toLocaleDateString('fr-CH'), '']; lotsOf().forEach(({lot,items})=>{ if(lotsOf().length>1||lot!=='Divers') L.push(`— ${lot}`); items.forEach(x=>L.push(`${x.q} × ${x.d}${x.note?' ['+x.note+']':''}  (ELDAS ${x.e||'—'}, N° ${x.f})${showPrice&&priceOf(x)!=null?'  '+chf(priceOf(x)*x.q):''}`)); L.push(''); }); if(showPrice) L.push('Total brut hors TVA, sans remise : '+chf(lotTotal(list))); if(client.notes) L.push('', client.notes); return L.join('\n'); }
-async function imgData(url){ if(!url) return null; try{ const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),4000); const r=await fetch('/api/img?u='+encodeURIComponent(url),{signal:ctrl.signal}); clearTimeout(t); if(!r.ok) return null; const b=await r.blob(); const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(b); }); const c=document.createElement('canvas'); const m=Math.min(1,160/Math.max(img.width,img.height)); c.width=Math.max(1,Math.round(img.width*m)); c.height=Math.max(1,Math.round(img.height*m)); const g=c.getContext('2d'); g.fillStyle='#fff'; g.fillRect(0,0,c.width,c.height); g.drawImage(img,0,0,c.width,c.height); return c.toDataURL('image/jpeg',0.8); }catch(e){ return null; } }
+async function imgData(url, alt){ if(!url) return null; if(!alt&&IMG_ALT[url]){ const r=await imgData(url,true); return r||imgData(IMG_ALT[url],true); } try{ const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),4000); const r=await fetch('/api/img?u='+encodeURIComponent(url),{signal:ctrl.signal}); clearTimeout(t); if(!r.ok) return null; const b=await r.blob(); const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(b); }); const c=document.createElement('canvas'); const m=Math.min(1,160/Math.max(img.width,img.height)); c.width=Math.max(1,Math.round(img.width*m)); c.height=Math.max(1,Math.round(img.height*m)); const g=c.getContext('2d'); g.fillStyle='#fff'; g.fillRect(0,0,c.width,c.height); g.drawImage(img,0,0,c.width,c.height); return c.toDataURL('image/jpeg',0.8); }catch(e){ return null; } }
 let pdfCache=null;
 async function buildPdf(onStep){
   await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js','jspdf'); await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js','jspdfAutoTableLoaded');
