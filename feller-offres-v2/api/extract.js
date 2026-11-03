@@ -1,7 +1,7 @@
 // Lecture de plan / photo / cahier des charges → relevé structuré par pièce (bêta).
 // Le mapping vers les références Feller / Schneider se fait côté client (catalogue + choix de ligne, couleur, montage, niveau connecté).
 const KINDS = ['interrupteur', 'va_et_vient', 'inverseur', 'poussoir', 'variateur', 'store', 'prise_t13', 'prise_t13_2', 'prise_t13_3', 'prise_t23', 'prise_usb', 'prise_rj45', 'prise_tv', 'prise_ext', 'interrupteur_ext', 'detecteur_mouvement', 'detecteur_presence', 'thermostat', 'sonnette', 'interphone', 'boite_derivation', 'sortie_cable', 'autre'];
-const OTHER = ['tableau', 'borne_recharge', 'luminaire', 'parafoudre', 'detecteur_fumee', 'ventilation', 'pac', 'photovoltaique', 'onduleur', 'reseau', 'autre'];
+const OTHER = ['tableau', 'disjoncteur', 'borne_recharge', 'luminaire', 'parafoudre', 'detecteur_fumee', 'ventilation', 'pac', 'photovoltaique', 'onduleur', 'reseau', 'autre'];
 
 const SYSTEM = `Tu es un électricien chef de projet suisse qui fait le relevé de matériel d'appareillage pour une offre Feller / Schneider.
 On te donne un plan électrique (photo ou PDF), une photo de chantier, ou un cahier des charges / descriptif d'architecte (CFC 232, 233...).
@@ -12,6 +12,7 @@ Lecture d'un plan :
 - Compte chaque symbole. Des symboles dessinés au même endroit (collés, alignés, dans un même cadre) = une COMBINAISON : donne-la dans combos avec la disposition (2x1 vertical, 1x2 horizontal, 3x1, 1x3, 2x2) et ses éléments. Ne les compte alors pas une deuxième fois dans items.
 - Nomme les pièces comme sur le plan (Séjour, Cuisine, Chambre 1, SdB, Hall, Réduit…), une entrée par pièce, dans l'ordre du plan. Si un élément est hors pièce identifiable, pièce « Divers ». Si le document impose une ligne ou une couleur pour une pièce précise (ex. « séjour en EDIZIO.liv noir »), mets-la dans design / color de la pièce.
 - Les luminaires, tableaux, bornes, ventilations, détecteurs de fumée vont dans other.
+- Tableau : si le document demande seulement des appareils modulaires à poser dans un tableau EXISTANT (disjoncteurs, FI, FI/LS / RCBO, contacteurs, parafoudre…), mets chaque article en other kind « disjoncteur » (une entrée par désignation, qty, detail = désignation recopiée telle quelle, brand) et existing = true. Utilise kind « tableau » uniquement quand un nouveau tableau / coffret est demandé (existing = false).
 
 Lecture d'un cahier des charges :
 - Relève les quantités écrites, pièce par pièce si le texte le permet, sinon par zone ou « Général ».
@@ -53,7 +54,7 @@ const TOOL = {
         combos: { type: 'array', items: { type: 'object', required: ['layout', 'parts'], properties: {
           layout: { type: 'string', enum: ['2x1', '1x2', '3x1', '1x3', '2x2'] }, parts: { type: 'array', items: { type: 'string', enum: KINDS } }, qty: { type: 'integer' }, detail: { type: 'string' } } } }
       } } },
-      other: { type: 'array', items: { type: 'object', required: ['kind', 'qty'], properties: { kind: { type: 'string', enum: OTHER }, qty: { type: 'integer' }, detail: { type: 'string' }, room: { type: 'string' }, section: { type: 'string' }, ref: { type: 'string' }, brand: { type: 'string' } } } },
+      other: { type: 'array', items: { type: 'object', required: ['kind', 'qty'], properties: { kind: { type: 'string', enum: OTHER }, qty: { type: 'integer' }, detail: { type: 'string' }, existing: { type: 'boolean', description: 'true = tableau existant, on ajoute / remplace seulement des appareils' }, room: { type: 'string' }, section: { type: 'string' }, ref: { type: 'string' }, brand: { type: 'string' } } } },
       questions: { type: 'array', items: { type: 'string' } }
     }
   }
