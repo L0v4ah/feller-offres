@@ -59,6 +59,29 @@ const TOOL = {
   }
 };
 
+
+// Mode « offre / devis » : lecture ligne par ligne (structure du document conservée) pour reprise et vérification dans l'app.
+const SYSTEM_OFFER = `Tu lis une offre, un devis ou une soumission d'installateur électricien suisse (photos de pages ou PDF), pour la reprendre ligne par ligne dans un outil d'offres Feller / Schneider.
+Rends le contenu avec l'outil extract_offer, sans texte.
+- Garde EXACTEMENT la structure du document : chaque position / chapitre (ex. « 01 Tableau », « 02a Entrée + couloir ») devient une section, dans l'ordre des pages. Une ligne de titre en gras avec un texte descriptif (« Démontage des appareils… ») = desc de la section.
+- Chaque ligne du document = une entrée lines, dans l'ordre, même les lignes de main d'oeuvre, câbles, petit matériel, divers. Ne fusionne jamais deux lignes, n'invente rien. Si une ligne continue sur la page suivante, ne la duplique pas.
+- text = le texte de la ligne recopié tel quel (désignation complète, sur une seule ligne).
+- qty, unit_price, total = nombres (format suisse « 1 155,05 » → 1155.05 ; « 2,000 » → 2). unit = p, pce, m, h, forfait…
+- type : materiel (appareil, prise, interrupteur, disjoncteur, combinaison, borne, luminaire…) ; cable (fil, câble, gaine, tube) ; main_oeuvre ; petit_materiel (petit matériel, matériel de raccordement, de fixation) ; divers (imprévus, déplacement, forfait) ; autre.
+- brand = marque si lisible ou évidente (Feller pour EDIZIOdue / EDIZIO.liv / STANDARDdue / NEVO, Schneider pour Clario / Resi9 / Acti9, Hager, Legrand…). ref = numéro d'article s'il est écrit.
+- suggest (lignes materiel seulement) = une courte requête catalogue pour l'équivalent Feller / Schneider, en français, avec fonction, calibre, pôles, courbe, sensibilité, type, ligne et couleur (ex. « Clario iC40 FI/LS 1P+N C13 30mA type A 1UM », « prise EDIZIOdue T13 blanc encastré »).
+- total_read de chaque section = le total imprimé de la section s'il existe. totals = total brut, rabais (%), TVA (%), total net imprimés en fin d'offre.
+- number = numéro de l'offre, issuer = entreprise émettrice si lisible, client / objet si lisibles. confidence basse sur une ligne mal lisible (photo floue, ombre).`;
+const TOOL_OFFER = { name: 'extract_offer', description: "Offre / devis lu ligne par ligne.", input_schema: { type: 'object', required: ['sections'], properties: {
+  number: { type: 'string' }, issuer: { type: 'string' }, client: { type: 'string' }, object: { type: 'string' }, summary: { type: 'string' },
+  sections: { type: 'array', items: { type: 'object', required: ['title', 'lines'], properties: {
+    code: { type: 'string' }, title: { type: 'string' }, desc: { type: 'string' }, total_read: { type: 'number' },
+    lines: { type: 'array', items: { type: 'object', required: ['text', 'type'], properties: {
+      text: { type: 'string' }, qty: { type: 'number' }, unit: { type: 'string' }, unit_price: { type: 'number' }, total: { type: 'number' },
+      type: { type: 'string', enum: ['materiel', 'cable', 'main_oeuvre', 'petit_materiel', 'divers', 'autre'] },
+      brand: { type: 'string' }, ref: { type: 'string' }, suggest: { type: 'string' }, confidence: { type: 'string', enum: ['haute', 'moyenne', 'basse'] } } } } } } },
+  totals: { type: 'object', properties: { brut: { type: 'number' }, rabais_pct: { type: 'number' }, tva_pct: { type: 'number' }, net: { type: 'number' } } } } } };
+
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST uniquement' });
@@ -73,12 +96,13 @@ module.exports = async (req, res) => {
   const content = [];
   images.forEach((src, i) => { const m = /^data:(image\/[a-z]+);base64,(.+)$/.exec(src); if (m) { content.push({ type: 'text', text: `Page / image ${i + 1}${body.name ? ' de « ' + String(body.name).slice(0, 80) + ' »' : ''} :` }); content.push({ type: 'image', source: { type: 'base64', media_type: m[1], data: m[2] } }); } });
   if (text.trim()) content.push({ type: 'text', text: `Texte du document${body.name ? ' « ' + String(body.name).slice(0, 80) + ' »' : ''} :\n\n${text}` });
-  content.push({ type: 'text', text: `Fais le relevé complet avec extract_project.${note ? ' Indication de Nicola : ' + note : ''}${learned ? '\n\nHabitudes apprises sur les projets précédents de Nicola (à appliquer si le document ne dit pas autre chose) :\n' + learned : ''}` });
+  const offer = body.mode === 'offre';
+  if (offer) content.push({ type: 'text', text: `Lis l'offre ligne par ligne avec extract_offer.${note ? ' Indication de Nicola : ' + note : ''}` }); else content.push({ type: 'text', text: `Fais le relevé complet avec extract_project.${note ? ' Indication de Nicola : ' + note : ''}${learned ? '\n\nHabitudes apprises sur les projets précédents de Nicola (à appliquer si le document ne dit pas autre chose) :\n' + learned : ''}` });
   const call = async (msgs) => {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: process.env.PLAN_MODEL || process.env.MODEL || 'claude-sonnet-5-5', max_tokens: 16000, system: SYSTEM, tools: [TOOL], tool_choice: { type: 'auto' }, messages: msgs })
+      body: JSON.stringify({ model: process.env.PLAN_MODEL || process.env.MODEL || 'claude-sonnet-5-5', max_tokens: 16000, system: offer ? SYSTEM_OFFER : SYSTEM, tools: [offer ? TOOL_OFFER : TOOL], tool_choice: { type: 'auto' }, messages: msgs })
     });
     if (!r.ok) { const t = await r.text(); throw new Error(('API ' + r.status + ' ' + t).slice(0, 300)); }
     return r.json();
@@ -89,12 +113,12 @@ module.exports = async (req, res) => {
     let tu = (data.content || []).find(c => c.type === 'tool_use');
     if (!tu) {
       msgs.push({ role: 'assistant', content: data.content && data.content.length ? data.content : [{ type: 'text', text: '…' }] });
-      msgs.push({ role: 'user', content: 'Rends maintenant le relevé complet avec l\'outil extract_project, sans texte.' });
+      msgs.push({ role: 'user', content: offer ? 'Rends maintenant l\'offre complète avec l\'outil extract_offer, sans texte.' : 'Rends maintenant le relevé complet avec l\'outil extract_project, sans texte.' });
       data = await call(msgs); tu = (data.content || []).find(c => c.type === 'tool_use');
     }
     if (!tu) { const txt = (data.content || []).filter(c => c.type === 'text').map(c => c.text).join('\n'); const m = txt.match(/\{[\s\S]*\}/); if (m) { try { tu = { input: JSON.parse(m[0]) }; } catch (e) {} } }
     if (!tu) return res.status(502).json({ error: 'Lecture impossible', detail: 'pas de relevé renvoyé' });
-    return res.status(200).json({ project: tu.input, usage: data.usage, stop: data.stop_reason });
+    return res.status(200).json(offer ? { offer: tu.input, usage: data.usage, stop: data.stop_reason } : { project: tu.input, usage: data.usage, stop: data.stop_reason });
   } catch (e) {
     return res.status(502).json({ error: 'Erreur API modèle', detail: String(e.message).slice(0, 300) });
   }
