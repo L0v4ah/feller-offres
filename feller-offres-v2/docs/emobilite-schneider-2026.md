@@ -13,8 +13,8 @@
 - **StarCharge Fast 720** : armoires EVD1S360 (→ 480, modules 30 kW, EVD1S483), EVD1S480 (→ 720, modules 40 kW), EVD1S720 ; satellites EVD1D720TBB / TBBC7 / TBBCC (≤ 6, 80 m, 2× CCS2 400 A boost 600 A). 2 arrivées : 2× NSX630 500 A / 630 A, 2× NS800 800 A.
 
 ## Gestion de charge
-- **Peak Controller** (anti-déclenchement, courant porteur, ≤ 6 bornes / 200 m, PV pris en compte) : EVA2HPC3 tri 16–50 A ; EVA4HPC1 mono 16–50 A ; EVA2HPC1 mono 32–100 A. Pour Schneider Charge et Charge Pro.
-- **Resi9 Energy Meter** (Charge Pro) : R9MUX6M tri + TI R9MCT80 / 160 / 250 ; R9M80X6M mono + R9MCT80. Modbus RS485, paires illimitées, config eSetup.
+- **Peak Controller** (anti-déclenchement, courant porteur PLC, PV pris en compte) : EVA2HPC3 tri 16–50 A ; EVA4HPC1 mono 16–50 A ; EVA2HPC1 mono 32–100 A. **Uniquement avec Schneider Charge (standard)** — retour terrain Feller du 02.11.2026 : pas compatible Charge Pro (le catalogue 2026 l'annonce pourtant pour les deux : l'app suit le terrain).
+- **Resi9 Energy Meter** (Charge Pro seule, anti-déclenchement) : R9MUX6M tri + TI R9MCT80 / 160 / 250 ; R9M80X6M mono + R9MCT80. Modbus RS485, paires illimitées, config eSetup.
 - **EcoStruxure EV Charging Expert** : une seule réf. **HMIBX1A0NEVB100SCP** (250 bornes, 20 zones / 4 niveaux, statique ou dynamique, VIP, PV, API BEMS, OCPP 1.6J, 12–24 V DC, 2× Ethernet, Harmony BX1). Autour : alim 24 V DC, switch Ethernet (Modicon), compteur de tête (iEM3155 A9MEM3155, PM5320 METSEPM5320, PowerTag + Panel Server PAS600, NSX via IFE LV434002, MTZ via EIFE LV851001), modem EVP3MM + EVP2MX. Délestage recalculé toutes les 15 min (favorise les derniers arrivés). Licences EVLMSED… uniquement pour les anciens HMIBSCEA53D1ED* (= « Régulateur de charge Evlink 5 / 15 / 250 stations » du grossiste).
 - EVlink Pro AC : répartition statique par Master / Extender (grossiste) ; dynamique = Expert + compteur.
 
@@ -34,3 +34,7 @@
 - Parcours bornes : variantes exactes, Peak Controller selon raccordement (mono/tri), Resi9 Energy Meter, EV Charging Expert + périphérie, iMNX, protections DC par puissance, pièces détachées en qty 0.
 - Section « Bornes — tout voir, accessoires, pièces détachées ».
 - Assistant (`api/chat.js`) : bloc BORNES réécrit avec toutes les références et règles.
+
+## Règle projet multi-bornes (03.11.2026)
+- Dès 2 Charge Pro avec gestion dynamique : EcoStruxure EV Charging Expert + alimentation 24 V DC (ABLM1A24012) + switch Ethernet + compteur de tête Modbus : ≤ 63 A iEM3155 direct ; > 63 A iEM3255 + 3 TI (200/5 A jusqu'à 160 A, 250/5 A jusqu'à 250 A, 400/5 A au-delà). Les TI sont toujours listés.
+- Montage Charge Pro : mural sans accessoire ; sur pied EVA2PBS2 (2 bornes) / EVA2PBS1 (1 borne).

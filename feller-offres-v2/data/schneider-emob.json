@@ -42,21 +42,21 @@
   {
    "f": "EVA4HPC1",
    "g": "Anti-tripping",
-   "d": "Peak Controller monophasé 16–50 A (EVA4HPC1) — module anti-déclenchement pour Schneider Charge / Charge Pro, rail DIN, courant porteur, réglages 16/20/25/32/40/50 A",
+   "d": "Peak Controller monophasé 16–50 A (EVA4HPC1) — module anti-déclenchement pour Schneider Charge (pas Charge Pro), rail DIN, courant porteur, réglages 16/20/25/32/40/50 A",
    "note": "Pince en tête (bas du disjoncteur principal) ; jusqu'à 6 paires par courant porteur (200 m). Prend en compte le PV. Minimum conseillé 25 A 3P+N si PAC.",
    "img": "https://download.se.com/files?p_Doc_Ref=EVA4HPC1_Image&p_File_Type=rendition_369_jpg&default_image=DefaultProductImage.png"
   },
   {
    "f": "EVA2HPC1",
    "g": "Anti-tripping",
-   "d": "Peak Controller monophasé haute intensité 32–100 A (EVA2HPC1) — anti-déclenchement Schneider Charge / Charge Pro, réglages 32/40/50/63/80/100 A",
+   "d": "Peak Controller monophasé haute intensité 32–100 A (EVA2HPC1) — anti-déclenchement Schneider Charge (pas Charge Pro), réglages 32/40/50/63/80/100 A",
    "note": "Pour raccordement monophasé jusqu'à 100 A.",
    "img": "https://download.se.com/files?p_Doc_Ref=EVA2HPC1_Image&p_File_Type=rendition_369_jpg&default_image=DefaultProductImage.png"
   },
   {
    "f": "EVA2HPC3",
    "g": "Anti-tripping",
-   "d": "Peak Controller triphasé 16–50 A (EVA2HPC3) — anti-déclenchement Schneider Charge / Charge Pro, 3 pinces, réglages 16/20/25/32/40/50 A",
+   "d": "Peak Controller triphasé 16–50 A (EVA2HPC3) — anti-déclenchement Schneider Charge (pas Charge Pro), 3 pinces, réglages 16/20/25/32/40/50 A",
    "note": "Le cas suisse courant : villa triphasée 25–40 A. Courant porteur, pas de câble bus.",
    "e": "834320839",
    "img": "https://download.se.com/files?p_Doc_Ref=EVA2HPC3_Image_of_product&p_File_Type=rendition_369_jpg&default_image=DefaultProductImage.png"
