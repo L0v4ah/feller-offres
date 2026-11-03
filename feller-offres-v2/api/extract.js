@@ -32,7 +32,7 @@ const TOOL = {
   input_schema: {
     type: 'object', required: ['summary', 'rooms'],
     properties: {
-      doc_type: { type: 'string', enum: ['plan', 'photo_chantier', 'cahier_des_charges', 'liste', 'autre'] },
+      doc_type: { type: 'string', enum: ['plan', 'photo_chantier', 'cahier_des_charges', 'liste', 'offre', 'autre'], description: 'offre = offre / devis d\'installateur avec lignes, quantités et prix' },
       summary: { type: 'string' },
       building: { type: 'string', description: 'villa, appartement, PPE, bureau, commerce, école…' },
       hints: { type: 'object', properties: {
