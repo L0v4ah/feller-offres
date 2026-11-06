@@ -408,6 +408,26 @@ body:has(#drawer:not([hidden])) .toast{bottom:auto;top:14px}
 @media (pointer:coarse){.mic{width:44px;height:44px}#theme{min-width:44px;height:44px}.hgh{min-height:48px}.res-head .btn,.wiz .btn{min-height:44px}.crumbs button{min-height:40px!important}.pk input[type=checkbox]{width:26px;height:26px}.btn.small{min-height:40px;padding:8px 14px;font-size:13.5px}.lothead .lotact .btn.small{min-height:36px;padding:6px 12px;font-size:13px}.fill .btn.small{min-height:36px}.st{width:44px;height:44px;font-size:20px}.chip{padding:9px 14px;min-height:38px}.item button.x{width:40px;height:40px;font-size:24px}.crumbs button{min-height:36px}.ob{min-height:34px;padding:6px 12px;font-size:13px}.item .addnote,.item .note{min-height:28px;display:inline-flex;align-items:center}.explode{min-height:28px}}
 @media (max-width:700px){.hgrp .hgh span{display:none}.brand small{display:none}.barbtn span.t{display:none}.barbtn{padding:0 12px;height:40px}.bar{gap:8px;padding:8px 12px;height:auto;flex-wrap:wrap}.bar .sbox{order:10;flex-basis:100%}.brand{margin-right:auto}:root{--bar:104px}.tiles{grid-template-columns:repeat(2,1fr);gap:10px}.tile .pic{height:104px;margin:6px 6px 0;border-radius:14px}.tile .pic img{max-height:84px}.tile .pic.multi img{max-height:70px}.tile .txt{padding:10px 12px 12px}.tile .txt b{font-size:14.5px}.tile .txt span{font-size:12.5px}.opts{grid-template-columns:repeat(2,1fr);gap:10px}.cards{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}.card .pic{height:120px}.card .pic img{max-height:100px}.card .e{font-size:17px}.card .act{flex-direction:column}}
 .pk .q small.pkp{display:block;font-size:11px;font-weight:500;color:var(--ink-3);white-space:nowrap}
+.pano .psub{margin:-6px 0 12px;color:var(--ink-2)}
+.pschema{background:var(--float);border:1px solid var(--line);border-radius:20px;padding:10px;margin:0 0 14px}
+.psvg{width:100%;max-width:520px;display:block;margin:0 auto;height:auto}
+.psvg .pn rect{fill:var(--glass-2);stroke:var(--line-2);stroke-width:1}
+.psvg .pn.pj rect{fill:var(--accent-soft);stroke:var(--accent)}
+.psvg .pn.ps rect{stroke-width:2}
+.psvg .pn.pj{cursor:pointer}.psvg .pn.pj:hover rect{stroke-width:2.5}
+.psvg .t{font:600 12.5px var(--font,system-ui);fill:var(--text)}.psvg .s{font:400 10.5px var(--font,system-ui);fill:var(--muted)}
+.psvg .pl{font:600 9.5px var(--font,system-ui);fill:var(--faint);letter-spacing:.06em}
+.psvg .pa{stroke:var(--muted);stroke-width:1.4}.psvg .pa.pd{stroke-dasharray:4 3}.psvg .pah{fill:var(--muted)}
+.pfam{margin:18px 0 6px;scroll-margin-top:90px;border-radius:14px;transition:box-shadow .3s}.pfam.flash{box-shadow:0 0 0 3px var(--accent)}
+.pfam h3{margin:0 0 2px;font-size:17px;font-weight:600}.pfam>p{margin:0 0 8px;color:var(--ink-2);font-size:13.5px}
+.prow{display:flex;align-items:stretch;gap:10px;overflow-x:auto;padding:2px 2px 8px;scroll-snap-type:x mandatory}.prow>.pcard{margin:0}
+.pcard{position:relative;flex:0 0 148px;scroll-snap-align:start;background:var(--float);border:1px solid var(--line);border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:3px;cursor:pointer}
+.pcard .pcpic{height:84px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:10px;margin-bottom:4px}.pcard .pcpic img{max-height:76px;max-width:100%;object-fit:contain}
+.pcard b{font-size:13px;line-height:1.25;font-weight:600}.pcard small{font-size:11.5px;color:var(--ink-3)}.pcard .tag{align-self:flex-start}
+.pcard .pcadd{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:1px solid var(--line-2);background:var(--float);color:var(--text);font-size:18px;line-height:1;cursor:pointer}
+.ptab{display:flex;flex-direction:column;gap:6px}.ptab div{display:grid;grid-template-columns:1fr;gap:1px;background:var(--float);border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:13px}.ptab span{color:var(--ink-2)}
+@media(min-width:640px){.ptab div{grid-template-columns:1.1fr 2fr 1.6fr 1fr;align-items:center}}
+.pdocs{display:flex;flex-direction:column;gap:8px;font-size:14px}.pswitch{margin-top:14px}
 </style>
 </head>
 <body>
@@ -876,25 +896,38 @@ const FLOWS = {
       {v:'fact',t:'Refacturer',s:'RCP / ZEV, locataires, borne partagée : compteur MID',imgq:'iEM3155 MID',rec:'Le plus fréquent'},
       {v:'suivi',t:'Suivre la consommation par circuit',s:'PowerTag sans fil + Panel Server, app / cloud',imgq:'PowerTag P 3PN'},
       {v:'both',t:'Les deux',s:'MID pour facturer + PowerTag pour le suivi'}]},
-    {key:'size', q:'Raccordement du compteur ?', opts:[{v:'m40',t:'Monophasé jusqu\'à 40 A',s:'iEM2010 MID'},{v:'t63',t:'Triphasé jusqu\'à 63 A',s:'iEM31xx MID',rec:'Logement, borne'},{v:'t125',t:'Triphasé jusqu\'à 125 A',s:'iEM33xx MID'},{v:'ti',t:'Plus de 125 A (transformateurs)',s:'iEM32xx MID + 3 TI'}], compact:true, when:a=>a.why!=='suivi'},
+    {key:'etat', q:'Installation ?', s:'Existant : capteurs et TI ouvrants, posés sans couper l\'introduction.', opts:[{v:'exist',t:'Existante',s:'Rénovation, ajout de mesure',rec:'Le plus fréquent'},{v:'neuf',t:'Neuve',s:'Tableau en construction'}], compact:true},
+    {key:'size', q:'Raccordement du compteur ?', opts:[{v:'m40',t:'Monophasé jusqu\'à 40 A',s:'iEM2010 MID'},{v:'t63',t:'Triphasé jusqu\'à 63 A',s:'iEM31xx MID',rec:'Logement, borne'},{v:'t125',t:'Triphasé jusqu\'à 125 A',s:'iEM33xx MID'},{v:'ti',t:'Plus de 125 A (transformateurs)',s:'iEM3255 MID + 3 TI'}], compact:true, when:a=>a.why!=='suivi'},
+    {key:'tical', q:'Calibre au point de mesure ?', s:'Le TI se choisit au-dessus du courant maximal.', opts:[{v:'100',t:'Jusqu\'à 100 A',s:'TI 100/5 A'},{v:'250',t:'100 à 250 A',s:'TI 250/5 A',rec:'PPE, PME'},{v:'400',t:'250 à 400 A',s:'TI 400/5 A (ouvrant : 500/5 A)'},{v:'500',t:'400 à 500 A',s:'TI 500/5 A'}], compact:true, when:a=>a.why!=='suivi'&&a.size==='ti'},
     {key:'com', q:'Lecture du compteur ?', s:'Modbus = lisible par un gestionnaire d\'énergie, une borne ou EV Charging Expert.', opts:[{v:'mb',t:'Modbus',rec:'Standard'},{v:'imp',t:'Impulsions'},{v:'mbus',t:'M-Bus',s:'Régie, relevé groupé'},{v:'bac',t:'BACnet',s:'GTB'}], compact:true, when:a=>a.why!=='suivi'&&a.size!=='m40'},
     {key:'n', q:'Combien de compteurs ?', opts:[1,2,4,6,8,10,12].map(n=>({v:String(n),t:String(n)})), compact:true, when:a=>a.why!=='suivi'},
+    {key:'intro', q:'Mesurer aussi l\'introduction ?', s:'Vue globale du bâtiment : capteur ouvrant autour des câbles ou sous le disjoncteur NSX.', opts:[{v:'non',t:'Non'},{v:'160',t:'Jusqu\'à 160 A',s:'PowerTag Flex 160 A'},{v:'200',t:'Jusqu\'à 200 A',s:'PowerTag Rope 200 A',rec:'PPE, PME'},{v:'600',t:'Jusqu\'à 600 A',s:'PowerTag Rope 600 A'},{v:'1000',t:'Jusqu\'à 1000 A',s:'PowerTag Rope 1000 A'},{v:'2000',t:'Jusqu\'à 2000 A',s:'PowerTag Rope 2000 A'},{v:'nsx250',t:'Disjoncteur NSX ≤ 250 A',s:'PowerTag NSX M250'},{v:'nsx630',t:'Disjoncteur NSX ≤ 630 A',s:'PowerTag NSX M630'}], compact:true, when:a=>a.why!=='fact'},
     {key:'pc', q:'Combien de circuits à suivre ?', opts:[4,8,12,20,40].map(n=>({v:String(n),t:String(n),rec:n===8?'Villa':undefined})), compact:true, when:a=>a.why!=='fact'},
     {key:'pt', q:'Sur quels appareils ?', s:'Le PowerTag se clipse sous le disjoncteur.', opts:[{v:'P',t:'Disjoncteurs Clario iC40',s:'PowerTag P',rec:'Nouveau tableau'},{v:'F',t:'FI/LS, FI type B, autres marques',s:'PowerTag F (flexible)'}], compact:true, when:a=>a.why!=='fact'},
     {key:'ph', q:'Circuits mono ou tri ?', opts:[{v:'1',t:'Monophasés',rec:'Majorité'},{v:'3',t:'Triphasés'}], compact:true, when:a=>a.why!=='fact'},
-    {key:'ps', q:'Passerelle ?', opts:[{v:'entry',t:'Panel Server Entry',s:'Jusqu\'à 20 PowerTag, app / cloud',rec:'Villa, petit tertiaire'},{v:'univ',t:'Panel Server Universal',s:'+ Modbus, plus d\'appareils'},{v:'adv',t:'Panel Server Advanced',s:'Historique local 3 ans, serveur énergie'}], compact:true, when:a=>a.why!=='fact'},
+    {key:'ps', q:'Passerelle ?', s:'Entry = sans fil seulement. Un compteur Modbus filaire (iEM, PM) demande Universal ou Advanced.', opts:a=>[{v:'entry',t:'Panel Server Entry',s:a.why==='both'?'Pas de Modbus : ne lit pas les iEM':'Jusqu\'à 20 PowerTag, pages web',rec:a.why==='both'?undefined:'Villa, petit tertiaire'},{v:'univ',t:'Panel Server Universal',s:'+ Modbus RS485 : iEM, PM',rec:a.why==='both'?'Avec compteurs MID':undefined},{v:'adv',t:'Panel Server Advanced',s:'Historique local 3 ans, alarmes e-mail'}], compact:true, when:a=>a.why!=='fact'},
+    {key:'sup', q:'Où consulter les données ?', opts:[{v:'local',t:'Pages web du Panel Server',s:'Sur place, sans licence',rec:'Simple'},{v:'hub',t:'EcoStruxure Energy Hub',s:'Cloud + app, multi-sites · 25 CHF / appareil / an'},{v:'pme',t:'PME Cloud / GTB',s:'Multi-fluides, rapports · sur projet'}], compact:true, when:a=>a.why!=='fact'},
   ], finish:(a,label)=>{
     const g=[]; const n=+(a.n||1);
-    if(a.why!=='suivi'){ const M={m40:{mb:'SE-981832616',imp:'SE-981832616',mbus:'SE-981832616',bac:'SE-981832616'},t63:{mb:'SE-981831556',imp:'SE-981831106',mbus:'SE-981831826',bac:'SE-981831526'},t125:{mb:'SE-981831336',imp:'SE-981831136',mbus:'SE-981831236',bac:'SE-981831536'},ti:{mb:'SE-981832556',imp:'SE-981832106',mbus:'SE-981831716',bac:'SE-981831516'}}; const ref=M[a.size||'t63'][a.com||'mb'];
+    if(a.why!=='suivi'){ const M={m40:{mb:'SE-981832616',imp:'SE-981832616',mbus:'SE-981832616',bac:'SE-981832616'},t63:{mb:'A9MEM3155',imp:'SE-981831106',mbus:'SE-981831826',bac:'SE-981831526'},t125:{mb:'SE-981831336',imp:'SE-981831136',mbus:'SE-981831236',bac:'SE-981831536'},ti:{mb:'SE-981832556',imp:'SE-981832106',mbus:'SE-981831716',bac:'SE-981831516'}}; const ref=M[a.size||'t63'][a.com||'mb'];
       g.push({label:`Compteur MID — ${label('size')||''}${a.size!=='m40'?' · '+(label('com')||'Modbus'):' · impulsions'}`, q:ref, qty:n, note:'MID : valable pour la refacturation'});
-      if(a.size==='ti') g.push({label:'Transformateurs de courant (3 par compteur)', q:'transformateur de courant Schneider Electric', qty:3*n});
+      if(a.size==='ti'){ const c=a.tical||'250', ex=a.etat!=='neuf'; const T=ex?{'100':['METSECT5HG010','100/5 A'],'250':['METSECT5HG025','250/5 A'],'400':['METSECT5HG050','500/5 A'],'500':['METSECT5HG050','500/5 A']}[c]:{'100':['METSECT5CC010','100/5 A'],'250':['METSECT5CC025','250/5 A'],'400':['METSECT5DA040','400/5 A'],'500':['METSECT5HG050','500/5 A']}[c];
+        g.push({label:`TI ${ex?'ouvrants':'fermés'} ${T[1]} (3 par compteur)`, q:T[0], qty:3*n, note:(ex?'se posent sans couper l\'alimentation':'à passer sur les câbles avant raccordement')+' · bornier de court-circuit conseillé (ne jamais ouvrir le secondaire en charge)'});
+        if(ex){ g.push({label:'Alternative sans TI 5 A : iEM3455 + TI basse tension ouvrants', q:'A9MEM3455', qty:0, note:'aucun risque de secondaire ouvert'}); g.push({label:'Alternative : iEM3555 + tores Rogowski souples', q:'A9MEM3555', qty:0, note:'grosses sections, jeux de barres'}); }
+        g.push({label:'Prise de tension : disjoncteur Clario 6 A 3LN', q:'A9P54706', qty:n}); }
     }
+    if(a.why!=='fact'&&a.intro&&a.intro!=='non'){ const I={'160':['SE-981831356','PowerTag Flex 160 A (A9MEM1580)'],'200':['SE-981831486','PowerTag Rope 200 A (A9MEM1590)'],'600':['SE-981831166','PowerTag Rope 600 A (A9MEM1591)'],'1000':['SE-981831586','PowerTag Rope 1000 A (A9MEM1592)'],'2000':['SE-981831276','PowerTag Rope 2000 A (A9MEM1593)'],'nsx250':['SE-981911266','PowerTag NSX M250 3P+N (LV434021)'],'nsx630':['SE-981911226','PowerTag NSX M630 3P+N (LV434023)']}[a.intro];
+      g.push({label:`Mesure de l'introduction : ${I[1]}`, q:I[0], qty:1, note:/nsx/.test(a.intro)?'se monte sous le disjoncteur NSX, aucun câblage':'tores ouverts autour des câbles, sans couper'});
+      if(!/nsx/.test(a.intro)&&a.intro!=='160') g.push({label:'Prise de tension du PowerTag Rope : Clario 6 A 3LN', q:'A9P54706', qty:1}); }
     if(a.why!=='fact'){ const pc=+(a.pc||8), tri=a.ph==='3'; const ref=a.pt==='F'?(tri?'SE-981876000':'SE-981872000'):(tri?'SE-981878000':'SE-981874000');
       g.push({label:`PowerTag ${a.pt==='F'?'F':'P'} ${tri?'3PN':'1PN'} — suivi par circuit`, q:ref, qty:pc, note:'mesure, pas de facturation'});
-      const ps=a.ps==='adv'?'SE-560318205':a.ps==='univ'?'SE-560318405':'SE-560318105';
-      g.push({label:`Passerelle ${label('ps')||'Panel Server Entry'}${pc>20&&a.ps==='entry'?' — attention : Entry = 20 PowerTag max':''}`, q:ps, qty:pc>20&&a.ps==='entry'?Math.ceil(pc/20):1, note:'3 à 4 modules sur le rail'});
+      const ntag=pc+(a.intro&&a.intro!=='non'?1:0); let pk=a.ps||(a.why==='both'?'univ':'entry'); const up=pk==='entry'&&a.why==='both'; if(up) pk='univ';
+      const ps=pk==='adv'?'SE-560318205':pk==='univ'?'PAS600':'SE-560318105';
+      g.push({label:`Passerelle ${pk==='adv'?'Panel Server Advanced':pk==='univ'?'Panel Server Universal PAS600':'Panel Server Entry PAS400'}${up?' (Entry ne lit pas les compteurs Modbus)':''}`, q:ps, qty:pk==='entry'&&ntag>20?Math.ceil(ntag/20):1, note:pk==='entry'?`${ntag} capteurs · 20 max par Entry`:'jusqu\'à 100 sans fil + 32 Modbus'});
+
     }
-    const tips=['Refacturer (RCP / ZEV, locataires, borne) = compteur MID obligatoire ; un PowerTag n\'est jamais MID.','Modbus : le compteur peut piloter la gestion de charge des bornes (Peak Controller, EV Charging Expert) et le PV.','Panel Server Entry : jusqu\'à 20 PowerTag sans fil ; au-delà, Universal ou Advanced (historique 3 ans).','Réserve la place sur le rail : compteur 63 A = 4 modules, Panel Server 3 à 4 modules.'];
+    const tips=['Panorama : touche « Panorama » en haut pour voir le schéma de principe et toute la gamme.','Refacturer (RCP / ZEV, locataires, borne) = compteur MID obligatoire ; un PowerTag n\'est jamais MID.','TI 5 A : bornier de court-circuit, ne jamais ouvrir le secondaire en charge.','Modbus : le compteur peut piloter la gestion de charge des bornes (Peak Controller, EV Charging Expert) et le PV.','Panel Server Entry : jusqu\'à 20 PowerTag sans fil ; au-delà, Universal ou Advanced (historique 3 ans).','Réserve la place sur le rail : compteur 63 A = 4 modules, Panel Server 3 à 4 modules.'];
+    if(a.sup==='hub') tips.unshift('Energy Hub : abonnement cloud par appareil (Essential 25 CHF/an, Advanced 50), commandé à part · app mobile, multi-sites.'); if(a.sup==='pme') tips.unshift('PME Cloud : sur projet, formulaire client (passerelles + appareils) à remplir pour ems.ch@schneider-electric.com.');
     const title=`Comptage · ${label('why')||''}`;
     const brief=`Comptage : ${label('why')}, ${label('size')||''} ${label('com')||''}, ${a.n||''} compteur(s), ${a.pc||0} circuits PowerTag. Vérifie les références et propose le raccordement. Ne me repose pas ces questions.`;
     return {title, groups:g, brief, tips};
@@ -958,7 +991,7 @@ const FLOWS = {
     if(o.includes('sect')) g.push({label:'Interrupteur-sectionneur de tête', q:a.amp==='125'?'Interrupteur de charge iSW 125A 4L':'Sectionneur de charge ComPacT NSX', qty:1});
     if(o.includes('spd')){ g.push({label:'Parafoudre type 2+3 à fusible intégré (sans paratonnerre)', q:'A9L2F640', qty:1, note:'doc Schneider 2025 : pas de disjoncteur de déconnexion à ajouter'}); g.push({label:'Si paratonnerre : type 1+2 25 kA (fusible intégré si amont > 315 A gG)', q:'A9L1F625', qty:0}); }
     if(o.includes('fi')) g.push({label:'Différentiels de groupe 63 A (sélectifs en tête)', q:'interrupteur différentiel iID 63A 300mA 4L', qty:2});
-    if(o.includes('mes')) { g.push({label:'PowerTag F 3PN 63 A (mesure sans fil par départ)', q:'SE-981876000', qty:4}); g.push({label:'Panel Server Universal (passerelle PowerTag + Modbus)', q:'SE-560318405', qty:1}); g.push({label:'Compteur MID de tête si refacturation', q:'SE-981832556', qty:0}); }
+    if(o.includes('mes')) { g.push({label:'PowerTag F 3PN 63 A (mesure sans fil par départ)', q:'SE-981876000', qty:4}); g.push({label:'Panel Server Universal (passerelle PowerTag + Modbus)', q:'PAS600', qty:1}); g.push({label:'Compteur MID de tête si refacturation', q:'SE-981832556', qty:0}); }
     const title=`TGBT · ${label('amp')||''}${a.enc?' · '+label('enc'):''}`;
     const brief=`Projet TGBT : courant de tête ${label('amp')}, enveloppe ${label('enc')||'à définir'}, ${a.champs||''} champs, ${a.ip||''}, options : ${(o.map(x=>x)).join(', ')||'aucune'}. Propose l'architecture (tête, répartition, différentiels, parafoudre, mesure) avec N° ELDAS quand ils existent et indique ce qui part en projet Schneider / tableautier. Ne me repose pas ces questions.`;
     return {title, groups:g, brief, tips};
@@ -1150,6 +1183,76 @@ function cbClick(e){
   return false;
 }
 
+/* ---------- Panorama Schneider (comptage & mesure, e-mobilité) : schéma de principe + familles + documents ---------- */
+const PANO={
+  comptage:{ title:'Panorama comptage & mesure', sub:'Schneider · quel appareil pour quel besoin', flow:'comptage',
+    rules:['Facturer (RCP / ZEV, locataires) = compteur MID / METAS. Un PowerTag (classe 1) n\'est jamais MID.','Existant : capteurs ouvrants (PowerTag Rope, TI ouvrants, iEM3455 / 3555) — pas besoin de couper l\'introduction.','TI 5 A : ne jamais ouvrir le secondaire en charge (bornier de court-circuit). Les tores basse tension et Rogowski n\'ont pas ce risque.','Panel Server Entry = sans fil seulement, 20 capteurs. Dès qu\'un compteur Modbus filaire (iEM, PM) est présent → Universal PAS600.'],
+    fams:[
+      {id:'direct', t:'Mesure directe · MID', s:'Compteur dans le circuit, jusqu\'à 125 A. Certifié MID / METAS : refacturation.', items:[['A9MEM2010','Monophasé ≤ 40 A'],['A9MEM3155','Triphasé ≤ 63 A · Modbus'],['A9MEM3355','Triphasé ≤ 125 A · Modbus']]},
+      {id:'ti', t:'Mesure indirecte · MID sur TI', s:'Au-delà de 125 A : compteur + 3 transformateurs. TI ouvrants pour l\'existant.', items:[['A9MEM3255','Sur TI x/5 A · Modbus'],['A9MEM3455','Sur TI basse tension ouvrants'],['A9MEM3555','Sur tores Rogowski souples'],['METSECT5CC025','TI fermé 250/5 A · neuf'],['METSECT5HG025','TI ouvrant 250/5 A · existant']]},
+      {id:'pt', t:'Capteurs sans fil PowerTag · suivi', s:'Classe 1, pas MID. Sous le disjoncteur ou autour des câbles, aucune place sur le rail.', items:[['A9MEM1561','P63 · Clario 1P+N'],['A9MEM1570','Flex 63 A · toutes marques'],['A9MEM1580','Flex 160 A'],['A9MEM1590','Rope 200 A'],['A9MEM1591','Rope 600 A'],['A9MEM1592','Rope 1000 A'],['A9MEM1593','Rope 2000 A'],['LV434021','NSX 250 A 3P+N'],['LV434023','NSX 630 A 3P+N']]},
+      {id:'pm', t:'Centrales de mesure · qualité', s:'Grandeurs électriques, harmoniques, sur TI.', items:[['METSEPM3255','PM3255 · rail DIN'],['METSEPM5320','PM5320 · Ethernet']]},
+      {id:'ps', t:'Passerelles Panel Server', s:'Collectent le sans fil et le Modbus · pages web incluses, sans licence.', items:[['PAS400','Entry · 20 PowerTag, sans fil seul'],['PAS600','Universal · + Modbus RS485 (iEM, PM)'],['PAS800','Advanced · historique 3 ans, alarmes']]},
+    ],
+    sup:[['Panel Server','Pages web locales','sans licence','1 h'],['Energy Hub','Cloud + app mobile, multi-sites','25 CHF / appareil / an (Advanced 50)','quelques heures'],['PME Cloud','Multi-fluides, rapports, alarmes','< 3 kCHF / an','quelques jours'],['PME local','Sites critiques, qualité réseau','> 10 kCHF licences','jours – semaines']],
+    docs:[['Panorama comptage & mesure (PDF)','docs/schneider/panorama-comptage-mesure.pdf'],['Mini-catalogue PowerTag (PDF)','docs/schneider/catalogue-powertag.pdf'],['iEM3000 certifiés METAS (PDF)','docs/schneider/iem3000-metas.pdf'],['Gamme iEM3000 sur se.com ↗','https://www.se.com/ch/fr/product-range/61273/']]},
+  emob:{ title:'Panorama e-mobilité', sub:'Schneider · topologie type et produits', flow:'bornes',
+    rules:['Charge Pro en priorité (PPE, flottes). EVlink Pro AC seulement sur demande.','Peak Controller : Schneider Charge (villa) uniquement, jamais avec Charge Pro.','≥ 2 Charge Pro en dynamique → EV Charging Expert + mesure d\'intro (PowerTag selon le calibre) + Panel Server.','Mise en service Schneider dès 4 bornes, sinon par l\'électricien (app eSetup).'],
+    fams:[
+      {id:'bornes', t:'Bornes', s:'Charge Pro 22 kW bridable 11 kW, RFID, OCPP, protection DC incluse.', items:[['EVB4S22N40','Charge Pro · prise T2S'],['EVB4S22NC0','Charge Pro · câble 7 m'],['EVB4S22N40M','Charge Pro · prise + MID'],['EVB4S22NC0MG','Charge Pro · câble + MID + 4G'],['EVH5A22N2S','Schneider Charge · villa'],['EVB3S22N4','EVlink Pro AC · sur demande']]},
+      {id:'lm', t:'Gestion de charge', s:'Délestage dynamique, supervision web, décompte par badge.', items:[['HMIBX1A0NEVB100SCP','EV Charging Expert · ≥ 2 Charge Pro'],['R9MUX6M','Resi9 Energy Meter · 1 Charge Pro'],['EVA2HPC3','Peak Controller · villa'],['ABLM1A24012','Alimentation 24 V DC'],['MCSESU083FN0','Switch Ethernet 8 ports'],['EVP3MM','Routeur 4G au tableau']]},
+      {id:'meas', t:'Mesure d\'introduction', s:'Le calibre de l\'introduction fixe le capteur.', items:[['A9MEM1570','Directe ≤ 63 A · Flex 63 A'],['A9MEM1580','≤ 160 A · Flex 160 A'],['A9MEM1590','≤ 200 A · Rope 200 A'],['A9MEM1591','≤ 600 A · Rope 600 A'],['PAS400','Panel Server Entry'],['A9P54706','Clario 6 A 3LN · prise de tension']]},
+      {id:'dist', t:'Distribution & protection', s:'Canalis pour les parkings, câbles individuels sinon.', items:[['KNA100ED4306','Canalis KNA 100 A · élément 3 m'],['KNA100AB4','Alimentation latérale'],['KNB63LSFI25ACH','Kit par borne · type A'],['EVK8KN4PB25','Kit par borne · type B'],['C16F3TM125','NSX 125 A · protection de ligne'],['A9DC3740','FI/LS 3LN 40 A · par borne']]},
+      {id:'acc', t:'Accessoires & services', s:'Pieds, badges, mise en service.', items:[['EVA2PBS1','Pied 1 borne'],['EVA2PBS2','Pied 2 bornes'],['EVP1BNS','10 badges RFID'],['EVLIBN20_L_NC','Mise en service / borne (dès 4)'],['EVLIBN20','Mise en service · forfait jour']]},
+    ],
+    docs:[['Schneider Charge Pro sur se.com ↗','https://www.se.com/ch/fr/product/EVB4S22NC0MG/'],['EV Charging Expert sur se.com ↗','https://www.se.com/ch/fr/product/HMIBX1A0NEVB100SCP/'],['PowerTag Rope 200 A sur se.com ↗','https://www.se.com/ch/fr/product/A9MEM1590/']]},
+};
+// Familles du panorama par référence (pour le lien depuis la fiche produit)
+const PANO_OF={}; Object.entries(PANO).forEach(([k,p])=>p.fams.forEach(fm=>fm.items.forEach(([r])=>{ if(!PANO_OF[r]) PANO_OF[r]=k+'#'+fm.id; })));
+const seRefOf = it => it ? (it.mref || ((it.src==='se'||it.src==='projet')&&!/^SE-|^PRJ-/.test(it.f)?it.f:'') || ((window.FELLER_SEREFS||{})[it.e]||'')) : '';
+function panoSvg(k){
+  const N=(x,y,w,h,t,s,j,strong)=>`<g class="pn${j?' pj':''}${strong?' ps':''}" ${j?`data-panojump="${j}" role="button" tabindex="0"`:''}><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="12"/><text x="${x+w/2}" y="${y+(s?h/2-3:h/2+5)}" text-anchor="middle" class="t">${t}</text>${s?`<text x="${x+w/2}" y="${y+h/2+13}" text-anchor="middle" class="s">${s}</text>`:''}</g>`;
+  const A=(x1,y1,x2,y2,d)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="pa${d?' pd':''}" marker-end="url(#pah)"/>`;
+  const L=(x,y,t)=>`<text x="${x}" y="${y}" class="pl">${t}</text>`;
+  const defs='<defs><marker id="pah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="pah"/></marker></defs>';
+  if(k==='comptage') return `<svg viewBox="0 0 340 452" class="psvg" role="img" aria-label="Schéma de principe comptage">${defs}
+    ${N(70,6,200,40,'Réseau du distributeur','compteur GRD')}${A(170,46,170,66)}
+    ${L(8,80,'INTRODUCTION / TGBT')}${N(8,86,158,50,'PowerTag Rope / NSX','suivi, sans TI','pt')}${N(174,86,158,50,'iEM MID sur TI','facturation','ti')}${A(170,136,170,160)}
+    ${L(8,174,'DÉPARTS / LOGEMENTS')}${N(8,180,104,50,'PowerTag','Flex · P63','pt')}${N(118,180,104,50,'iEM MID','direct ≤ 125 A','direct')}${N(228,180,104,50,'PM5320','qualité','pm')}
+    ${A(60,230,140,276,1)}${A(170,230,170,276,1)}${A(280,230,200,276,1)}${L(18,262,'sans fil')}${L(262,262,'Modbus')}
+    ${N(70,278,200,50,'Panel Server','Entry · Universal · Advanced','ps',1)}${A(170,328,170,352)}${L(178,346,'Ethernet')}
+    ${L(8,366,'SUPERVISION')}${N(8,372,104,50,'Pages web','local','sup')}${N(118,372,104,50,'Energy Hub','cloud + app','sup')}${N(228,372,104,50,'EV Charging','Expert · bornes','evce')}
+    <text x="170" y="444" text-anchor="middle" class="pl">Touchez un bloc pour voir les produits</text></svg>`;
+  return `<svg viewBox="0 0 340 470" class="psvg" role="img" aria-label="Schéma de principe e-mobilité">${defs}
+    ${L(8,14,'TGBT · INTRODUCTION')}${N(8,20,104,50,'PowerTag','Flex / Rope','meas')}${N(118,20,104,50,'Panel Server','PAS400','meas')}${N(228,20,104,50,'Clario 6 A','prise tension','meas')}
+    ${A(60,70,60,96)}${L(8,110,'PROTECTION DE LIGNE')}${N(8,116,158,50,'NSX 125 A','ligne Canalis','dist')}${N(174,116,158,50,'FI/LS par borne','câbles individuels','dist')}
+    ${A(87,166,87,190)}${L(8,204,'DISTRIBUTION')}${N(8,210,324,50,'Canalis KNA + un kit par borne','LS + FI type A (B en option)','dist')}
+    ${A(170,260,170,284)}${L(8,298,'PARKING')}${N(8,304,74,50,'Charge Pro','1','bornes')}${N(91,304,74,50,'Charge Pro','2','bornes')}${N(174,304,74,50,'Charge Pro','3','bornes')}${N(258,304,74,50,'Charge Pro','n','bornes')}
+    ${A(82,329,91,329,1)}${A(165,329,174,329,1)}${A(248,329,258,329,1)}
+    ${L(8,380,'SOUS-DISTRIBUTION · ETHERNET')}${N(8,386,324,50,'EV Charging Expert + 24 V + switch','Ethernet vers bornes et Panel Server · 4G option','lm',1)}
+    ${A(60,386,60,354,1)}${A(280,386,280,354,1)}
+    <text x="170" y="462" text-anchor="middle" class="pl">Touchez un bloc pour voir les produits</text></svg>`;
+}
+function panoHtml(){
+  const p=PANO[view.k]||PANO.comptage; const card=([r,lab])=>{ const it=byF[r]; if(!it) return ''; const pr=priceOf(it);
+    return `<div class="pcard" data-open="${esc(it.f)}" role="button" tabindex="0"><div class="pcpic">${it.img?`<img src="${esc(it.img)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`:''}</div><b>${esc(lab)}</b><small class="num">${esc(seRefOf(it)||it.f)}${pr!=null?' · '+chf(pr):''}</small>${isNew(it)?'<span class="tag new">Nouveau</span>':''}<button class="pcadd" type="button" data-panoadd="${esc(it.f)}" aria-label="Ajouter">+</button></div>`; };
+  return `<div class="pano"><div class="res-head"><h1>${esc(p.title)}</h1><button class="btn primary" type="button" data-panoflow="${p.flow}">Configurer →</button></div>
+    <p class="psub">${esc(p.sub)}</p>
+    <div class="pschema">${panoSvg(view.k)}</div>
+    <details class="tips" open><summary>Règles à retenir</summary><ul>${p.rules.map(r=>`<li>${esc(r)}</li>`).join('')}</ul></details>
+    ${p.fams.map(fm=>`<section class="pfam" id="pf-${fm.id}"><h3>${esc(fm.t)}</h3><p>${esc(fm.s)}</p><div class="prow">${fm.items.map(card).join('')}</div></section>`).join('')}
+    ${p.sup?`<section class="pfam" id="pf-sup"><h3>Supervision</h3><p>Le Panel Server suffit souvent ; Energy Hub pour suivre à distance.</p><div class="ptab">${p.sup.map(s=>`<div><b>${esc(s[0])}</b><span>${esc(s[1])}</span><span>${esc(s[2])}</span><span>${esc(s[3])}</span></div>`).join('')}</div></section>`:''}
+    <section class="pfam"><h3>Documents</h3><div class="pdocs">${p.docs.map(d=>`<a href="${esc(d[1])}" target="_blank" rel="noopener">${esc(d[0])}</a>`).join('')}</div>
+    <div class="pswitch">${Object.entries(PANO).filter(([k])=>k!==view.k).map(([k,o])=>`<button class="btn small" type="button" data-panogo="${k}">${esc(o.title)} →</button>`).join('')}</div></section></div>`;
+}
+function panoClick(e){
+  const j=e.target.closest('[data-panojump]'); if(j){ const id=j.dataset.panojump==='evce'?null:j.dataset.panojump; if(!id){ go({name:'pano',k:'emob'}); return true; } const el=document.getElementById('pf-'+id); if(el){ el.scrollIntoView({behavior:'smooth',block:'start'}); el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'),900); } return true; }
+  const ad=e.target.closest('[data-panoadd]'); if(ad){ e.stopPropagation(); const it=byF[ad.dataset.panoadd]; if(it) addToList(it, ad, 1, false, (PANO[view.k]||{}).title); return true; }
+  const g=e.target.closest('[data-panogo]'); if(g){ const [k,f]=g.dataset.panogo.split('#'); $('pm').hidden=true; go({name:'pano',k}); if(f) setTimeout(()=>{ const el=document.getElementById('pf-'+f); if(el){ el.scrollIntoView({block:'start'}); el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'),900);} },60); return true; }
+  const fl=e.target.closest('[data-panoflow]'); if(fl){ startFlow(fl.dataset.panoflow); return true; }
+  return false;
+}
+
 function render(scroll){
   const v=$('view'); const same=lastRendered===view.name && !forceTop; forceTop=false;
   const y=window.scrollY;
@@ -1163,6 +1266,7 @@ function render(scroll){
   else if(view.name==='combo') v.innerHTML=comboHtml();
   else if(view.name==='offers') v.innerHTML=offersHtml();
   else if(view.name==='offerimp') v.innerHTML=offerimpHtml();
+  else if(view.name==='pano') v.innerHTML=panoHtml();
   if(view.name==='project'){ curProject=view; saveProject(); }
   lastRendered=view.name;
   const mode=scroll||(same?'keep':'top');
@@ -1258,7 +1362,8 @@ const SECTIONS = [
     {label:'Relais et interfaces', q:'relais iRTC'},
     {label:'Compteurs d\'énergie iEM (MID)', q:'Compteur d\'énergie iEM3'},
     {label:'PowerTag sans fil + Panel Server', q:'PowerTag'}]},
-  {id:'comptage', flow:'comptage', k:'Nouveau', t:'Comptage & mesure', s:'Compteurs MID pour refacturer (RCP, bornes), PowerTag + Panel Server pour le suivi', imgs:['SE-981831556','SE-560318105']},
+  {id:'comptage', flow:'comptage', k:'Nouveau', t:'Comptage & mesure', s:'Compteurs MID pour refacturer (RCP, bornes), PowerTag + Panel Server pour le suivi', imgs:['A9MEM3155','SE-560318105']},
+  {id:'pano_comptage', k:'Nouveau', t:'Panorama comptage & mesure', s:'Schéma de principe, quel compteur pour quel besoin, documents Schneider', imgs:['SE-981831486','SE-981832556'], open:()=>go({name:'pano',k:'comptage'})},
   {id:'surtension', flow:'surtension', k:'Bêta', t:'Protection surtension', s:'Type 1+2, type 2, compact Resi9, type 3 — avec déconnexion', imgs:['SE-808000507','SE-808000207']},
   {id:'surtension_all', t:'Surtension — tout voir', s:'iPRD compact Resi9, iPRD 40r, type 1+2, Quick', imgs:['SE-808000027','A9L16617'], groups:[
     {label:'Parafoudre compact Resi9 iPRD (type 2+3, 1 module)', q:'parasurtension Resi9 iPRD compact'},
@@ -1292,14 +1397,15 @@ const SECTIONS = [
     {label:'Variateurs Altivar', q:'convertisseur Altivar'},
     {label:'Boutons et voyants Harmony', q:'bouton Harmony'},
     {label:'Relais Zelio', q:'Zelio Relay'}]},
+  {id:'pano_emob', k:'Nouveau', t:'Panorama e-mobilité', s:'Topologie type (intro, Canalis, bornes, gestion), produits et règles', imgs:['EVB4S22NC0MG','HMIBX1A0NEVB100SCP'], open:()=>go({name:'pano',k:'emob'})},
   {id:'nouveautes', flow:'nouveautes', t:'Nouveautés 2025–2026', s:'Feller 4, Wiser, Clario, NEVO SNAPFIX, Charge Pro', imgs:['3400.D.T3.GMI.A.61','A9DSC3613'], k:'Nouveau'},
 ];
 // Groupes de l'accueil : éléments principaux → sous-tuiles. L'ordre des groupes est fixe, l'ordre et le masquage des tuiles restent personnalisables.
 const HOME_GROUPS=[
   {id:'ia', t:'Lecture automatique', s:'Photo, PDF, plan, cahier des charges', secs:['photo','import']},
   {id:'app', t:'Appareillage', s:'Interrupteurs, prises, smart home, extérieur', secs:['piece','combo','appareillage','smart','exterieur','knxse','nouveautes']},
-  {id:'tab', t:'Tableaux & protection', s:'Coffrets, disjoncteurs, peignes, parafoudres, TGBT', secs:['tableau','xs','protection','protection_all','surtension','surtension_all','comptage','accessoires','commande','tgbt','tgbt_all']},
-  {id:'ev', t:'E-mobilité', s:'Bornes, gestion de charge, Canalis', secs:['bornes','ev_all','canalis','canalis_all']},
+  {id:'tab', t:'Tableaux & protection', s:'Coffrets, disjoncteurs, peignes, parafoudres, TGBT', secs:['tableau','xs','protection','protection_all','surtension','surtension_all','comptage','pano_comptage','accessoires','commande','tgbt','tgbt_all']},
+  {id:'ev', t:'E-mobilité', s:'Bornes, gestion de charge, Canalis', secs:['bornes','pano_emob','ev_all','canalis','canalis_all']},
   {id:'nrj', t:'Énergie & industrie', s:'Onduleurs, industriel', secs:['asi','asi_all','industrie']},
 ];
 let homePrefs = store.get('offre.home', {order:[], hidden:[], collapsed:[]}); let organizing=false;
@@ -1396,7 +1502,7 @@ function resultsHtml(){
   const packHtml = packOn ? (()=>{ const skip=g=>/^(Référence catalogue exacte|Alternative)/i.test(g.label); const main=groups.filter(g=>g.items.length&&!g.opt&&!skip(g)), opts=groups.filter(g=>g.items.length&&g.opt&&!skip(g));
     const row=(g,i,chk)=>{ const it=g.items[0]; return `<label class="pk ${chk?'':'opt'}"><input type="checkbox" data-pk="${esc(it.f)}" data-q="${g.pq}" data-lbl="${esc(g.label)}" ${chk?'checked':''}><img src="${esc(it.img||'')}" alt="" onerror="this.style.visibility='hidden'"><span class="t"><b>${esc(g.label.replace(/^Référence catalogue exacte\s*:?\s*/i,'').replace(/\s*—\s*stock grossiste/i,''))}</b><small>${esc(it.d)} · ${it.e?'ELDAS '+esc(it.e):esc(it.f)}${g.gnote?' · '+esc(g.gnote.slice(0,110)):''}</small></span><span class="q num">${g.pq}×${priceOf(it)!=null?`<small class="pkp">${chf(priceOf(it)).replace('CHF ','')}</small>`:''}</span></label>`; };
     return `<section class="pack"><div class="ph"><b>Pack conseillé</b><small>${main.length} lignes${(()=>{ let t=0,k=0; main.forEach(g=>{ const v=priceOf(g.items[0]); if(v!=null){ t+=v*(+g.pq||1); k++; } }); return k?` · <b>${chf(t)} brut</b>${k<main.length?` (${main.length-k} sans prix)`:''}`:''; })()} · la référence recommandée pour chaque besoin · décoche ce que tu ne veux pas</small></div>${main.map((g,i)=>row(g,i,true)).join('')}${opts.length?`<div class="pu">Options à proposer au client</div>${opts.map((g,i)=>row(g,i,false)).join('')}`:''}<div class="pa"><button class="btn primary" type="button" id="packadd">Ajouter le pack à la liste</button><button class="btn" type="button" id="packalt" aria-expanded="${!!r.showAlt}">${r.showAlt?'Masquer le détail':'Voir le détail et les alternatives'}</button></div></section>`; })() : '';
-  return `${tipsHtml}<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig" title="L'assistant compose une offre type avec quantités, accessoires et options, prête à ajouter">Offre type par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':r.from==='project'?'Retour au relevé':'Retour'}</button>${r.origin==='project'&&curProject&&r.from!=='project'?`<button class="btn" type="button" data-goproject="1">Retour au relevé</button>`:''}`}</div>${packHtml}${packOn&&!r.showAlt?'':`${filtersOut}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}${r.brief?' · touche un produit pour sa fiche':''}</div>${body}${total?accHtml:''}`}`;
+  return `${tipsHtml}<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${(()=>{ const fl=r.wiz&&r.wiz.flow; const pk=fl==='comptage'?'comptage':(fl==='bornes'||fl==='canalis')?'emob':''; return pk?`<button class="btn" type="button" data-panogo="${pk}">Panorama</button>`:''; })()}${r.brief?`<button class="btn primary" type="button" id="askconfig" title="L'assistant compose une offre type avec quantités, accessoires et options, prête à ajouter">Offre type par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':r.from==='project'?'Retour au relevé':'Retour'}</button>${r.origin==='project'&&curProject&&r.from!=='project'?`<button class="btn" type="button" data-goproject="1">Retour au relevé</button>`:''}`}</div>${packHtml}${packOn&&!r.showAlt?'':`${filtersOut}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}${r.brief?' · touche un produit pour sa fiche':''}</div>${body}${total?accHtml:''}`}`;
 }
 
 function rowHtml(it){
@@ -1461,7 +1567,7 @@ function openSheet(f){
       ${accs?`<h4>Accessoires et pièces à prévoir</h4><div class="accs">${accs}</div>`:''}
       ${spec?`<details><summary style="cursor:pointer;color:var(--muted);font-size:13.5px">Toutes les caractéristiques (${(it.tech||[]).length})</summary><div class="spec">${spec}</div></details>`:''}
       ${it.note?`<p style="margin:8px 0 0;font-size:13.5px;color:var(--ink-2)">${esc(it.note)}</p>`:''}
-      <div class="links">${it.src==='sonepar'?`<a href="${makerUrl(it)}" target="_blank" rel="noopener">Fiche Schneider se.com (photos, docs, CAD) ↗</a>`:''}<a href="${docsUrl(it)}" target="_blank" rel="noopener">${it.src==='projet'?'Gamme Schneider (fiche, brochure) ↗':it.src==='se'?'Chercher sur se.com ↗':it.src==='sonepar'?'Fiche grossiste ↗':'Fiche produit, brochures, plans cotés ↗'}</a>${it.src==='projet'?`<a href="https://www.se.com/ch/fr/work/support/contact/" target="_blank" rel="noopener">Demander une offre Schneider ↗</a>`:it.src!=='sonepar'?`<a href="https://www.sonepar.ch/fr/search?q=${encodeURIComponent(it.e||it.f)}" target="_blank" rel="noopener">Prix et stock grossiste ↗</a>`:''}</div>
+      ${(()=>{ const pk=PANO_OF[seRefOf(it)]||PANO_OF[it.f]; return pk?`<button class="btn small" type="button" data-panogo="${pk}" style="margin:10px 0 0">Voir dans le ${esc(PANO[pk.split('#')[0]].title.replace('Panorama','panorama'))} →</button>`:''; })()}<div class="links">${seRefOf(it)&&!/^EVLIBN/.test(seRefOf(it))?`<a href="https://www.se.com/ch/fr/product/${encodeURIComponent(seRefOf(it))}/" target="_blank" rel="noopener">Fiche se.com ${esc(seRefOf(it))} ↗</a><a href="https://www.se.com/ch/fr/product/download-pdf/${encodeURIComponent(seRefOf(it))}" target="_blank" rel="noopener">Fiche technique PDF ↗</a>`:it.src==='sonepar'?`<a href="${makerUrl(it)}" target="_blank" rel="noopener">Fiche Schneider se.com (photos, docs, CAD) ↗</a>`:''}<a href="${docsUrl(it)}" target="_blank" rel="noopener">${it.src==='projet'?'Gamme Schneider (fiche, brochure) ↗':it.src==='se'?'Chercher sur se.com ↗':it.src==='sonepar'?'Fiche grossiste ↗':'Fiche produit, brochures, plans cotés ↗'}</a>${it.src==='projet'?`<a href="https://www.se.com/ch/fr/work/support/contact/" target="_blank" rel="noopener">Demander une offre Schneider ↗</a>`:it.src!=='sonepar'?`<a href="https://www.sonepar.ch/fr/search?q=${encodeURIComponent(it.e||it.f)}" target="_blank" rel="noopener">Prix et stock grossiste ↗</a>`:''}</div>
       <div class="buy"><div class="cqty"><button type="button" class="st" data-d="-1" aria-label="Moins">−</button><input id="pmqty" class="num" type="number" min="1" value="${inList?inList.q:1}" style="width:54px;text-align:center;border:1px solid var(--line-2);border-radius:999px;padding:6px 4px;background:var(--float)"><button type="button" class="st" data-d="1" aria-label="Plus">+</button></div><button class="btn primary" id="pmadd" type="button" data-f="${esc(it.f)}">${inList?'Ajouter encore':'Ajouter à la liste'}</button></div>
     </div></div>`;
   $('pm').hidden=false;
@@ -1876,6 +1982,7 @@ function projectGroups(v){
 $('home').onclick=()=>{ $('q').value=''; go({name:'home'}); };
 document.addEventListener('click',e=>{
   if(e.target.closest('[data-home]')){ go({name:'home'}); return; }
+  if(panoClick(e)) return;
   const fxb=e.target.closest('[data-fx]'); if(fxb&&view.name==='results'){ if(fxb.dataset.fx==='reset') view.fx={}; else { view.fx=view.fx||{}; view.fx[fxb.dataset.fx]=view.fx[fxb.dataset.fx]===fxb.dataset.fv?'':fxb.dataset.fv; } render('keep'); return; }
   if(e.target.closest('[data-goffers]')){ go({name:'offers'}); return; }
   if(e.target.id==='hnewoffer'){ if(list.length&&!confirm('Commencer une nouvelle offre ? La liste actuelle reste dans « Mes offres ».')) return; newOffer(); render('keep'); toast('Nouvelle offre prête',null,'ok'); return; }
