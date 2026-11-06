@@ -38,3 +38,13 @@
 ## Règle projet multi-bornes (03.11.2026)
 - Dès 2 Charge Pro avec gestion dynamique : EcoStruxure EV Charging Expert + alimentation 24 V DC (ABLM1A24012) + switch Ethernet + compteur de tête Modbus : ≤ 63 A iEM3155 direct ; > 63 A iEM3255 + 3 TI (200/5 A jusqu'à 160 A, 250/5 A jusqu'à 250 A, 400/5 A au-delà). Les TI sont toujours listés.
 - Montage Charge Pro : mural sans accessoire ; sur pied EVA2PBS2 (2 bornes) / EVA2PBS1 (1 borne).
+
+## Règles terrain (v13y · 6.11.2026 — liste matériel KBSE + liste de prix EV 06/2026)
+- **Gamme** : Schneider Charge Pro en priorité (PPE et flottes). EVlink Pro AC uniquement sur demande.
+- **Mise en service Schneider dès 4 bornes** : EVLIBN20_L_NC 180 CHF/borne ; forfait jour EVLIBN20 1 927 CHF quand il revient moins cher (≈ dès 11 bornes ; max 16 bornes/jour, 10 avec EVCE). Moins de 4 bornes : électricien (app eSetup), noté sur la ligne borne.
+- **Mesure d'intro (EV Charging Expert)** selon l'introduction : ≤ 63 A PowerTag Flex 63 A A9MEM1570 · ≤ 160 A Flex 160 A A9MEM1580 · ≤ 200 A Rope 200 A A9MEM1590 · ≤ 600 A Rope 600 A A9MEM1591 · > 600 A PM5320 + 3 TI ouvrants METSECT5HG050. Toujours + Panel Server Entry PAS400 + Clario 6 A 3LN A9P54706 (prise de tension). Remplace iEM3155 / iEM3255 + TI.
+- **Autour de l'EVCE** : alim 24 V ABLM1A24012, switch Modicon MCSESU053FN0 (≤ 3 bornes) / MCSESU083FN0, LSC 6 A optionnel, modem EVP3MM si 4G.
+- **Canalis** (bornes) : élément 3 m KNA40ED4303 / KNA63-100-160ED4306, alimentation KNA63/100/160AB4, kit par borne KNB63LSFI25ACH (type A, Charge Pro) ou EVK8KN4PB25/40 (type B, option), étriers KNB160ZF1, protection de ligne : 40 A iC40 A9P54740 · 63 A iC60N A9F74463 · 100 A NSX 125 C16F3TM125 · 160 A NSX160.
+- **Câbles individuels** : FI/LS Clario A9DC3740 (22 kW) / A9DC3720 (11 kW) + iMNX ; option type B-EV A9Z51440 + A9P54740.
+- **Prix bruts** : `window.EV_GROSS` dans emob.js (réf. + ELDAS), utilisés quand aucun prix n'est importé ; total brut affiché dans le Pack conseillé.
+- **Format d'offre du KAM (mail D. Wagner 3.11.2026)** : mail court à l'installateur + grossiste en copie ; 3 pièces jointes (liste matériel Excel prix brut à transmettre au grossiste, liste de prix EV 2026, schéma unifilaire simplifié) ; arguments borne en puces (câble 7 m ou prise, Wi-Fi, Bluetooth, RFID, protection DC incluse, app iOS/Android, OCPP) ; serveur bornes (délestage dynamique, page web, décompte CSV par badge, connectable à un opérateur Move / Swisscharge) ; mesure d'intro PowerTag + passerelle ; « câblage derrière les compteurs d'appartement ou compteur commun possible ».
