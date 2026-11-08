@@ -133,7 +133,7 @@ main{padding:8px clamp(16px,1.6vw,28px) 80px;min-width:0}
 /* ---------- results ---------- */
 .res-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 12px}
 .res-head h1{font-size:clamp(22px,2.6vw,30px);font-weight:500;margin:0;letter-spacing:-.03em;flex:1;min-width:200px}
-.facets{display:flex;flex-direction:column;gap:6px;margin:0 0 14px}.frow{display:flex;align-items:center;gap:8px;min-width:0}.frow>b{flex:0 0 92px;font-size:12px;font-weight:600;color:var(--muted);line-height:1.2}.fopts{display:flex;gap:6px;overflow-x:auto;flex:1;min-width:0;padding:2px 0;scrollbar-width:none;align-items:center}.fopts::-webkit-scrollbar{display:none}.fopts .chip{flex:none;white-space:nowrap}.fopts .chip small{opacity:.55;font-size:11px;margin-left:2px}.frow.fend{padding-top:2px}.frow.fend>b{color:var(--ink-3);font-weight:500}.fcount{font-size:12.5px;color:var(--muted);white-space:nowrap;margin-left:4px}@media (max-width:760px){.frow>b{flex-basis:74px;font-size:11.5px}}
+.facets{margin:0 0 14px}.fbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.fbtn{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.fbtn i{font-style:normal;font-size:10px;opacity:.6}.fbtn b{font-weight:600}.fpanel{margin-top:8px;padding:10px;border:1px solid var(--rim);border-radius:14px;background:var(--glass-3);box-shadow:var(--shadow)}.fph{display:flex;align-items:center;gap:6px;margin-bottom:8px}.fph b{flex:1;font-size:14px}.fpo{display:flex;flex-wrap:wrap;gap:6px}.fpo .chip small{opacity:.55;font-size:11px}@media (max-width:760px){.fbar{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px;padding:2px 16px 4px;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent)}.fbar::-webkit-scrollbar{display:none}.fbar .chip{flex:none}}
 .filters{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px;align-items:center}
 .chip{border:1px solid var(--rim);background:var(--glass-3);border-radius:999px;padding:6px 13px;font-size:13px;color:var(--muted);box-shadow:var(--shadow)}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
@@ -1762,8 +1762,8 @@ const FACETS={
   prot:{l:'Protection', rx:/^(disjoncteur|interrupteur diff|interrupteur différen|interrupteur de charge|interrupteur-sectionneur)|\bClario\b|\biC60|\biID\b|\biDP|NG125|ComPacT|Resi9 .*(disj|diff)/i, rows:[
     {k:'fn',l:'Appareil',o:[FR('Disjoncteur (LS)',/^disjoncteur(?! de puissance)(?!.*(diff|FI\/LS|iDP|Vigi))/i),['Disj. différentiel (FI/LS)',it=>FX_DIFF.test(FXT(it))],FR('Interrupteur diff. (FI)',/^interrupteur diff|\biID\b/i),FR('Disj. de puissance',/disjoncteur de puissance|ComPacT|\bNSX/i),FR('Sectionneur',/^interrupteur de charge|sectionneur|\biSW\b/i)]},
     {k:'amp',l:'Calibre',get:FX_AMP,num:1},
+    {k:'crv',l:'Courbe',o:[FR('B',/\(B\)|\bcar\.? ?B\b|\sB\s?\d{1,3}\s?A|\bB\d{1,2}A?\b/),FR('C',/\(C\)|\bcar\.? ?C\b|\sC\s?\d{1,3}\s?A|\bC\d{1,2}A?\b/),FR('D',/\(D\)|\bcar\.? ?D\b|\sD\s\d{1,3}\s?A/),FR('K',/\(K\)|\sK\s\d{1,3}\s?A/),FR('Z',/\(Z\)|\sZ\s\d{1,3}\s?A/)]},
     {k:'pol',l:'Pôles',get:FX_POLES,order:['1P','1P+N','2P','3P','3P+N','4P']},
-    {k:'crv',l:'Courbe',o:[FR('B',/\(B\)|\bcar\.? ?B\b|\sB\s?\d{1,3}\s?A|\bB\d{1,2}A?\b/),FR('C',/\(C\)|\bcar\.? ?C\b|\sC\s?\d{1,3}\s?A|\bC\d{1,2}A?\b/),FR('D',/\(D\)|\bcar\.? ?D\b|\sD\s\d{1,3}\s?A/)]},
     {k:'typ',l:'Type FI',o:[FR('Type A',/\bt\.A\b|type A\b|\bA 1UM|classe A|\s0[.,]03A A\b|\sA\s\d?UM/),FR('Type F / Si',/\bt\.(F|Si)\b|\bF 1UM|classe Si|cl\.Si|A-SI|type F\b/i),FR('Type B / B-EV',/type B|B-EV|B-SI|\bt\.B\b/i)]},
     {k:'ma',l:'Sensibilité',o:[FR('30 mA',/0[.,]03\s?A|30\s?mA/),FR('300 mA',/0[.,]3\s?A(?!\d)|300\s?mA/)]},
     {k:'ka',l:'Pouvoir de coupure',get:it=>{ const m=(it.d||'').match(/(\d{1,3}(?:[.,]\d)?)\s?kA\b/); return m?m[1].replace('.',',')+' kA':null; },num:1}]},
@@ -1798,11 +1798,14 @@ function facetFilter(items, fx, skip){ const cat=facetCat(items); if(!cat||!fx) 
 function fxOpts(f,items){ const c={}; if(f.get){ items.forEach(it=>{ const v=f.get(it); if(v) c[v]=(c[v]||0)+1; }); let ks=Object.keys(c); if(f.order) ks.sort((a,b)=>((f.order.indexOf(a)+1)||99)-((f.order.indexOf(b)+1)||99)); else if(f.num) ks=ks.sort((a,b)=>c[b]-c[a]).slice(0,14).sort((a,b)=>parseFloat(a.replace(',','.'))-parseFloat(b.replace(',','.'))); else ks.sort((a,b)=>c[b]-c[a]||a.localeCompare(b,'fr',{numeric:true})); return ks.slice(0,14).map(k=>[k,c[k]]); }
   return f.o.map(o=>[o[0],items.filter(o[1]).length]).filter(x=>x[1]>0); }
 function facetsHtml(items, extra=''){ const cat=facetCat(items); if(!cat) return null; const C=FACETS[cat]; const fx=view.fx||{};
-  const rows=C.rows.map(f=>{ const base=facetFilter(items,fx,f.k); let opts=fxOpts(f,base); const cur=fx[f.k]; if(cur){ const i=opts.findIndex(o=>o[0]===cur); const o=i>=0?opts.splice(i,1)[0]:[cur,0]; opts.unshift(o); } if(opts.length<2&&!cur) return null; if(!cur&&opts.every(o=>o[1]===base.length)) return null;
-    return {f, cur, html:`<div class="frow"><b>${esc(f.l)}</b><div class="fopts">${opts.map(([v,n])=>`<button class="chip" type="button" data-fx="${f.k}" data-fv="${esc(v)}" aria-pressed="${cur===v}">${esc(v)}${cur===v?'':` <small>${n}</small>`}</button>`).join('')}</div></div>`}; }).filter(Boolean);
-  const LIM=3; const more=!!view.fxMore; const vis=rows.filter((r,i)=>i<LIM||more||r.cur); const hid=rows.length-vis.length;
+  // Barre compacte (1 ligne) : un bouton par critère « Calibre ▾ » ; le critère ouvert déplie ses options juste en dessous (avec le nombre d'articles).
+  const rows=C.rows.map(f=>{ const base=facetFilter(items,fx,f.k); const opts=fxOpts(f,base); const cur=fx[f.k]; if(!cur&&(opts.length<2||opts.every(o=>o[1]===base.length))) return null; return {f,cur,opts}; }).filter(Boolean);
+  if(!rows.length) return `<div class="facets" data-cat="${cat}"><div class="fbar">${extra}</div></div>`;
+  const open=rows.find(r=>r.f.k===view.fxOpen);
   const any=Object.values(fx).some(Boolean);
-  return `<div class="facets" data-cat="${cat}">${vis.map(r=>r.html).join('')}<div class="frow fend"><b></b><div class="fopts">${hid?`<button class="chip" type="button" data-fxmore="1">+ ${hid} filtre${hid>1?'s':''}</button>`:(rows.length>LIM&&more?`<button class="chip" type="button" data-fxmore="0">Moins de filtres</button>`:'')}${extra}${any?`<button class="chip x" type="button" data-fx="reset">Réinitialiser</button>`:''}</div></div></div>`; }
+  const bar=rows.map(r=>`<button class="chip fbtn" type="button" data-fxopen="${r.f.k}" aria-pressed="${!!r.cur}" aria-expanded="${open===r}">${r.cur?`${esc(r.f.l)} : <b>${esc(r.cur)}</b>`:esc(r.f.l)} <i>${open===r?'▴':'▾'}</i></button>`).join('');
+  const panel=open?`<div class="fpanel"><div class="fph"><b>${esc(open.f.l)}</b>${open.cur?`<button class="chip x" type="button" data-fx="${open.f.k}" data-fv="">Effacer</button>`:''}<button class="chip" type="button" data-fxopen="${open.f.k}">Fermer</button></div><div class="fpo">${open.opts.map(([v,n])=>`<button class="chip" type="button" data-fx="${open.f.k}" data-fv="${esc(v)}" aria-pressed="${open.cur===v}">${esc(v)} <small>${n}</small></button>`).join('')}</div></div>`:'';
+  return `<div class="facets" data-cat="${cat}"><div class="fbar">${any?`<button class="chip x" type="button" data-fx="reset">Tout effacer</button>`:''}${bar}<span class="fsep"></span>${extra}</div>${panel}</div>`; }
 function resultsHtml(){
   const r=view;
   const anyF = F.design||F.mount||F.ip||F.nw;
@@ -2317,8 +2320,8 @@ $('home').onclick=()=>{ $('q').value=''; go({name:'home'}); };
 document.addEventListener('click',e=>{
   if(e.target.closest('[data-home]')){ go({name:'home'}); return; }
   if(panoClick(e)) return;
-  const fxm=e.target.closest('[data-fxmore]'); if(fxm&&view.name==='results'){ view.fxMore=fxm.dataset.fxmore==='1'; render('keep'); return; }
-  const fxb=e.target.closest('[data-fx]'); if(fxb&&view.name==='results'){ if(fxb.dataset.fx==='reset') view.fx={}; else { view.fx=view.fx||{}; view.fx[fxb.dataset.fx]=view.fx[fxb.dataset.fx]===fxb.dataset.fv?'':fxb.dataset.fv; } render('keep'); return; }
+  const fxo=e.target.closest('[data-fxopen]'); if(fxo&&view.name==='results'){ view.fxOpen=view.fxOpen===fxo.dataset.fxopen?null:fxo.dataset.fxopen; render('keep'); return; }
+  const fxb=e.target.closest('[data-fx]'); if(fxb&&view.name==='results'){ if(fxb.dataset.fx==='reset') view.fx={}; else { view.fx=view.fx||{}; view.fx[fxb.dataset.fx]=fxb.dataset.fv==='' ? '' : (view.fx[fxb.dataset.fx]===fxb.dataset.fv?'':fxb.dataset.fv); } view.fxOpen=null; render('keep'); return; }
   if(e.target.closest('[data-goffers]')){ go({name:'offers'}); return; }
   if(e.target.id==='hnewoffer'){ if(list.length&&!confirm('Commencer une nouvelle offre ? La liste actuelle reste dans « Mes offres ».')) return; newOffer(); render('keep'); toast('Nouvelle offre prête',null,'ok'); return; }
   const oh=e.target.closest('[data-oopenh]'); if(oh){ const o=OFFERS.find(x=>x.id===oh.dataset.oopenh); if(o){ if(o.id!==curOfferId) loadOffer(o); openList(); render('keep'); } return; }
