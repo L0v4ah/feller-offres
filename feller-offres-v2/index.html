@@ -428,6 +428,31 @@ body:has(#drawer:not([hidden])) .toast{bottom:auto;top:14px}
 .ptab{display:flex;flex-direction:column;gap:6px}.ptab div{display:grid;grid-template-columns:1fr;gap:1px;background:var(--float);border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:13px}.ptab span{color:var(--ink-2)}
 @media(min-width:640px){.ptab div{grid-template-columns:1.1fr 2fr 1.6fr 1fr;align-items:center}}
 .pdocs{display:flex;flex-direction:column;gap:8px;font-size:14px}.pswitch{margin-top:14px}
+
+/* Accueil par domaine : portes d'entrée typées */
+.tile .txt{flex:1}
+.tacts{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 14px}
+.tact,.mtab,.mtag{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:13px;font-weight:600;border-radius:999px;padding:7px 12px;min-height:36px;cursor:pointer;border:1px solid var(--line-2);background:var(--float);color:var(--ink)}
+.tact svg,.mtab svg,.mtag svg{width:15px;height:15px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.tact.t-cfg,.mtab.t-cfg.on,.mtag.t-cfg{background:var(--pine);border-color:var(--pine);color:var(--on-pine,#fff)}
+.tact.t-ia,.mtag.t-ia{background:var(--butter,#f2c94c);border-color:transparent;color:#3b3000}
+.tact.t-pano,.mtab.t-pano{color:var(--pine);border-color:color-mix(in srgb,var(--pine) 45%,transparent)}
+.mtab.t-pano.on{background:var(--accent-soft);border-color:var(--pine);color:var(--pine)}
+.mtab.t-cat.on{background:var(--ink);border-color:var(--ink);color:var(--on-ink,#fff)}
+.tact.t-cfg+.tact.t-cfg{background:var(--float);color:var(--pine);border-color:color-mix(in srgb,var(--pine) 45%,transparent)}
+.tact:hover,.mtab:hover{filter:brightness(1.06)}
+.mbar{display:flex;gap:6px;margin:0 0 14px;flex-wrap:wrap}
+.mbar .mtab{flex:0 0 auto}
+.mbar.one .mtag{cursor:default;min-height:30px;padding:4px 11px;font-size:12px}
+@media (max-width:700px){
+  .tile .pic{height:84px}
+  .tile .txt{padding:10px 12px 10px}.tile .txt b{font-size:15.5px}.tile .txt span{font-size:12.5px}
+  .tacts{flex-direction:column;padding:0 10px 10px;gap:5px}
+  .tact{justify-content:center;width:100%}
+  .tile.wide{grid-column:span 2}
+  .tile.wide .tacts{flex-direction:row;flex-wrap:nowrap}.tile.wide .tact{width:auto;flex:1;padding:7px 6px}
+  .mbar{display:grid;grid-auto-flow:column;grid-auto-columns:1fr}.mbar.one{display:flex}.mbar .mtab{justify-content:center;padding:7px 8px}
+}
 </style>
 </head>
 <body>
@@ -1236,7 +1261,7 @@ function panoSvg(k){
 function panoHtml(){
   const p=PANO[view.k]||PANO.comptage; const card=([r,lab])=>{ const it=byF[r]; if(!it) return ''; const pr=priceOf(it);
     return `<div class="pcard" data-open="${esc(it.f)}" role="button" tabindex="0"><div class="pcpic">${it.img?`<img src="${esc(it.img)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`:''}</div><b>${esc(lab)}</b><small class="num">${esc(seRefOf(it)||it.f)}${pr!=null?' · '+chf(pr):''}</small>${isNew(it)?'<span class="tag new">Nouveau</span>':''}<button class="pcadd" type="button" data-panoadd="${esc(it.f)}" aria-label="Ajouter">+</button></div>`; };
-  return `<div class="pano"><div class="res-head"><h1>${esc(p.title)}</h1><button class="btn primary" type="button" data-panoflow="${p.flow}">Configurer →</button></div>
+  return `<div class="pano">${modeBar('pano_'+view.k)}<div class="res-head"><h1>${esc(p.title)}</h1></div>
     <p class="psub">${esc(p.sub)}</p>
     <div class="pschema">${panoSvg(view.k)}</div>
     <details class="tips" open><summary>Règles à retenir</summary><ul>${p.rules.map(r=>`<li>${esc(r)}</li>`).join('')}</ul></details>
@@ -1400,16 +1425,44 @@ const SECTIONS = [
   {id:'pano_emob', k:'Nouveau', t:'Panorama e-mobilité', s:'Topologie type (intro, Canalis, bornes, gestion), produits et règles', imgs:['EVB4S22NC0MG','HMIBX1A0NEVB100SCP'], open:()=>go({name:'pano',k:'emob'})},
   {id:'nouveautes', flow:'nouveautes', t:'Nouveautés 2025–2026', s:'Feller 4, Wiser, Clario, NEVO SNAPFIX, Charge Pro', imgs:['3400.D.T3.GMI.A.61','A9DSC3613'], k:'Nouveau'},
 ];
-// Groupes de l'accueil : éléments principaux → sous-tuiles. L'ordre des groupes est fixe, l'ordre et le masquage des tuiles restent personnalisables.
+// Accueil : une tuile par domaine, avec ses portes d'entrée typées (Configurer = parcours guidé, Panorama = schéma de principe + gamme, Catalogue = toutes les références).
+const ATYPE={cfg:['Configurer','parcours guidé'],pano:['Panorama','schéma + gamme'],cat:['Catalogue','toutes les réf.'],ia:['Lecture IA','photo / PDF']};
+const AICON={cfg:'<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h7M12 4h2M2 12h2M7 12h7"/><circle cx="10.5" cy="4" r="1.6"/><circle cx="5.5" cy="12" r="1.6"/></svg>',pano:'<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="1.5" width="5" height="3.5" rx="1"/><rect x="1.5" y="11" width="5" height="3.5" rx="1"/><rect x="9.5" y="11" width="5" height="3.5" rx="1"/><path d="M8 5v3M4 11V8h8v3"/></svg>',cat:'<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>',ia:'<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="4" width="13" height="9.5" rx="2"/><circle cx="8" cy="8.7" r="2.4"/><path d="M5.5 4l1-1.8h3l1 1.8"/></svg>'};
+const HOME_TILES=[
+  {id:'photo', t:'Photo ou PDF express', s:'Offre concurrente, fiche, étiquette → variante Feller / Schneider', sec:'photo', acts:[['Analyser','photo','ia']]},
+  {id:'import', t:'Plan ou cahier des charges', s:'Relevé pièce par pièce → liste de matériel', sec:'import', acts:[['Analyser','import','ia']]},
+  {id:'piece', t:'Pack par pièce', s:'Séjour, cuisine, SdB, extérieur : le pack Feller type en une minute', sec:'piece', acts:[['Configurer','piece','cfg']]},
+  {id:'combo', t:'Combinaison', s:'Plaque multiple : chaque emplacement, cadres prestige', sec:'combo', acts:[['Composer','combo','cfg']]},
+  {id:'appareillage', t:'Appareillage', s:'Interrupteurs, prises, USB, variateurs', sec:'appareillage', acts:[['Configurer','appareillage','cfg']]},
+  {id:'smart', t:'Smart home & KNX', s:'Wiser, KNX, Matter · KNX Schneider SpaceLogic', sec:'smart', acts:[['Configurer','smart','cfg'],['Catalogue KNX','knxse','cat']]},
+  {id:'exterieur', t:'Extérieur & humide', s:'NEVO, IP44 et plus', sec:'exterieur', acts:[['Configurer','exterieur','cfg']]},
+  {id:'nouveautes', k:'Nouveau', t:'Nouveautés 2025–2026', s:'Feller 4, Wiser, Clario, NEVO SNAPFIX, Charge Pro', sec:'nouveautes', acts:[['Découvrir','nouveautes','cfg']]},
+  {id:'tableau', t:'Tableaux', s:'Resi9, PrismaSeT, Clario iC40 — composeur par usage', sec:'tableau', acts:[['Configurer','tableau','cfg'],['Express XS','xs','cfg']]},
+  {id:'protection', t:'Disjoncteurs & différentiels', s:'Le bon Clario iC40 par circuit, type A / F / B', sec:'protection', acts:[['Configurer','protection','cfg'],['Catalogue','protection_all','cat']]},
+  {id:'accessoires', t:'Peignes, borniers, rails', s:'Peignes Clario 1LN / 3LN, capuchons, rails DIN, obturateurs', sec:'accessoires', acts:[['Catalogue','accessoires','cat']]},
+  {id:'surtension', t:'Protection surtension', s:'Type 1+2, type 2, compact Resi9, type 3', sec:'surtension', acts:[['Configurer','surtension','cfg'],['Catalogue','surtension_all','cat']]},
+  {id:'comptage', t:'Comptage & mesure', s:'Compteurs MID pour refacturer, PowerTag + Panel Server pour suivre', sec:'comptage', acts:[['Configurer','comptage','cfg'],['Panorama','pano_comptage','pano']]},
+  {id:'commande', t:'Commande', s:'Contacteurs, télérupteurs, minuteries, horloges', sec:'commande', acts:[['Catalogue','commande','cat']]},
+  {id:'tgbt', t:'TGBT & armoires', s:'Courant de tête, PrismaSeT XL / G / P, NSX, parafoudre', sec:'tgbt', acts:[['Configurer','tgbt','cfg'],['Catalogue','tgbt_all','cat']]},
+  {id:'bornes', t:'Bornes de recharge', s:'Charge Pro, Schneider Charge, EVlink, gestion de charge, mesure d\'intro', sec:'bornes', acts:[['Configurer','bornes','cfg'],['Panorama','pano_emob','pano'],['Catalogue','ev_all','cat']]},
+  {id:'canalis', t:'Canalis — gaine à barres', s:'Bornes, atelier, éclairage : ligne, boîtes de sortie, fixation', sec:'canalis', acts:[['Configurer','canalis','cfg'],['Panorama','pano_emob','pano'],['Catalogue','canalis_all','cat']]},
+  {id:'asi', t:'Onduleur / ASI', s:'Easy UPS, APC, 3S, Galaxy', sec:'asi', acts:[['Configurer','asi','cfg'],['Catalogue','asi_all','cat']]},
+  {id:'industrie', t:'Industriel', s:'TeSys, démarreurs, Altivar, Harmony', sec:'industrie', acts:[['Catalogue','industrie','cat']]},
+];
+HOME_TILES.forEach(t=>{ const sc=SECTIONS.find(x=>x.id===t.sec)||{}; t.imgs=sc.imgs; t.imgq=sc.imgq; });
 const HOME_GROUPS=[
   {id:'ia', t:'Lecture automatique', s:'Photo, PDF, plan, cahier des charges', secs:['photo','import']},
-  {id:'app', t:'Appareillage', s:'Interrupteurs, prises, smart home, extérieur', secs:['piece','combo','appareillage','smart','exterieur','knxse','nouveautes']},
-  {id:'tab', t:'Tableaux & protection', s:'Coffrets, disjoncteurs, peignes, parafoudres, TGBT', secs:['tableau','xs','protection','protection_all','surtension','surtension_all','comptage','pano_comptage','accessoires','commande','tgbt','tgbt_all']},
-  {id:'ev', t:'E-mobilité', s:'Bornes, gestion de charge, Canalis', secs:['bornes','pano_emob','ev_all','canalis','canalis_all']},
-  {id:'nrj', t:'Énergie & industrie', s:'Onduleurs, industriel', secs:['asi','asi_all','industrie']},
+  {id:'app', t:'Appareillage', s:'Interrupteurs, prises, smart home, extérieur', secs:['piece','combo','appareillage','smart','exterieur','nouveautes']},
+  {id:'tab', t:'Tableaux & protection', s:'Coffrets, disjoncteurs, parafoudres, comptage, TGBT', secs:['tableau','protection','accessoires','surtension','comptage','commande','tgbt']},
+  {id:'ev', t:'E-mobilité', s:'Bornes, gestion de charge, Canalis', secs:['bornes','canalis']},
+  {id:'nrj', t:'Énergie & industrie', s:'Onduleurs, industriel', secs:['asi','industrie']},
 ];
+// Domaine et type de la vue courante → barre « Configurer · Panorama · Catalogue » en tête de vue.
+function secOfView(v){ v=v||view; if(!v) return ''; if(v.name==='pano') return 'pano_'+v.k; if(v.name==='wizard') return v.flow; if(v.name==='combo') return 'combo'; if(v.name==='results'){ if(v.sec) return v.sec; if(v.wiz&&v.wiz.flow) return v.wiz.flow; } return ''; }
+function modeBar(sec){ if(!sec) return ''; const d=HOME_TILES.find(t=>t.acts.some(a=>a[1]===sec)); if(!d) return ''; const cur=d.acts.find(a=>a[1]===sec); if(d.acts.length<2) return `<div class="mbar one"><span class="mtag t-${cur[2]}">${AICON[cur[2]]}${ATYPE[cur[2]][0]}</span></div>`;
+  return `<div class="mbar" role="tablist" aria-label="${esc(d.t)}">${d.acts.map(a=>`<button type="button" role="tab" class="mtab t-${a[2]} ${a[1]===sec?'on':''}" aria-selected="${a[1]===sec}" data-act="${a[1]}">${AICON[a[2]]}<span>${esc(a[0])}</span></button>`).join('')}</div>`; }
 let homePrefs = store.get('offre.home', {order:[], hidden:[], collapsed:[]}); let organizing=false;
-function orderedSections(){ const ord=homePrefs.order||[]; const byId=Object.fromEntries(SECTIONS.map(x=>[x.id,x])); const out=ord.map(id=>byId[id]).filter(Boolean); SECTIONS.forEach(x=>{ if(!out.includes(x)) out.push(x); }); return out; }
+function orderedSections(){ const ord=homePrefs.order||[]; const byId=Object.fromEntries(HOME_TILES.map(x=>[x.id,x])); const out=ord.map(id=>byId[id]).filter(Boolean); HOME_TILES.forEach(x=>{ if(!out.includes(x)) out.push(x); }); return out; }
 function saveHome(){ store.set('offre.home', homePrefs); }
 
 function offersStripHtml(){ try{ autosaveOffer(); }catch(e){} const cur=OFFERS.find(o=>o.id===curOfferId); const rec=OFFERS.filter(o=>o.id!==curOfferId).slice(0,3); const d=t=>t?new Date(t).toLocaleDateString('fr-CH',{day:'2-digit',month:'2-digit'}):'';
@@ -1417,15 +1470,16 @@ function offersStripHtml(){ try{ autosaveOffer(); }catch(e){} const cur=OFFERS.f
   <div class="oschips">${cur?`<button type="button" class="ochip cur" data-oopenh="${cur.id}"><b>En cours · ${esc(cur.no)}</b><span>${esc(cur.client||'Sans client')} · ${cur.refs||0} réf.${cur.total?' · '+chf(cur.total):''}</span></button>`:`<span class="ochip empty">Aucune offre en cours : ajoute des articles, elle se crée toute seule</span>`}${rec.map(o=>`<button type="button" class="ochip" data-oopenh="${o.id}"><b>${esc(o.client||'Sans client')}</b><span>${esc(o.no)} · ${d(o.updated||o.created)} · ${OSTAT[o.status||'brouillon'][0]}</span></button>`).join('')}</div></section>`; }
 function homeHtml(){
   const secs=orderedSections(); const hidden=new Set(homePrefs.hidden||[]);
-  const tile=(t,i,arr)=>`<div class="tile ${organizing?'org':''}" role="button" tabindex="0" data-sec="${t.id}" draggable="${organizing}">${t.k?`<span class="k ${t.k==='Bêta'?'kb':''}">${t.k}</span>`:''}
+  const tile=(t,i,arr)=>`<div class="tile ${organizing?'org':''} ${t.acts.length>2?'wide':''}" role="button" tabindex="0" data-sec="${t.id}" draggable="${organizing}">${t.k?`<span class="k">${t.k}</span>`:''}
       ${organizing?`<span class="orgbar"><button type="button" class="ob" data-move="-1" data-sec="${t.id}" title="Monter" ${i===0?'disabled':''}>▲</button><button type="button" class="ob" data-move="1" data-sec="${t.id}" title="Descendre" ${i===arr.length-1?'disabled':''}>▼</button><button type="button" class="ob" data-hide="${t.id}" title="Masquer">Masquer</button></span>`:''}
       <div class="pic multi">${(t.imgs||t.imgq||[]).map(i=>{ const src=t.imgs?PIC(i):((searchFallback(i,{},1).items[0]||{}).img||''); return `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`; }).join('')}</div>
-      <div class="txt"><b>${esc(t.t)}</b><span>${esc(t.s)}</span></div></div>`;
+      <div class="txt"><b>${esc(t.t)}</b><span>${esc(t.s)}</span></div>
+      ${organizing?'':`<div class="tacts">${t.acts.map(a=>`<button type="button" class="tact t-${a[2]}" data-act="${a[1]}" title="${esc(ATYPE[a[2]][0]+' · '+ATYPE[a[2]][1])}">${AICON[a[2]]}<span>${esc(a[0])}</span></button>`).join('')}</div>`}</div>`;
   const shown=secs.filter(t=>!hidden.has(t.id)), hid=secs.filter(t=>hidden.has(t.id));
   return `<div class="home">
     ${organizing?'':offersStripHtml()}
     <div class="res-head"><h1>Que veux-tu proposer ?</h1><button class="btn small" type="button" id="orghome">${organizing?'Terminé':'Organiser'}</button></div>
-    <p class="lead">${organizing?'Déplace les tuiles (▲ ▼ ou glisser-déposer), masque celles que tu n\'utilises pas. L\'ordre est mémorisé sur cet appareil.':'Choisis un parcours : deux ou trois choix en images et tu as les références avec N° ELDAS. Ou tape une référence, un produit ou une question dans la barre en haut.'}</p>
+    <p class="lead">${organizing?'Déplace les tuiles (▲ ▼ ou glisser-déposer), masque celles que tu n\'utilises pas. L\'ordre est mémorisé sur cet appareil.':'<b>Configurer</b> : quelques choix guidés → liste prête. <b>Panorama</b> : schéma de principe et gamme. <b>Catalogue</b> : toutes les références. Ou tape une référence dans la barre en haut.'}</p>
     ${!organizing&&curProject?`<div class="curproj"><div><b>Projet en cours · ${esc(curProject.label||'relevé')}</b><span>${(curProject.proj.rooms||[]).length} pièces · ${(curProject.proj.other||[]).length} lots · ${(curProject.proj.other||[]).filter(o=>o.done&&list.some(x=>x.lot===o.done)).length} dans la liste</span></div><button class="btn primary small" type="button" data-goproject="1">Reprendre</button><button class="btn small" type="button" data-closeproject="1">Fermer</button></div>`:''}
     ${HOME_GROUPS.map(g=>{ const ts=shown.filter(t=>g.secs.includes(t.id)); if(!ts.length) return ''; const col=(homePrefs.collapsed||[]).includes(g.id)&&!organizing; return `<section class="hgrp ${col?'col':''}"><button type="button" class="hgh" data-grp="${g.id}" aria-expanded="${!col}"><b>${esc(g.t)}</b><span>${esc(g.s)} · ${ts.length}</span><i>${col?'+':'−'}</i></button>${col?'':`<div class="tiles">${ts.map((t,i)=>tile(t,i,ts)).join('')}</div>`}</section>`; }).join('')}
     ${(()=>{ const rest=shown.filter(t=>!HOME_GROUPS.some(g=>g.secs.includes(t.id))); return rest.length?`<div class="tiles">${rest.map(tile).join('')}</div>`:''; })()}
@@ -1438,7 +1492,7 @@ function openSection(id){
   if(t.open){ t.open(); return; }
   if(t.flow){ startFlow(t.flow); return; }
   if(t.preset){ const fl=FLOWS[t.preset.flow]; const answers={...t.preset.answers}; const steps=visibleSteps(fl,answers); const step=Math.max(0, steps.findIndex(st=>answers[st.key]===undefined)); go({name:'wizard', flow:t.preset.flow, step, answers}); return; }
-  if(t.groups){ F={design:'',mount:'',ip:false,nw:false}; const v={name:'results', title:t.t, groups:t.groups.map(g=>({...g})), q:t.q||'', from:'section'}; remember(t.t, v); go(v); }
+  if(t.groups){ F={design:'',mount:'',ip:false,nw:false}; const v={name:'results', title:t.t, groups:t.groups.map(g=>({...g})), q:t.q||'', from:'section', sec:t.id}; remember(t.t, v); go(v); }
 }
 
 function visibleSteps(flow,a){ return flow.steps.filter(st=>!st.when||st.when(a)).map(st=>typeof st.opts==='function'?{...st, opts:st.opts(a)}:st); }
@@ -1447,7 +1501,7 @@ function wizardHtml(){
   const crumbs = flow.steps.slice(0,view.step).map((s,i)=>{ const val=a[s.key]; const label=Array.isArray(val)? val.map(v=>(s.opts.find(o=>o.v===v)||{}).t||v).join(', ') : ((s.opts.find(o=>o.v===val)||{}).t||val||'—'); return `<button type="button" data-step="${i}">${esc(label)}</button><span class="sep">›</span>`; }).join('');
   const sel = a[step.key];
   const isSel = v => step.multi ? (sel||[]).includes(v) : sel===v;
-  return `<div class="wiz">
+  return `<div class="wiz">${modeBar(view.flow)}
     <div class="crumbs">${projCrumb()}<button type="button" data-step="-1">${esc(flow.title)}</button><span class="sep">›</span>${crumbs}<span style="color:var(--ink)">${view.step+1}/${flow.steps.length}</span></div>
     <h1>${esc(step.q)}</h1><p class="sub">${esc(step.s||(step.multi?'Plusieurs choix possibles.':'Un seul choix, tu pourras revenir.'))}</p>
     <div class="opts ${step.compact?'compact':''}">${step.opts.map(o=>`<button class="opt" type="button" data-v="${esc(o.v)}" aria-pressed="${isSel(o.v)}">
@@ -1502,7 +1556,7 @@ function resultsHtml(){
   const packHtml = packOn ? (()=>{ const skip=g=>/^(Référence catalogue exacte|Alternative)/i.test(g.label); const main=groups.filter(g=>g.items.length&&!g.opt&&!skip(g)), opts=groups.filter(g=>g.items.length&&g.opt&&!skip(g));
     const row=(g,i,chk)=>{ const it=g.items[0]; return `<label class="pk ${chk?'':'opt'}"><input type="checkbox" data-pk="${esc(it.f)}" data-q="${g.pq}" data-lbl="${esc(g.label)}" ${chk?'checked':''}><img src="${esc(it.img||'')}" alt="" onerror="this.style.visibility='hidden'"><span class="t"><b>${esc(g.label.replace(/^Référence catalogue exacte\s*:?\s*/i,'').replace(/\s*—\s*stock grossiste/i,''))}</b><small>${esc(it.d)} · ${it.e?'ELDAS '+esc(it.e):esc(it.f)}${g.gnote?' · '+esc(g.gnote.slice(0,110)):''}</small></span><span class="q num">${g.pq}×${priceOf(it)!=null?`<small class="pkp">${chf(priceOf(it)).replace('CHF ','')}</small>`:''}</span></label>`; };
     return `<section class="pack"><div class="ph"><b>Pack conseillé</b><small>${main.length} lignes${(()=>{ let t=0,k=0; main.forEach(g=>{ const v=priceOf(g.items[0]); if(v!=null){ t+=v*(+g.pq||1); k++; } }); return k?` · <b>${chf(t)} brut</b>${k<main.length?` (${main.length-k} sans prix)`:''}`:''; })()} · la référence recommandée pour chaque besoin · décoche ce que tu ne veux pas</small></div>${main.map((g,i)=>row(g,i,true)).join('')}${opts.length?`<div class="pu">Options à proposer au client</div>${opts.map((g,i)=>row(g,i,false)).join('')}`:''}<div class="pa"><button class="btn primary" type="button" id="packadd">Ajouter le pack à la liste</button><button class="btn" type="button" id="packalt" aria-expanded="${!!r.showAlt}">${r.showAlt?'Masquer le détail':'Voir le détail et les alternatives'}</button></div></section>`; })() : '';
-  return `${tipsHtml}<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${(()=>{ const fl=r.wiz&&r.wiz.flow; const pk=fl==='comptage'?'comptage':(fl==='bornes'||fl==='canalis')?'emob':''; return pk?`<button class="btn" type="button" data-panogo="${pk}">Panorama</button>`:''; })()}${r.brief?`<button class="btn primary" type="button" id="askconfig" title="L'assistant compose une offre type avec quantités, accessoires et options, prête à ajouter">Offre type par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':r.from==='project'?'Retour au relevé':'Retour'}</button>${r.origin==='project'&&curProject&&r.from!=='project'?`<button class="btn" type="button" data-goproject="1">Retour au relevé</button>`:''}`}</div>${packHtml}${packOn&&!r.showAlt?'':`${filtersOut}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}${r.brief?' · touche un produit pour sa fiche':''}</div>${body}${total?accHtml:''}`}`;
+  return `${r.pick?'':modeBar(secOfView(r))}${tipsHtml}<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig" title="L'assistant compose une offre type avec quantités, accessoires et options, prête à ajouter">Offre type par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':r.from==='project'?'Retour au relevé':'Retour'}</button>${r.origin==='project'&&curProject&&r.from!=='project'?`<button class="btn" type="button" data-goproject="1">Retour au relevé</button>`:''}`}</div>${packHtml}${packOn&&!r.showAlt?'':`${filtersOut}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${total} article${total>1?'s':''}${!r.groups&&total===60?' · affichage limité, précise la recherche':''}${r.brief?' · touche un produit pour sa fiche':''}</div>${body}${total?accHtml:''}`}`;
 }
 
 function rowHtml(it){
@@ -2045,7 +2099,8 @@ document.addEventListener('click',e=>{
   if(offerClick(e)) return;
   const im=e.target.closest('[data-impmode]'); if(im){ impMode=im.dataset.impmode; store.set('offre.impmode',impMode); render('keep'); return; }
   if(cbClick(e)) return;
-  const tile=e.target.closest('.tile'); if(tile){ if(organizing) return; openSection(tile.dataset.sec); return; }
+  const act=e.target.closest('[data-act]'); if(act&&!organizing){ if(act.classList.contains('on')) return; openSection(act.dataset.act); return; }
+  const tile=e.target.closest('.tile'); if(tile){ if(organizing) return; const d=HOME_TILES.find(x=>x.id===tile.dataset.sec); openSection(d?d.acts[0][1]:tile.dataset.sec); return; }
   const rc=e.target.closest('[data-recent]'); if(rc){ const r=recent[+rc.dataset.recent]; if(r) go(r.view); return; }
   const opt=e.target.closest('.opt'); if(opt){ pickOpt(opt.dataset.v); return; }
   const crumb=e.target.closest('.crumbs button'); if(crumb&&view.name==='wizard'&&crumb.dataset.step!==undefined){ const s=+crumb.dataset.step; if(s<0){ view.step=0; } else view.step=s; render('top'); return; }
