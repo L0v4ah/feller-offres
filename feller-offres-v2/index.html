@@ -1564,7 +1564,10 @@ const SECTIONS = [
     {label:'Répartition : barres collectrices Prisma', q:'Barre collectrice kit modulaire Prisma'},
     {label:'Mesure : PowerTag, compteurs, Panel Server', q:'PowerTag F 3PN'}]},
   {id:'protection', flow:'protection', k:'Bêta', t:'Disjoncteur & différentiel', s:'Le bon Clario iC40 par circuit, type A/F/B, peigne', imgs:['A9D67410','SE-531033410']},
-  {id:'protection_all', t:'Protection — tout voir', s:'Clario iC40, Acti9 iC60, iID, type B-EV, NG125', imgs:['A9P54716','SE-531012310'], groups:[
+  {id:'app_all', all:'app', t:'Appareillage — catalogue complet', s:'Toutes les lignes Feller, filtres fonction, ligne, montage, technologie'},
+  {id:'tab_all', all:'tab', t:'Tableaux & coffrets — catalogue complet', s:'Resi9, Mureva, Pragma, PrismaSeT, Prisma XS : rangées, IP, dimensions'},
+  {id:'cpt_all', all:'cpt', t:'Comptage — catalogue complet', s:'Compteurs, PowerTag, TC, centrales de mesure'},
+  {id:'protection_all', all:'prot', t:'Protection — catalogue complet', s:'Clario iC40, Acti9 iC60, iID, type B-EV, NG125', imgs:['A9P54716','SE-531012310'], groups:[
     {label:'FI/LS 1 module Clario iC40 (13 / 16 / 20 A, 30 mA)', q:'Clario iC40 1UM 0.03A'},
     {label:'Disjoncteurs 1LN Clario iC40', q:'Clario iC40 (C) 1LN'},
     {label:'Disjoncteurs 3LN Clario iC40', q:'Clario iC40 (C) 3LN'},
@@ -1573,7 +1576,7 @@ const SECTIONS = [
     {label:'Différentiels type B-EV (bornes sans détection DC)', q:'différentiel type B-EV'},
     {label:'Acti9 iC60N (industriel, 10 kA)', q:'Disjoncteur iC60N C'},
     {label:'NG125 (63–125 A)', q:'disjoncteur NG125N'}]},
-  {id:'commande', t:'Commande & mesure', s:'Contacteurs, télérupteurs, minuteries, horloges, compteurs', imgq:['contacteur iCT 25A 2F','Compteur d\'énergie iEM3100'], groups:[
+  {id:'commande', all:'cmd', t:'Commande & mesure', s:'Contacteurs, télérupteurs, minuteries, horloges, compteurs', imgq:['contacteur iCT 25A 2F','Compteur d\'énergie iEM3100'], groups:[
     {label:'Contacteurs iCT (tarif, boiler, chauffage)', q:'contacteur iCT 25A'},
     {label:'Télérupteurs TL', q:'telerupteur TL 16A'},
     {label:'Minuteries', q:'minuterie 16A'},
@@ -1587,7 +1590,7 @@ const SECTIONS = [
   {id:'pano_tableau', k:'Nouveau', t:'Aide-mémoire tableaux', s:'Resi9, Clario, types A/F/B, parafoudre, docs', imgs:['R9H10937B','A9DSC3613'], open:()=>go({name:'pano',k:'tableau'})},
   {id:'pano_comptage', k:'Nouveau', t:'Panorama comptage & mesure', s:'Schéma de principe, quel compteur pour quel besoin, documents Schneider', imgs:['SE-981831486','SE-981832556'], open:()=>go({name:'pano',k:'comptage'})},
   {id:'surtension', flow:'surtension', k:'Bêta', t:'Protection surtension', s:'Type 1+2, type 2, compact Resi9, type 3 — avec déconnexion', imgs:['SE-808000507','SE-808000207']},
-  {id:'surtension_all', t:'Surtension — tout voir', s:'iPRD compact Resi9, iPRD 40r, type 1+2, Quick', imgs:['SE-808000027','A9L16617'], groups:[
+  {id:'surtension_all', all:'sp', t:'Surtension — catalogue complet', s:'iPRD compact Resi9, iPRD 40r, type 1+2, Quick', imgs:['SE-808000027','A9L16617'], groups:[
     {label:'Parafoudre compact Resi9 iPRD (type 2+3, 1 module)', q:'parasurtension Resi9 iPRD compact'},
     {label:'iPRD 40r type 2+3 (tableau)', q:'parasurtension iPRD 40r'},
     {label:'Type 1+2 (arrivée, paratonnerre)', q:'iPRD1 type 1+2'},
@@ -1630,16 +1633,16 @@ const HOME_TILES=[
   {id:'import', t:'Plan ou cahier des charges', s:'Relevé pièce par pièce → liste de matériel', sec:'import', acts:[['Analyser','import','ia']]},
   {id:'piece', t:'Pack par pièce', s:'Séjour, cuisine, SdB, extérieur : le pack Feller type en une minute', sec:'piece', acts:[['Configurer','piece','cfg'],['Aide-mémoire','pano_appareillage','pano']]},
   {id:'combo', t:'Combinaison', s:'Plaque multiple : chaque emplacement, cadres prestige', sec:'combo', acts:[['Composer','combo','cfg']]},
-  {id:'appareillage', t:'Appareillage', s:'Interrupteurs, prises, USB, variateurs', sec:'appareillage', acts:[['Configurer','appareillage','cfg'],['Aide-mémoire','pano_appareillage','pano']]},
+  {id:'appareillage', t:'Appareillage', s:'Interrupteurs, prises, USB, variateurs', sec:'appareillage', acts:[['Configurer','appareillage','cfg'],['Aide-mémoire','pano_appareillage','pano'],['Catalogue','app_all','cat']]},
   {id:'smart', t:'Smart home & KNX', s:'Wiser, KNX, Matter · KNX Schneider SpaceLogic', sec:'smart', acts:[['Configurer','smart','cfg'],['Catalogue KNX','knxse','cat']]},
   {id:'exterieur', t:'Extérieur & humide', s:'NEVO, IP44 et plus', sec:'exterieur', acts:[['Configurer','exterieur','cfg']]},
   {id:'nouveautes', k:'Nouveau', t:'Nouveautés 2025–2026', s:'Feller 4, Wiser, Clario, NEVO SNAPFIX, Charge Pro', sec:'nouveautes', acts:[['Découvrir','nouveautes','cfg']]},
-  {id:'tableau', t:'Tableaux', s:'Resi9, PrismaSeT, Clario iC40 — composeur par usage', sec:'tableau', acts:[['Configurer','tableau','cfg'],['Aide-mémoire','pano_tableau','pano'],['Express XS','xs','cfg']]},
+  {id:'tableau', t:'Tableaux', s:'Resi9, PrismaSeT, Clario iC40 — composeur par usage', sec:'tableau', acts:[['Configurer','tableau','cfg'],['Aide-mémoire','pano_tableau','pano'],['Express XS','xs','cfg'],['Catalogue','tab_all','cat']]},
   {id:'protection', t:'Disjoncteurs & différentiels', s:'Le bon Clario iC40 par circuit, type A / F / B', sec:'protection', acts:[['Configurer','protection','cfg'],['Aide-mémoire','pano_tableau','pano'],['Catalogue','protection_all','cat']]},
   {id:'accessoires', t:'Peignes, borniers, rails', s:'Peignes Clario 1LN / 3LN, capuchons, rails DIN, obturateurs', sec:'accessoires', acts:[['Catalogue','accessoires','cat']]},
   {id:'surtension', t:'Protection surtension', s:'Type 1+2, type 2, compact Resi9, type 3', sec:'surtension', acts:[['Configurer','surtension','cfg'],['Catalogue','surtension_all','cat']]},
   {id:'compteurs', k:'Nouveau', t:'Tableau de comptage immeuble', s:'Coffret Prisma XS : compteurs appartements, communs, départs bornes, multimédia — règles WV-CH', sec:'compteurs', acts:[['Configurer','compteurs','cfg']]},
-  {id:'comptage', t:'Comptage & mesure', s:'Compteurs MID pour refacturer, PowerTag + Panel Server pour suivre', sec:'comptage', acts:[['Configurer','comptage','cfg'],['Panorama','pano_comptage','pano']]},
+  {id:'comptage', t:'Comptage & mesure', s:'Compteurs MID pour refacturer, PowerTag + Panel Server pour suivre', sec:'comptage', acts:[['Configurer','comptage','cfg'],['Panorama','pano_comptage','pano'],['Catalogue','cpt_all','cat']]},
   {id:'commande', t:'Commande', s:'Contacteurs, télérupteurs, minuteries, horloges', sec:'commande', acts:[['Catalogue','commande','cat']]},
   {id:'tgbt', t:'TGBT & armoires', s:'Courant de tête, PrismaSeT XL / G / P, NSX, parafoudre', sec:'tgbt', acts:[['Configurer','tgbt','cfg'],['Catalogue','tgbt_all','cat']]},
   {id:'bornes', t:'Bornes de recharge', s:'Charge Pro, Schneider Charge, EVlink, gestion de charge, mesure d\'intro', sec:'bornes', acts:[['Configurer','bornes','cfg'],['Panorama','pano_emob','pano'],['Catalogue','ev_all','cat']]},
@@ -1714,6 +1717,7 @@ function openSection(id){
   if(t.open){ t.open(); return; }
   if(t.flow){ startFlow(t.flow); return; }
   if(t.preset){ const fl=FLOWS[t.preset.flow]; const answers={...t.preset.answers}; const steps=visibleSteps(fl,answers); const step=Math.max(0, steps.findIndex(st=>answers[st.key]===undefined)); go({name:'wizard', flow:t.preset.flow, step, answers}); return; }
+  if(t.all){ F={design:'',mount:'',ip:false,nw:false}; const v={name:'results', title:t.t, all:t.all, q:'', from:'section', sec:t.id}; remember(t.t, v); go(v); return; }
   if(t.groups){ F={design:'',mount:'',ip:false,nw:false}; const v={name:'results', title:t.t, groups:t.groups.map(g=>({...g})), q:t.q||'', from:'section', sec:t.id}; remember(t.t, v); go(v); }
 }
 
@@ -1759,9 +1763,10 @@ const FACETS={
     {k:'pt',l:'Porte',o:[FR('Porte pleine',/a\.porte(?!\s?tr)|porte pleine|\bportes\b/i),FR('Porte transparente',/porte tr|transparent/i),FR('Sans porte',/s\.porte|sans porte/i)]},
     {k:'w',l:'Largeur max',o:[400,600,800,1100].map(v=>['≤ '+v+' mm',it=>{ const d=FX_DIM(it); return !!d&&d[0]<=v; }])},
     {k:'h',l:'Hauteur max',o:[500,800,1100,1400].map(v=>['≤ '+v+' mm',it=>{ const d=FX_DIM(it); return !!d&&d[1]<=v; }])}]},
-  prot:{l:'Protection', rx:/^(disjoncteur|interrupteur diff|interrupteur différen|interrupteur de charge|interrupteur-sectionneur)|\bClario\b|\biC60|\biID\b|\biDP|NG125|ComPacT|Resi9 .*(disj|diff)/i, rows:[
-    {k:'fn',l:'Appareil',o:[FR('Disjoncteur (LS)',/^disjoncteur(?! de puissance)(?!.*(diff|FI\/LS|iDP|Vigi))/i),['Disj. différentiel (FI/LS)',it=>FX_DIFF.test(FXT(it))],FR('Interrupteur diff. (FI)',/^interrupteur diff|\biID\b/i),FR('Disj. de puissance',/disjoncteur de puissance|ComPacT|\bNSX/i),FR('Sectionneur',/^interrupteur de charge|sectionneur|\biSW\b/i)]},
+  prot:{l:'Protection', rx:/^(AFD|disjoncteur|interrupteur diff|interrupteur différen|interrupteur de charge|interrupteur-sectionneur)|\bClario\b|\biC60|\biID\b|\biDP|NG125|ComPacT|Resi9 .*(disj|diff)/i, rows:[
+    {k:'fn',l:'Appareil',o:[FR('Disjoncteur (LS)',/^disjoncteur(?! de puissance)(?!.*(diff|FI\/LS|iDP|Vigi|ComPacT|\bNSX))/i),['Disj. différentiel (FI/LS)',it=>FX_DIFF.test(FXT(it))],FR('Interrupteur diff. (FI)',/^interrupteur diff|\biID\b/i),FR('Disj. de puissance',/disjoncteur de puissance|ComPacT|\bNSX/i),FR('Détecteur d\'arc (AFD)',/^AFD/),FR('Sectionneur',/^interrupteur de charge|sectionneur|\biSW\b/i)]},
     {k:'amp',l:'Calibre',get:FX_AMP,num:1},
+    {k:'gam',l:'Gamme',o:[FR('Clario iC40',/clario|iC40/i),FR('Resi9',/resi9/i),FR('Acti9 iC60',/iC60/i),FR('iDPN / iDT40',/iDPN|iDT40|DT40/i),FR('iID',/\biID\b/),FR('C120 / NG125',/C120|NG125/i),FR('ComPacT NSX',/ComPacT|\bNSX/i)]},
     {k:'crv',l:'Courbe',o:[FR('B',/\(B\)|\bcar\.? ?B\b|\sB\s?\d{1,3}\s?A|\bB\d{1,2}A?\b/),FR('C',/\(C\)|\bcar\.? ?C\b|\sC\s?\d{1,3}\s?A|\bC\d{1,2}A?\b/),FR('D',/\(D\)|\bcar\.? ?D\b|\sD\s\d{1,3}\s?A/),FR('K',/\(K\)|\sK\s\d{1,3}\s?A/),FR('Z',/\(Z\)|\sZ\s\d{1,3}\s?A/)]},
     {k:'pol',l:'Pôles',get:FX_POLES,order:['1P','1P+N','2P','3P','3P+N','4P']},
     {k:'typ',l:'Type FI',o:[FR('Type A',/\bt\.A\b|type A\b|\bA 1UM|classe A|\s0[.,]03A A\b|\sA\s\d?UM/),FR('Type F / Si',/\bt\.(F|Si)\b|\bF 1UM|classe Si|cl\.Si|A-SI|type F\b/i),FR('Type B / B-EV',/type B|B-EV|B-SI|\bt\.B\b/i)]},
@@ -1792,7 +1797,7 @@ const FACETS={
     {k:'mid',l:'Compteur',o:[FR('MID intégré',/\bMID\b(?!.*sans MID)|comp\.énergie|compteur/i),FR('sans MID',/sans MID/i)]},
     {k:'com',l:'Connexion',o:[FR('Wi-Fi',/wi-?fi/i),FR('4G',/\b4G\b|SIM/i),FR('Ethernet',/ethernet|LAN|RJ45/i)]}]}
 };
-function facetCat(items){ if(!items||!items.length) return null; let best=null,bs=0; for(const [k,c] of Object.entries(FACETS)){ const n=items.filter(it=>(c.own?c.own(it):true)&&c.rx.test(FXT(it))).length/items.length; if(n>bs){ bs=n; best=k; } } return bs>=0.4?best:null; }
+function facetCat(items){ if(view&&view.all&&FACETS[view.all]) return view.all; if(!items||!items.length) return null; let best=null,bs=0; for(const [k,c] of Object.entries(FACETS)){ const n=items.filter(it=>(c.own?c.own(it):true)&&c.rx.test(FXT(it))).length/items.length; if(n>bs){ bs=n; best=k; } } return bs>=0.4?best:null; }
 function fxTest(f,it,v){ if(f.get) return f.get(it)===v; const o=f.o.find(x=>x[0]===v); return o?o[1](it):true; }
 function facetFilter(items, fx, skip){ const cat=facetCat(items); if(!cat||!fx) return items; return items.filter(it=>FACETS[cat].rows.every(f=>{ if(f.k===skip) return true; const v=fx[f.k]; return !v||fxTest(f,it,v); })); }
 function fxOpts(f,items){ const c={}; if(f.get){ items.forEach(it=>{ const v=f.get(it); if(v) c[v]=(c[v]||0)+1; }); let ks=Object.keys(c); if(f.order) ks.sort((a,b)=>((f.order.indexOf(a)+1)||99)-((f.order.indexOf(b)+1)||99)); else if(f.num) ks=ks.sort((a,b)=>c[b]-c[a]).slice(0,14).sort((a,b)=>parseFloat(a.replace(',','.'))-parseFloat(b.replace(',','.'))); else ks.sort((a,b)=>c[b]-c[a]||a.localeCompare(b,'fr',{numeric:true})); return ks.slice(0,14).map(k=>[k,c[k]]); }
@@ -1818,11 +1823,12 @@ function resultsHtml(){
   const hasColor=q=>COLORS.some(([name])=>norm(q||'').includes(norm(name)));
   const dedupe=(items,q)=>{ if(hasColor(q)) return items; const seen=new Set(); const out=[]; items.forEach(it=>{ const base=it._variantOf||it.f; if(seen.has(base)) return; seen.add(base); out.push(it._variantOf&&byF[it._variantOf]&&items.includes(byF[it._variantOf])?byF[it._variantOf]:it); }); return out; };
   if(r.groups) groups = r.groups.map(g=>{ const sr=searchFallback(g.q,{...F, ...(g.F||{})},24); sr.items=dedupe(sr.items,g.q); const pf=g.pickF||(byF[g.q]?g.q:null); const nwFirst=a=>a.map((x,i)=>[x,i]).sort((p,q)=>(isNew(q[0])-isNew(p[0]))||p[1]-q[1]).map(p=>p[0]); const its=pf&&byF[pf]?[byF[pf],...nwFirst(sr.items.filter(x=>x.f!==pf))]:nwFirst(sr.items); return {label:g.label, lot:g.lot, opt:!!g.opt, pq:g.qty||1, gnote:g.note||'', items:its.map(it=>g.qty>1?Object.assign(Object.create(it),{_gq:g.qty}):it), note:[g.qty>1?'quantité conseillée : '+g.qty:'' ,g.note,sr.note].filter(Boolean).join(' · '), q:g.q, qty:g.qty}; });
+  else if(r.all){ const C=FACETS[r.all]; const its=DB.filter(it=>!it._variantOf&&(C.own?C.own(it):true)&&C.rx.test(FXT(it))&&(!F.nw||it.nw)).sort((a,b)=>(!!b.nw-!!a.nw)||((a.src==='sonepar')-(b.src==='sonepar'))||a.d.localeCompare(b.d,'fr',{numeric:true})); groups=[{label:'', items:its, q:''}]; }
   else { const sr=searchFallback(r.q||'',F,1500); sr.items=dedupe(sr.items,r.q); groups=[{label:sr.note?`Rien ne correspond exactement — résultats proches ${sr.note}`:'', items:sr.items, q:r.q, hint:sr.note?`Pas d'article « ${esc(r.q)} » tel quel dans la base. Vérifie aussi : ${catalogueLinks(r.q)} — ou demande à l'assistant.`:''}]; }
   const total = groups.reduce((a,g)=>a+g.items.length,0);
   const allItems=groups.flatMap(g=>g.items); const actF=Object.entries(MOUNT).filter(([v])=>F.mount===v).map(([v,l])=>chip(l,'mount',v)).join('')+(F.ip?chip('IP44+','ip','1'):'')+(F.design?chip(F.design,'design',F.design):''); const fhtml=facetsHtml(allItems, chipNw()+actF); if(fhtml&&view.fx&&Object.values(view.fx).some(Boolean)){ groups.forEach(g=>{ const n=g.items.length; g.items=facetFilter(g.items,view.fx); if(n&&!g.items.length) g._hide=true; }); }
   const nMatch=groups.reduce((a,g)=>a+(g._hide?0:g.items.length),0);
-  if(!r.groups&&groups[0]&&groups[0].items.length>60) groups[0].items=groups[0].items.slice(0,60);
+  const LIMV=view.lim||60; if(!r.groups&&groups[0]&&groups[0].items.length>LIMV) groups[0].items=groups[0].items.slice(0,LIMV);
   const filtersOut=fhtml||filters;
   const body = total ? groups.map((g,gi)=>g._hide?'':`<section class="group" data-gi="${gi}">${g.label?`<h2>${esc(g.label)} <small>${g.items.length} article${g.items.length>1?'s':''}${g.note?' · '+esc(g.note):''}</small></h2>`:''}${g.hint?`<div style="font-size:13px;color:var(--ink-2);margin:-4px 0 10px">${g.hint}</div>`:''}${g.items.length?((g.compact||(r.groups&&g.items.length<=2))?`<div class="cards rows">${g.items.map(rowHtml).join('')}</div>`:`<div class="cards">${g.items.map(cardHtml).join('')}</div>`):`<div class="empty" style="padding:10px 6px">Rien dans le catalogue pour « ${esc(g.q)} ». ${catalogueLinks(g.q)}</div>`}</section>`).join('')
     : COMPETITORS.test(r.q||'') ? `<div class="empty"><h2>Produit concurrent : « ${esc(r.q)} »</h2>Pas dans le catalogue Feller / Schneider — normal. L'assistant trouve l'<b>équivalent</b> avec N° ELDAS et un argument factuel face à ${esc((r.q.match(COMPETITORS)||[''])[0])}.<div style="margin-top:12px"><button class="btn primary" type="button" id="askequiv">Trouver l'équivalent Feller / Schneider</button></div></div>`
@@ -1837,7 +1843,7 @@ function resultsHtml(){
   const packHtml = packOn ? (()=>{ const skip=g=>/^(Référence catalogue exacte|Alternative)/i.test(g.label); const main=groups.filter(g=>g.items.length&&!g.opt&&!skip(g)), opts=groups.filter(g=>g.items.length&&g.opt&&!skip(g));
     const row=(g,i,chk)=>{ const it=g.items[0]; return `<label class="pk ${chk?'':'opt'}"><input type="checkbox" data-pk="${esc(it.f)}" ${chk?'':'data-opt="1"'} data-q="${g.pq}" data-lbl="${esc(g.label)}" ${g.lot?`data-lot="${esc(g.lot)}"`:''} ${chk?'checked':''}><img src="${esc(it.img||'')}" alt="" onerror="this.style.visibility='hidden'"><span class="t"><b>${esc(g.label.replace(/^Référence catalogue exacte\s*:?\s*/i,'').replace(/\s*—\s*stock grossiste/i,''))}</b><small>${esc(it.d)} · ${it.e?'ELDAS '+esc(it.e):esc(it.f)}${g.gnote?' · '+esc(g.gnote.slice(0,110)):''}</small></span><span class="q num">${g.pq}×${priceOf(it)!=null?`<small class="pkp">${chf(priceOf(it)).replace('CHF ','')}</small>`:''}</span></label>`; };
     return `<section class="pack"><div class="ph"><b>Pack conseillé</b><small>${main.length} lignes${(()=>{ let t=0,k=0; main.forEach(g=>{ const v=priceOf(g.items[0]); if(v!=null){ t+=v*(+g.pq||1); k++; } }); return k?` · <b>${chf(t)} brut</b>${k<main.length?` (${main.length-k} sans prix)`:''}`:''; })()} · la référence recommandée pour chaque besoin · décoche ce que tu ne veux pas</small></div>${main.map((g,i)=>(g.lot&&(i===0||main[i-1].lot!==g.lot)?`<div class="plot">${esc(g.lot)}</div>`:'')+row(g,i,true)).join('')}${opts.length?`<div class="pu">Options suggérées · coche celles à inclure</div>${opts.map((g,i)=>(g.lot?`<div class="plot sm">${esc(g.lot)}</div>`:'')+row(g,i,false)).join('')}`:''}<div class="pa"><button class="btn primary" type="button" id="packadd">Ajouter le pack à la liste</button><button class="btn" type="button" id="packalt" aria-expanded="${!!r.showAlt}">${r.showAlt?'Masquer le détail':'Voir le détail et les alternatives'}</button></div>${(()=>{ const ls=[...new Set(groups.filter(g=>g.lot&&g.items.length).map(g=>g.lot))].filter(l=>LOT_DOCS[l]); return ls.length?`<details class="tips pdl"><summary>Documentation par lot (${ls.reduce((a,l)=>a+LOT_DOCS[l].length,0)})</summary>${ls.map(l=>`<div class="plot sm">${esc(l)}</div><div class="pdocs">${LOT_DOCS[l].map(docLink).join('')}</div>`).join('')}</details>`:''; })()}</section>`; })() : '';
-  return `${r.pick?'':modeBar(secOfView(r))}${tipsHtml}<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig" title="L'assistant compose une offre type avec quantités, accessoires et options, prête à ajouter">Offre type par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':r.from==='project'?'Retour au relevé':'Retour'}</button>${r.origin==='project'&&curProject&&r.from!=='project'?`<button class="btn" type="button" data-goproject="1">Retour au relevé</button>`:''}`}</div>${packHtml}${packOn&&!r.showAlt?'':`${filtersOut}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${nMatch>=1500?'Plus de 1500':nMatch} article${nMatch>1?'s':''}${!r.groups&&nMatch>60?' · 60 affichés, affine avec les filtres':''}${r.brief?' · touche un produit pour sa fiche':''}</div>${body}${total?accHtml:''}`}`;
+  return `${r.pick?'':modeBar(secOfView(r))}${tipsHtml}<div class="res-head"><h1>${esc(r.title||r.q||'Résultats')}</h1>${r.brief?`<button class="btn primary" type="button" id="askconfig" title="L'assistant compose une offre type avec quantités, accessoires et options, prête à ajouter">Offre type par l'assistant</button>`:''}${r.pick?`<button class="btn" type="button" id="pickback">Retour au tableau</button>`:`<button class="btn" type="button" id="back">${r.from==='wizard'?'Modifier les choix':r.from==='project'?'Retour au relevé':'Retour'}</button>${r.origin==='project'&&curProject&&r.from!=='project'?`<button class="btn" type="button" data-goproject="1">Retour au relevé</button>`:''}`}</div>${packHtml}${packOn&&!r.showAlt?'':`${filtersOut}${conf}<div class="count" style="color:var(--ink-3);font-size:13px;margin-bottom:8px">${nMatch>=1500&&!r.all?'Plus de 1500':nMatch} article${nMatch>1?'s':''}${!r.groups&&nMatch>LIMV?` · ${LIMV} affichés, affine avec les filtres`:''}${r.brief?' · touche un produit pour sa fiche':''}</div>${body}${!r.groups&&nMatch>LIMV?`<div style="text-align:center;margin:16px 0"><button class="btn" type="button" id="morelim">Afficher 60 de plus (${nMatch-LIMV} restants)</button></div>`:''}${total?accHtml:''}`}`;
 }
 
 function rowHtml(it){
@@ -2320,8 +2326,9 @@ $('home').onclick=()=>{ $('q').value=''; go({name:'home'}); };
 document.addEventListener('click',e=>{
   if(e.target.closest('[data-home]')){ go({name:'home'}); return; }
   if(panoClick(e)) return;
+  if(e.target.closest('#morelim')&&view.name==='results'){ view.lim=(view.lim||60)+60; render('keep'); return; }
   const fxo=e.target.closest('[data-fxopen]'); if(fxo&&view.name==='results'){ view.fxOpen=view.fxOpen===fxo.dataset.fxopen?null:fxo.dataset.fxopen; render('keep'); return; }
-  const fxb=e.target.closest('[data-fx]'); if(fxb&&view.name==='results'){ if(fxb.dataset.fx==='reset') view.fx={}; else { view.fx=view.fx||{}; view.fx[fxb.dataset.fx]=fxb.dataset.fv==='' ? '' : (view.fx[fxb.dataset.fx]===fxb.dataset.fv?'':fxb.dataset.fv); } view.fxOpen=null; render('keep'); return; }
+  const fxb=e.target.closest('[data-fx]'); if(fxb&&view.name==='results'){ if(fxb.dataset.fx==='reset') view.fx={}; else { view.fx=view.fx||{}; view.fx[fxb.dataset.fx]=fxb.dataset.fv==='' ? '' : (view.fx[fxb.dataset.fx]===fxb.dataset.fv?'':fxb.dataset.fv); } view.fxOpen=null; view.lim=0; render('keep'); return; }
   if(e.target.closest('[data-goffers]')){ go({name:'offers'}); return; }
   if(e.target.id==='hnewoffer'){ if(list.length&&!confirm('Commencer une nouvelle offre ? La liste actuelle reste dans « Mes offres ».')) return; newOffer(); render('keep'); toast('Nouvelle offre prête',null,'ok'); return; }
   const oh=e.target.closest('[data-oopenh]'); if(oh){ const o=OFFERS.find(x=>x.id===oh.dataset.oopenh); if(o){ if(o.id!==curOfferId) loadOffer(o); openList(); render('keep'); } return; }
