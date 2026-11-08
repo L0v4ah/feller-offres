@@ -972,6 +972,97 @@ const FLOWS = {
     const brief=`Protection surtension : ${label('where')}, ${label('lp')||''} ${label('amont')||''}. Propose la référence iPRD adaptée (logique Schneider 2025) avec N° ELDAS et 2 arguments de vente. Ne me repose pas ces questions.`;
     return {title, groups:g, brief, tips};
   }},
+  compteurs: { title:'Tableau de comptage immeuble', steps:[
+    {key:'wmax', q:'Largeur disponible sur le mur ?', s:'Mesure utile en cm (porte du local, niche, passage). Le coffret Prisma XS fait 300 à 1300 mm ; au-delà on juxtapose.', opts:[{v:'60',t:'60 cm'},{v:'90',t:'90 cm'},{v:'120',t:'120 cm'},{v:'150',t:'150 cm'},{v:'200',t:'200 cm'},{v:'300',t:'300 cm et plus'},{v:'0',t:'Pas de contrainte',rec:'Local technique dégagé'}], compact:true, free:'Autre largeur en cm'},
+    {key:'hmax', q:'Hauteur disponible ?', s:'WV-CH : bord supérieur des compteurs ≤ 200 cm, bord inférieur ≥ 80 cm. Un coffret de 140 cm posé à 60 cm du sol respecte la règle.', opts:[{v:'120',t:'120 cm',s:'Sous une fenêtre, un soffite'},{v:'160',t:'160 cm'},{v:'200',t:'200 cm'},{v:'0',t:'Pas de contrainte',rec:'Local technique standard'}], compact:true, free:'Autre hauteur en cm'},
+    {key:'nappt', q:'Combien d\'appartements ?', s:'Un compteur par appartement. Le compteur des communs et la réserve s\'ajoutent automatiquement.', opts:['2','3','4','6','8','10','12','16','20'].map(v=>({v,t:v})), compact:true, free:'Autre nombre'},
+    {key:'xmet', q:'Compteurs supplémentaires ?', s:'Le compteur « services communs » est toujours prévu. WV-CH : au moins une place de réserve ; dès 6 compteurs, télérelevé exigé.', multi:true, opts:[
+      {v:'reserve',t:'1 place de réserve',s:'Exigée par les prescriptions (extension, PV, ZEV)',rec:'Toujours'},
+      {v:'pac',t:'Chauffage / PAC',s:'Tarif chauffage séparé'},
+      {v:'asc',t:'Ascenseur',s:'Souvent demandé par le propriétaire'},
+      {v:'ev',t:'Bornes de recharge (compteur commun bornes)',s:'Si refacturation par le backend plutôt que par appartement'},
+      {v:'pv',t:'Production PV / ZEV',s:'Compteur de production ou regroupement'}], compact:true},
+    {key:'bu', q:'Coupe-surintensité avant chaque compteur ?', s:'Obligatoire et plombable en position ouverte (WV-CH 4.2). Appartements : fusibles ou disjoncteurs à pôles séparés — selon le distributeur.', opts:[
+      {v:'ls',t:'3 disjoncteurs 1P 25 A plombables',s:'iC60N 1P 25 A C × 3 par compteur · réf. Schneider au grossiste',rec:'Si le GRD l\'accepte'},
+      {v:'d02',t:'Fusibles D02 25 A',s:'Pratique romande classique · socle + fusibles hors catalogue Schneider (ligne grossiste)'},
+      {v:'grd',t:'À confirmer avec le GRD',s:'Je laisse une ligne « selon prescriptions du distributeur »'}]},
+    {key:'calapp', q:'Départ par appartement ?', s:'Disjoncteur 3LN après le compteur, vers le tableau de l\'appartement.', opts:[{v:'25',t:'25 A',s:'Appartement standard 3-4 pièces',rec:'Le plus fréquent'},{v:'32',t:'32 A',s:'Grand appartement, cuisson + borne'},{v:'40',t:'40 A',s:'Attique, chauffage électrique'}], compact:true},
+    {key:'com', q:'Départs des services communs ?', s:'Les lignes cochées sont le standard d\'un immeuble ; ajoute ce que le bâtiment a.', multi:true, opts:[
+      {v:'ecl',t:'Éclairage communs + extérieur',s:'2 FI/LS 13 A (cage, sous-sol) + 1 extérieur',rec:'Standard'},
+      {v:'min',t:'Minuterie cage d\'escalier',s:'Minuterie 16 A',rec:'Standard'},
+      {v:'son',t:'Sonnerie / interphone',s:'Transformateur 8–12 V 16 VA + FI/LS',rec:'Standard'},
+      {v:'buand',t:'Buanderie',s:'2 FI/LS 13 A + machine 16 A 3LN'},
+      {v:'vent',t:'Ventilation',s:'FI/LS 13 A'},
+      {v:'chauf',t:'Chaufferie / PAC',s:'3LN 20 A + contacteur'},
+      {v:'asc',t:'Ascenseur',s:'3LN 16 A (selon fiche ascensoriste)'},
+      {v:'ev',t:'Bornes de recharge',s:'Départs placés EN HAUT du coffret'},
+      {v:'velo',t:'Local vélos / cave',s:'FI/LS 13 A'}], compact:true},
+    {key:'nev', q:'Combien de départs bornes ?', s:'1 FI/LS 3LN 20 A par borne 11 kW, en haut du coffret. Le détail des bornes se fait dans le parcours Bornes.', opts:['1','2','3','4','6','8','10','12'].map(v=>({v,t:v})), compact:true, free:'Autre nombre', when:a=>(a.com||[]).includes('ev')},
+    {key:'mm', q:'Zone multimédia (fibre, routeur, répartiteur) ?', s:'Champ multimédia Prisma XS à droite du coffret : plaque percée, cote de montage 94 mm, disponible en hauteur 7 et 8 (9 si 1 part).', opts:[{v:'oui',t:'Oui, dans le coffret',s:'1 part de 250 mm en plus',rec:'Petit immeuble'},{v:'sep',t:'Coffret multimédia séparé',s:'Grand immeuble, opérateur qui impose son armoire'},{v:'non',t:'Non'}], compact:true},
+    {key:'ip', q:'Local sec ou humide ?', opts:[{v:'43',t:'Sec · IP43, profondeur 210 mm',s:'Local compteurs, couloir de cave',rec:'Standard'},{v:'55',t:'Humide · IP55, profondeur 280 mm',s:'Garage, extérieur couvert, buanderie'}], compact:true},
+    {key:'intro', q:'Calibre de l\'introduction ?', s:'Coupe-surintensité général du bâtiment (fusibles NH du GRD). Décide de l\'interrupteur de tête et de la mesure.', opts:[{v:'63',t:'Jusqu\'à 63 A',s:'2 à 4 appartements'},{v:'100',t:'80 à 100 A',s:'5 à 8 appartements',rec:'Le plus courant'},{v:'160',t:'125 à 160 A',s:'9 à 14 appartements'},{v:'250',t:'200 à 250 A',s:'Grand immeuble, PAC, bornes'}], compact:true},
+  ], finish:(a,label)=>{
+    const g=[]; const W=+a.wmax||0, H=+a.hmax||0, nA=+a.nappt||4; const x=a.xmet||[], com=a.com||[], nEV=com.includes('ev')?(+a.nev||2):0;
+    const meters=nA+1+(x.includes('reserve')?1:0)+(x.includes('pac')?1:0)+(x.includes('asc')?1:0)+(x.includes('ev')?1:0)+(x.includes('pv')?1:0);
+    // hauteur du coffret : 9 rangées (1400 mm, 2 compteurs par part) par défaut ; 7 rangées (1100 mm, 1 compteur par part) si la hauteur manque ; 5 rangées (800 mm) en dernier recours
+    let h=9; if(H&&H<150) h=7; if(H&&H<115) h=5;
+    const perPart=h>=8?2:1; const cabH={9:1400,8:1250,7:1100,5:800}[h];
+    const mParts=Math.ceil(meters/perPart);
+    const nCom=(com.includes('ecl')?3:0)+(com.includes('min')?1:0)+(com.includes('son')?1:0)+(com.includes('buand')?3:0)+(com.includes('vent')?1:0)+(com.includes('chauf')?1:0)+(com.includes('asc')?1:0)+(com.includes('velo')?1:0);
+    const dParts=Math.max(1, Math.ceil((nCom*1.4+nEV*4+8)/ (h>=8?60:40))); // modules REG dispo par part (≈ 12 UM par rangée utile)
+    const mmParts=a.mm==='oui'?1:0; const parts=mParts+dParts+mmParts;
+    const widths={1:300,2:550,3:800,4:1050,5:1300}; const nc=Math.ceil(parts/5); const cabs=[]; { let rest=parts; for(let i=0;i<nc;i++){ const p=Math.ceil(rest/(nc-i)); cabs.push(p); rest-=p; } } // répartition équilibrée (pas de coffret 1 part en IP55)
+    const totalW=cabs.reduce((s,p)=>s+widths[p],0); const ip55=a.ip==='55';
+    const cabRef=p=>ip55?`SZNF${p}${h}P`:`SZS${p}${h}`;
+    const title=`Comptage immeuble · ${nA} appart. · ${meters} compteurs · ${cabs.length>1?cabs.length+' coffrets':'coffret'} ${totalW} × ${cabH} mm`;
+    const L='Coffret & structure';
+    cabs.forEach((p,i)=>g.push({lot:L, label:`Coffret Prisma XS ${widths[p]} × ${cabH} × ${ip55?280:210} mm ${ip55?'IP55':'IP43'}, ${p} part${p>1?'s':''}, ${h} rangées${cabs.length>1?' ('+(i+1)+'/'+cabs.length+')':''}`, q:cabRef(p), qty:1, note:i===0?`${parts} parts : ${mParts} compteurs + ${dParts} distribution${mmParts?' + 1 multimédia':''} · entrée des câbles par le bas, départs bornes en haut`:''}));
+    const zRef={9:['SZMK109Z00','SZMK109Z01'],8:['SZMK108Z00','SZMK108Z01'],7:[null,'SZMK107Z00'],5:[null,'SZMK105Z00']}[h];
+    const dbl=perPart===2?Math.floor(meters/2):0, sgl=meters-dbl*2;
+    if(dbl) g.push({lot:L, label:`Champ compteurs prémonté, 2 places par part (${zRef[0]}) — borniers en bas, rail DIN en haut`, q:zRef[0], qty:dbl, note:'plaque compteur 3 points double, cloisons, passe-câbles compris'});
+    if(sgl) g.push({lot:L, label:`Champ compteur prémonté, 1 place (${zRef[1]})`, q:zRef[1], qty:sgl});
+    const vRef={9:'SZMK109V01',8:'SZMK108V01',7:'SZMK107V01',5:'SZMK105V01'}[h];
+    g.push({lot:L, label:`Champ distribution prémonté, rails DIN (${vRef})`, q:vRef, qty:dParts, note:'services communs, départs bornes en haut, borniers en bas'});
+    if(mmParts) g.push({lot:L, label:`Champ multimédia Prisma XS, 1 part, ${h} rangées`, q:({9:'SZVX19RM7180',8:'SZVX18RM7170',7:'SZVX17RM7160'})[h]||'SZVX17RM7160', qty:1, note:'à droite du coffret · plaque percée pour routeur, répartiteur, OTO fibre'});
+    g.push({lot:L, label:'Vis de fixation compteur 3 points (1 jeu par compteur)', q:'SZY20', qty:meters});
+    g.push({lot:L, label:'Levier / fermeture plombable (demande du GRD)', q:'Levier pivotant Schneider Electric Prisma XS plombable', qty:0});
+    // comptage appartements
+    const C='Comptage appartements';
+    if(a.bu==='ls') g.push({lot:C, label:'Coupe-surintensité avant compteur : iC60N 1P 25 A C (3 par compteur, plombables)', q:'SE-805121010', qty:meters*3, note:'pôles séparés exigés par WV-CH 4.2 (4) · cache plombable'});
+    else if(a.bu==='d02') g.push({lot:C, label:'Coupe-surintensité avant compteur : porte-fusible DII 25 A plombable (3 par compteur) + fusibles', q:'30205-S', qty:meters*3, note:'capot transparent plombable · variante D02 / Neozed selon le GRD : à prendre au grossiste'});
+    else g.push({lot:C, label:'Coupe-surintensité avant compteur : selon prescriptions du distributeur (à confirmer)', q:'SE-805121010', qty:0, note:'fusibles D02 ou 3 × disjoncteurs 1P plombables'});
+    const ca=a.calapp||'25'; g.push({lot:C, label:`Départ appartement : disjoncteur Clario iC40 3LN ${ca} A C (1 par appartement)`, q:({25:'A9P54725',32:'A9P54732',40:'A9P54740'})[ca], qty:nA, note:'après le compteur, vers le tableau de l\'appartement · 6 mm² minimum pour le câblage compteur'});
+    g.push({lot:C, label:'Bornier de commande 7 pôles plombable (tarif, télécommande GRD)', q:'5XSK71', qty:1});
+    // communs
+    const S='Services communs'; const n13=(com.includes('ecl')?3:0)+(com.includes('buand')?2:0)+(com.includes('vent')?1:0)+(com.includes('velo')?1:0)+(com.includes('son')?1:0);
+    g.push({lot:S, label:'Départ compteur commun : disjoncteur Clario iC40 3LN 25 A C', q:'A9P54725', qty:1});
+    if(n13) g.push({lot:S, label:'FI/LS 1LN 13 A 30 mA type A (éclairage, prises communs)', q:'A9DC3613', qty:n13});
+    if(com.includes('min')) g.push({lot:S, label:'Minuterie cage d\'escalier 16 A', q:'15363', qty:1});
+    if(com.includes('son')) g.push({lot:S, label:'Transformateur de sonnerie / interphone 8–12 V 16 VA', q:'SE-960000706', qty:1});
+    if(com.includes('buand')) g.push({lot:S, label:'Buanderie : FI/LS 3LN 16 A (lave-linge, sèche-linge)', q:'A9DC3716', qty:1});
+    if(com.includes('chauf')) { g.push({lot:S, label:'Chaufferie / PAC : disjoncteur 3LN 20 A C', q:'A9P54720', qty:1}); g.push({lot:S, label:'Contacteur iCT 25 A (commande tarif / PAC)', q:'contacteur iCT 25A', qty:1}); }
+    if(com.includes('asc')) g.push({lot:S, label:'Ascenseur : disjoncteur 3LN 16 A C (selon fiche ascensoriste)', q:'A9P54716', qty:1});
+    g.push({lot:S, label:'Peigne Clario 1LN 12 modules', q:'A9XPC612', qty:Math.max(1,Math.ceil(n13/6))}); g.push({lot:S, label:'Peigne Clario 3LN 12 modules', q:'A9XPC712', qty:1});
+    g.push({lot:S, label:'Option : PowerTag 1P+N 63 A sur les départs communs (suivi, pas de refacturation)', q:'A9MEM1561', qty:0, note:'+ Panel Server Entry PAS400 · suivi des consommations communes par poste'});
+    // bornes
+    if(nEV){ const B='Bornes de recharge'; g.push({lot:B, label:`Départs bornes en haut du coffret : FI/LS Clario 3LN 20 A C 30 mA type A (${nEV})`, q:'A9DC3720', qty:nEV, note:'11 kW par borne · 22 kW : 40 A (A9DC3740) · bornes, gestion de charge et mesure : parcours Bornes'}); g.push({lot:B, label:'Déclencheur à minimum de tension iMNX par borne (option)', q:'A9A26969', qty:0}); }
+    // tête
+    const T='Tête & protection'; const I=a.intro||'100';
+    g.push({lot:T, label:`Interrupteur de charge de tête iSW ${I==='63'?'63':'100'} A 4L`, q:I==='63'?'A9S65463':'A9S65491', qty:I==='160'||I==='250'?0:1, note:I==='160'||I==='250'?'au-delà de 100 A : ComPacT NSX / INS160–250 (parcours TGBT)':'coupure générale après les fusibles NH du GRD'});
+    if(I==='160'||I==='250') g.push({lot:T, label:`Tête ${I} A : interrupteur-sectionneur ComPacT INS / NSX${I}`, q:I==='160'?'Disjoncteur de puissance ComPacT NSX160 TM160D 4P':'Disjoncteur de puissance ComPacT NSX250 TM250D 4P', qty:1});
+    g.push({lot:T, label:'Parafoudre type 2+3 Resi9 iPRD (protège compteurs, communs, bornes)', q:'R9L2C640', qty:0, note:'option à proposer systématiquement en immeuble'});
+    g.push({lot:T, label:'Mesure de l\'introduction PowerTag (base pour gestion de charge future)', q:I==='63'?'A9MEM1570':I==='100'?'A9MEM1580':'A9MEM1590', qty:0, note:'+ Panel Server PAS400 · prépare EV Charging Expert et le suivi énergétique'});
+    const tips=[
+      `Implantation (gauche → droite) : tête et arrivée GRD · ${mParts} part${mParts>1?'s':''} compteurs (${meters} places : ${nA} appartements + communs${x.includes('reserve')?' + réserve':''}${x.includes('pac')?' + PAC':''}${x.includes('asc')?' + ascenseur':''}${x.includes('ev')?' + bornes':''}${x.includes('pv')?' + PV':''}) · ${dParts} part${dParts>1?'s':''} distribution communs${nEV?' avec les '+nEV+' départs bornes EN HAUT':''}${mmParts?' · multimédia à droite':''}. Arrivée des câbles et borniers EN BAS.`,
+      `Dimensions : ${cabs.length>1?cabs.length+' coffrets juxtaposés, ':''}${totalW} × ${cabH} mm, profondeur ${ip55?280:210} mm${W&&totalW>W*10?` — ⚠ dépasse la largeur disponible (${W} cm) : prévoir ${h<9?'des coffrets plus hauts, ':''}une 2e rangée de coffrets ou un local plus grand`:W?` — tient dans les ${W} cm`:''}${H&&cabH>H*10-600?` — ⚠ hauteur : poser le bas à ≥ 60 cm du sol ; vérifier que les compteurs restent entre 80 et 200 cm`:''}.`,
+      'WV-CH 2021 : compteurs entre 80 et 200 cm (bord inférieur / supérieur), place normalisée 400 × 250 mm, coupe-surintensité d\'abonné avant chaque compteur plombable ouvert, 190 mm libres devant le compteur, câblage compteur 6 mm² avec boucle de 150 mm, tube de réserve M25 vers le tableau.',
+      meters>=6?'≥ 6 compteurs : télérelevé (ZFA) obligatoire — prévoir un tube M25 du local compteurs jusqu\'en façade pour l\'antenne du GRD, et l\'alimentation permanente des compteurs.':'Prévoir le tube M25 vers la façade : le télérelevé devient la règle d\'ici fin 2027.',
+      'Mesure directe jusqu\'à 80 A par compteur ; au-delà (gros commun, PAC collective) : transformateurs d\'intensité et place compteur supplémentaire.',
+      'À remplir avec le GRD : avis d\'installation, numérotation des appartements (étage + position, pas de noms), fiche d\'accès au local.',
+      'Arguments de vente : champs prémontés = moins d\'heures de câblage ; parafoudre et PowerTag en option ; départs bornes réservés en haut = pré-équipement sans refaire le tableau ; multimédia intégré = un seul coffret à poser.'];
+    const brief=`Tableau de comptage immeuble : ${nA} appartements, ${meters} compteurs, coffret${cabs.length>1?'s':''} Prisma XS ${totalW} × ${cabH} mm ${ip55?'IP55':'IP43'}, coupe-surintensité ${label('bu')}, départs appartements ${ca} A, communs : ${com.map(c=>label('com')).length?label('com'):'aucun'}, bornes : ${nEV}, multimédia : ${label('mm')}, introduction ${label('intro')}. Contraintes : largeur ${W||'libre'} cm, hauteur ${H||'libre'} cm. Règles WV-CH 2021 (hauteur 80–200 cm, plombage, réserve, télérelevé dès 6 compteurs). Vérifie la cohérence, propose 2 options utiles. Ne me repose pas ces questions.`;
+    return {title, groups:g, brief, tips};
+  }},
   comptage: { title:'Comptage & mesure', steps:[
     {key:'why', q:'Pourquoi compter ?', s:'Refacturer = compteur MID obligatoire. Un PowerTag sert au suivi, jamais à la facturation.', opts:[
       {v:'fact',t:'Refacturer',s:'RCP / ZEV, locataires, borne partagée : compteur MID',imgq:'iEM3155 MID',rec:'Le plus fréquent'},
@@ -1476,6 +1567,7 @@ const SECTIONS = [
     {label:'Relais et interfaces', q:'relais iRTC'},
     {label:'Compteurs d\'énergie iEM (MID)', q:'Compteur d\'énergie iEM3'},
     {label:'PowerTag sans fil + Panel Server', q:'PowerTag'}]},
+  {id:'compteurs', flow:'compteurs', k:'Nouveau', t:'Tableau de comptage immeuble', s:'Prisma XS : places compteurs, communs, bornes, multimédia selon WV-CH', imgs:['SZS29','SZMK109Z00']},
   {id:'comptage', flow:'comptage', k:'Nouveau', t:'Comptage & mesure', s:'Compteurs MID pour refacturer (RCP, bornes), PowerTag + Panel Server pour le suivi', imgs:['A9MEM3155','SE-560318105']},
   {id:'pano_comptage', k:'Nouveau', t:'Panorama comptage & mesure', s:'Schéma de principe, quel compteur pour quel besoin, documents Schneider', imgs:['SE-981831486','SE-981832556'], open:()=>go({name:'pano',k:'comptage'})},
   {id:'surtension', flow:'surtension', k:'Bêta', t:'Protection surtension', s:'Type 1+2, type 2, compact Resi9, type 3 — avec déconnexion', imgs:['SE-808000507','SE-808000207']},
@@ -1530,6 +1622,7 @@ const HOME_TILES=[
   {id:'protection', t:'Disjoncteurs & différentiels', s:'Le bon Clario iC40 par circuit, type A / F / B', sec:'protection', acts:[['Configurer','protection','cfg'],['Catalogue','protection_all','cat']]},
   {id:'accessoires', t:'Peignes, borniers, rails', s:'Peignes Clario 1LN / 3LN, capuchons, rails DIN, obturateurs', sec:'accessoires', acts:[['Catalogue','accessoires','cat']]},
   {id:'surtension', t:'Protection surtension', s:'Type 1+2, type 2, compact Resi9, type 3', sec:'surtension', acts:[['Configurer','surtension','cfg'],['Catalogue','surtension_all','cat']]},
+  {id:'compteurs', k:'Nouveau', t:'Tableau de comptage immeuble', s:'Coffret Prisma XS : compteurs appartements, communs, départs bornes, multimédia — règles WV-CH', sec:'compteurs', acts:[['Configurer','compteurs','cfg']]},
   {id:'comptage', t:'Comptage & mesure', s:'Compteurs MID pour refacturer, PowerTag + Panel Server pour suivre', sec:'comptage', acts:[['Configurer','comptage','cfg'],['Panorama','pano_comptage','pano']]},
   {id:'commande', t:'Commande', s:'Contacteurs, télérupteurs, minuteries, horloges', sec:'commande', acts:[['Catalogue','commande','cat']]},
   {id:'tgbt', t:'TGBT & armoires', s:'Courant de tête, PrismaSeT XL / G / P, NSX, parafoudre', sec:'tgbt', acts:[['Configurer','tgbt','cfg'],['Catalogue','tgbt_all','cat']]},
@@ -1542,7 +1635,7 @@ HOME_TILES.forEach(t=>{ const sc=SECTIONS.find(x=>x.id===t.sec)||{}; t.imgs=sc.i
 const HOME_GROUPS=[
   {id:'ia', t:'Lecture automatique', s:'Photo, PDF, plan, cahier des charges', secs:['photo','import']},
   {id:'app', t:'Appareillage', s:'Interrupteurs, prises, smart home, extérieur', secs:['piece','combo','appareillage','smart','exterieur','nouveautes']},
-  {id:'tab', t:'Tableaux & protection', s:'Coffrets, disjoncteurs, parafoudres, comptage, TGBT', secs:['tableau','protection','accessoires','surtension','comptage','commande','tgbt']},
+  {id:'tab', t:'Tableaux & protection', s:'Coffrets, disjoncteurs, parafoudres, comptage, TGBT', secs:['tableau','compteurs','protection','accessoires','surtension','comptage','commande','tgbt']},
   {id:'ev', t:'E-mobilité', s:'Bornes, gestion de charge, Canalis', secs:['bornes','canalis']},
   {id:'nrj', t:'Énergie & industrie', s:'Onduleurs, industriel', secs:['asi','industrie']},
 ];
@@ -1562,6 +1655,7 @@ const DOMAIN_DOCS={
   protection:[['Factsheet iC40 AFD / FI/LS anti-arc',FD(9345)],['Factsheet FI d\'alimentation Clario iC40',FD(9351)],['Factsheet interrupteur FI de type B',FD(7938)],['Factsheet contacts auxiliaires',FD(9348)],['Catalogue Acti 9',FD(8785)],['Clario iC40 · se.com',SE('Clario iC40')]],
   accessoires:[['Factsheet bornes de raccordement à la terre',FD(7941)],['Catalogue Acti 9',FD(8785)],['Peignes Clario · se.com',SE('peigne Clario')]],
   surtension:[['Factsheet parafoudres Resi9 iPRD / Acti9 iPRD1',FD(9808)],['Parafoudres iPRD · se.com',SE('iPRD')]],
+  compteurs:[['Documentation système Prisma XS : coffrets pour compteurs officiels',FD(8782)],['Factsheet Prisma XS',FD(7931)],['Prescriptions des distributeurs WV-CH 2021 (avec TAB)','https://www.ibbrugg.ch/hubfs/Werkvorschriften%20WV-CH%202021%20mit%20den%20Technischen%20Anschlussbedingungen%20TAB.pdf'],['PDIE-CH · dispositions Romande Energie','https://corpweb-st-prd-chn-dcdedafvgsbuejdj.a01.azurefd.net/public/document/2024-02/202211-dp-re-pdie-ch.pdf'],['Documentation système Distribution électrique',FD(6105)],['Factsheet FI d\'alimentation Clario iC40',FD(9351)]],
   comptage:[['Panorama comptage & mesure','docs/schneider/panorama-comptage-mesure.pdf'],['Mini-catalogue PowerTag','docs/schneider/catalogue-powertag.pdf'],['Compteurs iEM3000 certifiés METAS','docs/schneider/iem3000-metas.pdf'],['Documentation système Prisma XS (coffrets compteurs)',FD(8782)],['PowerTag Flex · notice','https://www.se.com/ch/fr/download/document/JYT32195_A/'],['Panel Server · guide utilisateur (EN)','https://www.se.com/ch/fr/download/document/DOCA0172EN/'],['Gamme iEM3000 · se.com','https://www.se.com/ch/fr/product-range/61273/']],
   commande:[['Factsheet interrupteur horaire digital et crépusculaire',FD(7944)],['Catalogue Acti 9',FD(8785)],['Contacteurs iCT · se.com',SE('iCT')]],
   tgbt:[['Documentation système Distribution électrique',FD(6105)],['PrismaSeT · se.com',SE('PrismaSeT')],['ComPacT NSX · se.com',SE('ComPacT NSX')],['Configurateurs Schneider (CH)','https://www.se.com/ch/fr/work/products/tools/product-configurators/']],
